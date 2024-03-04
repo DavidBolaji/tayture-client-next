@@ -1,5 +1,6 @@
 import ejs from 'ejs'
 import transporter from './transporter'
+import path from 'path'
 
 interface ImailOptions {
   from: string
@@ -28,7 +29,7 @@ const sendWelcomeMail = async ({
     current.getHours() + ':' + current.getMinutes() + ':' + current.getSeconds()
   let dateTime = cDate + ' ' + cTime
 
-  const templatePath = './views/welcome.ejs'
+  const templatePath = path.join(process.cwd(), 'views', 'welcome.ejs')
   console.log(templatePath)
   const dat = await ejs.renderFile(templatePath, {
     firstName,
