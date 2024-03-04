@@ -51,11 +51,11 @@ function DashboardDrawer({visible, isAdmin}: {visible: boolean, isAdmin: boolean
         >
           <div className="w-full text-center bg-black pb-5 text-white">
             {dataNav.map((nav) => (
-            nav.path !== '/dashboard/admin'? <p className="text-[20px]">
+            nav.path !== '/dashboard/admin'? <p key={nav.path} className="text-[20px]">
               <Link href={nav?.path} className="hover:text-orange text-white">
                {nav?.title}
               </Link>
-            </p>: isAdmin && <p className="text-[20px] text-white">
+            </p>: isAdmin && <p key={nav.path} className="text-[20px] text-white">
               <Link href={nav?.path} className="hover:text-orange text-white">
                {nav?.title}
               </Link>
