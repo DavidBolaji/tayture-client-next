@@ -45,7 +45,10 @@ export default async function handler(
     return res.status(401).json({ error: 'Invalid credentials' })
   }
 
-  const token = jwt.sign({ id: user.id }, process.env.NEXTAUTH_SECRET!)
+  const token = jwt.sign(
+    { id: user.id },
+    process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!,
+  )
 
   const sessionData = {
     userId: user.id,
@@ -53,29 +56,29 @@ export default async function handler(
     sessionToken: token,
   }
 
-  const session = await db.session.create({
-    data: sessionData,
-  })
-
-  res.setHeader('Authorization', `Bearer ${session.sessionToken}`)
-
-  if (user?.first_time) {
-    await sendWelcome({
-      firstName: user.fname,
-      email: user.email,
-    })
-  }
-
-  let pinId
-
-  if (!user?.validated) {
-    const reqOTP = await sendTextMessageOTP(user?.phone as string)
-    if (reqOTP.data.pinId) {
-      pinId = reqOTP.data.pinId
-    }
-  }
-
   try {
+    const session = await db.session.create({
+      data: sessionData,
+    })
+
+    res.setHeader('Authorization', `Bearer ${session.sessionToken}`)
+
+    if (user?.first_time) {
+      await sendWelcome({
+        firstName: user.fname,
+        email: user.email,
+      })
+    }
+
+    let pinId
+
+    if (!user?.validated) {
+      const reqOTP = await sendTextMessageOTP(user?.phone as string)
+      if (reqOTP.data.pinId) {
+        pinId = reqOTP.data.pinId
+      }
+    }
+
     return res
       .status(200)
       .json({ message: 'Signed In!', user: { ...user, pinId } })
