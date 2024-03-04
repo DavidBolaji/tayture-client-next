@@ -22,6 +22,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
+  if (req.method !== 'POST')
+    return res.status(405).json({ message: 'Method not allowed' })
   const body = req.body
 
   const validation = loginUserSchema.safeParse(body)
