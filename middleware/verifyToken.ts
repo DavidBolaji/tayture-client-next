@@ -22,7 +22,10 @@ const verifyToken =
       let decodedUser
 
       try {
-        decodedUser = jwt.verify(token, process.env.NEXTAUTH_SECRET!)
+        decodedUser = jwt.verify(
+          token,
+          process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!,
+        )
       } catch (error) {
         if ((error as Error).name === 'TokenExpiredError') {
           await db.session.deleteMany({
