@@ -77,7 +77,7 @@ const BuildPage = () => {
         </div>
         <div className="flex justify-end">
           <Button
-            onClick={() => router.push(`/build/${selected}`)}
+            onClick={() => router.push(`/buildcv/${selected}`)}
             disabled={selected.trim().length < 5}
             text="Next"
             render="light"

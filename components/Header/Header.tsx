@@ -53,7 +53,7 @@ const items: MenuProps['items'] = [
   },
   {
     label: 'Build CV',
-    key: '/build',
+    key: '/buildcv',
   },
 ]
 

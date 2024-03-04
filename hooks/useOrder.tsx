@@ -1,7 +1,8 @@
 'use client'
-import Education from '@/pages/build/components/CVform/Education'
-import WorkHistory from '@/pages/build/components/CVform/WorkHistory'
 
+
+import Education from '@/pages/buildcv/components/CVform/Education'
+import WorkHistory from '@/pages/buildcv/components/CVform/WorkHistory'
 import { DragEndEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useState } from 'react'

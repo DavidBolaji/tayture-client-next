@@ -27,7 +27,7 @@ const dataNav = [
   },
   {
     id: 'nav5',
-    path: '/build',
+    path: '/buildcv',
     title: 'Build CV'
   },
   {
