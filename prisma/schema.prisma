@@ -1,0 +1,365 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL_DEV")
+  relationMode = "prisma"
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+model Profile {
+  id           String  @id @default(uuid())
+  picture      String? @db.VarChar(255)
+  cv           String? @db.VarChar(255)
+  cover        String? @db.VarChar(255)
+  description  String? @db.VarChar(300)
+  address      String? @db.VarChar(300)
+  lga          String? @db.VarChar(30)
+  state        String? @db.VarChar(30)
+  city         String? @db.VarChar(30)
+  available    Int     @default(0)
+  workplace    String? @db.VarChar(100)
+  job_location String?
+  user         User    @relation(fields: [userId], references: [id])
+  userId       String  @unique
+}
+
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model User {
+  id                     String   @id @default(uuid())
+  role                   Role     @default(USER)
+  path                   String?
+  fname                  String   @db.VarChar(30)
+  lname                  String   @db.VarChar(30)
+  email                  String   @unique @db.VarChar(255)
+  password               String   @db.VarChar(255)
+  phone                  String   @db.VarChar(16)
+  validated              Int?     @default(0)
+  first_time             Int?     @default(1)
+  profile                Profile?
+  school                 School?
+  password_reset_token   String?
+  password_reset_expires Int?     @default(0)
+  validation_token       String?
+
+  blog_likes       Blog[]        @relation("blog_likes")
+  comment_likes    Comment[]     @relation("comment_likes")
+  blog_comments    Blog[]
+  comment_comments Comment[]
+  wallet           Wallet?
+  accounts         Account[]
+  job              Job[]
+  notification     Notifcation[]
+  sessions         Session[]
+  applied          Applied[]
+  matched          Matched[]
+  transaction      Transaction[]
+  viewed           ViewedMatch[]
+  schedule         Schedule[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Blog {
+  blog_id               String    @id @default(uuid()) @map("blog_id")
+  blog_user             String
+  title                 String?
+  banner                String?
+  content               Json?
+  tags                  Json?
+  total_likes           Int       @default(0)
+  total_comments        Int       @default(0)
+  total_reads           Int       @default(0)
+  total_parent_comments Int?
+  created_at            DateTime  @default(now())
+  blog_user_fk          User      @relation(fields: [blog_user], references: [id])
+  user_blog_likes       User[]    @relation(name: "blog_likes")
+  comments              Comment[]
+
+  @@index([blog_user])
+}
+
+model Comment {
+  comment_id        Int      @id @default(autoincrement())
+  comment_blog_id   String
+  comment_user_id   String
+  parent_comment_id Int
+  comment           String
+  created_at        DateTime @default(now())
+  comment_like      Int      @default(0)
+  reply_count       Int      @default(0)
+
+  comment_user_fk    User?     @relation(fields: [comment_user_id], references: [id])
+  comment_blog_fk    Blog?     @relation(fields: [comment_blog_id], references: [blog_id])
+  user_comment_likes User[]    @relation(name: "comment_likes")
+  parent_comment_fk  Comment?  @relation("ChildComments", fields: [parent_comment_id], references: [comment_id], onDelete: NoAction, onUpdate: NoAction)
+  child_comments     Comment[] @relation("ChildComments")
+
+  @@index([comment_blog_id])
+  @@index([comment_user_id])
+  @@index([parent_comment_id])
+  @@index([comment_id])
+}
+
+model SchoolAdmin {
+  sch_admin_id    String @id @default(uuid())
+  sch_admin_name  String @db.VarChar(30)
+  sch_admin_email String @db.VarChar(30)
+  sch_admin_phone String @db.VarChar(20)
+  school          School @relation(fields: [schoolId], references: [sch_id], onDelete: Cascade)
+  schoolId        String
+
+  @@index([schoolId])
+}
+
+model School {
+  sch_id           String        @id @default(uuid())
+  sch_logo         String?       @db.VarChar(200)
+  sch_name         String        @db.VarChar(50)
+  sch_no_emp       String        @db.VarChar(30)
+  sch_address      String        @db.VarChar(30)
+  sch_url          String        @db.VarChar(100)
+  sch_phone        String        @db.VarChar(20)
+  sch_verified     Int?          @default(0)
+  sch_admin        SchoolAdmin[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  sch_city         String        @db.VarChar(100)
+  sch_state        String        @db.VarChar(80)
+  sch_lga          String        @db.VarChar(100)
+  pending_job_post Int           @default(0)
+  user             User          @relation(fields: [schUserId], references: [id])
+  schUserId        String        @unique
+  wallet           Wallet?
+  job              Job[]
+  applied          Applied[]
+  matched          Matched[]
+  viewed           ViewedMatch[]
+  transaction      Transaction[]
+  schedule         Schedule[]
+}
+
+model Wallet {
+  wallet_id      String @id @default(uuid())
+  school         School @relation(fields: [walletSchId], references: [sch_id], onDelete: Cascade)
+  walletSchId    String @unique
+  user           User   @relation(fields: [walletUserId], references: [id])
+  walletUserId   String @unique
+  wallet_balance Int    @default(0)
+}
+
+model Job {
+  job_id         String        @id @default(uuid())
+  job_title      String        @db.VarChar(20)
+  job_role       String        @db.VarChar(50)
+  job_active     String        @db.VarChar(50)
+  job_desc       String?       @db.VarChar(255)
+  job_min_sal    String        @db.VarChar(255)
+  job_max_sal    String        @db.VarChar(255)
+  job_exp        String        @db.VarChar(30)
+  job_qual       String        @db.VarChar(30)
+  job_resumption DateTime
+  job_no_hires   String
+  status         Boolean       @default(false)
+  school         School        @relation(fields: [jobSchoolId], references: [sch_id])
+  jobSchoolId    String
+  user           User          @relation(fields: [jobUserzId], references: [id])
+  jobUserzId     String
+  applied        Applied[]
+  matched        Matched[]
+  viewed         ViewedMatch[]
+  transaction    Transaction[]
+  schedule       Schedule[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([jobSchoolId])
+  @@index([jobUserzId])
+}
+
+model Notifcation {
+  id               String   @id @default(uuid())
+  caption          String   @db.VarChar(50)
+  msg              String   @db.VarChar(255)
+  status           Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  notificationUser String
+  user             User     @relation(fields: [notificationUser], references: [id])
+
+  @@index([notificationUser])
+}
+
+model Applied {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [sch_id])
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [job_id])
+  qual      String
+  exp       String
+  cv        String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([schoolId])
+  @@index([jobId])
+}
+
+model Matched {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [sch_id])
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [job_id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([schoolId])
+  @@index([jobId])
+}
+
+model ViewedMatch {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [sch_id])
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [job_id])
+  viewed    DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([schoolId])
+  @@index([jobId])
+}
+
+model Assesement {
+  a_id      String   @id @default(uuid())
+  a_name    String
+  a_email   String
+  taken     Int
+  path      String
+  result    String   @db.LongText
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id          String   @id @default(uuid())
+  amount      Int
+  noPaid      Int
+  noScheduled Int      @default(0)
+  deducted    Boolean? @default(false)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [sch_id])
+  jobId       String
+  job         Job      @relation(fields: [jobId], references: [job_id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([schoolId])
+  @@index([jobId])
+}
+
+model Schedule {
+  id          String        @id @default(uuid())
+  date        DateTime
+  mode        String
+  time        DateTime
+  status      Status        @default(PENDING)
+  city        String?
+  lga         String?
+  state       String?
+  address     String?
+  link        String?
+  userId      String
+  instruction Instruction[]
+  test        Test[]
+  hiredAdmin  Boolean       @default(true)
+  hiredUser   Boolean       @default(true)
+  reminder    Boolean       @default(false)
+  feedback    String?       @db.VarChar(200)
+  reason      String?       @db.VarChar(200)
+  user        User          @relation(fields: [userId], references: [id])
+  schoolId    String
+  school      School        @relation(fields: [schoolId], references: [sch_id])
+  jobId       String
+  job         Job           @relation(fields: [jobId], references: [job_id])
+
+  @@index([userId])
+  @@index([schoolId])
+  @@index([jobId])
+}
+
+enum Status {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model Instruction {
+  id         String   @id @default(uuid())
+  text       String   @db.VarChar(255)
+  scheduleId String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@index([scheduleId])
+}
+
+model Test {
+  id         String   @id @default(uuid())
+  text       String   @db.VarChar(50)
+  scheduleId String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@index([scheduleId])
+}

@@ -1,0 +1,18 @@
+.ant-collapse-header {
+  background-color: #fff !important;
+  padding: 24px 50px !important;
+  border-top-right-radius: 8px !important;
+  border-top-left-radius: 8px !important;
+  border-bottom: #fff !important;
+  overflow: hidden;
+}
+
+.ant-collapse-content {
+  margin-left: 24px;
+  margin-right: 24px;
+  background-color: #f5f4f4 !important;
+}
+
+.ant-collapse-content-box {
+  padding: 0 !important;
+}

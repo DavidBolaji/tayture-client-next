@@ -1,0 +1,8 @@
+.env
+.husky
+.next
+assets
+node_modules
+prisma
+public
+views
