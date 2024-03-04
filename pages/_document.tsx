@@ -6,7 +6,6 @@ import type { DocumentContext } from 'next/document'
 const MyDocument = () => (
   <Html lang="en">
     <Head />
-    <script src="html2pdf.bundle.min.js"></script>
     <body>
       <Main />
       <NextScript />
