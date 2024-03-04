@@ -118,13 +118,16 @@ export const sendWelcome = async ({
   email: string
 }) => {
   const result = await Axios.post(`/mail/welcome`, { firstName, email })
-
-  if (result.data.message === 'SMS sent succesfully') {
-    const user = await Axios.get(`/users/email/${email}`)
-
-    const nuser = await Axios.put(`/users/update/${user.data.user.id}`, {
-      first_time: 0,
-    })
+  try {
+    if (result.data.message === 'SMS sent succesfully') {
+      const user = await Axios.get(`/users/email/${email}`)
+  
+      const nuser = await Axios.put(`/users/update/${user.data.user.id}`, {
+        first_time: 0,
+      })
+    }
+    return result
+  } catch (err) {
+    console.log((err as any).message);
   }
-  return result
 }

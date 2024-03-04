@@ -25,12 +25,16 @@ export default async function handler(
   console.log(req.query.userId)
   console.log(data)
 
-  const user = await db.user.update({
-    where: {
-      id: req.query.userId as string,
-    },
-    data,
-  })
+  try {
+    const user = await db.user.update({
+      where: {
+        id: req.query.userId as string,
+      },
+      data,
+    })
 
-  return res.status(200).json({ message: 'User Updated', user })
+    return res.status(200).json({ message: 'User Updated', user })
+  } catch (err) {
+    console.log((err as Error).message)
+  }
 }
