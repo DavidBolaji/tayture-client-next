@@ -42,7 +42,7 @@ const Hero = () => {
                 priority
                 src={Images.HeroImage}
                 alt="hero"
-                width={800} 
+                width={800}
                 height={600}
                 layout="fixed"
                 className="lg:object-center lg:object-contain scale-[0.75] lg:scale-[0.85] xl:scale-[0.95] -z-5"

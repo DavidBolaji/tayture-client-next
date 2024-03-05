@@ -4,11 +4,22 @@ import ejs from 'ejs'
 import path from 'path'
 import fs, { writeFileSync, readFileSync } from 'fs'
 import { PDFDocument } from 'pdf-lib'
+import { NextResponse } from 'next/server'
+import sendCvMail from '@/mail/sendCvMail'
+import { Axios } from '@/request/request'
+import verifyToken from '@/middleware/verifyToken'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders })
+}
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
   }
@@ -17,61 +28,81 @@ export default async function handler(
     const { data, colorList } = req.body
     const templatePath = path.join(process.cwd(), 'views', 'templateOne.ejs')
 
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
+    const updateSummary = Axios.put('/users/summary', {
+      summary: data.summary,
+      userId: req.authUser?.id,
+    })
+    const updateWork = Axios.put('/users/work', {
+      work: data.history,
+      userId: req.authUser?.id,
+    })
+    const updateEdu = Axios.put('/users/education', {
+      education: data.education,
+      userId: req.authUser?.id,
+    })
+    const updateSkills = Axios.put('/users/skills', {
+      skill: data.skills,
+      userId: req.authUser?.id,
+    })
 
-    let pdfPaths: string[] = []
-    await generatePDFPages(
-      page,
-      templatePath,
-      data,
-      colorList,
-      browser,
-      pdfPaths,
-    )
-    const name = `html_full`
-    const pdfPathz = path.join(process.cwd(), `${name}.pdf`)
-    await mergePDFs2(pdfPaths, name)
+    // Generate PDF, merge, and send mail concurrently
+    await Promise.all([
+      updateSummary,
+      updateWork,
+      updateEdu,
+      updateSkills,
+      generateAndSendPDF(data, colorList, templatePath),
+    ])
 
-    // Delete generated PDFs
-    for (const pdfPath of pdfPaths) {
-      fs.unlink(pdfPath, (err) => {
-        if (err) {
-          console.error('Error deleting PDF file:', err)
-        } else {
-          console.log('PDF file deleted successfully')
-        }
-      })
-    }
-
-    await browser.close()
-
-    fs.readFile(pdfPathz, (err, data) => {
-      if (err) {
-        console.error('Error reading PDF file:', err)
-        return res.status(500).send('Error reading PDF file')
-      }
-
-      res.setHeader('Content-Type', 'application/pdf')
-      res.setHeader(
-        'Content-Disposition',
-        'attachment; filename=generated_pdf.pdf',
-      )
-      res.status(200).send(data)
-
-      // Delete the file after sending its data
-      fs.unlink(pdfPathz, (err) => {
-        if (err) {
-          console.error('Error deleting PDF file:', err)
-        } else {
-          console.log('PDF file deleted successfully')
-        }
-      })
+    res.status(200).send({
+      message: 'File generated successfully, check mail to download file',
     })
   } catch (error) {
     console.error('Error generating PDF:', error)
     res.status(500).send('Error generating PDF')
   }
+}
+
+async function generateAndSendPDF(
+  data: any,
+  colorList: any,
+  templatePath: string,
+) {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+
+  let pdfPaths: string[] = []
+  await generatePDFPages(page, templatePath, data, colorList, browser, pdfPaths)
+  const name = `html_full`
+  const pdfPathz = path.join(process.cwd(), `${name}.pdf`)
+  await mergePDFs2(pdfPaths, name)
+
+  // Delete generated PDFs
+  for (const pdfPath of pdfPaths) {
+    fs.unlink(pdfPath, (err) => {
+      if (err) {
+        console.error('Error deleting PDF file:', err)
+      } else {
+        console.log('PDF file deleted successfully')
+      }
+    })
+  }
+
+  await browser.close()
+  await sendCvMail({
+    firstName: data.name.split(' \n')[0],
+    email: data.email,
+    filename: `${name}.pdf`,
+    path: pdfPathz,
+  })
+
+  fs.unlink(pdfPathz, (err) => {
+    if (err) {
+      console.error('Error deleting PDF file:', err)
+    } else {
+      console.log('PDF file deleted successfully')
+    }
+  })
 }
 
 async function generatePDFPages(
@@ -109,8 +140,6 @@ async function generatePDFPages(
   const a4PageHeight = 842
   let totalPages = Math.ceil(height / a4PageHeight)
 
-  console.log(totalPages)
-
   for (let i = 0; i < totalPages; i++) {
     const pageHtml = await ejs.renderFile(templatePath, {
       data,
@@ -139,7 +168,6 @@ async function generatePDFPages(
         pageRanges: `${i + 1}`,
       })
     } catch (_: any) {
-      console.log(_.message)
       pdfPaths.pop()
       return (totalPages = totalPages - 1)
     }
@@ -178,3 +206,5 @@ async function mergePDFs2(pdfPaths: string[], baseName: string) {
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+export default verifyToken(handler)

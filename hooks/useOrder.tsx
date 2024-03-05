@@ -1,6 +1,5 @@
 'use client'
 
-
 import Education from '@/pages/buildcv/components/CVform/Education'
 import WorkHistory from '@/pages/buildcv/components/CVform/WorkHistory'
 import { DragEndEvent } from '@dnd-kit/core'

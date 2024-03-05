@@ -7,8 +7,9 @@ import { useRouter } from 'next/navigation'
 import Spinner from '@/components/Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
 import { loginUser } from '@/lib/api/user'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as Yup from 'yup'
+import { Axios } from '@/request/request'
 
 const initilaValues = {
   email: '',
@@ -30,20 +31,45 @@ const loginSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
 })
 
-const LoginForm = () => {
+const LoginForm = ({ show = true }: { show?: boolean }) => {
   const router = useRouter()
-  const { setMessage } = useGlobalContext()
+  const queryClient = useQueryClient()
+  const { setMessage, colorList } = useGlobalContext()
+
+  const data = queryClient.getQueryData(['cvData']) as any
+  const order = queryClient.getQueryData(['sectionOrder']) as string[]
+
+  const downloadCv = async () => {
+    try {
+      const response = await Axios.post('/pdf', { data, colorList })
+      setMessage(() => response.data.message)
+      const t = setTimeout(() => {
+        setMessage(() => '')
+        clearTimeout(t)
+      }, 3000)
+    } catch (error) {
+      console.error('Error sending PDF:', (error as Error).message)
+    }
+  }
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       localStorage.setItem('pinId', res.data.user.pinId)
       localStorage.setItem(
         'token',
         //@ts-ignore
         JSON.stringify(res.headers.getAuthorization().replace('Bearer ', '')),
       )
-      window.location.assign('/dashboard')
+      if (!show) {
+        await downloadCv()
+        const t = setTimeout(() => {
+          clearTimeout(t)
+          window.location.assign('/dashboard?profile=1')
+        }, 3000)
+      } else {
+        window.location.assign('/dashboard')
+      }
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
@@ -99,16 +125,18 @@ const LoginForm = () => {
                 full
                 type="submit"
               />
-              <h3 className="mt-5 text-[14px] text-center">
-                You don’t have an account ? <br />
-                <button
-                  type="button"
-                  className="text-orange cursor-pointer text-[18px]"
-                  onClick={() => router.push('/auth/register')}
-                >
-                  Sign up
-                </button>
-              </h3>
+              {show && (
+                <h3 className="mt-5 text-[14px] text-center">
+                  You don’t have an account ? <br />
+                  <button
+                    type="button"
+                    className="text-orange cursor-pointer text-[18px]"
+                    onClick={() => router.push('/auth/register')}
+                  >
+                    Sign up
+                  </button>
+                </h3>
+              )}
             </div>
           </Form>
         )}

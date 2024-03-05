@@ -1,23 +1,22 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import type { MenuProps } from 'antd';
-import { Avatar, Card, Dropdown, Empty, Space, Tooltip } from 'antd';
-import styled from '@emotion/styled';
-import Meta from 'antd/lib/card/Meta';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { HiOutlineBell } from 'react-icons/hi';
-import { FiCheck } from 'react-icons/fi';
-import Notification from './Notification';
-import Spinner from '../../components/Spinner/Spinner';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Axios } from '@/request/request';
-import { Notifcation } from '@prisma/client';
+'use client'
+import React, { useEffect, useState } from 'react'
+import type { MenuProps } from 'antd'
+import { Avatar, Card, Dropdown, Empty, Space, Tooltip } from 'antd'
+import styled from '@emotion/styled'
+import Meta from 'antd/lib/card/Meta'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { HiOutlineBell } from 'react-icons/hi'
+import { FiCheck } from 'react-icons/fi'
+import Notification from './Notification'
+import Spinner from '../../components/Spinner/Spinner'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Axios } from '@/request/request'
+import { Notifcation } from '@prisma/client'
 
-
-dayjs.extend(relativeTime);
+dayjs.extend(relativeTime)
 interface StyledCardProps {
-  mobile?: boolean;
+  mobile?: boolean
 }
 const StyledCard = styled(Card)<StyledCardProps>`
   transform: ${(props) => (props.mobile ? 'translateX(10px)' : '')};
@@ -30,14 +29,14 @@ const StyledCard = styled(Card)<StyledCardProps>`
   }
   & > .ant-card-head {
   }
-`;
+`
 
 const StyledDropdown = styled(Dropdown)`
   & > .ant-dropdown {
     /* margin-top: 1000px !important; */
     width: 100px !important;
   }
-`;
+`
 const StyledMeta = styled(Meta)`
   && {
     .ant-card-meta-title {
@@ -45,28 +44,34 @@ const StyledMeta = styled(Meta)`
       font-weight: bolder;
     }
   }
-`;
+`
 
-const NotificationItem: React.FC<any> = ({ caption, fullMessage, date, read, id }) => {
-  const period = dayjs().to(dayjs(date));
-  const queryClient = useQueryClient();
-  const {mutate: notificationUpdate} = useMutation({
-    mutationFn: async (data: {id: string, status: boolean}) => {
-        return await Axios.put('/notification', data)
+const NotificationItem: React.FC<any> = ({
+  caption,
+  fullMessage,
+  date,
+  read,
+  id,
+}) => {
+  const period = dayjs().to(dayjs(date))
+  const queryClient = useQueryClient()
+  const { mutate: notificationUpdate } = useMutation({
+    mutationFn: async (data: { id: string; status: boolean }) => {
+      return await Axios.put('/notification', data)
     },
     onSuccess: () => {
-        queryClient.invalidateQueries({
-            queryKey: ['notifications']
-        })
-    }
+      queryClient.invalidateQueries({
+        queryKey: ['notifications'],
+      })
+    },
   })
 
   const handleNotificationUpdate = (key: string) => {
-      notificationUpdate({
-        id: key,
-        status: true,
-      })
-  };
+    notificationUpdate({
+      id: key,
+      status: true,
+    })
+  }
 
   return (
     <Card
@@ -89,7 +94,9 @@ const NotificationItem: React.FC<any> = ({ caption, fullMessage, date, read, id 
             title={caption}
             description={
               <div>
-                <p className="-mt-2 overflow-hidden text-[12px]">{fullMessage}</p>
+                <p className="-mt-2 overflow-hidden text-[12px]">
+                  {fullMessage}
+                </p>
                 <small>
                   Period:
                   {period}
@@ -114,13 +121,13 @@ const NotificationItem: React.FC<any> = ({ caption, fullMessage, date, read, id 
         </div>
       </div>
     </Card>
-  );
-};
+  )
+}
 
 const MenuContent: React.FC<{
-  data?: any;
-  loading?: boolean;
-  mobile?: boolean;
+  data?: any
+  loading?: boolean
+  mobile?: boolean
 }> = ({ data, loading, mobile }) => (
   <StyledCard
     mobile={mobile}
@@ -151,26 +158,26 @@ const MenuContent: React.FC<{
       ) : null}
     </div>
   </StyledCard>
-);
+)
 
 const NotificationDropdown: React.FC<{
-  mobile?: boolean;
+  mobile?: boolean
 }> = ({ mobile }) => {
-    const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        setLoading(true)
-    }, [])
+  useEffect(() => {
+    setLoading(true)
+  }, [])
 
-    const {data: notification, isLoading} = useQuery({
-        queryKey: ['notifications'],
-        queryFn: async () => {
-            const req = await Axios.get('/notification/me')
-            return req.data.notification
-        }
-    })
-    console.log(isLoading);
-    console.log(notification);
+  const { data: notification, isLoading } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: async () => {
+      const req = await Axios.get('/notification/me')
+      return req.data.notification
+    },
+  })
+  console.log(isLoading)
+  console.log(notification)
 
   const msg = notification
     ?.map((n: Notifcation) => ({
@@ -182,17 +189,21 @@ const NotificationDropdown: React.FC<{
       date: n.createdAt,
       read: n.status,
     }))
-    .sort((a: any, b: any) => b.key! - a.key!) as unknown as MenuProps['items'];
+    .sort((a: any, b: any) => b.key! - a.key!) as unknown as MenuProps['items']
 
-  const items: MenuProps['items'] = msg!;
-  const show = notification ? notification.some((n: any) => !n.notification_status) : false;
+  const items: MenuProps['items'] = msg!
+  const show = notification
+    ? notification.some((n: any) => !n.notification_status)
+    : false
 
   return (
     <StyledDropdown
       trigger={['click']}
       placement="bottomRight"
       arrow={!mobile}
-      dropdownRender={() => <MenuContent mobile={mobile} data={items} loading={isLoading} />}
+      dropdownRender={() => (
+        <MenuContent mobile={mobile} data={items} loading={isLoading} />
+      )}
       autoAdjustOverflow
       menu={{ items }}
     >
@@ -200,7 +211,7 @@ const NotificationDropdown: React.FC<{
         <Notification show={show} color={mobile || false} />
       </button>
     </StyledDropdown>
-  );
-};
+  )
+}
 
-export default NotificationDropdown;
+export default NotificationDropdown

@@ -44,7 +44,7 @@ const ColorPalete: React.FC<{ background: string }> = ({ background }) => {
   }, [color])
 
   return (
-    <div className="grid grid-cols-9 gap-1 max-w-[600px] mx-auto">
+    <div className="grid grid-cols-9 gap-1 max-w-[600px]">
       {colorData.map((color) => (
         <div key={color.id} id={color.id} className="col-span-1">
           <ColorPicker

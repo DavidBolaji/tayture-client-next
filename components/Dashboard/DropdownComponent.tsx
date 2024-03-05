@@ -174,10 +174,7 @@ const DropdownComponent: React.FC<{
     },
     {
       label: (
-        <Link
-          className={regularFont.className}
-          href={`/dashboard/profile/${auth?.id}`}
-        >
+        <Link className={regularFont.className} href={`/dashboard/profile`}>
           View Profile
         </Link>
       ),
@@ -214,7 +211,7 @@ const DropdownComponent: React.FC<{
               ) : (
                 <StyledAvatar name={`${auth?.fname}`} />
               )}
-              <span className='hidden md:block'>{auth?.fname}</span>
+              <span className="hidden md:block">{auth?.fname}</span>
             </Space>
           </Badge>
           <DownOutlined />

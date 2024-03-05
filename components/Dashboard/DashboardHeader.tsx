@@ -106,7 +106,7 @@ const DashboardHeader: React.FC<{
           </div>
           helo
           {/* <div className="mx-[20px]"> */}
-            <NotificationDropdown mobile={false} />
+          <NotificationDropdown mobile={false} />
           {/* </div> */}
           <DropdownComponent isAdmin={isSchAdmin} />
         </div>

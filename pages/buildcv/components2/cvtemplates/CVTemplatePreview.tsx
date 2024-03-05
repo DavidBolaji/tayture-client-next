@@ -37,13 +37,12 @@ const CVTemplatePreview = ({ hide }: { hide?: boolean }) => {
           {data.name}
         </div>
         <hr
-          
           style={{
-            display: "block",
+            display: 'block',
             borderColor: colorList.background,
             borderWidth: 1.5,
-            marginTop: "2px",
-            marginBottom: "2px"
+            marginTop: '2px',
+            marginBottom: '2px',
           }}
         />
         <h2
@@ -219,7 +218,7 @@ const CVTemplatePreview = ({ hide }: { hide?: boolean }) => {
         }}
       >
         <div className="grid grid-cols-5">
-          <div className='col-span-1 flex items-start h-full'>
+          <div className="col-span-1 flex items-start h-full">
             <div
               className="flex items-center w-7 h-7 justify-center rounded-full"
               style={{
@@ -233,7 +232,7 @@ const CVTemplatePreview = ({ hide }: { hide?: boolean }) => {
               />
             </div>
           </div>
-          <div className='col-span-4'>
+          <div className="col-span-4">
             <div
               className="text-[10px]"
               style={{

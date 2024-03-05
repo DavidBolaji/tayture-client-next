@@ -24,7 +24,7 @@ model Profile {
   lga          String? @db.VarChar(30)
   state        String? @db.VarChar(30)
   city         String? @db.VarChar(30)
-  available    Int     @default(0)
+  available    Boolean @default(true)
   workplace    String? @db.VarChar(100)
   job_location String?
   user         User    @relation(fields: [userId], references: [id])
@@ -68,6 +68,11 @@ model User {
   password_reset_expires Int?     @default(0)
   validation_token       String?
 
+  summary Summary?
+  work    WorkHistory[]
+  education Education[]
+  skills    Skills[]
+
   blog_likes       Blog[]        @relation("blog_likes")
   comment_likes    Comment[]     @relation("comment_likes")
   blog_comments    Blog[]
@@ -85,6 +90,72 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Summary {
+  id String @id @default(uuid())
+  text String @db.VarChar(500)
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkHistory {
+  id String @id @default(uuid())
+  title String @db.VarChar(50)
+  date String @db.VarChar(20)
+  location String @db.VarChar(100)
+  roles WorkRole[]
+  
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+   @@index([userId])
+}
+
+model WorkRole {
+  id String @id @default(uuid())
+  workId String
+  work WorkHistory @relation(fields: [workId], references: [id])
+  role String 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([workId])
+}
+
+model Education {
+  id String @id @default(uuid())
+  degree String
+  year String
+  school String
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Skills {
+  id String @id @default(uuid())
+  skill String
+
+  userId String
+  user User @relation(fields: [userId],references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model Session {

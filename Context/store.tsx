@@ -43,6 +43,7 @@ type UIkeyz =
   | 'applyLandingModal'
   | 'postLandingModal'
   | 'scheduleModal'
+  | 'userProfileModal'
 
 interface IUi {
   attentionModal: {
@@ -73,6 +74,10 @@ interface IUi {
     visibility: boolean
     data?: any
   }
+  userProfileModal: {
+    visibility: boolean
+    data?: any
+  }
 }
 
 const uiInit: IUi = {
@@ -95,6 +100,9 @@ const uiInit: IUi = {
     visibility: false,
   },
   scheduleModal: {
+    visibility: false,
+  },
+  userProfileModal: {
     visibility: false,
   },
 }

@@ -1,6 +1,7 @@
 import { loginUserSchema } from './Schema/loginSchema'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { setCookie } from 'nookies'
 
 import { NextApiRequest, NextApiResponse } from 'next'
 import {
@@ -59,6 +60,12 @@ export default async function handler(
   try {
     const session = await db.session.create({
       data: sessionData,
+    })
+
+    // Set the cookie containing the token
+    setCookie({ res }, 'token', session.sessionToken, {
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: '/', // Set the cookie path to '/'
     })
 
     res.setHeader('Authorization', `Bearer ${session.sessionToken}`)

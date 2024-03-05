@@ -27,6 +27,8 @@ const usePath = () => {
         ? '/buildcv'
         : pathname === '/dashboard/jobs/all'
         ? '/dashboard/jobs'
+        : pathname === '/dashboard/profile'
+        ? '/dashboard'
         : pathname === '/dashboard/jobs'
         ? '/dashboard/jobs'
         : pathname === '/dashboard/admin'

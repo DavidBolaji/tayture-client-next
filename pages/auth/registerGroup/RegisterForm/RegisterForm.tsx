@@ -49,7 +49,13 @@ const initilaValues: IRegister = {
   phone: '',
 }
 
-const RegisterForm = () => {
+const RegisterForm = ({
+  show = true,
+  cb,
+}: {
+  show?: boolean
+  cb?: () => void
+}) => {
   const router = useRouter()
   const { setUser, setMessage, setUI } = useGlobalContext()
   const onSubmit = async (
@@ -62,15 +68,19 @@ const RegisterForm = () => {
       resetForm({
         values: initilaValues,
       })
-      setUI((prev) => {
-        return {
-          ...prev,
-          OTPModal: {
-            ...prev.OTPModal,
-            visibility: true,
-          },
-        }
-      })
+      if (!show) {
+        if (cb) return cb()
+      } else {
+        setUI((prev) => {
+          return {
+            ...prev,
+            OTPModal: {
+              ...prev.OTPModal,
+              visibility: true,
+            },
+          }
+        })
+      }
     } else {
       setMessage(() => res.data.message)
     }
@@ -144,16 +154,18 @@ const RegisterForm = () => {
               full
               type="submit"
             />
-            <h3 className="mt-5 text-[14px] text-center">
-              Already have an account ? <br />
-              <button
-                type="button"
-                className="text-orange cursor-pointer text-[18px]"
-                onClick={() => router.push('/login')}
-              >
-                Log In
-              </button>
-            </h3>
+            {show && (
+              <h3 className="mt-5 text-[14px] text-center">
+                Already have an account ? <br />
+                <button
+                  type="button"
+                  className="text-orange cursor-pointer text-[18px]"
+                  onClick={() => router.push('/login')}
+                >
+                  Log In
+                </button>
+              </h3>
+            )}
           </div>
         </Form>
       )}

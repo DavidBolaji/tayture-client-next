@@ -8,24 +8,29 @@ import { IoIosClose } from 'react-icons/io'
 import LocationComponent from '@/components/LocationComponent/LocationComponent'
 import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
 import Button from '@/components/Button/Button'
-import * as Yup from 'yup';
-import {useQueryClient } from '@tanstack/react-query'
+import * as Yup from 'yup'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const LocationSchema = Yup.object().shape({
   state: Yup.string().required('State is required'),
   city: Yup.string().required('City is required'),
   lga: Yup.string().required('LGA is required'),
-  address: Yup.string().required('Address is required')
+  address: Yup.string().required('Address is required'),
 })
 
-export type Ilocation = {state: string; lga: string; address: string, city: string}
+export type Ilocation = {
+  state: string
+  lga: string
+  address: string
+  city: string
+}
 interface ITextarea {
   name?: string
   defaultValue?: string
   className?: string
   dir?: 'top' | 'bottom'
   st?: any
-  hide?: boolean,
+  hide?: boolean
 }
 
 const NameComponent: React.FC<ITextarea> = ({
@@ -56,7 +61,7 @@ const NameComponent: React.FC<ITextarea> = ({
   }
 
   const handleEditClick = () => {
-    if (name === "location") {
+    if (name === 'location') {
       setOpen(true)
     } else {
       setDisabled((prev) => !prev)
@@ -65,7 +70,7 @@ const NameComponent: React.FC<ITextarea> = ({
           if (document) {
             const el = document.getElementById(name!)
             el!.focus()
-  
+
             const length = (el as any).value.length as number
             ;(el as any).setSelectionRange(0, length, 'forward')
           }
@@ -76,9 +81,12 @@ const NameComponent: React.FC<ITextarea> = ({
   }
 
   const onSubmit = (data: Ilocation) => {
-   queryClient.setQueryData(['cvLocation'], data)
-   setFieldValue(name!, `${data.address}, ${data.lga}, ${data.city}, ${data.state}`)
-   setOpen(false)
+    queryClient.setQueryData(['cvLocation'], data)
+    setFieldValue(
+      name!,
+      `${data.address}, ${data.lga}, ${data.city}, ${data.state}`,
+    )
+    setOpen(false)
   }
 
   return (
@@ -112,11 +120,7 @@ const NameComponent: React.FC<ITextarea> = ({
           </div>
         </Tooltip>
       )}
-      <Drawer
-        open={open}
-        title="Set Location"
-        onClose={() => setOpen(false)}
-      >
+      <Drawer open={open} title="Set Location" onClose={() => setOpen(false)}>
         <Formik
           validationSchema={LocationSchema}
           validateOnMount
@@ -124,16 +128,17 @@ const NameComponent: React.FC<ITextarea> = ({
             state: '',
             lga: '',
             city: '',
-            address: ''
+            address: '',
           }}
           onSubmit={onSubmit}
         >
-          {({handleSubmit, isValid}) => (
+          {({ handleSubmit, isValid }) => (
             <Form onSubmit={handleSubmit}>
-              <Field as={LocationComponent} 
+              <Field
+                as={LocationComponent}
                 city="city"
                 state="state"
-                lga="lga" 
+                lga="lga"
               />
               <Field
                 name="address"
@@ -152,8 +157,7 @@ const NameComponent: React.FC<ITextarea> = ({
                   render="light"
                   type="submit"
                 />
-            </div>
-
+              </div>
             </Form>
           )}
         </Formik>

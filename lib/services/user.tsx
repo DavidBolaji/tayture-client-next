@@ -121,13 +121,13 @@ export const sendWelcome = async ({
   try {
     if (result.data.message === 'SMS sent succesfully') {
       const user = await Axios.get(`/users/email/${email}`)
-  
+
       const nuser = await Axios.put(`/users/update/${user.data.user.id}`, {
         first_time: 0,
       })
     }
     return result
   } catch (err) {
-    console.log((err as any).message);
+    console.log((err as any).message)
   }
 }

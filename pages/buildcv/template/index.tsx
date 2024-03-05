@@ -32,10 +32,10 @@ const One = () => {
     <div className="mt-20 h-[90vh] overflow-y-scroll no-s">
       <Wrapper>
         <div className="grid grid-cols-10 gap-3">
-          <div className="col-span-7">
+          <div className="md:col-span-7 col-span-10">
             <CVTemplateOne />
           </div>
-          <div className="col-span-3 px-3 b">
+          <div className="md:col-span-3 px-3 col-span-10 md:order-last order-first ">
             <Tabs type="card" defaultActiveKey="template" items={items} />
           </div>
         </div>

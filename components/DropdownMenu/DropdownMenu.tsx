@@ -8,41 +8,44 @@ const dataNav = [
   {
     id: 'nav1',
     path: '/',
-    title: 'Home'
+    title: 'Home',
   },
   {
     id: 'nav5',
     path: '/calculator',
-    title: 'Calculator'
+    title: 'Calculator',
   },
   {
     id: 'nav2',
     path: '/find_job',
-    title: 'Find a Job'
+    title: 'Find a Job',
   },
   {
     id: 'nav7',
     path: '/post_landing',
-    title: 'Post a Job'
+    title: 'Post a Job',
   },
   {
     id: 'nav5',
     path: '/buildcv',
-    title: 'Build CV'
+    title: 'Build CV',
   },
   {
     id: 'nav3',
     path: '/auth/login',
-    title: 'Login'
+    title: 'Login',
   },
   {
     id: 'nav4',
     path: '/auth/register',
-    title: 'Sign Up'
-  }
+    title: 'Sign Up',
+  },
 ]
 
-const DropdownMenu: React.FC<{ open: boolean, handleClose: () => void }> = ({ open, handleClose }) => {
+const DropdownMenu: React.FC<{ open: boolean; handleClose: () => void }> = ({
+  open,
+  handleClose,
+}) => {
   const router = useRouter()
   const handleClick = (path: string) => {
     handleClose()
@@ -76,16 +79,20 @@ const DropdownMenu: React.FC<{ open: boolean, handleClose: () => void }> = ({ op
           className="w-full"
         >
           <div className="w-full text-center bg-black pb-5">
-            {
-              dataNav.map((nav) => (
-              <p key={nav.id} id={nav.id} className="text-white text-[16px] mb-[24px]">
-                <button onClick={() => handleClick(nav.path)} className={`hover:text-orange text-white ${regularFont.className}`}>
+            {dataNav.map((nav) => (
+              <p
+                key={nav.id}
+                id={nav.id}
+                className="text-white text-[16px] mb-[24px]"
+              >
+                <button
+                  onClick={() => handleClick(nav.path)}
+                  className={`hover:text-orange text-white ${regularFont.className}`}
+                >
                   {nav.title}
                 </button>
               </p>
-
-              ))
-            }
+            ))}
           </div>
         </motion.div>
       )}

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React, { useState } from 'react'
 
 import { IoMdClose } from 'react-icons/io'
@@ -9,10 +9,9 @@ import NotificationDropdown from './NotificationDropdown'
 import DashboardDrawer from './DashboardDrawer'
 
 const DashboardNav: React.FC = () => {
-
   const [visible, setVisible] = useState(false)
   const toggle = () => {
-    setVisible(prev => !prev)
+    setVisible((prev) => !prev)
   }
   return (
     <>
@@ -33,7 +32,9 @@ const DashboardNav: React.FC = () => {
           </div>
         </div>
       </nav>
-      <div className=""><DashboardDrawer visible={visible} isAdmin={false} /></div>
+      <div className="">
+        <DashboardDrawer visible={visible} isAdmin={false} />
+      </div>
     </>
   )
 }
