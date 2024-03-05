@@ -92,7 +92,7 @@ const UserCard: React.FC<UserCardProps> = ({
           </span>
         ) : (
           <span className="dsm:text-[12px] text-[8px] text-black_200 px-[24px] py-[8px] rounded-[15px] bg-pink-200">
-            I'm casually looking
+            I&aposm casually looking
           </span>
         )}
       </div>
