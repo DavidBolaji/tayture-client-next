@@ -2,7 +2,7 @@ import React from 'react'
 import { Badge } from 'antd'
 import { HiOutlineBell } from 'react-icons/hi2'
 
-const Notification: React.FC<{
+const NotificationCom: React.FC<{
   color?: boolean
   show?: boolean
 }> = ({ color, show }) => {
@@ -16,4 +16,4 @@ const Notification: React.FC<{
   )
 }
 
-export default Notification
+export default NotificationCom

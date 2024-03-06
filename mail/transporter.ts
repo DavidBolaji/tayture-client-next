@@ -22,7 +22,7 @@ export const transporter2 = nodemailer.createTransport({
 })
 
 export const startMailServer = () => {
-  transporter.verify((error, success) => {
+  transporter.verify((error: any, success: any) => {
     if (error) {
       console.log(error)
     } else {
@@ -31,7 +31,7 @@ export const startMailServer = () => {
   })
 }
 export const startMailServer2 = () => {
-  transporter2.verify((error, success) => {
+  transporter2.verify((error: any, success: any) => {
     if (error) {
       console.log(error)
     } else {

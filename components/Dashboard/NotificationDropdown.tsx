@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { HiOutlineBell } from 'react-icons/hi'
 import { FiCheck } from 'react-icons/fi'
-import Notification from './Notification'
+import NotificationCom from './Notification'
 import Spinner from '../../components/Spinner/Spinner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
@@ -208,7 +208,7 @@ const NotificationDropdown: React.FC<{
       menu={{ items }}
     >
       <button className="relative flex items-center">
-        <Notification show={show} color={mobile || false} />
+        <NotificationCom show={show} color={mobile || false} />
       </button>
     </StyledDropdown>
   )
