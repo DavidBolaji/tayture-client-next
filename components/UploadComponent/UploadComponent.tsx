@@ -1,9 +1,8 @@
 import { Images } from '@/assets'
 import React, { ChangeEvent, FC, useRef, useState } from 'react'
 import Spinner from '../Spinner/Spinner'
-import Cloudinary from '@/request/cloudinary'
 import { useGlobalContext } from '@/Context/store'
-import { Image } from 'antd'
+import axios from 'axios'
 
 const UploadComponent: FC<{ image?: string }> = ({ image }) => {
   const uploadRef = useRef<HTMLImageElement | null>(null)
@@ -26,7 +25,7 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
       )
 
       try {
-        const response = await Cloudinary.post('/auto/upload', formData)
+        const response = await axios.post('https://api.cloudinary.com/v1_1/dhwlkhbet/auto/upload', formData)
         const { secure_url } = response.data
         if (uploadRef.current?.src) {
           uploadRef.current.src = secure_url
