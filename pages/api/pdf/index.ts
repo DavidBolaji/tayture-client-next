@@ -70,6 +70,7 @@ async function generateAndSendPDF(
 ) {
   const browser = await puppeteer.launch({
     headless: true,
+    executablePath: path.join(process.cwd(), '.cache', 'chrome.exe')
   })
   const page = await browser.newPage()
 
