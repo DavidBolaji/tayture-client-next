@@ -1,18 +1,26 @@
 // prettier-ignore
 import { NextApiRequest, NextApiResponse } from 'next'
-import puppeteer from 'puppeteer'
+// import puppeteer from 'puppeteer'
 import ejs from 'ejs'
 import path from 'path'
 import fs, { writeFileSync, readFileSync } from 'fs'
 import { PDFDocument } from 'pdf-lib'
-import { NextResponse } from 'next/server'
 import sendCvMail from '@/mail/sendCvMail'
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
 
+let chrome: any = {};
+let puppeteer: any;
+console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
+if (typeof process.env.AWS_LAMBDA_FUNCTION_VERSION !== "undefined") {
+  console.log('entered');
+  chrome = require("chrome-aws-lambda");
+  puppeteer = require("puppeteer-core");
+} else {
+  puppeteer = require("puppeteer");
+}
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('object')
-  console.log(req.authUser?.id)
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
   }
@@ -48,7 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     ])
 
     res.status(200).send({
-      message: 'File generated successfully, check mail to download file',
+      message: 'File generated successfully, check mail to download Curriculum Vitae',
     })
   } catch (error) {
     console.error('Error generating PDF:', error)
@@ -62,9 +70,20 @@ async function generateAndSendPDF(
   templatePath: string,
   email: string
 ) {
-  const options = {}
+  let options: any = {}
 
-  const browser = await puppeteer.launch({})
+  
+  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    options = {
+      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      headless: true,
+      ignoreHTTPSErrors: true,
+    };
+  }
+
+  let browser = await puppeteer.launch(options);
   const page = await browser.newPage()
 
   let pdfPaths: string[] = []
