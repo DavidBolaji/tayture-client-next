@@ -3,9 +3,11 @@ import { boldFont } from '@/assets/fonts/fonts'
 import Button from '@/components/Button/Button'
 import CardComponent from '@/components/CardComponent/CardComponent'
 import TwoColumn from '@/components/TwoColumn/TwoColumn'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 const Empower = () => {
+  const router = useRouter()
   return (
     <TwoColumn
       white={false}
@@ -40,7 +42,7 @@ const Empower = () => {
               bold={false}
               text="Get Started"
               render="light"
-              // onClick={() => navigate('/auth/register')}
+              onClick={() => router.push('/auth/register')}
               hover
             />
           </div>

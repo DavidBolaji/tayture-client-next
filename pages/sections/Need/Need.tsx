@@ -5,12 +5,15 @@ import { Icons } from '@/assets'
 import Button from '@/components/Button/Button'
 import Spinner from '@/components/Spinner/Spinner'
 import { boldFont } from '@/assets/fonts/fonts'
+import { useRouter } from 'next/router'
 
 function Need() {
   const [loading, setLoading] = useState<boolean>(false)
+  const router = useRouter()
   const handleNavigate = () => {
     setLoading((prev) => !prev)
     setTimeout(() => {
+      router.push('/calculator')
       setLoading((prev) => !prev)
     }, 2000)
   }

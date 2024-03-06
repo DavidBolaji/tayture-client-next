@@ -4,8 +4,10 @@ import Wrapper from '@/components/Wrapper/Wrapper'
 import { IoTelescopeSharp } from 'react-icons/io5'
 import React from 'react'
 import { boldFont } from '@/assets/fonts/fonts'
+import { useRouter } from 'next/router'
 
 const Hiring = () => {
+  const router = useRouter();
   return (
     <section className="grid lg:grid-cols-12 grid-cols-6">
       <div className="col-span-6 bg-[] md:py-20 py-10">
@@ -23,7 +25,7 @@ const Hiring = () => {
             Nursery, Primary and Secondary schools
           </p>
           <div className="w-2/4 mt-[40px]">
-            <Button text={'See Jobs'} bold={false} render={'dark'} />
+            <Button text={'See Jobs'} bold={false} render={'dark'}  onClick={() => router.push('/find_job')} />
           </div>
         </Wrapper>
       </div>
@@ -42,7 +44,7 @@ const Hiring = () => {
             Hire the best hands to accomplish your school&apos;s vision.
           </p>
           <div className="w-2/4 mt-[65px]">
-            <Button text={'Post Jobs'} bold={false} render={'light'} />
+            <Button text={'Post Jobs'} bold={false} render={'light'}  onClick={() => router.push('/post_landing')} />
           </div>
         </Wrapper>
       </div>

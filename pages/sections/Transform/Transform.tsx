@@ -5,8 +5,10 @@ import { Images } from '@/assets'
 import Button from '@/components/Button/Button'
 import { boldFont, regularFont } from '@/assets/fonts/fonts'
 import TwoColumn from '@/components/TwoColumn/TwoColumn'
+import { useRouter } from 'next/router'
 
 const Transform = () => {
+  const router = useRouter()
   return (
     <TwoColumn
       left={
@@ -43,7 +45,7 @@ const Transform = () => {
               bold={false}
               text="Get Started"
               render="dark"
-              // onClick={() => navigate('/auth/register')}
+              onClick={() => router.push('/auth/register')}
               hover
             />
           </div>
