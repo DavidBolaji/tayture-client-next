@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port=5000",
-    "build": "next build",
+    "build": "npm remove puppeteer && npm install puppeteer && next build",
     "start": "next start  --port=5000",
     "lint": "next lint",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
-    "postinstall": "prisma generate && npm remove puppeteer && npm install puppeteer",
+    "postinstall": "prisma generate",
     "generate-antd-css": "node less-styles-script.js",
     "predev": "npm run generate-antd-css",
     "prebuild": "npm run generate-antd-css",
