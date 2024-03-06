@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import sendCvMail from '@/mail/sendCvMail'
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
+// import PCR from "puppeteer-chromium-resolver";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -68,9 +69,14 @@ async function generateAndSendPDF(
   colorList: any,
   templatePath: string,
 ) {
+  const options = {}
+  // const stats = await PCR(options);
+
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: path.join(process.cwd(), '.cache', 'chrome.exe')
+    executablePath: path.join(process.cwd(), '.cache', 'chrome.exe'),
+    // args: ["--no-sandbox"],
+    // executablePath: stats.executablePath
   })
   const page = await browser.newPage()
 
