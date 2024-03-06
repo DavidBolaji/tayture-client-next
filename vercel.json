@@ -1,3 +1,0 @@
-{
-  "buildCommand": "npm remove puppeteer && npm install puppeteer && next build"
-}
