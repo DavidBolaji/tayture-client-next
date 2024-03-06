@@ -1,3 +1,4 @@
+// prettier-ignore
 import { NextApiRequest, NextApiResponse } from 'next'
 import puppeteer from 'puppeteer'
 import ejs from 'ejs'
@@ -9,17 +10,9 @@ import sendCvMail from '@/mail/sendCvMail'
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-}
-
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders })
-}
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log('object')
+  console.log(req.authUser?.id)
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
   }
@@ -51,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       updateWork,
       updateEdu,
       updateSkills,
-      generateAndSendPDF(data, colorList, templatePath),
+      generateAndSendPDF(data, colorList, templatePath, req.authUser?.email!),
     ])
 
     res.status(200).send({
@@ -67,15 +60,11 @@ async function generateAndSendPDF(
   data: any,
   colorList: any,
   templatePath: string,
+  email: string
 ) {
   const options = {}
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: path.join(process.cwd(), '.cache', 'puppeteer'),
-    args: ['--no-sandbox'],
-    // executablePath: stats.executablePath,
-  })
+  const browser = await puppeteer.launch({})
   const page = await browser.newPage()
 
   let pdfPaths: string[] = []
@@ -98,7 +87,7 @@ async function generateAndSendPDF(
   await browser.close()
   await sendCvMail({
     firstName: data.name.split(' \n')[0],
-    email: data.email,
+    email: email,
     filename: `${name}.pdf`,
     path: pdfPathz,
   })
