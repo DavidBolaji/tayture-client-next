@@ -65,7 +65,7 @@
     "nookies": "^2.5.2",
     "npm": "^9.1.1",
     "pdf-lib": "^1.17.1",
-    "puppeteer": "^22.4.0",
+    "puppeteer": "^18.2.1",
     "puppeteer-chromium-resolver": "^22.0.0",
     "rc-picker": "^4.0.0-alpha.37",
     "react": "18.2.0",

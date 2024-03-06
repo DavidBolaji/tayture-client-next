@@ -73,11 +73,8 @@ async function generateAndSendPDF(
   const options = {}
   const stats = await PCR(options)
 
-  const browser = await stats.puppeteer.launch({
-    headless: true,
-    // executablePath: path.join(process.cwd(), '.cache', 'chrome.exe'),
-    args: ['--no-sandbox'],
-    executablePath: stats.executablePath,
+  const browser = await puppeteer.launch({
+    // executablePath: stats.executablePath,
   })
   const page = await browser.newPage()
 
