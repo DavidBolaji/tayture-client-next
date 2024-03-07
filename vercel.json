@@ -1,4 +1,4 @@
 {
   "buildCommand": "npm run build",
-  "installCommand": "npm install -force && npx playwright install"
+  "installCommand": "sudo apt update && sudo apt install -y libicu66 libwoff2-1 libevent-2.1 libopus0 libharfbuzz-icu0 libgcrypt20 libjpeg8 libpng16-16 libwebp6 libenchant2 libsecret-1-0 libhyphen0 libflite1 libflite-usenglish1 libflite-cmu-grapheme-lang1 libflite-cmu-grapheme-lex1 libflite-cmu-indic-lang1 libflite-cmu-indic-lex1 libflite-cmulex1 libflite-cmu-timeawb1 libflite-cmu-us-awb1 libflite-cmu-us-kal16 libflite-cmu-us-kal1 libflite-cmu-us-rms1 libflite-cmu-us-slt1 libpsl5 libgudev-1.0-0 libevdev2 libpcre3 libffi7 libgnutls30 libgles2 libx264-160 && npm install -force && npx playwright install"
 }
