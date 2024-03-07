@@ -66,6 +66,7 @@
     "nookies": "^2.5.2",
     "npm": "^9.1.1",
     "pdf-lib": "^1.17.1",
+    "playwright": "^1.42.1",
     "puppeteer": "^22.4.0",
     "puppeteer-core": "^6",
     "rc-picker": "^4.0.0-alpha.37",
