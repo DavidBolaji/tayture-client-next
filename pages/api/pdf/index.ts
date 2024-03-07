@@ -1,6 +1,5 @@
 // prettier-ignore
 import { NextApiRequest, NextApiResponse } from 'next'
-// import puppeteer from 'puppeteer'
 import ejs from 'ejs'
 import path from 'path'
 import fs, { writeFileSync, readFileSync } from 'fs'
