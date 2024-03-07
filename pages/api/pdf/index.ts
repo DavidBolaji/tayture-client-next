@@ -12,7 +12,7 @@ let chrome: any = {};
 let puppeteer: any;
 console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
 if (typeof process.env.AWS_LAMBDA_FUNCTION_VERSION !== "undefined") {
-  console.log('entered');
+  console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
   chrome = require("chrome-aws-lambda");
   puppeteer = require("puppeteer-core");
 } else {
