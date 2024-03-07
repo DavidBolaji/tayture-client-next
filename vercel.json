@@ -1,3 +1,3 @@
 {
-  "buildCommand": "npm run build && npm run postinstall"
+  "buildCommand": "npm run build"
 }

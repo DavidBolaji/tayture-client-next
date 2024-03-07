@@ -68,8 +68,8 @@ model User {
   password_reset_expires Int?     @default(0)
   validation_token       String?
 
-  summary Summary?
-  work    WorkHistory[]
+  summary   Summary?
+  work      WorkHistory[]
   education Education[]
   skills    Skills[]
 
@@ -93,36 +93,36 @@ model User {
 }
 
 model Summary {
-  id String @id @default(uuid())
-  text String @db.VarChar(500)
+  id     String @id @default(uuid())
+  text   String @db.VarChar(500)
   userId String @unique
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model WorkHistory {
-  id String @id @default(uuid())
-  title String @db.VarChar(50)
-  date String @db.VarChar(20)
-  location String @db.VarChar(100)
-  roles WorkRole[]
-  
+  id       String     @id @default(uuid())
+  title    String     @db.VarChar(50)
+  date     String     @db.VarChar(20)
+  location String     @db.VarChar(100)
+  roles    WorkRole[]
+
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-   @@index([userId])
+  @@index([userId])
 }
 
 model WorkRole {
-  id String @id @default(uuid())
+  id     String      @id @default(uuid())
   workId String
-  work WorkHistory @relation(fields: [workId], references: [id])
-  role String 
+  work   WorkHistory @relation(fields: [workId], references: [id])
+  role   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -131,13 +131,13 @@ model WorkRole {
 }
 
 model Education {
-  id String @id @default(uuid())
+  id     String @id @default(uuid())
   degree String
-  year String
+  year   String
   school String
 
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -146,11 +146,11 @@ model Education {
 }
 
 model Skills {
-  id String @id @default(uuid())
+  id    String @id @default(uuid())
   skill String
 
   userId String
-  user User @relation(fields: [userId],references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
