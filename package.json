@@ -16,9 +16,6 @@
     "format": "prettier --write .",
     "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}"
   },
-  "engines": {
-    "node": "^20"
-  },
   "dependencies": {
     "@ant-design/cssinjs": "^1.18.2",
     "@ant-design/icons": "^4.7.0",

@@ -7,13 +7,19 @@ import { PDFDocument } from 'pdf-lib'
 import sendCvMail from '@/mail/sendCvMail'
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
+import chromium from 'chrome-aws-lambda';
 
-let chrome: any = {};
+// let chrome: any = {};
 let puppeteer: any;
-console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
-if (typeof process.env.AWS_LAMBDA_FUNCTION_VERSION !== "undefined") {
-  console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
-  chrome = require("chrome-aws-lambda");
+// console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
+// if (typeof process.env.AWS_LAMBDA_FUNCTION_VERSION !== "undefined") {
+//   console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
+//   chrome = require("chrome-aws-lambda");
+//   puppeteer = require("puppeteer-core");
+// } else {
+//   puppeteer = require("puppeteer");
+// }
+if (process.env.NEXT_PUBLIC_BROWSERLESS_TOKEN) {
   puppeteer = require("puppeteer-core");
 } else {
   puppeteer = require("puppeteer");
@@ -72,17 +78,35 @@ async function generateAndSendPDF(
   let options: any = {}
 
   
-  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-    options = {
-      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
-      defaultViewport: chrome.defaultViewport,
-      executablePath: await chrome.executablePath,
-      headless: true,
-      ignoreHTTPSErrors: true,
-    };
-  }
+  // if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+  //   options = {
+  //     args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+  //     defaultViewport: chrome.defaultViewport,
+  //     executablePath: await chrome.executablePath,
+  //     headless: true,
+  //     ignoreHTTPSErrors: true,
+  //   };
+  // }
+  // if (process.env.NEXT_PUBLIC_BROWSERLESS_TOKEN) {
+  //   browser = await puppeteer.connect({
+  //     // browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.NEXT_PUBLIC_BROWSERLESS_TOKEN}`,
+  //     browserWSEndpoint: `wss://chrome.browserless.io`,
+  //   })
+  // } else {
+  //   browser = await puppeteer.launch();
+  // }
 
-  let browser = await puppeteer.launch(options);
+  
+const browser = await chromium.puppeteer.launch({
+  args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+  defaultViewport: chromium.defaultViewport,
+  executablePath: await chromium.executablePath,
+  headless: true,
+  ignoreHTTPSErrors: true,
+})
+
+
+  
   const page = await browser.newPage()
 
   let pdfPaths: string[] = []
