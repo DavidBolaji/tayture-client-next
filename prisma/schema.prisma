@@ -24,7 +24,7 @@ model Profile {
   lga          String? @db.VarChar(30)
   state        String? @db.VarChar(30)
   city         String? @db.VarChar(30)
-  available    Boolean @default(true)
+  available    Boolean @default(false)
   workplace    String? @db.VarChar(100)
   job_location String?
   user         User    @relation(fields: [userId], references: [id])

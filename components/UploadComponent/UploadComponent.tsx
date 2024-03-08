@@ -25,7 +25,10 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
       )
 
       try {
-        const response = await axios.post('https://api.cloudinary.com/v1_1/dhwlkhbet/auto/upload', formData)
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/dhwlkhbet/auto/upload',
+          formData,
+        )
         const { secure_url } = response.data
         if (uploadRef.current?.src) {
           uploadRef.current.src = secure_url

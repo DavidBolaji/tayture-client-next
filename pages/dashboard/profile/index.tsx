@@ -17,6 +17,7 @@ import PersonalInformationCard from './components/card/PersonalInformationCard'
 import EducationCard from './components/card/EducationCard'
 import ExperienceCard from './components/card/ExperienceCard'
 import SkillCard from './components/card/SkillCard'
+import Meta from './components/Meta'
 
 export default function Page({
   profile,
@@ -30,7 +31,10 @@ export default function Page({
   }
 }) {
   return (
+    <>
+     <Meta imageUrl={profile?.profile?.picture} title={`${profile.fname}'s Page`} desc="Tayture offers me access to multiple opportunities as an educator to learn more" />
     <div className="pb-20">
+     
       <UserCard
         fname={profile.fname}
         lname={profile.lname}
@@ -57,6 +61,7 @@ export default function Page({
       <ExperienceCard experience={profile.work} />
       <SkillCard skills={profile.skills} />
     </div>
+    </>
   )
 }
 

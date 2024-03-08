@@ -1,16 +1,9 @@
-// prettier-ignore
 import { NextApiRequest, NextApiResponse } from 'next'
 import path from 'path'
 
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
 import axios from 'axios'
-
-// https://tayture-pdf.onrender.com
-
-type Json = {
-  message: string
-}
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -48,7 +41,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     ])
 
     res.status(200).send({
-      message: 'File generated successfully, check mail to download Curriculum Vitae',
+      message:
+        'File generated successfully, check mail to download Curriculum Vitae',
     })
   } catch (error) {
     console.error('Error generating PDF:', error)
@@ -56,19 +50,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 }
 
-async function generateAndSendPDF(
-  data: any,
-  colorList: any,
-  email: string
-) {
-
+async function generateAndSendPDF(data: any, colorList: any, email: string) {
   try {
-    const render = await axios.post("https://tayture-pdf.onrender.com/api/pdf", {data, colorList, email})
-    console.log(render.data.message);
+    const render = await axios.post(
+      'https://tayture-pdf.onrender.com/api/pdf',
+      { data, colorList, email },
+    )
+    console.log(render.data.message)
   } catch (error) {
-    console.log((error as Error).message);
+    console.log((error as Error).message)
   }
 }
-
 
 export default verifyToken(handler)

@@ -17,7 +17,7 @@ const ExperienceCard: React.FC<ExperienceCardProp> = ({ experience }) => {
       onClick={() => {}}
     >
       {experience.map((d: WorkHistory & { roles: WorkRole[] }) => (
-        <div key={d.id} className='mb-8'>
+        <div key={d.id} className="mb-8">
           <div className="grid grid-cols-7">
             <div className="col-span-5 text-black_400 text-[16px] font-[600]">
               {d.title}{' '}

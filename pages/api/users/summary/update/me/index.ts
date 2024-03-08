@@ -5,45 +5,32 @@ import { NextApiRequest, NextApiResponse } from 'next'
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'PUT')
     return res.status(405).json({ message: 'Method not allowed' })
-  const obj = {}
-  const keys = Object.keys(req.body)
-  keys.forEach((key: string) => {
-    //@ts-ignore
-    obj[key] = req.body[key]
-  })
-  console.log(keys)
-  console.log(obj)
+
   try {
-    const profile = await db.profile.findUnique({
+    const summary = await db.summary.findUnique({
       where: {
         userId: req.authUser?.id,
       },
     })
 
-    if (profile) {
-      const result = await db.profile.update({
+    if (summary) {
+      await db.summary.delete({
         where: {
           userId: req.authUser?.id,
         },
-        data: obj,
-      })
-
-      return res.status(200).json({
-        message: 'User profile Created',
-        profile: result,
       })
     }
 
-    const result = await db.profile.create({
+    const result = await db.summary.create({
       data: {
-        ...obj,
+        text: req.body['text'],
         userId: req.authUser!.id,
       },
     })
 
     return res.status(200).json({
-      message: 'User profile Created',
-      profile: result,
+      message: 'User Summary Created',
+      summary: result,
     })
   } catch (error) {
     res.status(500).send({ message: (error as Error).message })

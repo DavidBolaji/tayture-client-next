@@ -22,19 +22,14 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
       >
         <div className={cn('flex gap-2', className)}>
           <div className="w-full">
-            <Input
-              className="h-10"
-              placeholder="Search for a job"
-            />
+            <Input className="h-10" placeholder="Search for a job" />
           </div>
           <div className="whitespace-nowrap">
             <Button
               render="light"
               // text="find"
               text={
-                <span className="md:text-[16px] text-[12px]">
-                  Find jobs
-                </span>
+                <span className="md:text-[16px] text-[12px]">Find jobs</span>
               }
               hover={false}
               bold={false}
