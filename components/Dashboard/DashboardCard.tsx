@@ -30,15 +30,30 @@ const DashboardCard: React.FC<{
     })
   }
 
+  const showUploadModal = () => {
+    console.log('trig');
+    setUI((prev) => {
+      return {
+        ...prev,
+        uploadModal: {
+          ...prev.uploadModal,
+          visibility: true,
+        },
+      }
+    })
+  }
+
+  console.log(title);
+
   return (
     <div
       onClick={() =>
         link && link.length > 1
           ? router.push(link)
           : title === 'Upload'
-          ? () => console.log('upload')
+          ? showUploadModal()
           : title === 'coming'
-          ? () => {}
+          ? {}
           : handleShow()
       }
       className={`-z-[4] px-[16px] min-h-[146px] w-full transition-all ease-in duration-500 cursor-pointer hover:shadow border border-card_border rounded-[15px] py-[24px] flex flex-col justify-center bg-white ${

@@ -36,7 +36,7 @@ const ProfileProgressCard: React.FC = () => {
           <Button
             render="dark"
             text="Complete setup"
-            onClick={() => router.push('/dashboard/jobs/profile')}
+            onClick={() => router.push('/dashboard/profile')}
             gray
             hover={false}
             bold={false}

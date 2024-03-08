@@ -13,7 +13,7 @@ const BuildPage = () => {
   const router = useRouter()
   return (
     <div
-      className={`${regularFont.className} pt-16 text-center h-[90vh] overflow-y-scroll no-s`}
+      className={`${regularFont.className} pt-16 text-center h-[90vh] overflow-x-auto`}
     >
       <Wrapper>
         <h1
@@ -24,58 +24,27 @@ const BuildPage = () => {
         <Divider>
           <span className="text-xl font-semibold">TEMPLATES</span>
         </Divider>
-        <div className="group grid grid-cols-1 md:grid-cols-4 gap-3 place-items-center">
-          <label
-            className="radio-image"
-            onClick={() => setSelected('template')}
-          >
-            <input
-              type="radio"
-              name="template"
-              value="template1"
-              className="hidden-radio"
-            />
-            <Image src={Images.CV} alt="Template 1" />
-          </label>
-
-          <label
-            className="radio-image"
-            onClick={() => setSelected('templateTwo')}
-          >
-            <input
-              type="radio"
-              name="template"
-              value="template2"
-              className="hidden-radio"
-            />
-            <Image src={Images.CV2} alt="Template 2" />
-          </label>
-          <label
-            className="radio-image"
-            onClick={() => setSelected('templateThree')}
-          >
-            <input
-              type="radio"
-              name="template"
-              value="template3"
-              className="hidden-radio"
-            />
-            <Image src={Images.CV3} alt="Template 2" />
-          </label>
-          <label
-            className="radio-image"
-            onClick={() => setSelected('templateFour')}
-          >
-            <input
-              type="radio"
-              name="template"
-              value="template4"
-              className="hidden-radio"
-            />
-            <Image src={Images.CV2} alt="Template 2" />
-          </label>
+        <div className="flex overflow-x-auto no-s">
+          {['template'].map((el) => (
+            <div key={el} className="flex-shrink-0 mr-3 ">
+              <label
+                className="radio-image w-[250px]"
+                onClick={() => setSelected(el)}
+              >
+                <input
+                  type="radio"
+                  name="template"
+                  value={el}
+                  className="hidden-radio"
+                />
+                <div className="w-[250px] h-[300px] overflow-hidden cont">
+                  <Image className='object-fit ' src={Images.CV} alt={`Template ${el}`} width={300} height={225} />
+                </div>
+              </label>
+            </div>
+          ))}
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-5">
           <Button
             onClick={() => router.push(`/buildcv/${selected}`)}
             disabled={selected.trim().length < 5}

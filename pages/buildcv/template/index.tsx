@@ -19,8 +19,6 @@ const items = [
         <span>Text 1</span>
         <ColorPalete background="textOne" />
         <span>Text2</span>
-        <ColorPalete background="textTwo" />
-        <span>Text3</span>
         <ColorPalete background="colorParagraph" />
       </div>
     ),

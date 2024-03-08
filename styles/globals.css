@@ -71,8 +71,8 @@ body {
   border: 2px solid transparent;
 }
 
-.hidden-radio:checked + img {
-  border-color: #ff7517;
+.hidden-radio:checked + .cont {
+  background-color: #ff7517;
 }
 
 /* #nprogress {pointer-events: none;} */

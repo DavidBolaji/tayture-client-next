@@ -1,13 +1,12 @@
 // prettier-ignore
 import { NextApiRequest, NextApiResponse } from 'next'
-import ejs from 'ejs'
 import path from 'path'
-import fs, { writeFileSync, readFileSync } from 'fs'
-import { PDFDocument } from 'pdf-lib'
-import sendCvMail from '@/mail/sendCvMail'
+
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
-import { chromium } from 'playwright-core'; // Importing Playwright's chromium
+import axios from 'axios'
+
+// https://tayture-pdf.onrender.com
 
 type Json = {
   message: string
@@ -45,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       updateWork,
       updateEdu,
       updateSkills,
-      generateAndSendPDF(data, colorList, templatePath, req.authUser?.email!),
+      generateAndSendPDF(data, colorList, req.authUser?.email!),
     ])
 
     res.status(200).send({
@@ -60,148 +59,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 async function generateAndSendPDF(
   data: any,
   colorList: any,
-  templatePath: string,
   email: string
 ) {
-  let browser: any;
 
-  browser = await chromium.launch();
-  const page = await browser.newPage()
-
-  let pdfPaths: string[] = []
-  await generatePDFPages(page, templatePath, data, colorList, browser, pdfPaths)
-  const name = `html_full`
-  const pdfPathz = path.join(process.cwd(), `${name}.pdf`)
-  await mergePDFs2(pdfPaths, name)
-
-  // Delete generated PDFs
-  for (const pdfPath of pdfPaths) {
-    fs.unlink(pdfPath, (err) => {
-      if (err) {
-        console.error('Error deleting PDF file:', err)
-      } else {
-        console.log('PDF file deleted successfully')
-      }
-    })
-  }
-
-  await browser.close()
-  await sendCvMail({
-    firstName: data.name.split(' \n')[0],
-    email: email,
-    filename: `${name}.pdf`,
-    path: pdfPathz,
-  })
-
-  fs.unlink(pdfPathz, (err) => {
-    if (err) {
-      console.error('Error deleting PDF file:', err)
-    } else {
-      console.log('PDF file deleted successfully')
-    }
-  })
-}
-
-async function generatePDFPages(
-  page: any,
-  templatePath: string,
-  data: any,
-  colorList: any,
-  browser: any,
-  pdfPaths: string[],
-) {
-  const html = await ejs.renderFile(templatePath, {
-    data,
-    colorList,
-    page: 1,
-  })
-
-  await page.setContent(html, {
-    waitUntil: 'networkidle0',
-  })
-
-  const height = await page.evaluate(() => {
-    const body = document.body
-    const html = document.documentElement
-
-    const height = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight,
-    )
-    return height
-  })
-
-  const a4PageHeight = 842
-  let totalPages = Math.ceil(height / a4PageHeight)
-
-  for (let i = 0; i < totalPages; i++) {
-    const pageHtml = await ejs.renderFile(templatePath, {
-      data,
-      colorList,
-      page: i + 1,
-    })
-
-    await page.setContent(pageHtml, {
-      waitUntil: 'networkidle0',
-    })
-
-    const pdfPath = path.join(process.cwd(), `html2pdf_${i + 1}.pdf`)
-    pdfPaths.push(pdfPath)
-
-    try {
-      await page.pdf({
-        path: pdfPath,
-        format: 'a4',
-        printBackground: true,
-        displayHeaderFooter: true,
-        margin:
-          i + 1 === 1
-            ? { top: 0, right: 0, bottom: 40, left: 0 }
-            : { top: 10, right: 0, bottom: 40, left: 0 },
-        preferCSSPageSize: true,
-        pageRanges: `${i + 1}`,
-      })
-    } catch (_: any) {
-      pdfPaths.pop()
-      return (totalPages = totalPages - 1)
-    }
-  }
-
-  return totalPages
-}
-
-async function mergePDFs2(pdfPaths: string[], baseName: string) {
   try {
-    const mergedPdf = await PDFDocument.create()
-
-    for (const pdfPath of pdfPaths) {
-      const pdfBytes = readFileSync(pdfPath)
-      const pdfDoc = await PDFDocument.load(pdfBytes)
-      const copiedPages = await mergedPdf.copyPages(
-        pdfDoc,
-        pdfDoc.getPageIndices(),
-      )
-
-      for (const page of copiedPages) {
-        mergedPdf.addPage(page)
-      }
-    }
-
-    const mergedPdfBytes = await mergedPdf.save()
-    const mergedPdfPath = path.join(process.cwd(), `${baseName}.pdf`)
-    writeFileSync(mergedPdfPath, mergedPdfBytes)
-
-    console.log('PDFs merged successfully.')
+    const render = await axios.post("https://tayture-pdf.onrender.com/api/pdf", {data, colorList, email})
+    console.log(render.data.message);
   } catch (error) {
-    console.error('Error merging PDFs:', error)
+    console.log((error as Error).message);
   }
 }
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 export default verifyToken(handler)

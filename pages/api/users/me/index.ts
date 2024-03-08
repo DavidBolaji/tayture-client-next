@@ -74,6 +74,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         },
       },
+      profile: true
     },
   })
 

@@ -108,7 +108,7 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
               as={StyledInput}
               name={'password'}
               type="password"
-              placeholder={'Pasword'}
+              placeholder={'Password'}
             />
             {/* <Link href={"/forgot"} className="text-orange">
               forgot

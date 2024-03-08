@@ -14,6 +14,7 @@ import HandlePostLanding from '@/components/HandlePostLanding'
 import { AnimatePresence, motion } from 'framer-motion'
 import NextNProgress from 'nextjs-progressbar'
 import Loading from '@/components/Loading/Loading'
+import HandleUpload from '@/components/HandleUpload'
 
 const pages = [
   'Home',
@@ -84,6 +85,7 @@ export default function App({
             <HandleApply />
             <HandleApplyLanding />
             <HandlePostLanding />
+            <HandleUpload />
           </motion.div>
         </AnimatePresence>
       </GlobalContextProvider>

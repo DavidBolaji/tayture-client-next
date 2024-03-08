@@ -1,5 +1,6 @@
 import ejs from 'ejs'
 import transporter from './transporter'
+import path from 'path';
 
 interface ImailOptions {
   from: string
@@ -29,7 +30,7 @@ const sendAssesementResultMail = async ({
   let cTime =
     current.getHours() + ':' + current.getMinutes() + ':' + current.getSeconds()
   let dateTime = cDate + ' ' + cTime
-  const templatePath = './views/index.ejs'
+  const templatePath = path.join(process.cwd(), 'views', 'index.ejs')
   const dat = await ejs.renderFile(templatePath, {
     firstName,
     keyz: Object.values(data).map((e: any) =>
