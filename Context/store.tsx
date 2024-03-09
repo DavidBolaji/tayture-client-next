@@ -45,6 +45,7 @@ type UIkeyz =
   | 'scheduleModal'
   | 'userProfileModal'
   | 'uploadModal'
+  | 'personalModal'
 
 interface IUi {
   attentionModal: {
@@ -83,6 +84,10 @@ interface IUi {
     visibility: boolean
     data?: any
   }
+  personalModal: {
+    visibility: boolean
+    data?: any
+  }
 }
 
 const uiInit: IUi = {
@@ -111,6 +116,9 @@ const uiInit: IUi = {
     visibility: false,
   },
   uploadModal: {
+    visibility: false,
+  },
+  personalModal: {
     visibility: false,
   },
 }

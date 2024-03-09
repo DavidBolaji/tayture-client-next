@@ -1,6 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import path from 'path'
-
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
 import axios from 'axios'
@@ -11,8 +9,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const { data, colorList } = req.body
-    const templatePath = path.join(process.cwd(), 'views', 'templateOne.ejs')
+    const { data, colorList, loc } = req.body
+
+    if(loc.state.trim().length > 3) {
+     await axios.put('/users/profile/update/me', {
+       city: loc.city,
+       address: loc.address,
+       state: loc.state,
+       lga: loc.lga
+      }, {
+        headers: {
+          Authorization: `Bearer ${req.token}`
+        }
+      })
+    }
 
     const updateSummary = Axios.put('/users/summary', {
       summary: data.summary,

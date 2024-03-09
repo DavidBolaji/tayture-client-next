@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider     = "mysql"
-  url          = env("DATABASE_URL")
+  url          = env("DATABASE_URL_DEV")
   relationMode = "prisma"
 }
 
@@ -55,6 +55,8 @@ model User {
   id                     String   @id @default(uuid())
   role                   Role     @default(USER)
   path                   String?
+  others                 Others[]
+  othersText             String?
   fname                  String   @db.VarChar(30)
   lname                  String   @db.VarChar(30)
   email                  String   @unique @db.VarChar(255)
@@ -90,6 +92,15 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Others {
+  id String @id @default(uuid())
+  text String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model Summary {

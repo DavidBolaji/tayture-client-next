@@ -34,6 +34,8 @@ const UserForm: React.FC<UserCardProps> = ({
   const { img, setMessage } = useGlobalContext()
   const queryClient = useQueryClient()
   const noImage = img.trim().length < 1
+  console.log(img);
+  console.log(noImage);
   const userInitialValues = {
     fname: fname,
     lname: lname,
@@ -82,7 +84,7 @@ const UserForm: React.FC<UserCardProps> = ({
   return (
     <>
       <div className="pt-[32px] pb-[48px] flex justify-center">
-        <UploadComponent image={img ?? picture} />
+        <UploadComponent image={ img ?? picture} />
       </div>
       <Formik
         initialValues={userInitialValues}

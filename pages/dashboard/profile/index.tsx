@@ -30,6 +30,7 @@ export default function Page({
     skills: Skills[]
   }
 }) {
+
   return (
     <>
      <Meta imageUrl={profile?.profile?.picture} title={`${profile.fname}'s Page`} desc="Tayture offers me access to multiple opportunities as an educator to learn more" />
@@ -55,7 +56,7 @@ export default function Page({
         state={profile?.profile?.state}
         city={profile?.profile?.city}
         lga={profile?.profile?.lga}
-        workplace={'Tayture'}
+        workplace={profile?.profile?.workplace}
       />
       <EducationCard education={profile.education} />
       <ExperienceCard experience={profile.work} />

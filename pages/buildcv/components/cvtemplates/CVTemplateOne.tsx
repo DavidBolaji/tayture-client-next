@@ -121,8 +121,9 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
 
   const downloadCv = async () => {
     setLoading(true)
+    const loc = queryClient.getQueryData(['cvLocation'])
     try {
-      const response = await Axios.post('/pdf', { data, colorList })
+      const response = await Axios.post('/pdf', { data, colorList, loc })
       setMessage(() => response.data.message)
       const t = setTimeout(() => {
         setMessage(() => '')
