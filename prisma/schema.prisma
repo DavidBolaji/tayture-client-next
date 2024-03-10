@@ -144,8 +144,12 @@ model WorkRole {
 model Education {
   id     String @id @default(uuid())
   degree String
-  year   String
+  startYear String
+  endYear  String
+  startMonth String
+  endMonth String
   school String
+  field  String
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

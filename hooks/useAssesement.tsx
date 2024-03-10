@@ -4,7 +4,7 @@ import { createAssesement } from '@/lib/api/assesement'
 import { isValidEmail } from '@/utils/helpers'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const useAssesement = () => {
   const router = useRouter()

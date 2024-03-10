@@ -21,7 +21,7 @@ export const initialValuesCv = {
     {
       id: 'history',
       title: 'Primary School Teacher',
-      date: '01/2023 - Current',
+      date: 'feb, 2019 - apr, 2023',
       location: 'Wordhouse Green Primary School, London',
       roles: [
         {
@@ -43,7 +43,7 @@ export const initialValuesCv = {
     {
       id: 'education',
       degree: 'Bachelor of Arts, Education',
-      year: '2016',
+      year: 'feb, 2019 - apr, 2023',
       school: 'University of London - London',
     },
   ],
@@ -59,7 +59,7 @@ export const initialValuesCv = {
 
 export const workData = {
   title: 'Primary School Teacher',
-  date: '01/2023 - Current',
+  date: 'feb, 2019 - apr, 2023',
   location: 'Wordhouse Green Primary School, London',
   roles: [
     {
@@ -79,7 +79,7 @@ export const workData = {
 
 export const eduData = {
   degree: 'Bachelor of Arts, Education',
-  year: '2016',
+  year: 'feb, 2019 - apr, 2023',
   school: 'University of London - London',
 }
 
@@ -120,7 +120,7 @@ const WorkHistory = () => {
   const handleRemoveList = (ind: number, idx: number) => {
     setHistory((prev) => {
       const updatedHistory = [...prev]
-      updatedHistory[ind].roles.splice(idx, 1) // Remove the item at index idx
+      updatedHistory[ind].roles.splice(idx, 1)
       return updatedHistory
     })
   }
@@ -165,7 +165,7 @@ const WorkHistory = () => {
                         name={`history[${ind}].date`}
                         as={NameComponent}
                         dir="top"
-                        className={`text-black text-[10px] md:text-sm ${regularFont.className} h-1 capitalize w-full`}
+                        className={`text-black text-xs ${regularFont.className} h-1 capitalize w-full`}
                         st={{
                           color: colorList.colorParagraph,
                         }}

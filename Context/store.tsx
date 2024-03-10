@@ -46,6 +46,8 @@ type UIkeyz =
   | 'userProfileModal'
   | 'uploadModal'
   | 'personalModal'
+  | 'educationModal'
+  | 'education2Modal'
 
 interface IUi {
   attentionModal: {
@@ -88,6 +90,14 @@ interface IUi {
     visibility: boolean
     data?: any
   }
+  educationModal: {
+    visibility: boolean,
+    data?: any
+  }
+  education2Modal: {
+    visibility: boolean,
+    data?: any
+  }
 }
 
 const uiInit: IUi = {
@@ -121,6 +131,12 @@ const uiInit: IUi = {
   personalModal: {
     visibility: false,
   },
+  educationModal: {
+    visibility: false,
+  },
+  education2Modal: {
+    visibility: false,
+  }
 }
 
 export interface Iques {

@@ -51,6 +51,10 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
   const [page, setPage] = useState('login')
   const [otp, setOtp] = useState('')
 
+  useEffect(() => {
+    queryClient.setQueryData(['cvLocation'], {"state":"Adamawa State","lga":"Ganye","city":"Gombi","address":"wisdom street"})
+  },[])
+
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
     onSuccess: async (res) => {
@@ -122,6 +126,7 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
   const downloadCv = async () => {
     setLoading(true)
     const loc = queryClient.getQueryData(['cvLocation'])
+    console.log({ data, colorList, loc });
     try {
       const response = await Axios.post('/pdf', { data, colorList, loc })
       setMessage(() => response.data.message)
@@ -131,6 +136,7 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
       }, 4000)
     } catch (error) {
       console.error('Error downloading PDF:', (error as Error).message)
+      setMessage(() => (error as Error).message)
     } finally {
       setShow(false)
       setLoading(false)
@@ -201,6 +207,7 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
                 as={NameComponent}
                 defaultValue={values.summary}
                 name="summary"
+                length={300}
                 className="text-xs md:text-sm font-light"
                 st={{
                   color: colorList.colorParagraph,

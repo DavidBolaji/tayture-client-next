@@ -188,7 +188,7 @@ const CVTemplatePreview = ({ hide }: { hide?: boolean }) => {
                     </div>
                     <div className="w-full flex flex-[0.3] justify-end">
                       <div
-                        className={` text-[10px] md:text-sm ${regularFont.className} capitalize w-full`}
+                        className={` text-[10px] md:text-xs ${regularFont.className} capitalize w-full`}
                         style={{
                           color: colorList.colorParagraph,
                         }}

@@ -146,3 +146,9 @@ body {
     transform: rotate(360deg);
   }
 }
+/* 
+.ant-picker-focused.ant-picker {
+  border-color: #FFA466 !important;
+  box-shadow: 0 0 0 2px #FFA466;
+  outline: 0;
+} */

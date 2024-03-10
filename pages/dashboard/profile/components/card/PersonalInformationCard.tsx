@@ -54,7 +54,7 @@ const PersonalInformationCard: React.FC<PersonalInformationCardProp> = ({
               <>
                 {address} <span>at </span>
                 {lga} <span>at </span>
-                {city},{state}
+                {city}, {state}
               </>
             ) : (
               '-'

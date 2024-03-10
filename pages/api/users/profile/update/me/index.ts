@@ -3,6 +3,7 @@ import verifyToken from '@/middleware/verifyToken'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  
   if (req.method !== 'PUT')
     return res.status(405).json({ message: 'Method not allowed' })
   const obj = {}

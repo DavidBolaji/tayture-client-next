@@ -11,8 +11,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { data, colorList, loc } = req.body
 
-    if(loc.state.trim().length > 3) {
-     await axios.put('/users/profile/update/me', {
+    if(loc?.state?.trim()?.length > 2) {
+     await Axios.put('/users/profile/update/me', {
        city: loc.city,
        address: loc.address,
        state: loc.state,
@@ -47,15 +47,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       updateWork,
       updateEdu,
       updateSkills,
-      generateAndSendPDF(data, colorList, req.authUser?.email!),
     ])
+    // await generateAndSendPDF(data, colorList, req.authUser?.email!),
 
     res.status(200).send({
       message:
         'File generated successfully, check mail to download Curriculum Vitae',
     })
   } catch (error) {
-    console.error('Error generating PDF:', error)
+  
     res.status(500).send('Error generating PDF')
   }
 }

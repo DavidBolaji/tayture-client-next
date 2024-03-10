@@ -1652,6 +1652,21 @@ export const degree = [
   { key: 'MASTERS', value: 'MASTERS' },
   { key: 'DOCTORATE', value: 'DOCTORATE' },
 ]
+
+export const months = [
+  { key: 'jan', value: 'January' },
+  { key: 'feb', value: 'February' },
+  { key: 'mar', value: 'March' },
+  { key: 'apr', value: 'April' },
+  { key: 'may', value: 'May' },
+  { key: 'jun', value: 'June' },
+  { key: 'jul', value: 'July' },
+  { key: 'aug', value: 'August' },
+  { key: 'sep', value: 'September' },
+  { key: 'oct', value: 'October' },
+  { key: 'nov', value: 'November' },
+  { key: 'dec', value: 'December' },
+];
 export const exp = [
   { key: 'entry', value: 'Entry level' },
   { key: 'mid', value: 'Mid level' },
