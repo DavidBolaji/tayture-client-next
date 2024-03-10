@@ -1,10 +1,10 @@
-import { useGlobalContext } from '@/Context/store';
-import React from 'react';
+import { useGlobalContext } from '@/Context/store'
+import React from 'react'
 
-import { IoIosCloseCircle } from 'react-icons/io';
-import styled from '@emotion/styled';
-import { Modal } from 'antd';
-import EducationForm from './EducationForm';
+import { IoIosCloseCircle } from 'react-icons/io'
+import styled from '@emotion/styled'
+import { Modal } from 'antd'
+import EducationForm from './EducationForm'
 
 export const StyledModal = styled(Modal)`
   background: #fff;
@@ -25,23 +25,22 @@ export const StyledModal = styled(Modal)`
     box-shadow: none;
     padding: 0px;
   }
-`;
-
+`
 
 const EducationModal: React.FC = () => {
-    const { setUI, ui } = useGlobalContext()
-    const handleClose = () => {
-        setUI((prev) => {
-          return {
-            ...prev,
-            educationModal: {
-              ...prev.educationModal,
-              visibility: false,
-            },
-          }
-        })
+  const { setUI, ui } = useGlobalContext()
+  const handleClose = () => {
+    setUI((prev) => {
+      return {
+        ...prev,
+        educationModal: {
+          ...prev.educationModal,
+          visibility: false,
+        },
       }
- 
+    })
+  }
+
   return (
     <StyledModal
       open={ui.educationModal?.visibility}
@@ -50,7 +49,9 @@ const EducationModal: React.FC = () => {
       onCancel={() => handleClose()}
     >
       <div className="w-full h-full pt-[21px] pb-[41px] ">
-        <h3 className="text-center mb-[48px] text-[24px] font-[600]">Add Education</h3>
+        <h3 className="text-center mb-[48px] text-[24px] font-[600]">
+          Add Education
+        </h3>
         <EducationForm />
       </div>
       <div
@@ -61,7 +62,7 @@ const EducationModal: React.FC = () => {
         <IoIosCloseCircle size={24} color="#666666" />
       </div>
     </StyledModal>
-  );
-};
+  )
+}
 
-export default EducationModal;
+export default EducationModal

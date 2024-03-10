@@ -11,17 +11,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { data, colorList, loc } = req.body
 
-    if(loc?.state?.trim()?.length > 2) {
-     await Axios.put('/users/profile/update/me', {
-       city: loc.city,
-       address: loc.address,
-       state: loc.state,
-       lga: loc.lga
-      }, {
-        headers: {
-          Authorization: `Bearer ${req.token}`
-        }
-      })
+    if (loc?.state?.trim()?.length > 2) {
+      await Axios.put(
+        '/users/profile/update/me',
+        {
+          city: loc.city,
+          address: loc.address,
+          state: loc.state,
+          lga: loc.lga,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${req.token}`,
+          },
+        },
+      )
     }
 
     const updateSummary = Axios.put('/users/summary', {
@@ -42,12 +46,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     // Generate PDF, merge, and send mail concurrently
-    await Promise.all([
-      updateSummary,
-      updateWork,
-      updateEdu,
-      updateSkills,
-    ])
+    await Promise.all([updateSummary, updateWork, updateEdu, updateSkills])
     // await generateAndSendPDF(data, colorList, req.authUser?.email!),
 
     res.status(200).send({
@@ -55,7 +54,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         'File generated successfully, check mail to download Curriculum Vitae',
     })
   } catch (error) {
-  
     res.status(500).send('Error generating PDF')
   }
 }

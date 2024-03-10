@@ -91,11 +91,11 @@ interface IUi {
     data?: any
   }
   educationModal: {
-    visibility: boolean,
+    visibility: boolean
     data?: any
   }
   education2Modal: {
-    visibility: boolean,
+    visibility: boolean
     data?: any
   }
 }
@@ -136,7 +136,7 @@ const uiInit: IUi = {
   },
   education2Modal: {
     visibility: false,
-  }
+  },
 }
 
 export interface Iques {

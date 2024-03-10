@@ -52,8 +52,13 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
   const [otp, setOtp] = useState('')
 
   useEffect(() => {
-    queryClient.setQueryData(['cvLocation'], {"state":"Adamawa State","lga":"Ganye","city":"Gombi","address":"wisdom street"})
-  },[])
+    queryClient.setQueryData(['cvLocation'], {
+      state: 'Adamawa State',
+      lga: 'Ganye',
+      city: 'Gombi',
+      address: 'wisdom street',
+    })
+  }, [])
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
@@ -126,7 +131,7 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
   const downloadCv = async () => {
     setLoading(true)
     const loc = queryClient.getQueryData(['cvLocation'])
-    console.log({ data, colorList, loc });
+    console.log({ data, colorList, loc })
     try {
       const response = await Axios.post('/pdf', { data, colorList, loc })
       setMessage(() => response.data.message)

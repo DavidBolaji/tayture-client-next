@@ -1,10 +1,10 @@
-import React from 'react';
-import { IoIosCloseCircle } from 'react-icons/io';
-import styled from '@emotion/styled';
-import { Modal } from 'antd';
-import { useGlobalContext } from '@/Context/store';
-import PersonalForm from './PersonalForm';
-import { PersonalInformationCardProp } from '../../card/PersonalInformationCard';
+import React from 'react'
+import { IoIosCloseCircle } from 'react-icons/io'
+import styled from '@emotion/styled'
+import { Modal } from 'antd'
+import { useGlobalContext } from '@/Context/store'
+import PersonalForm from './PersonalForm'
+import { PersonalInformationCardProp } from '../../card/PersonalInformationCard'
 
 export const StyledModal = styled(Modal)`
   background: #fff;
@@ -25,22 +25,22 @@ export const StyledModal = styled(Modal)`
     box-shadow: none;
     padding: 0px;
   }
-`;
+`
 
-const PersonalModal: React.FC<PersonalInformationCardProp> = ({...rest}) => {
-    const {ui, setUI} = useGlobalContext();
-   
-    const handleClose = () => {
-        setUI((prev) => {
-          return {
-            ...prev,
-            personalModal: {
-              ...prev.personalModal,
-              visibility: false,
-            },
-          }
-        })
+const PersonalModal: React.FC<PersonalInformationCardProp> = ({ ...rest }) => {
+  const { ui, setUI } = useGlobalContext()
+
+  const handleClose = () => {
+    setUI((prev) => {
+      return {
+        ...prev,
+        personalModal: {
+          ...prev.personalModal,
+          visibility: false,
+        },
       }
+    })
+  }
   return (
     <StyledModal
       open={ui.personalModal?.visibility}
@@ -49,10 +49,10 @@ const PersonalModal: React.FC<PersonalInformationCardProp> = ({...rest}) => {
       onCancel={() => handleClose()}
     >
       <div className="w-full h-full pt-[21px] pb-[41px] ">
-        <h3 className="text-center mb-[48px] text-[24px] font-[600]">Personal Information</h3>
-        <PersonalForm 
-            {...rest}
-        />
+        <h3 className="text-center mb-[48px] text-[24px] font-[600]">
+          Personal Information
+        </h3>
+        <PersonalForm {...rest} />
       </div>
       <div
         className="absolute top-7 right-8 z-20 hover:scale-[1.1] delay-200 transition-transform cursor-pointer duration-1000 ease-in-out cursor-point rounded-full"
@@ -61,7 +61,7 @@ const PersonalModal: React.FC<PersonalInformationCardProp> = ({...rest}) => {
         <IoIosCloseCircle size={24} color="#666666" />
       </div>
     </StyledModal>
-  );
-};
+  )
+}
 
-export default PersonalModal;
+export default PersonalModal

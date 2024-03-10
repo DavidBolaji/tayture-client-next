@@ -28,7 +28,7 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
       }
     })
   }
-  const handleOpen2 = (edu:Education) => {
+  const handleOpen2 = (edu: Education) => {
     setUI((prev) => {
       return {
         ...prev,
@@ -39,16 +39,16 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
       }
     })
   }
-  const {mutate, isPending} = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (id: string) => {
-      console.log(id);
+      console.log(id)
       return Axios.delete(`/users/education/me/delete/${id}`)
     },
     onSuccess: () => {
-      setMessage(() => "Education removed successfully")
-      window.location.reload();
-    }
-  });
+      setMessage(() => 'Education removed successfully')
+      window.location.reload()
+    },
+  })
   return (
     <CardWrapper
       key="education"
@@ -82,7 +82,7 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
             </div>
             <div className="col-span-2 flex items-center gap-5 justify-end w-full">
               <div
-                onClick={()=>handleOpen2(edu)}
+                onClick={() => handleOpen2(edu)}
                 className="w-[32px] h-[32px] rounded-full bg-ash_200 flex items-center justify-center border cursor-pointer hover:scale-110 border-ash_600 hover:border hover:border-ash_600  transition-all duration-300"
               >
                 <FaPen color="#FFA466" />
@@ -101,8 +101,8 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
         </div>
       ))}
       {education.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-       <EducationModal />
-       <EducationEditModal />
+      <EducationModal />
+      <EducationEditModal />
     </CardWrapper>
   )
 }

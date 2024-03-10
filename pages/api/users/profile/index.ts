@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       path: true,
       email: true,
       phone: true,
-    
+
       summary: true,
       work: {
         include: {
@@ -32,7 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           state: true,
           city: true,
           available: true,
-          workplace: true
+          workplace: true,
         },
       },
     },

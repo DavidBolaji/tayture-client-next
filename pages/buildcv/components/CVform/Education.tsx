@@ -6,11 +6,10 @@ import { MdOutlineAdd } from 'react-icons/md'
 import { Tooltip } from 'antd'
 import NameComponent from './NameComponent'
 import { boldFont, regularFont } from '@/assets/fonts/fonts'
-import useCv, {eduData} from '../../hook/useCv'
-
+import useCv, { eduData } from '../../hook/useCv'
 
 const Education = () => {
-  const {setEducation, education, colorList} = useCv()
+  const { setEducation, education, colorList } = useCv()
 
   const handlePushEdu = (fn: (data: any) => void) => {
     const id = new Date().toISOString()

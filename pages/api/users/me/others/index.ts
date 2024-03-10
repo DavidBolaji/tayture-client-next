@@ -9,24 +9,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const user = await db.others.findFirst({
     where: {
       userId: req.authUser?.id,
-    }
+    },
   })
 
-  if(user) {
+  if (user) {
     await db.others.deleteMany({
-        where: {
-            userId: req.authUser?.id
-        }
+      where: {
+        userId: req.authUser?.id,
+      },
     })
   }
 
   await db.others.createMany({
     data: req.body['others'].map((e: string) => {
-        return {
-            text: e,
-            userId: req.authUser?.id
-        }
-    })
+      return {
+        text: e,
+        userId: req.authUser?.id,
+      }
+    }),
   })
 
   return res.status(200).json({

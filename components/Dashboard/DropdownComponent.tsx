@@ -61,7 +61,7 @@ const DropdownComponent: React.FC<{
   const queryClient = useQueryClient()
   const router = useRouter()
 
-  const user = queryClient.getQueryData(['user']) as User & {profile: Profile}
+  const user = queryClient.getQueryData(['user']) as User & { profile: Profile }
 
   const auth = user ? user : null
   const profile = { picture: user?.profile?.picture ?? '' }

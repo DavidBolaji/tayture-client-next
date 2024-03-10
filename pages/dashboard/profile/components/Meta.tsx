@@ -1,14 +1,13 @@
-import Head from 'next/head';
-import { FC } from 'react';
+import Head from 'next/head'
+import { FC } from 'react'
 
 interface MetaProps {
-  imageUrl: string | null;
-  title:  string;
-  desc:  string;
+  imageUrl: string | null
+  title: string
+  desc: string
 }
 
 const Meta: FC<MetaProps> = ({ imageUrl, title, desc }) => {
-
   return (
     <Head>
       <title>{title}</title>
@@ -23,7 +22,7 @@ const Meta: FC<MetaProps> = ({ imageUrl, title, desc }) => {
         </>
       )}
     </Head>
-  );
-};
+  )
+}
 
-export default Meta;
+export default Meta

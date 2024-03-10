@@ -1666,7 +1666,7 @@ export const months = [
   { key: 'oct', value: 'October' },
   { key: 'nov', value: 'November' },
   { key: 'dec', value: 'December' },
-];
+]
 export const exp = [
   { key: 'entry', value: 'Entry level' },
   { key: 'mid', value: 'Mid level' },

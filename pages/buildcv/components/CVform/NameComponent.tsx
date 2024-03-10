@@ -1,5 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { ErrorMessage, Field, FieldProps, Form, Formik, useFormikContext } from 'formik'
+import {
+  ErrorMessage,
+  Field,
+  FieldProps,
+  Form,
+  Formik,
+  useFormikContext,
+} from 'formik'
 import cn from 'classnames'
 import { MdOutlineModeEdit } from 'react-icons/md'
 import { regularFont } from '@/assets/fonts/fonts'
@@ -23,11 +30,10 @@ export const LocationSchema = Yup.object().shape({
   lga: Yup.string().required('LGA is required'),
   address: Yup.string().required('Address is required'),
 })
-  
+
 const educationFormSchema = Yup.object().shape({
   startMonth: Yup.string().required('Month is required'),
-  startYear: Yup.string() 
-    .required('Year is required'),
+  startYear: Yup.string().required('Year is required'),
   endMonth: Yup.string().required('Month is required'),
   endYear: Yup.string()
     .required('Year is required')
@@ -35,16 +41,14 @@ const educationFormSchema = Yup.object().shape({
       'startYearBeforeEndYear',
       'End year must be greater than or equal to start year',
       function (startYear) {
-        const endYear = +this.parent.startYear;
-        return +startYear! >= endYear;
-      }
+        const endYear = +this.parent.startYear
+        return +startYear! >= endYear
+      },
     ),
-  });
+})
 const degreeFormSchema = Yup.object().shape({
- 
-  degree: Yup.string().required('Degree is required')
-  });
-  
+  degree: Yup.string().required('Degree is required'),
+})
 
 export type Ilocation = {
   state: string
@@ -93,16 +97,16 @@ const NameComponent: React.FC<ITextarea> = ({
   }
 
   const handleEditClick = () => {
-    console.log(name);
+    console.log(name)
     if (name === 'location') {
       setOpen(true)
-    } else if (name?.split('.')[1] === "date") {
+    } else if (name?.split('.')[1] === 'date') {
       setOpenDate(true)
-    } else if (name?.split('.')[1] === "year") {
+    } else if (name?.split('.')[1] === 'year') {
       setOpen1(true)
-    } else if (name?.split('.')[1] === "degree") {
+    } else if (name?.split('.')[1] === 'degree') {
       setOpenDegree(true)
-    } else{
+    } else {
       setDisabled((prev) => !prev)
       if (textareaRef.current) {
         const t = setTimeout(() => {
@@ -129,7 +133,6 @@ const NameComponent: React.FC<ITextarea> = ({
   }
 
   const onSubmit2 = (data: any) => {
-    
     setFieldValue(
       name!,
       `${data.startMonth}, ${data.startYear} - ${data.endMonth}, ${data.endYear}`,
@@ -138,11 +141,7 @@ const NameComponent: React.FC<ITextarea> = ({
     setOpenDate(false)
   }
   const onSubmit3 = (data: any) => {
-    
-    setFieldValue(
-      name!,
-      `${data.degree}, ${data.field}`,
-    )
+    setFieldValue(name!, `${data.degree}, ${data.field}`)
     setOpenDegree(false)
   }
 
@@ -220,7 +219,11 @@ const NameComponent: React.FC<ITextarea> = ({
           )}
         </Formik>
       </Drawer>
-      <Drawer open={open1} title="Set Education Date" onClose={() => setOpen1(false)}>
+      <Drawer
+        open={open1}
+        title="Set Education Date"
+        onClose={() => setOpen1(false)}
+      >
         <Formik
           validationSchema={educationFormSchema}
           validateOnMount
@@ -232,124 +235,124 @@ const NameComponent: React.FC<ITextarea> = ({
           }}
           onSubmit={onSubmit2}
         >
-          {({ handleSubmit, isValid, values, handleBlur, errors, touched, setFieldValue }) => (
+          {({
+            handleSubmit,
+            isValid,
+            values,
+            handleBlur,
+            errors,
+            touched,
+            setFieldValue,
+          }) => (
             <Form onSubmit={handleSubmit}>
-            <h3 className="mb-2 ml-1 text-[16px] font-[600]">Start date</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-            <Field
-              name="startMonth"
-              as={SelectInput}
-              placeholder="Select start month"
-              text="Select start month"
-              option={months}
-            />
-             
-            </div>
-            <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-              <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-              <Field name="startYear">
-                  
-                  {({ field }: { field: FieldProps['field'] }) => (
-                    <div className="">
-                      <ConfigProvider
-                        theme={{
-                          token: {
-                            controlOutline: '#FFA466',
-                            colorLinkHover: 'none',
-                            colorPrimaryHover: 'none',
-                            colorBorder: 'transparent',
-                            colorPrimary: "#FF7517"
-                          },
-                        }}
-                      >
-                        <InputDateComponent
-                          {...field}
-                          showIcon={values.startYear.toString().length > 0}
-                          valid={!errors.startYear}
-                          picker="year"
-                          // @ts-ignore
-                          border={errors.edu_startYear && touched.startYear}
-                          // @ts-ignore
-                          onChange={(e: any) => {
-                            setFieldValue('startYear', e.$y);
-                          }}
-                          onBlur={(e: any) => {
-                            handleBlur(e);
-                          }}
-                          
-                        />
-                      </ConfigProvider>
-                    </div>
-                  )}
-                </Field>
+              <h3 className="mb-2 ml-1 text-[16px] font-[600]">Start date</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                  <Field
+                    name="startMonth"
+                    as={SelectInput}
+                    placeholder="Select start month"
+                    text="Select start month"
+                    option={months}
+                  />
+                </div>
+                <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                  <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                    <Field name="startYear">
+                      {({ field }: { field: FieldProps['field'] }) => (
+                        <div className="">
+                          <ConfigProvider
+                            theme={{
+                              token: {
+                                controlOutline: '#FFA466',
+                                colorLinkHover: 'none',
+                                colorPrimaryHover: 'none',
+                                colorBorder: 'transparent',
+                                colorPrimary: '#FF7517',
+                              },
+                            }}
+                          >
+                            <InputDateComponent
+                              {...field}
+                              showIcon={values.startYear.toString().length > 0}
+                              valid={!errors.startYear}
+                              picker="year"
+                              // @ts-ignore
+                              border={errors.edu_startYear && touched.startYear}
+                              // @ts-ignore
+                              onChange={(e: any) => {
+                                setFieldValue('startYear', e.$y)
+                              }}
+                              onBlur={(e: any) => {
+                                handleBlur(e)
+                              }}
+                            />
+                          </ConfigProvider>
+                        </div>
+                      )}
+                    </Field>
+                  </div>
+                  <div className="-mt-4">
+                    <ErrorMessage name="startYear">
+                      {(msg) => <FormError msg={msg} />}
+                    </ErrorMessage>
+                  </div>
+                </div>
               </div>
-              <div className="-mt-4">
-                <ErrorMessage
-                  name="startYear"
-                >
-                     {(msg) => <FormError msg={msg} />}
-                </ErrorMessage>
-              </div>
-            </div>
-          </div>
-          <h3 className="ml-1 text-[16px] font-[600]">End date</h3>
+              <h3 className="ml-1 text-[16px] font-[600]">End date</h3>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
-            <Field
-              name="endMonth"
-              as={SelectInput}
-              placeholder="Select end month"
-              text="Select end month"
-              option={months}
-            />
-            </div>
-            <div className="w-full col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 mb-6">
-              <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-              <Field name="endYear">
-                 
-                  {({ field }: { field: FieldProps['field'] }) => (
-                    <div className="">
-                      <ConfigProvider
-                        theme={{
-                          token: {
-                            controlOutline: '#FFA466',
-                            colorLinkHover: 'none',
-                            colorPrimaryHover: 'none',
-                            colorBorder: 'transparent',
-                            colorPrimary: "#FF7517"
-                          },
-                        }}
-                      >
-                        <InputDateComponent
-                          {...field}
-                          showIcon={values.endYear.toString().length > 0}
-                          valid={!errors.endYear}
-                          picker="year"
-                          // @ts-ignore
-                          border={errors.endYear && touched.endYear}
-                          // @ts-ignore
-                          onChange={(e: any) => {
-                            console.log(e.$y);
-                            setFieldValue('endYear', e.$y);
-                          }}
-                          onBlur={(e: any) => {
-                            handleBlur(e);
-                          }}
-                        />
-                      </ConfigProvider>
-                    </div>
-                  )}
-                </Field>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
+                  <Field
+                    name="endMonth"
+                    as={SelectInput}
+                    placeholder="Select end month"
+                    text="Select end month"
+                    option={months}
+                  />
+                </div>
+                <div className="w-full col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 mb-6">
+                  <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                    <Field name="endYear">
+                      {({ field }: { field: FieldProps['field'] }) => (
+                        <div className="">
+                          <ConfigProvider
+                            theme={{
+                              token: {
+                                controlOutline: '#FFA466',
+                                colorLinkHover: 'none',
+                                colorPrimaryHover: 'none',
+                                colorBorder: 'transparent',
+                                colorPrimary: '#FF7517',
+                              },
+                            }}
+                          >
+                            <InputDateComponent
+                              {...field}
+                              showIcon={values.endYear.toString().length > 0}
+                              valid={!errors.endYear}
+                              picker="year"
+                              // @ts-ignore
+                              border={errors.endYear && touched.endYear}
+                              // @ts-ignore
+                              onChange={(e: any) => {
+                                console.log(e.$y)
+                                setFieldValue('endYear', e.$y)
+                              }}
+                              onBlur={(e: any) => {
+                                handleBlur(e)
+                              }}
+                            />
+                          </ConfigProvider>
+                        </div>
+                      )}
+                    </Field>
+                  </div>
+                  <ErrorMessage name="endYear">
+                    {(msg) => <FormError msg={msg} />}
+                  </ErrorMessage>
+                </div>
               </div>
-              <ErrorMessage
-                  name="endYear"
-                >
-                     {(msg) => <FormError msg={msg} />}
-                </ErrorMessage>
-            </div>
-          </div>
               <div className="text-center">
                 <Button
                   disabled={!isValid}
@@ -364,32 +367,36 @@ const NameComponent: React.FC<ITextarea> = ({
           )}
         </Formik>
       </Drawer>
-      <Drawer open={openDegree} title="Select Degree" onClose={() => setOpenDegree(false)}>
+      <Drawer
+        open={openDegree}
+        title="Select Degree"
+        onClose={() => setOpenDegree(false)}
+      >
         <Formik
           validationSchema={degreeFormSchema}
           validateOnMount
           initialValues={{
             degree: '',
-            field: ''
+            field: '',
           }}
           onSubmit={onSubmit3}
         >
           {({ handleSubmit, isValid }) => (
             <Form onSubmit={handleSubmit}>
-           <Field
-              name="field"
-              as={StyledInput}
-              placeholder="Field of study"
-              text="Field ofStudy"
-            />
+              <Field
+                name="field"
+                as={StyledInput}
+                placeholder="Field of study"
+                text="Field ofStudy"
+              />
 
-          <Field
-              name="degree"
-              as={SelectInput}
-              placeholder="Minimum educational qualification"
-              text="Minimum educational qualification"
-              option={degree}
-            />
+              <Field
+                name="degree"
+                as={SelectInput}
+                placeholder="Minimum educational qualification"
+                text="Minimum educational qualification"
+                option={degree}
+              />
               <div className="text-center">
                 <Button
                   disabled={!isValid}
@@ -404,7 +411,11 @@ const NameComponent: React.FC<ITextarea> = ({
           )}
         </Formik>
       </Drawer>
-      <Drawer open={openDate} title="Set Work Date" onClose={() => setOpenDate(false)}>
+      <Drawer
+        open={openDate}
+        title="Set Work Date"
+        onClose={() => setOpenDate(false)}
+      >
         <Formik
           validationSchema={educationFormSchema}
           validateOnMount
@@ -416,124 +427,124 @@ const NameComponent: React.FC<ITextarea> = ({
           }}
           onSubmit={onSubmit2}
         >
-          {({ handleSubmit, isValid, values, handleBlur, errors, touched, setFieldValue }) => (
+          {({
+            handleSubmit,
+            isValid,
+            values,
+            handleBlur,
+            errors,
+            touched,
+            setFieldValue,
+          }) => (
             <Form onSubmit={handleSubmit}>
-            <h3 className="mb-2 ml-1 text-[16px] font-[600]">Start date</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-            <Field
-              name="startMonth"
-              as={SelectInput}
-              placeholder="Select start month"
-              text="Select start month"
-              option={months}
-            />
-             
-            </div>
-            <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-              <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-              <Field name="startYear">
-                  
-                  {({ field }: { field: FieldProps['field'] }) => (
-                    <div className="">
-                      <ConfigProvider
-                        theme={{
-                          token: {
-                            controlOutline: '#FFA466',
-                            colorLinkHover: 'none',
-                            colorPrimaryHover: 'none',
-                            colorBorder: 'transparent',
-                            colorPrimary: "#FF7517"
-                          },
-                        }}
-                      >
-                        <InputDateComponent
-                          {...field}
-                          showIcon={values.startYear.toString().length > 0}
-                          valid={!errors.startYear}
-                          picker="year"
-                          // @ts-ignore
-                          border={errors.edu_startYear && touched.startYear}
-                          // @ts-ignore
-                          onChange={(e: any) => {
-                            setFieldValue('startYear', e.$y);
-                          }}
-                          onBlur={(e: any) => {
-                            handleBlur(e);
-                          }}
-                          
-                        />
-                      </ConfigProvider>
-                    </div>
-                  )}
-                </Field>
+              <h3 className="mb-2 ml-1 text-[16px] font-[600]">Start date</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                  <Field
+                    name="startMonth"
+                    as={SelectInput}
+                    placeholder="Select start month"
+                    text="Select start month"
+                    option={months}
+                  />
+                </div>
+                <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                  <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                    <Field name="startYear">
+                      {({ field }: { field: FieldProps['field'] }) => (
+                        <div className="">
+                          <ConfigProvider
+                            theme={{
+                              token: {
+                                controlOutline: '#FFA466',
+                                colorLinkHover: 'none',
+                                colorPrimaryHover: 'none',
+                                colorBorder: 'transparent',
+                                colorPrimary: '#FF7517',
+                              },
+                            }}
+                          >
+                            <InputDateComponent
+                              {...field}
+                              showIcon={values.startYear.toString().length > 0}
+                              valid={!errors.startYear}
+                              picker="year"
+                              // @ts-ignore
+                              border={errors.edu_startYear && touched.startYear}
+                              // @ts-ignore
+                              onChange={(e: any) => {
+                                setFieldValue('startYear', e.$y)
+                              }}
+                              onBlur={(e: any) => {
+                                handleBlur(e)
+                              }}
+                            />
+                          </ConfigProvider>
+                        </div>
+                      )}
+                    </Field>
+                  </div>
+                  <div className="-mt-4">
+                    <ErrorMessage name="startYear">
+                      {(msg) => <FormError msg={msg} />}
+                    </ErrorMessage>
+                  </div>
+                </div>
               </div>
-              <div className="-mt-4">
-                <ErrorMessage
-                  name="startYear"
-                >
-                     {(msg) => <FormError msg={msg} />}
-                </ErrorMessage>
-              </div>
-            </div>
-          </div>
-          <h3 className="ml-1 text-[16px] font-[600]">End date</h3>
+              <h3 className="ml-1 text-[16px] font-[600]">End date</h3>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
-            <Field
-              name="endMonth"
-              as={SelectInput}
-              placeholder="Select end month"
-              text="Select end month"
-              option={months}
-            />
-            </div>
-            <div className="w-full col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 mb-6">
-              <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-              <Field name="endYear">
-                 
-                  {({ field }: { field: FieldProps['field'] }) => (
-                    <div className="">
-                      <ConfigProvider
-                        theme={{
-                          token: {
-                            controlOutline: '#FFA466',
-                            colorLinkHover: 'none',
-                            colorPrimaryHover: 'none',
-                            colorBorder: 'transparent',
-                            colorPrimary: "#FF7517"
-                          },
-                        }}
-                      >
-                        <InputDateComponent
-                          {...field}
-                          showIcon={values.endYear.toString().length > 0}
-                          valid={!errors.endYear}
-                          picker="year"
-                          // @ts-ignore
-                          border={errors.endYear && touched.endYear}
-                          // @ts-ignore
-                          onChange={(e: any) => {
-                            console.log(e.$y);
-                            setFieldValue('endYear', e.$y);
-                          }}
-                          onBlur={(e: any) => {
-                            handleBlur(e);
-                          }}
-                        />
-                      </ConfigProvider>
-                    </div>
-                  )}
-                </Field>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
+                  <Field
+                    name="endMonth"
+                    as={SelectInput}
+                    placeholder="Select end month"
+                    text="Select end month"
+                    option={months}
+                  />
+                </div>
+                <div className="w-full col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 mb-6">
+                  <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                    <Field name="endYear">
+                      {({ field }: { field: FieldProps['field'] }) => (
+                        <div className="">
+                          <ConfigProvider
+                            theme={{
+                              token: {
+                                controlOutline: '#FFA466',
+                                colorLinkHover: 'none',
+                                colorPrimaryHover: 'none',
+                                colorBorder: 'transparent',
+                                colorPrimary: '#FF7517',
+                              },
+                            }}
+                          >
+                            <InputDateComponent
+                              {...field}
+                              showIcon={values.endYear.toString().length > 0}
+                              valid={!errors.endYear}
+                              picker="year"
+                              // @ts-ignore
+                              border={errors.endYear && touched.endYear}
+                              // @ts-ignore
+                              onChange={(e: any) => {
+                                console.log(e.$y)
+                                setFieldValue('endYear', e.$y)
+                              }}
+                              onBlur={(e: any) => {
+                                handleBlur(e)
+                              }}
+                            />
+                          </ConfigProvider>
+                        </div>
+                      )}
+                    </Field>
+                  </div>
+                  <ErrorMessage name="endYear">
+                    {(msg) => <FormError msg={msg} />}
+                  </ErrorMessage>
+                </div>
               </div>
-              <ErrorMessage
-                  name="endYear"
-                >
-                     {(msg) => <FormError msg={msg} />}
-                </ErrorMessage>
-            </div>
-          </div>
               <div className="text-center">
                 <Button
                   disabled={!isValid}

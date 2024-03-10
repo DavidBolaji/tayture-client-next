@@ -66,15 +66,17 @@ const PersonalInformationCard: React.FC<PersonalInformationCardProp> = ({
           <h3 className="col-span-4">{workplace ? workplace : '-'}</h3>
         </div>
       </CardWrapper>
-      <PersonalModal {...{
-  email,
-  phone,
-  address,
-  city,
-  state,
-  lga,
-  workplace,
-}} />
+      <PersonalModal
+        {...{
+          email,
+          phone,
+          address,
+          city,
+          state,
+          lga,
+          workplace,
+        }}
+      />
     </>
   )
 }

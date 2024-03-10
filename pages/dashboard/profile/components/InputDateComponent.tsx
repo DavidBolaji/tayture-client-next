@@ -1,17 +1,16 @@
-
-import { regularFont } from '@/assets/fonts/fonts';
-import { DatePicker } from 'antd';
+import { regularFont } from '@/assets/fonts/fonts'
+import { DatePicker } from 'antd'
 
 export interface IInput {
-  showIcon?: boolean;
-  valid?: boolean;
-  text?: string;
-  border: boolean;
-  focus: boolean;
-  picker?: any;
-  value?: any;
-  format?: any;
-  readonly?: boolean;
+  showIcon?: boolean
+  valid?: boolean
+  text?: string
+  border: boolean
+  focus: boolean
+  picker?: any
+  value?: any
+  format?: any
+  readonly?: boolean
 }
 // h-[2.9375rem] w-full border border-[rgba(35,35,35, 0.2)] outline-none focus:ring-0
 function InputDateComponent({
@@ -43,7 +42,7 @@ function InputDateComponent({
         />
       </div>
     </div>
-  );
+  )
 }
 
-export default InputDateComponent;
+export default InputDateComponent
