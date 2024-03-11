@@ -116,8 +116,16 @@ model Summary {
 model WorkHistory {
   id       String     @id @default(uuid())
   title    String     @db.VarChar(50)
-  date     String     @db.VarChar(20)
   location String     @db.VarChar(100)
+  startYear String
+  endYear  String
+  startMonth String
+  endMonth String
+  endDate  String?
+  city   String
+  state   String
+  lga     String
+  address   String
   roles    WorkRole[]
 
   userId String
