@@ -1,6 +1,6 @@
 import ejs from 'ejs'
 import transporter from './transporter'
-import path from 'path';
+import path from 'path'
 
 interface ImailOptions {
   from: string

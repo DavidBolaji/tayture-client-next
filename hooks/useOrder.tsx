@@ -10,12 +10,12 @@ export const initialValuesCv = {
   name: `DANIEL
   OLOGUNLEKO`,
   summary:
-    'Experienced web developer proficient in frontend and backend development, with expertise in HTML, CSS, JavaScript, and various frameworks/libraries. Skilled in version control (Git), deployment, and debugging. Dedicated to creating responsive, efficient, and visually appealing websites and web applications. Strong problem-solving abilities and a passion for staying updated with the latest web technologies.',
+    'Experienced web developer proficient in frontend and backend development, with expertise in HTML, CSS, JavaScript, and various frameworks/libraries. Skilled in version control (Git), deployment, and debugging.',
   history: [
     {
       id: 'history',
       title: 'Primary School Teacher',
-      date: '01/2023 - Current',
+      date: 'feb, 2019 - apr, 2023',
       location: 'Wordhouse Green Primary School, London',
       roles: [
         {
@@ -36,12 +36,12 @@ export const initialValuesCv = {
   education: [
     {
       id: 'education',
-      degree: 'Bachelor of Arts, Education',
-      year: '2016',
+      degree: 'BACHELORS, Education',
+      year: 'feb, 2019 - apr, 2023',
       school: 'University of London - London',
     },
   ],
-  location: '195 Crown Street, London W12 4WEB',
+  location: 'wisdom street, Ganye, Gombi, Adamawa State',
   number: '+23485674321',
   email: 'davidologunleko@gmail.com.uk',
   skills: [
@@ -53,7 +53,7 @@ export const initialValuesCv = {
 
 export const workData = {
   title: 'Primary School Teacher',
-  date: '01/2023 - Current',
+  date: 'feb, 2019 - apr, 2023',
   location: 'Wordhouse Green Primary School, London',
   roles: [
     {
@@ -73,7 +73,7 @@ export const workData = {
 
 export const eduData = {
   degree: 'Bachelor of Arts, Education',
-  year: '2016',
+  year: 'feb, 2019 - apr, 2023',
   school: 'University of London - London',
 }
 

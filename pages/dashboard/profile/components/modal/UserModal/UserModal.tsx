@@ -39,7 +39,6 @@ const StyledModal = styled(Modal)`
   }
 `
 
-
 const UserModal: React.FC<UserCardProps> = ({
   fname,
   lname,
@@ -69,9 +68,6 @@ const UserModal: React.FC<UserCardProps> = ({
       onCancel={handleClose}
     >
       <div className="w-full h-full py-10">
-        <div className="w-full flex items-center justify-center mb-[120px]">
-          <UserImage picture={picture} />
-        </div>
         <UserForm {...{ fname, lname, summary, picture, available }} />
       </div>
     </StyledModal>

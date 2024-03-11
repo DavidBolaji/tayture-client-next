@@ -38,7 +38,13 @@ const BuildPage = () => {
                   className="hidden-radio"
                 />
                 <div className="w-[250px] h-[300px] overflow-hidden cont">
-                  <Image className='object-fit ' src={Images.CV} alt={`Template ${el}`} width={300} height={225} />
+                  <Image
+                    className="object-fit "
+                    src={Images.CV}
+                    alt={`Template ${el}`}
+                    width={300}
+                    height={225}
+                  />
                 </div>
               </label>
             </div>

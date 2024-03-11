@@ -67,7 +67,6 @@ const UserCard: React.FC<UserCardProps> = ({
                   >
                     <span className="md:text-[80px]">{fname.split('')[0]}</span>
                   </Avatar>
-                  {/* <StyledAvatar width={150} height={150} name={`${auth?.fname}`} /> */}
                 </div>
               )}
             </div>
@@ -91,8 +90,8 @@ const UserCard: React.FC<UserCardProps> = ({
             Open to work
           </span>
         ) : (
-          <span className="dsm:text-[12px] text-[8px] text-black_200 px-[24px] py-[8px] rounded-[15px] bg-pink-200">
-            I&aposm casually looking
+          <span className="sm:text-[12px] text-[10px] text-black_200 px-[24px] py-[8px] rounded-[15px] bg-pink-200">
+            I&apos;m casually looking
           </span>
         )}
       </div>

@@ -45,6 +45,11 @@ type UIkeyz =
   | 'scheduleModal'
   | 'userProfileModal'
   | 'uploadModal'
+  | 'personalModal'
+  | 'educationModal'
+  | 'education2Modal'
+  | 'experienceModal'
+  | 'experienceEditModal'
 
 interface IUi {
   attentionModal: {
@@ -83,6 +88,26 @@ interface IUi {
     visibility: boolean
     data?: any
   }
+  personalModal: {
+    visibility: boolean
+    data?: any
+  }
+  educationModal: {
+    visibility: boolean
+    data?: any
+  }
+  education2Modal: {
+    visibility: boolean
+    data?: any
+  }
+  experienceModal: {
+    visibility: boolean
+    data?: any
+  }
+  experienceEditModal: {
+    visibility: boolean
+    data?: any
+  }
 }
 
 const uiInit: IUi = {
@@ -111,6 +136,21 @@ const uiInit: IUi = {
     visibility: false,
   },
   uploadModal: {
+    visibility: false,
+  },
+  personalModal: {
+    visibility: false,
+  },
+  educationModal: {
+    visibility: false,
+  },
+  education2Modal: {
+    visibility: false,
+  },
+  experienceModal: {
+    visibility: false,
+  },
+  experienceEditModal: {
     visibility: false,
   },
 }

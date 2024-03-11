@@ -32,6 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           state: true,
           city: true,
           available: true,
+          workplace: true,
         },
       },
     },

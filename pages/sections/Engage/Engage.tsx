@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 
 const Engage = () => {
-  const router = useRouter();
+  const router = useRouter()
   return (
     <TwoColumn
       left={
@@ -36,7 +36,13 @@ const Engage = () => {
             teachers to unleash your child&apos;s potential.
           </p>
           <div className="lg:block flex justify-center lg:ml-1">
-            <Button bold={false} text="Get Started" render="dark" hover  onClick={() => router.push('/auth/register')} />
+            <Button
+              bold={false}
+              text="Get Started"
+              render="dark"
+              hover
+              onClick={() => router.push('/auth/register')}
+            />
           </div>
         </div>
       }

@@ -14,6 +14,7 @@ import { getUserSchool } from '@/lib/api/school'
 import { regularFont } from '@/assets/fonts/fonts'
 import { userSignout } from '@/lib/api/user'
 import { IUser } from '@/pages/api/users/types'
+import { Profile, User } from '@prisma/client'
 
 export const StyledDropdown = styled(Dropdown)`
   .ant-dropdown {
@@ -60,10 +61,10 @@ const DropdownComponent: React.FC<{
   const queryClient = useQueryClient()
   const router = useRouter()
 
-  const user = queryClient.getQueryData(['user']) as IUser
+  const user = queryClient.getQueryData(['user']) as User & { profile: Profile }
 
   const auth = user ? user : null
-  const profile = { picture: '' }
+  const profile = { picture: user?.profile?.picture ?? '' }
 
   const { data: school } = useQuery({
     queryKey: ['school'],

@@ -17,6 +17,7 @@ import PersonalInformationCard from './components/card/PersonalInformationCard'
 import EducationCard from './components/card/EducationCard'
 import ExperienceCard from './components/card/ExperienceCard'
 import SkillCard from './components/card/SkillCard'
+import Meta from './components/Meta'
 
 export default function Page({
   profile,
@@ -30,33 +31,40 @@ export default function Page({
   }
 }) {
   return (
-    <div className="pb-20">
-      <UserCard
-        fname={profile.fname}
-        lname={profile.lname}
-        picture={profile?.profile?.picture}
-        summary={profile?.summary?.text}
-        available={profile?.profile?.available}
+    <>
+      <Meta
+        imageUrl={profile?.profile?.picture}
+        title={`${profile.fname}'s Page`}
+        desc="Tayture offers me access to multiple opportunities as an educator to learn more"
       />
-      <ShareCard
-        fname={profile.fname}
-        lname={profile.lname}
-        picture={profile?.profile?.picture}
-      />
-      <PersonalInformationCard
-        email={profile.email}
-        phone={profile.phone}
-        picture={profile?.profile?.picture}
-        address={profile?.profile?.address}
-        state={profile?.profile?.state}
-        city={profile?.profile?.city}
-        lga={profile?.profile?.lga}
-        workplace={'Tayture'}
-      />
-      <EducationCard education={profile.education} />
-      <ExperienceCard experience={profile.work} />
-      <SkillCard skills={profile.skills} />
-    </div>
+      <div className="pb-20">
+        <UserCard
+          fname={profile.fname}
+          lname={profile.lname}
+          picture={profile?.profile?.picture}
+          summary={profile?.summary?.text}
+          available={profile?.profile?.available}
+        />
+        <ShareCard
+          fname={profile.fname}
+          lname={profile.lname}
+          picture={profile?.profile?.picture}
+        />
+        <PersonalInformationCard
+          email={profile.email}
+          phone={profile.phone}
+          picture={profile?.profile?.picture}
+          address={profile?.profile?.address}
+          state={profile?.profile?.state}
+          city={profile?.profile?.city}
+          lga={profile?.profile?.lga}
+          workplace={profile?.profile?.workplace}
+        />
+        <EducationCard education={profile.education} />
+        <ExperienceCard experience={profile.work} />
+        <SkillCard skills={profile.skills} />
+      </div>
+    </>
   )
 }
 

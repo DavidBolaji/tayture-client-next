@@ -10,6 +10,12 @@ body {
   overflow: hidden;
 }
 
+.blinker {
+  color: transparent;
+  text-shadow: 0 0 0 gray;
+
+}
+
 /**select antd global css */
 .ant-select-item-option-selected {
   background-color: #ff7517 !important;
@@ -146,3 +152,9 @@ body {
     transform: rotate(360deg);
   }
 }
+/* 
+.ant-picker-focused.ant-picker {
+  border-color: #FFA466 !important;
+  box-shadow: 0 0 0 2px #FFA466;
+  outline: 0;
+} */

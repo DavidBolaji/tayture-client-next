@@ -1,6 +1,6 @@
 import db from '@/db/db'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { v4 as uuid } from 'uuid'
+
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'PUT')
@@ -32,8 +32,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           year: string
           school: string
         }) => ({
-          degree,
-          year,
+          degree: degree.split(',')[0],
+          field: degree.split(',')[1],
+          startYear: year.split('-')[0].split(',')[1],
+          startMonth: year.split('-')[0].split(',')[0],
+          endMonth: year.split('-')[1].split(',')[0],
+          endYear: year.split('-')[1].split(',')[1],
           school,
           userId: req.body['userId'],
         }),

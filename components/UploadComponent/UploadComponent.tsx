@@ -8,7 +8,8 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
   const uploadRef = useRef<HTMLImageElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [loading, setLoading] = useState(false)
-  const { setMessage, setImg } = useGlobalContext()
+  const { setMessage, setImg, img } = useGlobalContext()
+  console.log(image)
   const handleUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     setLoading((prev) => !prev)
     const inputElement = event.target
@@ -25,8 +26,12 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
       )
 
       try {
-        const response = await axios.post('https://api.cloudinary.com/v1_1/dhwlkhbet/auto/upload', formData)
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/dhwlkhbet/auto/upload',
+          formData,
+        )
         const { secure_url } = response.data
+        console.log(secure_url)
         if (uploadRef.current?.src) {
           uploadRef.current.src = secure_url
           setImg(() => secure_url)

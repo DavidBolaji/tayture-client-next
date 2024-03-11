@@ -19,7 +19,6 @@ export const cvSchema = Yup.object().shape({
   cv: Yup.string().required('Upload Cv to submit'),
 })
 
-
 const isAllowedFileType = (fileType: string) =>
   [
     'application/pdf',
@@ -29,12 +28,11 @@ const isAllowedFileType = (fileType: string) =>
 
 const HandleUpload = () => {
   const { ui, setUI, setMessage } = useGlobalContext()
-  const queryClient = useQueryClient();
-  const user = queryClient.getQueryData(['user']) as User & {profile: Profile}
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData(['user']) as User & { profile: Profile }
 
   const [loading, setLoading] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
-
 
   const handleUpload = async (
     e: ChangeEvent<HTMLInputElement>,
@@ -74,30 +72,29 @@ const HandleUpload = () => {
     }
   }
 
-  const {mutate, isPending} = useMutation({
-    mutationFn: async(data) => {
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data) => {
       return await Axios.put('/users/profile/update/me', data)
     },
     onSuccess: (res) => {
-      handleClose();
+      handleClose()
       queryClient.invalidateQueries({
-        queryKey: ['users']
+        queryKey: ['users'],
       })
       setMessage(() => res.data.message)
       const t = setTimeout(() => {
-        setMessage(() => "")
+        setMessage(() => '')
         clearTimeout(t)
       }, 5000)
     },
     onError: (err) => {
       setMessage(() => err.message)
       const t = setTimeout(() => {
-        setMessage(() => "")
+        setMessage(() => '')
         clearTimeout(t)
       }, 5000)
-    }
-  });
-
+    },
+  })
 
   const handleClose = () => {
     setUI((prev) => {
@@ -114,7 +111,7 @@ const HandleUpload = () => {
   const handleOk = () => {}
 
   const onSubmit = (values: any) => {
-    console.log(values);
+    console.log(values)
     mutate(values)
   }
   return (
@@ -126,16 +123,16 @@ const HandleUpload = () => {
       <Formik
         validateOnMount
         initialValues={{
-          cv: user?.profile?.cv ?? ''
+          cv: user?.profile?.cv ?? '',
         }}
         validationSchema={cvSchema}
         onSubmit={onSubmit}
         enableReinitialize
-        key={user?.profile?.cv ?? ""}
+        key={user?.profile?.cv ?? ''}
       >
-        {({values, setFieldValue, isValid, handleSubmit}) => (
-          <Form className='w-full' onSubmit={handleSubmit}>
-                    <label className="mb-2 inline-block text-[20px] ml-1">
+        {({ values, setFieldValue, isValid, handleSubmit }) => (
+          <Form className="w-full" onSubmit={handleSubmit}>
+            <label className="mb-2 inline-block text-[20px] ml-1">
               Curriculum Vitae
             </label>
             {loading && (
@@ -168,21 +165,19 @@ const HandleUpload = () => {
               ref={inputRef}
               accept=".pdf, .doc, .docx"
               onChange={(e) => handleUpload(e, setFieldValue)}
-            /> 
-             <div className="pt-10 text-center">
+            />
+            <div className="pt-10 text-center">
               <Button
                 disabled={!isValid || isPending}
-                text={isPending ? <Spinner color='white' /> :'Submit'}
+                text={isPending ? <Spinner color="white" /> : 'Submit'}
                 bold={false}
                 render="light"
-                type='submit'
+                type="submit"
               />
             </div>
           </Form>
         )}
-          
       </Formik>
-
     </UploadModal>
   )
 }

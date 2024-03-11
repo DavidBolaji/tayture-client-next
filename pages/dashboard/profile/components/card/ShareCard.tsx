@@ -80,7 +80,7 @@ const ShareCard: FC<SharedCardProp> = ({ picture, fname, lname }) => {
           <div className="sharethis-inline-share-buttons" />
           <Space.Compact className="gap-3">
             <FacebookShareButton
-              url={shareUrl}
+              url={`${process.env.NEXT_PUBLIC_FRONTEND_API}/dashboard/profile`}
               quote="Tayture offers me access to multiple opportunities as an educator to learn more"
               hashtag="#education#tayture"
             >

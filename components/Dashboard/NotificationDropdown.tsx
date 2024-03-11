@@ -176,8 +176,6 @@ const NotificationDropdown: React.FC<{
       return req.data.notification
     },
   })
-  console.log(isLoading)
-  console.log(notification)
 
   const msg = notification
     ?.map((n: Notifcation) => ({

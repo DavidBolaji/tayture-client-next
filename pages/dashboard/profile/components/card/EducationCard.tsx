@@ -4,12 +4,51 @@ import { Alert, Empty, Space } from 'antd'
 import { MdOutlineError } from 'react-icons/md'
 import CardWrapper from '@/components/Dashboard/CardWrapper'
 import { Education } from '@prisma/client'
+import EducationModal from '../modal/EducationModal/EducationModal'
+import { useGlobalContext } from '@/Context/store'
+import { useMutation } from '@tanstack/react-query'
+import { Axios } from '@/request/request'
+import EducationEditModal from '../modal/EducationModal/EducationEditModal'
 
 interface EducationCardProp {
   education: Education[]
 }
 
 const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
+  const { setUI, setMessage } = useGlobalContext()
+
+  const handleOpen = () => {
+    setUI((prev) => {
+      return {
+        ...prev,
+        educationModal: {
+          ...prev.educationModal,
+          visibility: true,
+        },
+      }
+    })
+  }
+  const handleOpen2 = (edu: Education) => {
+    setUI((prev) => {
+      return {
+        ...prev,
+        education2Modal: {
+          data: edu,
+          visibility: true,
+        },
+      }
+    })
+  }
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (id: string) => {
+      console.log(id)
+      return Axios.delete(`/users/education/me/delete/${id}`)
+    },
+    onSuccess: () => {
+      setMessage(() => 'Education removed successfully')
+      window.location.reload()
+    },
+  })
   return (
     <CardWrapper
       key="education"
@@ -32,7 +71,8 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
           </div>
         </Space>
       }
-      onClick={() => {}}
+      onClick={handleOpen}
+      loading={isPending}
     >
       {education.map((edu) => (
         <div key={edu.id}>
@@ -42,13 +82,13 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
             </div>
             <div className="col-span-2 flex items-center gap-5 justify-end w-full">
               <div
-                onClick={() => {}}
+                onClick={() => handleOpen2(edu)}
                 className="w-[32px] h-[32px] rounded-full bg-ash_200 flex items-center justify-center border cursor-pointer hover:scale-110 border-ash_600 hover:border hover:border-ash_600  transition-all duration-300"
               >
                 <FaPen color="#FFA466" />
               </div>
               <div
-                onClick={() => {}}
+                onClick={() => mutate(edu.id)}
                 className="w-[32px] h-[32px] rounded-full bg-ash_200 flex items-center justify-center border cursor-pointer hover:scale-110 border-ash_600 hover:border hover:border-ash_600  transition-all duration-300"
               >
                 <FaTrash color="#FFA466" />
@@ -61,8 +101,8 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
         </div>
       ))}
       {education.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-      {/* <EducationModal />
-      <EducationEditModal /> */}
+      <EducationModal />
+      <EducationEditModal />
     </CardWrapper>
   )
 }

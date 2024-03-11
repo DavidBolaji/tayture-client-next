@@ -51,6 +51,16 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
   const [page, setPage] = useState('login')
   const [otp, setOtp] = useState('')
 
+  useEffect(() => {
+    queryClient.setQueryData(['cvLocation'], {
+      state: 'Adamawa State',
+      lga: 'Ganye',
+      city: 'Gombi',
+      address: 'wisdom street',
+    })
+    queryClient.setQueryData(['0.history'], {"location":"Wordhouse Green Primary School, Ghana","city":"Aba","state":"Abia State","lga":"Bende","address":"hajs, will"})
+  }, [])
+
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
     onSuccess: async (res) => {
@@ -121,8 +131,26 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
 
   const downloadCv = async () => {
     setLoading(true)
+    const loc = queryClient.getQueryData(['cvLocation'])
+    console.log({ data, colorList, loc })
+    const history = data.history.map((e: any, idx: number) => {
+      const res = queryClient.getQueryData([`${idx}.history`]) as any
+      return {
+        ...e,
+        lga: res.lga,
+        city: res.city,
+        state: res.state,
+        address: res.address,
+
+      }
+    })
+    const newObj = {
+      ...data,
+      history
+    }
+
     try {
-      const response = await Axios.post('/pdf', { data, colorList })
+      const response = await Axios.post('/pdf', { data: newObj, colorList, loc })
       setMessage(() => response.data.message)
       const t = setTimeout(() => {
         setMessage(() => '')
@@ -130,6 +158,7 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
       }, 4000)
     } catch (error) {
       console.error('Error downloading PDF:', (error as Error).message)
+      setMessage(() => (error as Error).message)
     } finally {
       setShow(false)
       setLoading(false)
@@ -200,6 +229,7 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
                 as={NameComponent}
                 defaultValue={values.summary}
                 name="summary"
+                length={300}
                 className="text-xs md:text-sm font-light"
                 st={{
                   color: colorList.colorParagraph,

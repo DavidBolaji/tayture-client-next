@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 
 const Career = () => {
-  const router  = useRouter()
+  const router = useRouter()
   return (
     <div
       className={`flex flex-col items-center justify-center bg-[#FFA466] rounded-md h-full w-full py-[48px] ${regularFont.className}`}
@@ -16,7 +16,12 @@ const Career = () => {
         Create a free account, complete your profile,and get matched with your
         dream job.
       </p>
-      <Button render="dark" text={'Create Account'} bold={false} onClick={() => router.push('/post_landing')} />
+      <Button
+        render="dark"
+        text={'Create Account'}
+        bold={false}
+        onClick={() => router.push('/post_landing')}
+      />
     </div>
   )
 }

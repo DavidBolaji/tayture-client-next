@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider     = "mysql"
-  url          = env("DATABASE_URL")
+  url          = env("DATABASE_URL_DEV")
   relationMode = "prisma"
 }
 
@@ -24,7 +24,7 @@ model Profile {
   lga          String? @db.VarChar(30)
   state        String? @db.VarChar(30)
   city         String? @db.VarChar(30)
-  available    Boolean @default(true)
+  available    Boolean @default(false)
   workplace    String? @db.VarChar(100)
   job_location String?
   user         User    @relation(fields: [userId], references: [id])
@@ -55,6 +55,8 @@ model User {
   id                     String   @id @default(uuid())
   role                   Role     @default(USER)
   path                   String?
+  others                 Others[]
+  othersText             String?
   fname                  String   @db.VarChar(30)
   lname                  String   @db.VarChar(30)
   email                  String   @unique @db.VarChar(255)
@@ -92,6 +94,15 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model Others {
+  id String @id @default(uuid())
+  text String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
 model Summary {
   id     String @id @default(uuid())
   text   String @db.VarChar(500)
@@ -105,8 +116,16 @@ model Summary {
 model WorkHistory {
   id       String     @id @default(uuid())
   title    String     @db.VarChar(50)
-  date     String     @db.VarChar(20)
   location String     @db.VarChar(100)
+  startYear String
+  endYear  String
+  startMonth String
+  endMonth String
+  endDate  String?
+  city   String
+  state   String
+  lga     String
+  address   String
   roles    WorkRole[]
 
   userId String
@@ -133,8 +152,12 @@ model WorkRole {
 model Education {
   id     String @id @default(uuid())
   degree String
-  year   String
+  startYear String
+  endYear  String
+  startMonth String
+  endMonth String
   school String
+  field  String
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

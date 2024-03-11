@@ -41,13 +41,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         title: string
         date: string
         location: string
+        lga: string
+        city: string
+        address: string
+        state: string
+        endDate: string
         roles: { role: string }[]
       }) => {
+        console.log(data.date.split('-')[1]);
         await db.workHistory.create({
+
           data: {
             title: data.title,
-            date: data.date,
+            startYear: data.date.split('-')[0].split(',')[1],
+            startMonth: data.date.split('-')[0].split(',')[0],
+            endMonth: data.date.split('-')[1].trim() === "Current" ? data.date.split('-')[0].split(',')[0] : data.date.split('-')[1].split(',')[0],
+            endYear:  data.date.split('-')[1].trim() === "Current" ? data.date.split('-')[0].split(',')[1] : data.date.split('-')[1].split(',')[1],
             location: data.location,
+            endDate:  data.date.split('-')[1].trim() === "Current" ? "Current" : undefined,
+            lga: data.lga,
+            city: data.city,
+            address: data.address,
+            state: data.state,
             userId: req.body['userId'],
             roles: {
               create: data.roles.map((role: { role: string }) => ({
@@ -76,11 +91,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       work: result,
     })
   } catch (error) {
-    if ((error as Error).name === 'PrismaClientKnownRequestError') {
-      return res.status(400).json({
-        message: `An error occured: ${(error as Error).message}`,
-      })
-    }
+    console.log((error as Error).message);
     res.status(400).json({
       message: `An error occured: ${(error as Error).message}`,
     })

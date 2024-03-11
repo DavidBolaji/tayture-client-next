@@ -11,6 +11,7 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { Row } from './DragableSection'
 import { useGlobalContext } from '@/Context/store'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const initialValuesCv = {
   name: `DANIEL
@@ -21,7 +22,7 @@ export const initialValuesCv = {
     {
       id: 'history',
       title: 'Primary School Teacher',
-      date: '01/2023 - Current',
+      date: 'feb, 2019 - apr, 2023',
       location: 'Wordhouse Green Primary School, London',
       roles: [
         {
@@ -43,7 +44,7 @@ export const initialValuesCv = {
     {
       id: 'education',
       degree: 'Bachelor of Arts, Education',
-      year: '2016',
+      year: 'feb, 2019 - apr, 2023',
       school: 'University of London - London',
     },
   ],
@@ -59,7 +60,7 @@ export const initialValuesCv = {
 
 export const workData = {
   title: 'Primary School Teacher',
-  date: '01/2023 - Current',
+  date: 'feb, 2019 - apr, 2023',
   location: 'Wordhouse Green Primary School, London',
   roles: [
     {
@@ -79,13 +80,14 @@ export const workData = {
 
 export const eduData = {
   degree: 'Bachelor of Arts, Education',
-  year: '2016',
+  year: 'feb, 2019 - apr, 2023',
   school: 'University of London - London',
 }
 
 const WorkHistory = () => {
   const [history, setHistory] = useState(initialValuesCv.history)
   const { colorList } = useGlobalContext()
+  const queryClient = useQueryClient()
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -120,7 +122,7 @@ const WorkHistory = () => {
   const handleRemoveList = (ind: number, idx: number) => {
     setHistory((prev) => {
       const updatedHistory = [...prev]
-      updatedHistory[ind].roles.splice(idx, 1) // Remove the item at index idx
+      updatedHistory[ind].roles.splice(idx, 1)
       return updatedHistory
     })
   }
@@ -165,7 +167,7 @@ const WorkHistory = () => {
                         name={`history[${ind}].date`}
                         as={NameComponent}
                         dir="top"
-                        className={`text-black text-[10px] md:text-sm ${regularFont.className} h-1 capitalize w-full`}
+                        className={`text-black text-xs ${regularFont.className} h-1 capitalize w-full`}
                         st={{
                           color: colorList.colorParagraph,
                         }}
@@ -263,10 +265,14 @@ const WorkHistory = () => {
                       <div
                         onClick={() => {
                           push(workData)
-                          setHistory((prev) => [
+                          setHistory((prev) => {
+                            queryClient.setQueryData([`${prev.length}`], {"location":"Wordhouse Green Primary School, Ghana","city":"Aba","state":"Abia State","lga":"Bende","address":"hajs, will"})
+                            return [
                             ...prev,
                             { id: new Date().toISOString(), ...workData },
-                          ])
+                          ]})
+                       
+                          
                         }}
                         className="flex items-center justify-end absolute -top-[52px] right-0 cursor-pointer rounded-full hover:scale-105 bg-slate-300 hover:bg-orange transition-all duration-300 p-1 "
                       >
