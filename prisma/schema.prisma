@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider     = "mysql"
-  url          = env("DATABASE_URL_DEV")
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -95,10 +95,10 @@ model User {
 }
 
 model Others {
-  id String @id @default(uuid())
-  text String
+  id     String @id @default(uuid())
+  text   String
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
@@ -114,19 +114,19 @@ model Summary {
 }
 
 model WorkHistory {
-  id       String     @id @default(uuid())
-  title    String     @db.VarChar(50)
-  location String     @db.VarChar(100)
-  startYear String
-  endYear  String
+  id         String     @id @default(uuid())
+  title      String     @db.VarChar(50)
+  location   String     @db.VarChar(100)
+  startYear  String
+  endYear    String
   startMonth String
-  endMonth String
-  endDate  String?
-  city   String
-  state   String
-  lga     String
-  address   String
-  roles    WorkRole[]
+  endMonth   String
+  endDate    String?
+  city       String
+  state      String
+  lga        String
+  address    String
+  roles      WorkRole[]
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
@@ -150,14 +150,14 @@ model WorkRole {
 }
 
 model Education {
-  id     String @id @default(uuid())
-  degree String
-  startYear String
-  endYear  String
+  id         String @id @default(uuid())
+  degree     String
+  startYear  String
+  endYear    String
   startMonth String
-  endMonth String
-  school String
-  field  String
+  endMonth   String
+  school     String
+  field      String
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
