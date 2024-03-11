@@ -19,6 +19,7 @@ function CheckComponent({
         style={{ width: '100%' }}
         onChange={onChange}
         defaultValue={defaultValue && defaultValue}
+        
       >
         <Row>
           {options.map((path) => (

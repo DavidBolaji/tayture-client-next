@@ -10,6 +10,12 @@ body {
   overflow: hidden;
 }
 
+.blinker {
+  color: transparent;
+  text-shadow: 0 0 0 gray;
+
+}
+
 /**select antd global css */
 .ant-select-item-option-selected {
   background-color: #ff7517 !important;

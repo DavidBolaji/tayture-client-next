@@ -58,6 +58,7 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
       city: 'Gombi',
       address: 'wisdom street',
     })
+    queryClient.setQueryData(['0.history'], {"location":"Wordhouse Green Primary School, Ghana","city":"Aba","state":"Abia State","lga":"Bende","address":"hajs, will"})
   }, [])
 
   const { mutate: loginMutate, isPending } = useMutation({
@@ -132,8 +133,24 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
     setLoading(true)
     const loc = queryClient.getQueryData(['cvLocation'])
     console.log({ data, colorList, loc })
+    const history = data.history.map((e: any, idx: number) => {
+      const res = queryClient.getQueryData([`${idx}.history`]) as any
+      return {
+        ...e,
+        lga: res.lga,
+        city: res.city,
+        state: res.state,
+        address: res.address,
+
+      }
+    })
+    const newObj = {
+      ...data,
+      history
+    }
+
     try {
-      const response = await Axios.post('/pdf', { data, colorList, loc })
+      const response = await Axios.post('/pdf', { data: newObj, colorList, loc })
       setMessage(() => response.data.message)
       const t = setTimeout(() => {
         setMessage(() => '')

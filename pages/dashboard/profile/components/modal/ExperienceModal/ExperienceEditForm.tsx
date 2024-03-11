@@ -166,7 +166,7 @@ const ExperienceEditForm: React.FC<{
           </div>
 
           <AnimatePresence mode="wait">
-            {values.endDate !== 'Present' && (
+            {values.endDate !== 'Current' && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 120 }}
@@ -246,16 +246,17 @@ const ExperienceEditForm: React.FC<{
 
           <div className="mb-5">
             <Field name="endDate">
-              {/* FormikProps<YourFormValues>  */}
               {({ field }: { field: FieldProps['field'] }) => (
                 <CheckComponent
                   {...field}
+                  
                   options={['I currently work here']}
-                  defaultValue={[]}
+                  
+                  defaultValue={['I currently work here']}
                   onChange={(e: any) => {
                     console.log(e)
                     // handleChange(e);
-                    setFieldValue('endDate', e.length > 0 ? 'Present' : '')
+                    setFieldValue('endDate', e.length > 0 ? 'Current' : '')
                     setFieldValue(
                       'endMonth',
                       e.length > 0 ? values.startMonth : '',

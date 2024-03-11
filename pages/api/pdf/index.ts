@@ -46,8 +46,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     // Generate PDF, merge, and send mail concurrently
-    await Promise.all([updateSummary, updateWork, updateEdu, updateSkills])
-    // await generateAndSendPDF(data, colorList, req.authUser?.email!),
+    await Promise.all([
+      updateSummary, 
+      updateWork, 
+      updateEdu, 
+      updateSkills
+    ])
+    await generateAndSendPDF(data, colorList, req.authUser?.email!),
 
     res.status(200).send({
       message:

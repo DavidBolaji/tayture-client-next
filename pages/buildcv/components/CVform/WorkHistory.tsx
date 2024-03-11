@@ -11,6 +11,7 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { Row } from './DragableSection'
 import { useGlobalContext } from '@/Context/store'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const initialValuesCv = {
   name: `DANIEL
@@ -86,6 +87,7 @@ export const eduData = {
 const WorkHistory = () => {
   const [history, setHistory] = useState(initialValuesCv.history)
   const { colorList } = useGlobalContext()
+  const queryClient = useQueryClient()
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -263,10 +265,14 @@ const WorkHistory = () => {
                       <div
                         onClick={() => {
                           push(workData)
-                          setHistory((prev) => [
+                          setHistory((prev) => {
+                            queryClient.setQueryData([`${prev.length}`], {"location":"Wordhouse Green Primary School, Ghana","city":"Aba","state":"Abia State","lga":"Bende","address":"hajs, will"})
+                            return [
                             ...prev,
                             { id: new Date().toISOString(), ...workData },
-                          ])
+                          ]})
+                       
+                          
                         }}
                         className="flex items-center justify-end absolute -top-[52px] right-0 cursor-pointer rounded-full hover:scale-105 bg-slate-300 hover:bg-orange transition-all duration-300 p-1 "
                       >
