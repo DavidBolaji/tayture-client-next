@@ -27,8 +27,7 @@ const ExperienceCard: React.FC<ExperienceCardProp> = ({ experience }) => {
     })
   }
 
-  const handleOpen2 = (exp:any) => {
-    console.log(exp);
+  const handleOpen2: any = (exp: any) => {
     setUI((prev) => {
       return {
         ...prev,
@@ -63,9 +62,11 @@ const ExperienceCard: React.FC<ExperienceCardProp> = ({ experience }) => {
             <div className="col-span-5 text-black_400 text-[16px] font-[600]">
               {d.title}{' '}
               <span className="text-ash_400 text-[14px] font-[400] capitalize">
-              ({d.startMonth} {d.startYear} - {' '}
-              {/* @ts-ignore */}
-                {d?.endDate.length > 1 ? d.endDate : `${d.endMonth} ${d.endYear}`})
+                ({d.startMonth} {d.startYear} - {/* @ts-ignore */}
+                {d?.endDate.length > 1
+                  ? d.endDate
+                  : `${d.endMonth} ${d.endYear}`}
+                )
               </span>
               <div className="text-ash_400 text-[14px] font-[400]">
                 <p>{d.location}</p>

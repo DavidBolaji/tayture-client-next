@@ -1,27 +1,33 @@
-import { ConfigProvider, Space } from 'antd';
-import { ErrorMessage, Field, FieldArray, FieldProps, Form, Formik } from 'formik';
-import React from 'react';
-import * as Yup from 'yup';
-import { AnimatePresence, easeIn, motion } from 'framer-motion';
-import { WorkHistory } from '@prisma/client';
-import StyledInput from '@/components/Form/NomalInput/StyledInput';
-import { SelectInput } from '@/components/Form/SelectInput/SelectInput';
-import InputDateComponent from '../../InputDateComponent';
-import FormError from '@/components/FormError/FormError';
-import LocationComponent from '@/components/LocationComponent/LocationComponent';
-import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea';
-import Button from '@/components/Button/Button';
-import Spinner from '@/components/Spinner/Spinner';
-import CheckComponent from '@/pages/calculator/components/CheckComponent';
-import { months } from '@/utils/data';
-import { FaPlus } from 'react-icons/fa';
-import {v4 as uuid} from 'uuid'
-import { regularFont } from '@/assets/fonts/fonts';
-import { MinusCircleOutlined } from '@ant-design/icons';
-import { useMutation } from '@tanstack/react-query';
-import { Axios } from '@/request/request';
-import { useGlobalContext } from '@/Context/store';
-
+import { ConfigProvider, Space } from 'antd'
+import {
+  ErrorMessage,
+  Field,
+  FieldArray,
+  FieldProps,
+  Form,
+  Formik,
+} from 'formik'
+import React from 'react'
+import * as Yup from 'yup'
+import { AnimatePresence, easeIn, motion } from 'framer-motion'
+import { WorkHistory } from '@prisma/client'
+import StyledInput from '@/components/Form/NomalInput/StyledInput'
+import { SelectInput } from '@/components/Form/SelectInput/SelectInput'
+import InputDateComponent from '../../InputDateComponent'
+import FormError from '@/components/FormError/FormError'
+import LocationComponent from '@/components/LocationComponent/LocationComponent'
+import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
+import Button from '@/components/Button/Button'
+import Spinner from '@/components/Spinner/Spinner'
+import CheckComponent from '@/pages/calculator/components/CheckComponent'
+import { months } from '@/utils/data'
+import { FaPlus } from 'react-icons/fa'
+import { v4 as uuid } from 'uuid'
+import { regularFont } from '@/assets/fonts/fonts'
+import { MinusCircleOutlined } from '@ant-design/icons'
+import { useMutation } from '@tanstack/react-query'
+import { Axios } from '@/request/request'
+import { useGlobalContext } from '@/Context/store'
 
 export const validationSchema = Yup.object().shape({
   location: Yup.string().required('Location i.e where you worked is required'),
@@ -33,9 +39,9 @@ export const validationSchema = Yup.object().shape({
       'startYearBeforeEndYear',
       'End year must be greater than or equal to start year',
       function (startYear) {
-        const endYear = +this.parent.startYear;
-        return +startYear! >= endYear;
-      }
+        const endYear = +this.parent.startYear
+        return +startYear! >= endYear
+      },
     )
     .when(['endDate'], {
       is: (expEndDate: string) => !expEndDate,
@@ -57,18 +63,21 @@ export const validationSchema = Yup.object().shape({
   lga: Yup.string().required('Lga is required'),
   address: Yup.string().required('Address is required'),
   endDate: Yup.string().notRequired(),
-  roles: Yup.array().of(
-    Yup.object().shape({
-      id: Yup.string().required('ID is a required field'),
-      role: Yup.string().required('Enter role')
-    })
-  ).min(1).required('Role is a required field'),
-});
+  roles: Yup.array()
+    .of(
+      Yup.object().shape({
+        id: Yup.string().required('ID is a required field'),
+        role: Yup.string().required('Enter role'),
+      }),
+    )
+    .min(1)
+    .required('Role is a required field'),
+})
 
 const ExperienceForm: React.FC = () => {
-  const {setUI, setMessage} = useGlobalContext()
-  const {mutate, isPending} = useMutation({
-    mutationFn: async (data :WorkHistory)=> {
+  const { setUI, setMessage } = useGlobalContext()
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: WorkHistory) => {
       return await Axios.post('/users/work/me', data)
     },
     onSuccess: () => {
@@ -76,22 +85,25 @@ const ExperienceForm: React.FC = () => {
         return {
           ...prev,
           experienceModal: {
-            visibility: false
-          }
+            visibility: false,
+          },
         }
       })
-      setMessage(() => "Experience created succesfully")
-      const t = setTimeout(() =>{
-        setMessage(() => "")
+      setMessage(() => 'Experience created succesfully')
+      const t = setTimeout(() => {
+        setMessage(() => '')
         window.location.reload()
         clearTimeout(t)
       }, 4000)
-    }
+    },
   })
-  const handleClick: any = async (values: WorkHistory, { resetForm }: { resetForm: any }) => {
+  const handleClick: any = async (
+    values: WorkHistory,
+    { resetForm }: { resetForm: any },
+  ) => {
     mutate(values)
     // resetForm();
-  };
+  }
 
   return (
     <Formik
@@ -125,17 +137,19 @@ const ExperienceForm: React.FC = () => {
         setFieldTouched,
         setFieldValue,
       }) => (
-        <Form className={`w-full md:px-10 px-10 ${regularFont.className}`} onSubmit={handleSubmit}>
-          
+        <Form
+          className={`w-full md:px-10 px-10 ${regularFont.className}`}
+          onSubmit={handleSubmit}
+        >
           <Field
             text="Location"
             placeholder="Location"
             name="location"
             as={StyledInput}
           />
-           <Field
-             text="Title"
-             placeholder="Title"
+          <Field
+            text="Title"
+            placeholder="Title"
             name="title"
             as={StyledInput}
           />
@@ -144,18 +158,17 @@ const ExperienceForm: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-3 mt-2">
             <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-             <Field
-               name="startMonth"
-               as={SelectInput}
-               placeholder="Select start month"
-               text="Select start month"
-               option={months}
-             />
+              <Field
+                name="startMonth"
+                as={SelectInput}
+                placeholder="Select start month"
+                text="Select start month"
+                option={months}
+              />
             </div>
             <div className="w-full col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
               <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                 <Field name="startYear">
-                  
                   {({ field }: { field: FieldProps['field'] }) => (
                     <div className="">
                       <ConfigProvider
@@ -177,10 +190,10 @@ const ExperienceForm: React.FC = () => {
                           // @ts-ignore
                           border={errors.startYear && touched.startYear}
                           onChange={(e: any) => {
-                            setFieldValue('startYear', e.$y);
+                            setFieldValue('startYear', e.$y)
                           }}
                           onBlur={(e: any) => {
-                            handleBlur(e);
+                            handleBlur(e)
                           }}
                         />
                       </ConfigProvider>
@@ -188,8 +201,8 @@ const ExperienceForm: React.FC = () => {
                   )}
                 </Field>
                 <ErrorMessage name="startYear">
-                {(msg) => <FormError msg={msg} />}
-              </ErrorMessage>
+                  {(msg) => <FormError msg={msg} />}
+                </ErrorMessage>
               </div>
             </div>
           </div>
@@ -250,10 +263,10 @@ const ExperienceForm: React.FC = () => {
                                 // @ts-ignore
                                 border={errors.endYear && touched.endYear}
                                 onChange={(e: any) => {
-                                  setFieldValue('endYear', e.$y);
+                                  setFieldValue('endYear', e.$y)
                                 }}
                                 onBlur={(e: any) => {
-                                  handleBlur(e);
+                                  handleBlur(e)
                                 }}
                               />
                             </ConfigProvider>
@@ -270,7 +283,7 @@ const ExperienceForm: React.FC = () => {
             )}
           </AnimatePresence>
 
-          <div className='mb-4'>
+          <div className="mb-4">
             <Field name="endDate">
               {({ field }: { field: FieldProps['field'] }) => (
                 <CheckComponent
@@ -278,30 +291,31 @@ const ExperienceForm: React.FC = () => {
                   options={['I currently work here']}
                   defaultValue={[]}
                   onChange={(e: any) => {
-                    setFieldValue('endDate', e.length > 0 ? 'Present' : '');
-                    setFieldValue('endMonth', e.length > 0 ? values.startMonth : '');
-                    setFieldValue('endYear', e.length > 0 ? values.startYear : '');
+                    setFieldValue('endDate', e.length > 0 ? 'Present' : '')
+                    setFieldValue(
+                      'endMonth',
+                      e.length > 0 ? values.startMonth : '',
+                    )
+                    setFieldValue(
+                      'endYear',
+                      e.length > 0 ? values.startYear : '',
+                    )
                   }}
                 />
               )}
             </Field>
           </div>
 
-          <Field
-              as={LocationComponent}
-              city="city"
-              state="state"
-              lga="lga"
-            />
+          <Field as={LocationComponent} city="city" state="state" lga="lga" />
 
-            <Field
-              name="address"
-              as={StyledTextarea}
-              placeholder="Address"
-              text={'Address'}
-              rows={5}
-              spellCheck="false"
-            />
+          <Field
+            name="address"
+            as={StyledTextarea}
+            placeholder="Address"
+            text={'Address'}
+            rows={5}
+            spellCheck="false"
+          />
 
           <h3 className="ml-1 text-[16px] font-[600] mb-2">Roles</h3>
           <FieldArray name="roles">
@@ -310,15 +324,14 @@ const ExperienceForm: React.FC = () => {
                 {values.roles.length > 0 &&
                   values.roles.map((_, index) => (
                     <div className="relative" key={index}>
-                       <Field
+                      <Field
                         name={`roles.${index}.role`}
                         as={StyledTextarea}
                         placeholder="Role"
-                       
                         rows={1}
                         spellCheck="false"
                       />
-                       {index === 0 ? null : (
+                      {index === 0 ? null : (
                         <div className="flex items-center justify-end absolute -top-6 right-1">
                           <MinusCircleOutlined onClick={() => remove(index)} />
                         </div>
@@ -326,25 +339,25 @@ const ExperienceForm: React.FC = () => {
                     </div>
                   ))}
                 <Button
-                    render="light"
-                    transparent
-                    onClick={() =>
-                      push({
-                        id: uuid(),
-                        role: ""
-                      })
-                    }
-                    bold={false}
-                    rounded
-                    text={
-                      <Space>
-                        <FaPlus color="#FF7517" />
-                        <span className="text-[12px] text-orange">
-                         {values.roles.length > 0 ? "Another role": "Add role"}
-                        </span>
-                      </Space>
-                    }
-                  />
+                  render="light"
+                  transparent
+                  onClick={() =>
+                    push({
+                      id: uuid(),
+                      role: '',
+                    })
+                  }
+                  bold={false}
+                  rounded
+                  text={
+                    <Space>
+                      <FaPlus color="#FF7517" />
+                      <span className="text-[12px] text-orange">
+                        {values.roles.length > 0 ? 'Another role' : 'Add role'}
+                      </span>
+                    </Space>
+                  }
+                />
               </div>
             )}
           </FieldArray>
@@ -362,7 +375,7 @@ const ExperienceForm: React.FC = () => {
         </Form>
       )}
     </Formik>
-  );
-};
+  )
+}
 
-export default ExperienceForm;
+export default ExperienceForm

@@ -1,9 +1,9 @@
-import React from 'react';
-import { IoIosCloseCircle } from 'react-icons/io';
-import styled from '@emotion/styled';
-import { Modal } from 'antd';
-import { useGlobalContext } from '@/Context/store';
-import ExperienceForm from './ExperienceForm';
+import React from 'react'
+import { IoIosCloseCircle } from 'react-icons/io'
+import styled from '@emotion/styled'
+import { Modal } from 'antd'
+import { useGlobalContext } from '@/Context/store'
+import ExperienceForm from './ExperienceForm'
 
 export const StyledModal = styled(Modal)`
   background: #fff;
@@ -24,10 +24,10 @@ export const StyledModal = styled(Modal)`
     box-shadow: none;
     padding: 0px;
   }
-`;
+`
 
 const ExperienceModal: React.FC = () => {
-  const {ui, setUI} = useGlobalContext()
+  const { ui, setUI } = useGlobalContext()
   const handleClose = () => {
     setUI((prev) => {
       return {
@@ -59,7 +59,7 @@ const ExperienceModal: React.FC = () => {
         <IoIosCloseCircle size={24} color="#666666" />
       </div>
     </StyledModal>
-  );
-};
+  )
+}
 
-export default ExperienceModal;
+export default ExperienceModal

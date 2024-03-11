@@ -15,9 +15,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     await db.workRole.deleteMany({
-        where: {
-            workId: req.query.id as string
-        }
+      where: {
+        workId: req.query.id as string,
+      },
     })
 
     return res.status(200).json({

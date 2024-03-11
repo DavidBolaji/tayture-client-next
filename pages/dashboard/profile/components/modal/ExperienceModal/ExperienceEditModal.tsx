@@ -1,12 +1,11 @@
-import React from 'react';
-import { IoIosCloseCircle } from 'react-icons/io';
-import { StyledModal } from './ExperienceModal';
-import { useGlobalContext } from '@/Context/store';
-import ExperienceEditForm from './ExperienceEditForm';
-
+import React from 'react'
+import { IoIosCloseCircle } from 'react-icons/io'
+import { StyledModal } from './ExperienceModal'
+import { useGlobalContext } from '@/Context/store'
+import ExperienceEditForm from './ExperienceEditForm'
 
 const ExperienceEditModal: React.FC = () => {
-  const {ui, setUI} = useGlobalContext()
+  const { ui, setUI } = useGlobalContext()
   const handleClose = () => {
     setUI((prev) => {
       return {
@@ -26,8 +25,9 @@ const ExperienceEditModal: React.FC = () => {
       onCancel={handleClose}
     >
       <div className="w-full h-full pt-[21px] pb-[41px] ">
-        <h3 className="text-center mb-[48px] text-[24px] font-[600]">Update Experience</h3>
-        {/* @ts-ignore */}
+        <h3 className="text-center mb-[48px] text-[24px] font-[600]">
+          Update Experience
+        </h3>
         <ExperienceEditForm exp={{ ...ui.experienceEditModal?.data }} />
       </div>
       <div
@@ -37,7 +37,7 @@ const ExperienceEditModal: React.FC = () => {
         <IoIosCloseCircle size={24} color="#666666" />
       </div>
     </StyledModal>
-  );
-};
+  )
+}
 
-export default ExperienceEditModal;
+export default ExperienceEditModal

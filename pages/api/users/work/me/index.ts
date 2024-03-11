@@ -8,26 +8,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     await db.workHistory.create({
-       data: {
-        title: req.body["title"],
+      data: {
+        title: req.body['title'],
         startMonth: req.body['startMonth'],
         startYear: String(req.body['startYear']),
         endMonth: req.body['endMonth'],
-        endDate: typeof req.body['endMonth'] !== "undefined" ? req.body['endMonth'] : undefined,
+        endDate:
+          typeof req.body['endMonth'] !== 'undefined'
+            ? req.body['endMonth']
+            : undefined,
         endYear: String(req.body['endYear']),
-        location: req.body["location"],
-        city: req.body["city"],
-        state: req.body["state"],
-        lga: req.body["lga"],
-        address: req.body["address"],
+        location: req.body['location'],
+        city: req.body['city'],
+        state: req.body['state'],
+        lga: req.body['lga'],
+        address: req.body['address'],
         userId: req.authUser!.id,
         roles: {
-            create: req.body["roles"].map((role: { role: string }) => ({
-                ...role
-               })),
-        }
-       }
-      })
+          create: req.body['roles'].map((role: { role: string }) => ({
+            ...role,
+          })),
+        },
+      },
+    })
 
     return res.status(200).json({
       message: 'Work Hitory Created',
