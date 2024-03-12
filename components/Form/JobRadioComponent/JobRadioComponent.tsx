@@ -11,7 +11,7 @@ import {
 import { regularFont } from '@/assets/fonts/fonts'
 import { AnimatePresence, motion } from 'framer-motion'
 import { AdministratorHire, teacherHire } from '@/utils/data'
-import FormError from '@/components/FormError/FormError'
+import FormError from '@/components/Form/FormError/FormError'
 
 const { Group, Button } = Radio
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyledModal } from './AlertModal.style'
-import Button from '../Button/Button'
+import Button from '../../Button/Button'
 import { regularFont } from '@/assets/fonts/fonts'
 
 const AlertModal: React.FC<{

@@ -6,8 +6,8 @@ import React, { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
-import ScheduleModal from './ScheduleModal/ScheduleModal'
-import ScheduleForm from './ScheduleModal/ScheduleForm'
+import ScheduleModal from './Modal/ScheduleModal/ScheduleModal'
+import ScheduleForm from './Modal/ScheduleModal/ScheduleForm'
 import { ConfigProvider } from 'antd'
 
 export const checkPath = (path: string | null) => {

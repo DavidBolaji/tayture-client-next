@@ -10,6 +10,7 @@ import { loginUser } from '@/lib/api/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as Yup from 'yup'
 import { Axios } from '@/request/request'
+import { AxiosError } from 'axios'
 
 const initilaValues = {
   email: '',
@@ -72,7 +73,7 @@ const LoginForm = ({ show = true }: { show?: boolean }) => {
       }
     },
     onError: (err) => {
-      setMessage(() => (err as Error).message)
+      setMessage(() => (err as AxiosError<{error: string}>).response?.data?.error ||(err as Error).message)
     },
   })
 

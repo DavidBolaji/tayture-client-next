@@ -1,5 +1,5 @@
 import { regularFont } from '@/assets/fonts/fonts'
-import FormError from '@/components/FormError/FormError'
+import FormError from '@/components/Form/FormError/FormError'
 import styled from '@emotion/styled'
 import { Select, SelectProps } from 'antd'
 import { DefaultOptionType } from 'antd/es/cascader'

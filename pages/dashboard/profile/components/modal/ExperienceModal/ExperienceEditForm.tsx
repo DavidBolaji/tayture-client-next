@@ -16,9 +16,9 @@ import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import { SelectInput } from '@/components/Form/SelectInput/SelectInput'
 import { months } from '@/utils/data'
 import InputDateComponent from '../../InputDateComponent'
-import FormError from '@/components/FormError/FormError'
+import FormError from '@/components/Form/FormError/FormError'
 import CheckComponent from '@/pages/calculator/components/CheckComponent'
-import LocationComponent from '@/components/LocationComponent/LocationComponent'
+import LocationComponent from '@/components/Form/LocationComponent/LocationComponent'
 import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
 import Button from '@/components/Button/Button'
 import { FaPlus } from 'react-icons/fa'
@@ -33,6 +33,7 @@ import { regularFont } from '@/assets/fonts/fonts'
 const ExperienceEditForm: React.FC<{
   exp: WorkHistory & { roles: WorkRole[] }
 }> = ({ exp }) => {
+  console.log(exp);
   const { setUI, setMessage } = useGlobalContext()
   const { mutate } = useMutation({
     mutationFn: async (data: WorkHistory) => {
@@ -166,7 +167,7 @@ const ExperienceEditForm: React.FC<{
           </div>
 
           <AnimatePresence mode="wait">
-            {values.endDate !== 'Current' && (
+            {values.endDate.length < 1 && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 120 }}
