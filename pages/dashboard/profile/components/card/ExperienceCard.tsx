@@ -1,3 +1,4 @@
+// "use client"
 import React from 'react'
 import { FaPen, FaTrash } from 'react-icons/fa'
 import { Empty } from 'antd'
@@ -63,7 +64,7 @@ const ExperienceCard: React.FC<ExperienceCardProp> = ({ experience }) => {
               {d.title}{' '}
               <span className="text-ash_400 text-[14px] font-[400] capitalize">
                 ({d.startMonth} {d.startYear} - {/* @ts-ignore */}
-                {d?.endDate.length > 1
+                {d?.endDate?.length > 1
                   ? "Current"
                   : `${d.endMonth} ${d.endYear}`}
                 )
