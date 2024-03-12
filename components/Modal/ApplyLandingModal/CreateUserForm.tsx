@@ -2,11 +2,11 @@
 
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
-import StyledInput from '../Form/NomalInput/StyledInput'
-import Button from '../Button/Button'
-import Spinner from '../Spinner/Spinner'
+import StyledInput from '../../Form/NomalInput/StyledInput'
+import Button from '../../Button/Button'
+import Spinner from '../../Spinner/Spinner'
 import { regularFont } from '@/assets/fonts/fonts'
-import CustomPhoneInput from '../Form/CustomPhoneInput/CustomPhoneInput'
+import CustomPhoneInput from '../../Form/CustomPhoneInput/CustomPhoneInput'
 import { useRouter } from 'next/router'
 import { useGlobalContext } from '@/Context/store'
 import {

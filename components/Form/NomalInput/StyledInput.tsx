@@ -2,7 +2,7 @@
 import { ErrorMessage, useFormikContext } from 'formik'
 import InputComponent, { InputProps } from './InputComponent'
 import React, { useState } from 'react'
-import FormError from '@/components/FormError/FormError'
+import FormError from '@/components/Form/FormError/FormError'
 import { isNotNumber, isNotText } from '@/utils/helpers'
 
 const StyledInput: React.FC<InputProps> = ({ name, ...rest }) => {

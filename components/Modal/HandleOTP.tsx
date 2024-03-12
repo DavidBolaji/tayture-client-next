@@ -14,8 +14,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { valdateOTP } from '@/lib/services/user'
 import { ILogin } from '@/pages/auth/LoginForm/LoginForm'
 import { loginUser } from '@/lib/api/user'
-import TimerComponent from './TimerComponent'
-import Spinner from './Spinner/Spinner'
+import TimerComponent from '../TimerComponent'
+import Spinner from '../Spinner/Spinner'
 import { useRouter } from 'next/router'
 
 export const checkPath = (path: string | null) => {

@@ -3,7 +3,7 @@ import Header from '../Header/Header'
 import Wrapper from '../Wrapper/Wrapper'
 import Image from 'next/image'
 import { Images } from '@/assets'
-import HandleOTP from '../HandleOTP'
+import HandleOTP from '../Modal/HandleOTP'
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
   return (

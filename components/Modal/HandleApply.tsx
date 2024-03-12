@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import ApplyModal from './ApplyModal/ApplyModal'
 import ApplyModalForm from './ApplyModal/ApplyModalForm'
 import ApplyModalFormPreview from './ApplyModal/ApplyModalFormPreview'
-import Stepper, { StepperChildProps } from './Stepper/Stepper'
+import Stepper, { StepperChildProps } from '../Stepper/Stepper'
 
 export const checkPath = (path: string | null) => {
   if (!path) return false

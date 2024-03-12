@@ -4,7 +4,7 @@ import { useGlobalContext } from '@/Context/store'
 import React, { ReactNode, useEffect, useState } from 'react'
 
 import PaymentModal from './PaymentModal/PaymentModal'
-import PaymentComponent from './PaymentComponent/PaymentComponent'
+import PaymentComponent from '../PaymentComponent/PaymentComponent'
 
 export const checkPath = (path: string | null) => {
   if (!path) return false

@@ -1,6 +1,6 @@
 'use client'
 import { regularFont } from '@/assets/fonts/fonts'
-import FormError from '@/components/FormError/FormError'
+import FormError from '@/components/Form/FormError/FormError'
 import { DatePicker } from 'antd'
 import { ErrorMessage, useFormikContext } from 'formik'
 import React, { FC } from 'react'

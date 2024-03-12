@@ -5,7 +5,7 @@ import { PersonalInformationCardProp } from '../../card/PersonalInformationCard'
 import * as Yup from 'yup'
 import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
-import LocationComponent from '@/components/LocationComponent/LocationComponent'
+import LocationComponent from '@/components/Form/LocationComponent/LocationComponent'
 import Button from '@/components/Button/Button'
 import Spinner from '@/components/Spinner/Spinner'
 

@@ -1,7 +1,7 @@
 import Button from '@/components/Button/Button'
 import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import { SelectInput } from '@/components/Form/SelectInput/SelectInput'
-import FormError from '@/components/FormError/FormError'
+import FormError from '@/components/Form/FormError/FormError'
 import Spinner from '@/components/Spinner/Spinner'
 import { degree, months } from '@/utils/data'
 import { ConfigProvider } from 'antd'

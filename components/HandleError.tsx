@@ -2,7 +2,7 @@
 
 import { useGlobalContext } from '@/Context/store'
 import React, { useEffect, useState } from 'react'
-import AlertModal from './AlertModal/AlertModal'
+import AlertModal from './Modal/AlertModal/AlertModal'
 
 const HandleError = () => {
   const { message, setMessage } = useGlobalContext()

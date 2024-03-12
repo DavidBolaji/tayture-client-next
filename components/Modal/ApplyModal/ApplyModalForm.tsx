@@ -1,24 +1,17 @@
 'use client'
-
-import { useGlobalContext } from '@/Context/store'
-import React, { ChangeEvent, useRef, useState } from 'react'
-
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import UploadModal from './UploadModal/UploadModal'
+import { Field, Form, Formik, useFormikContext } from 'formik'
+import React, { ChangeEvent, FC, useRef, useState } from 'react'
+import { SelectInput } from '../../Form/SelectInput/SelectInput'
+import { regularFont } from '@/assets/fonts/fonts'
+import { degree, expL } from '@/utils/data'
+import CVComponent from '../../CVComponent'
 import { checkFileExtension } from '@/utils/helpers'
-import CVComponent from './CVComponent'
-import Spinner from './Spinner/Spinner'
 import Cloudinary from '@/request/cloudinary'
-import { Profile, User } from '@prisma/client'
-import { Form, Formik } from 'formik'
-import Button from './Button/Button'
-import { Axios } from '@/request/request'
-import * as Yup from 'yup'
-
-export const cvSchema = Yup.object().shape({
-  cv: Yup.string().required('Upload Cv to submit'),
-})
-
+import { useGlobalContext } from '@/Context/store'
+import Spinner from '../../Spinner/Spinner'
+import { ApplyFormSchema } from './ApplyFormSchema'
+import Button from '../../Button/Button'
+import { useQueryClient } from '@tanstack/react-query'
 const isAllowedFileType = (fileType: string) =>
   [
     'application/pdf',
@@ -26,13 +19,11 @@ const isAllowedFileType = (fileType: string) =>
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   ].includes(fileType)
 
-const HandleUpload = () => {
-  const { ui, setUI, setMessage } = useGlobalContext()
-  const queryClient = useQueryClient()
-  const user = queryClient.getQueryData(['user']) as User & { profile: Profile }
-
+const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const queryClient = useQueryClient()
+  const { setMessage, setCount } = useGlobalContext()
 
   const handleUpload = async (
     e: ChangeEvent<HTMLInputElement>,
@@ -72,66 +63,46 @@ const HandleUpload = () => {
     }
   }
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (data) => {
-      return await Axios.put('/users/profile/update/me', data)
-    },
-    onSuccess: (res) => {
-      handleClose()
-      queryClient.invalidateQueries({
-        queryKey: ['users'],
-      })
-      setMessage(() => res.data.message)
-      const t = setTimeout(() => {
-        setMessage(() => '')
-        clearTimeout(t)
-      }, 5000)
-    },
-    onError: (err) => {
-      setMessage(() => err.message)
-      const t = setTimeout(() => {
-        setMessage(() => '')
-        clearTimeout(t)
-      }, 5000)
-    },
-  })
-
-  const handleClose = () => {
-    setUI((prev) => {
-      return {
-        ...prev,
-        uploadModal: {
-          ...prev.uploadModal,
-          visibility: false,
-        },
-      }
-    })
-  }
-
-  const handleOk = () => {}
-
-  const onSubmit = (values: any) => {
-    console.log(values)
-    mutate(values)
+  const handleNext = (data: { exp: string; qual: string; cv: string }) => {
+    queryClient.setQueryData(['jobApplication'], data)
+    setCount((prev) => prev + 1)
+    SW.next()
   }
   return (
-    <UploadModal
-      ok={handleOk}
-      isOpen={ui.uploadModal?.visibility ? ui.uploadModal?.visibility : false}
-      close={handleClose}
-    >
+    <div className={`w-full px-5 ${regularFont.className}`}>
+      <h2 className="text-center text-[24px] mb-[40px] text-black">
+        Application
+      </h2>
       <Formik
-        validateOnMount
+        validateOnMount={true}
+        validationSchema={ApplyFormSchema}
         initialValues={{
-          cv: user?.profile?.cv ?? '',
+          cv: '',
+          qual: '',
+          exp: '',
         }}
-        validationSchema={cvSchema}
-        onSubmit={onSubmit}
-        enableReinitialize
-        key={user?.profile?.cv ?? ''}
+        onSubmit={() => {}}
       >
-        {({ values, setFieldValue, isValid, handleSubmit }) => (
-          <Form className="w-full" onSubmit={handleSubmit}>
+        {({ values, setFieldValue, isValid }) => (
+          <Form>
+            <label className="mb-2 inline-block text-[20px] ml-1">
+              Educational qualification
+            </label>
+            <Field
+              name="qual"
+              option={degree}
+              as={SelectInput}
+              placeholder={'Your highest degree or certification'}
+            />
+            <label className="mb-2 inline-block text-[20px] ml-1">
+              Work experience
+            </label>
+            <Field
+              name="exp"
+              option={expL}
+              as={SelectInput}
+              placeholder={'How many years have you worked ?'}
+            />
             <label className="mb-2 inline-block text-[20px] ml-1">
               Curriculum Vitae
             </label>
@@ -140,11 +111,11 @@ const HandleUpload = () => {
                 <Spinner color="#ff7617" />
               </div>
             )}
-            {values.cv && !loading && (
+            {values?.cv && !loading && (
               <div className="mb-3">
                 <CVComponent
                   ext={checkFileExtension(values.cv)}
-                  onClick={() => window.location.assign(values.cv as string)}
+                  onClick={() => window.location.assign(values.cv)}
                   name={values.cv.split('/')[values.cv.split('/').length - 1]}
                 />
               </div>
@@ -166,20 +137,20 @@ const HandleUpload = () => {
               accept=".pdf, .doc, .docx"
               onChange={(e) => handleUpload(e, setFieldValue)}
             />
-            <div className="pt-10 text-center">
+            <div className="pt-10 pb-20 text-center">
               <Button
-                disabled={!isValid || isPending}
-                text={isPending ? <Spinner color="white" /> : 'Submit'}
+                disabled={!isValid}
+                text={'Next'}
                 bold={false}
                 render="light"
-                type="submit"
+                onClick={() => handleNext(values)}
               />
             </div>
           </Form>
         )}
       </Formik>
-    </UploadModal>
+    </div>
   )
 }
 
-export default HandleUpload
+export default ApplyModalForm

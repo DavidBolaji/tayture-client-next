@@ -6,7 +6,7 @@ import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
 import { SelectInput } from '@/components/Form/SelectInput/SelectInput'
 import { employes } from '@/utils/data'
 import CustomPhoneInput from '@/components/Form/CustomPhoneInput/CustomPhoneInput'
-import LocationComponent from '@/components/LocationComponent/LocationComponent'
+import LocationComponent from '@/components/Form/LocationComponent/LocationComponent'
 import Button from '@/components/Button/Button'
 import { ISchData, useGlobalContext } from '@/Context/store'
 

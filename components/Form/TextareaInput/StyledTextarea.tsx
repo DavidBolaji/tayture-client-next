@@ -1,7 +1,7 @@
 'use client'
 import { ErrorMessage, useFormikContext } from 'formik'
 import React from 'react'
-import FormError from '@/components/FormError/FormError'
+import FormError from '@/components/Form/FormError/FormError'
 
 import TextareaInput, { ITextarea } from './TextareaInput'
 

@@ -3,7 +3,7 @@ import { getUser } from '@/lib/api/user'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { PropsWithChildren } from 'react'
-import HandleOTP from '../HandleOTP'
+import HandleOTP from '../Modal/HandleOTP'
 import { useGlobalContext } from '@/Context/store'
 
 const AuthLayer = (props: PropsWithChildren) => {

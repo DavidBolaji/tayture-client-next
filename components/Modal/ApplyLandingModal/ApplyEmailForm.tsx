@@ -2,11 +2,11 @@
 
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import React from 'react'
-import StyledInput from '../Form/NomalInput/StyledInput'
-import Button from '../Button/Button'
+import StyledInput from '../../Form/NomalInput/StyledInput'
+import Button from '../../Button/Button'
 import { useMutation } from '@tanstack/react-query'
 import { getUserByEmail2 } from '@/lib/services/user'
-import Spinner from '../Spinner/Spinner'
+import Spinner from '../../Spinner/Spinner'
 import { regularFont } from '@/assets/fonts/fonts'
 import { useGlobalContext } from '@/Context/store'
 

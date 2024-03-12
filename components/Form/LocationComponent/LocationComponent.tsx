@@ -1,7 +1,7 @@
 import useAddress from '@/hooks/useAddress'
 import { Field, useFormikContext } from 'formik'
 import React from 'react'
-import { SelectInput } from '../Form/SelectInput/SelectInput'
+import { SelectInput } from '../SelectInput/SelectInput'
 
 const LocationComponent: React.FC<{
   city: string

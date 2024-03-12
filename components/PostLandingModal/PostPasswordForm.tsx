@@ -12,7 +12,7 @@ import { ILogin } from '@/pages/auth/LoginForm/LoginForm'
 import { useGlobalContext } from '@/Context/store'
 // import Link from "next/link";
 import * as Yup from 'yup'
-import { checkPath } from '../HandleApply'
+import { checkPath } from '../Modal/HandleApply'
 
 export const passwordSchema = Yup.object().shape({
   password: Yup.string().required('Email is required'),
