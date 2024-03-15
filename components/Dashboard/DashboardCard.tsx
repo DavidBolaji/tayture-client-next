@@ -31,7 +31,6 @@ const DashboardCard: React.FC<{
   }
 
   const showUploadModal = () => {
-    console.log('trig')
     setUI((prev) => {
       return {
         ...prev,
@@ -42,8 +41,6 @@ const DashboardCard: React.FC<{
       }
     })
   }
-
-  console.log(title)
 
   return (
     <div

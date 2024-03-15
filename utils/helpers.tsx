@@ -59,7 +59,6 @@ export function handleFormat(dataList: any) {
       const questions = entry[learningPath]
       const firstName = questions[0].answer
       const email = questions[questions.length - 1].answer
-      console.log(email)
 
       return {
         firstName,

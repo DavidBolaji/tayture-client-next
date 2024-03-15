@@ -32,7 +32,6 @@ const sendOtpMail = async ({
   let dateTime = cDate + ' ' + cTime
 
   const templatePath = path.join(__dirname, '../views/otp.ejs')
-  console.log(templatePath)
   const dat = await ejs.renderFile(templatePath, {
     firstName,
     otp,

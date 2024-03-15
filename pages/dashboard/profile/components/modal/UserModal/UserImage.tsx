@@ -49,7 +49,6 @@ const UserImage: React.FC<{ picture: string | null }> = ({ picture }) => {
       try {
         const res = await Cloudinary.post('/image/upload', formData)
         const { secure_url, public_id, asset_id, existing } = res.data
-        console.log(public_id)
 
         // Modify the secure_url to include Cloudinary transformations
         const cloudinaryTransformations = 'c_thumb,g_faces,w_200,h_200,z_0.7' // Add your desired transformations here
@@ -69,7 +68,6 @@ const UserImage: React.FC<{ picture: string | null }> = ({ picture }) => {
         ])
         setImageUrl(imageUrlWithTransformations)
         setImg(() => imageUrlWithTransformations)
-        console.log(imageUrlWithTransformations)
       } catch (err: any) {
         message.error(err)
       }

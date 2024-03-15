@@ -32,14 +32,11 @@ const DashboardHeader: React.FC<{
     JSON.parse(user.role).includes('school admin')
       ? true
       : false
-  console.log(isSchAdmin)
 
   const handleClick = (link: string) => {
     if (!isSchAdmin) {
-      console.log(isSchAdmin)
       router.push(link)
     } else {
-      console.log('here')
       setUI((prev) => ({
         ...prev,
         attentionModal: {

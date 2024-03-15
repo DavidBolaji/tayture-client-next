@@ -10,7 +10,6 @@ import { Skeleton } from 'antd'
 
 const FindJobTypePage = () => {
   const router = useRouter()
-  console.log(router.query)
   return (
     <div className="bg-ash_200 pt-[50px] h-[90vh] overflow-y-scroll no-s">
       <Wrapper>

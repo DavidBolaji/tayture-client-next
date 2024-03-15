@@ -55,7 +55,7 @@ const ApplyEmailForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
   ) => {
     mutate(values.email)
   }
-  //   console.log(data);
+
   return (
     <div className="w-full">
       <h2

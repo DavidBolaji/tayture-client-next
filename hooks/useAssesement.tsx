@@ -97,7 +97,6 @@ const useAssesement = () => {
   }
 
   const handleSubmit = () => {
-    console.log('clicked')
     if (path.length > cur + 1) {
       setVisible((prev) => !prev)
     } else {

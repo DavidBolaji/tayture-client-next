@@ -48,7 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         endDate: string
         roles: { role: string }[]
       }) => {
-        console.log(data.date.split('-')[1]);
+       
         await db.workHistory.create({
 
           data: {

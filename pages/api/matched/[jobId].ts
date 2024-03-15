@@ -23,9 +23,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       token: req.token as string,
     })
     const totalHires = +jobs.data.job.job_no_hires * 2
-    console.log(totalHires)
-
-    console.log('[GET_VIEWED_DATA]', viewed)
 
     /**check if viewed match exist */
     if (viewed && viewed.length > 0) {

@@ -28,7 +28,6 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
   const school = queryClient.getQueryData(['school']) as any
   const jobData = queryClient.getQueryData(['jobData']) as any
   const idz = queryClient.getQueryData(['schId'])
-  console.log(idz)
 
   const isArrayJson = ({ ...jobData }?.job_active as string)?.includes('[')
   const { setMessage, ui, setUI } = useGlobalContext()
@@ -36,7 +35,6 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: { [key: string]: any }) => {
-      console.log(data.jobSchoolId)
       return await createJob({
         ...data,
       })
@@ -66,7 +64,6 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
     },
   })
   const handleSubmit = (values: any) => {
-    console.log(school?.sch_id)
     mutate({ ...values, jobSchoolId: idz ?? school?.sch_id })
   }
   const goBack = () => {

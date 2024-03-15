@@ -132,7 +132,6 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
   const downloadCv = async () => {
     setLoading(true)
     const loc = queryClient.getQueryData(['cvLocation'])
-    console.log({ data, colorList, loc })
     const history = data.history.map((e: any, idx: number) => {
       const res = queryClient.getQueryData([`${idx}.history`]) as any
       return {
@@ -393,8 +392,8 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
                 options={[
                   { label: 'Login', value: 'login', icon: <BarsOutlined /> },
                   {
-                    label: 'Register',
-                    value: 'register',
+                    label: 'Sign up',
+                    value: 'signup',
                     icon: <AppstoreOutlined />,
                   },
                 ]}
@@ -420,7 +419,7 @@ const CVTemplateOne = ({ hide }: { hide?: boolean }) => {
                       <LoginForm show={false} />
                     </motion.div>
                   )}
-                  {page === 'register' && (
+                  {page === 'signup' && (
                     <motion.div
                       initial={{
                         opacity: 0,

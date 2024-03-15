@@ -32,7 +32,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       data[key] = req.body[key]
     }
   })
-  console.log(`${req.body['time']} ${req.body['date']}`)
 
   const targetDateTime = moment.tz(
     `${req.body['time']} ${req.body['date']}`,

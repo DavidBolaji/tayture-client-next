@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     const [test] = await Promise.all([req1])
-    console.log(test)
+
     return res.status(200).json({
       message: 'Test fetched succesfully',
       test,

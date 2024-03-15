@@ -22,7 +22,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   })
 
-  console.log(data)
 
   try {
     const job = await db.job.create({

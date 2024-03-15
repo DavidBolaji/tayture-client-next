@@ -41,7 +41,6 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
   }
   const { mutate, isPending } = useMutation({
     mutationFn: async (id: string) => {
-      console.log(id)
       return Axios.delete(`/users/education/me/delete/${id}`)
     },
     onSuccess: () => {

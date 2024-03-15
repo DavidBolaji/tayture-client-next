@@ -20,7 +20,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   })
 
-  console.log(data)
 
   const user = await db.user.update({
     where: {

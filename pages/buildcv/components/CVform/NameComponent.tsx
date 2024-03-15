@@ -136,7 +136,6 @@ const NameComponent: React.FC<ITextarea> = ({
   }
 
   const handleEditClick = () => {
-    console.log(name)
     if (name === 'location') {
       setOpen(true)
     } else if (name?.split('.')[1] === 'date') {
@@ -391,7 +390,6 @@ const NameComponent: React.FC<ITextarea> = ({
                               border={errors.endYear && touched.endYear}
                               // @ts-ignore
                               onChange={(e: any) => {
-                                console.log(e.$y)
                                 setFieldValue('endYear', e.$y)
                               }}
                               onBlur={(e: any) => {

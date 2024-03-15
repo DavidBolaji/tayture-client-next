@@ -10,7 +10,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!req.query.scheduleId)
     return res.status(400).json({ message: 'Schedule id is required' })
-  console.log(req.query.scheduleId)
 
   try {
     /** get applied */

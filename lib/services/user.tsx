@@ -44,7 +44,6 @@ export const sendTextMessage = async (phone: string, msg: string) => {
         channel: 'dnd',
       },
     )
-    console.log(result.data)
 
     console.log('SMS sent succesfully')
     return result.data

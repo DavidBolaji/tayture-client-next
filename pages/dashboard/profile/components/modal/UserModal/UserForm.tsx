@@ -34,8 +34,6 @@ const UserForm: React.FC<UserCardProps> = ({
   const { img, setMessage } = useGlobalContext()
   const queryClient = useQueryClient()
   const noImage = img.trim().length < 1
-  console.log(img)
-  console.log(noImage)
   const userInitialValues = {
     fname: fname,
     lname: lname,

@@ -41,7 +41,6 @@ const ExperienceCard: React.FC<ExperienceCardProp> = ({ experience }) => {
   }
   const { mutate, isPending } = useMutation({
     mutationFn: async (id: string) => {
-      console.log(id)
       return Axios.delete(`/users/work/me/delete/${id}`)
     },
     onSuccess: () => {

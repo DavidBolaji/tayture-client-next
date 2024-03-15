@@ -116,7 +116,6 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 
   const handlePayment = () => {
     const canSchedule = wb - aggregateAmt > amountFinal
-    console.log(wb - aggregateAmt - amountFinal)
     if (canSchedule) {
       /**proceed to create transaction and update job status to paid */
       mutate({

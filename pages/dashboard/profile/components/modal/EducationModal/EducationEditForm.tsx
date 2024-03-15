@@ -204,7 +204,6 @@ const EducationEditForm: React.FC<{ data: Education }> = ({ data }) => {
                           // @ts-ignore
                           border={errors.endYear && touched.endYear}
                           onChange={(e: any) => {
-                            console.log(e.$y)
                             setFieldValue('endYear', e.$y)
                           }}
                           onBlur={(e: any) => {

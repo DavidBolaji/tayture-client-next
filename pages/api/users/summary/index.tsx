@@ -2,7 +2,7 @@ import db from '@/db/db'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('incoming request to update summary: ', req.url)
+
   if (req.method !== 'PUT')
     return res.status(405).json({ message: 'Method not allowed' })
 

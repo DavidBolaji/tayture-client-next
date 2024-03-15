@@ -2,6 +2,27 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
 import axios from 'axios'
+import queue from '@/utils/queue';
+
+queue.process('generate_pdf', 20, async (job, done) => {
+  const { data, colorList, email } = job.data;
+  try {
+    await generateAndSendPDF(data, colorList, email);
+    done();
+  } catch (error) {
+    // Log the error
+    console.error('PDF generation failed:', (error as Error).message);
+
+    if (job.attemptsMade < 20) {
+      console.log(`Retrying job. Attempt ${job.attemptsMade + 1} out of 20.`);
+      return done(new Error('PDF generation failed. Retrying...'));
+    } else {
+      console.error('PDF generation failed after 10 attempts.');
+      done(error as Error);
+    }
+  }
+});
+
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -52,7 +73,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       updateEdu, 
       updateSkills
     ])
-    await generateAndSendPDF(data, colorList, req.authUser?.email!),
+
+    const job =await queue.add('generate_pdf', { data, colorList, email: req.authUser?.email! });
+    console.log(queue.getJobLogs(job.id))
 
     res.status(200).send({
       message:
@@ -64,6 +87,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 async function generateAndSendPDF(data: any, colorList: any, email: string) {
+  console.log('called');
   try {
     const render = await axios.post(
       'https://tayture-pdf.onrender.com/api/pdf',

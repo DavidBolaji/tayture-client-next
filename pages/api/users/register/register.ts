@@ -20,7 +20,6 @@ export default async function handler(
   const validation = registerUserSchema.safeParse(body)
 
   if (!validation.success) {
-    console.log(validation.error.errors)
     const errorList = validation.error.format()
     const field = Object.keys(errorList)[1] as verifyField
     return res.send({
@@ -35,8 +34,6 @@ export default async function handler(
   if (existingUser) return res.send({ message: 'Email already in use!' })
 
   const hash = await bcrypt.hash(password, 10)
-
-  console.log(!path)
 
   const user = await db.user.create({
     data: {

@@ -33,7 +33,6 @@ import { regularFont } from '@/assets/fonts/fonts'
 const ExperienceEditForm: React.FC<{
   exp: WorkHistory & { roles: WorkRole[] }
 }> = ({ exp }) => {
-  console.log(exp);
   const { setUI, setMessage } = useGlobalContext()
   const { mutate } = useMutation({
     mutationFn: async (data: WorkHistory) => {
@@ -255,8 +254,6 @@ const ExperienceEditForm: React.FC<{
                   
                   defaultValue={['I currently work here']}
                   onChange={(e: any) => {
-                    console.log(e)
-                    // handleChange(e);
                     setFieldValue('endDate', e.length > 0 ? 'Current' : '')
                     setFieldValue(
                       'endMonth',

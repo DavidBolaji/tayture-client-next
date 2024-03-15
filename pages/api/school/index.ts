@@ -18,6 +18,5 @@ export default async function handler(
       sch_admin: true,
     },
   })
-  // console.log(req.params);
   res.status(200).json({ message: 'Succesful', school })
 }

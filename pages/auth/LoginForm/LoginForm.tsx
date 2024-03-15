@@ -39,10 +39,27 @@ const LoginForm = ({ show = true }: { show?: boolean }) => {
 
   const data = queryClient.getQueryData(['cvData']) as any
   const order = queryClient.getQueryData(['sectionOrder']) as string[]
+  const loc = queryClient.getQueryData(['cvLocation'])
+ 
 
   const downloadCv = async () => {
+    const history = data.history.map((e: any, idx: number) => {
+      const res = queryClient.getQueryData([`${idx}.history`]) as any
+        return {
+          ...e,
+          lga: res.lga,
+          city: res.city,
+          state: res.state,
+          address: res.address,
+    
+        }
+      })
+      const newObj = {
+        ...data,
+        history
+      }
     try {
-      const response = await Axios.post('/pdf', { data, colorList })
+      const response = await Axios.post('/pdf', { data: newObj, colorList, loc })
       setMessage(() => response.data.message)
       const t = setTimeout(() => {
         setMessage(() => '')

@@ -22,8 +22,6 @@ export default async function handler(
       data[key] = req.body[key]
     }
   })
-  console.log(req.query.userId)
-  console.log(data)
 
   try {
     const user = await db.user.update({

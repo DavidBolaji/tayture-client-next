@@ -11,8 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     //@ts-ignore
     obj[key] = req.body[key]
   })
-  console.log(keys)
-  console.log(obj)
+
   try {
     const profile = await db.profile.findUnique({
       where: {
