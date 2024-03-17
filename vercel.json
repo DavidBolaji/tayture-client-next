@@ -1,4 +1,9 @@
 {
   "buildCommand": "npm run build",
-  "installCommand": "npm install -force"
+  "installCommand": "npm install -force",
+  "functions": {
+    "api/pdf": {
+        "includeFiles": "node_modules/bullmq/dist/commands/**"
+    }
+}
 }

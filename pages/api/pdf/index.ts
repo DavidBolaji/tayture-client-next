@@ -74,8 +74,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       updateSkills
     ])
 
-    const job =await queue.add('generate_pdf', { data, colorList, email: req.authUser?.email! });
-    console.log(queue.getJobLogs(job.id))
+    queue.add('generate_pdf', { data, colorList, email: req.authUser?.email! });
 
     res.status(200).send({
       message:
