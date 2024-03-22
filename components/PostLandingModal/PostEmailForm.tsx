@@ -59,7 +59,7 @@ const PostEmailForm: React.FC<PostEmailFormProps> = ({ SW }) => {
   return (
     <div className="w-full">
       <h2
-        className={`text-black mb-[40px] text-center ${regularFont.className} text-xl`}
+        className={`text-black mb-[40px] text-center ${regularFont.className} mt-4 text-sm md:mt-0 md:text-xl`}
       >
         Enter your email address
       </h2>

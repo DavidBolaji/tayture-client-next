@@ -61,7 +61,7 @@ const HandlePostLanding = () => {
       }
       close={handleClose}
     >
-      <Stepper init={setSW} className="overflow-hidden mx-10">
+      <Stepper init={setSW} className="overflow-hidden w-full">
         <PostEmailForm SW={SW} />
 
         {user.fname ? (

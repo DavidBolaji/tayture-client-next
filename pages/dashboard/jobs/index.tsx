@@ -29,7 +29,9 @@ const JobsPage: React.FC = () => {
       <div className="mb-[40px] mt-10">
         <JobSearch />
       </div>
-      <TopNav />
+      <div className='mt-24 sm:-mt-10  bg-black'>
+        <TopNav />
+      </div>
       <JobApplication progress />
     </div>
   )

@@ -7,6 +7,7 @@ import FormError from '@/components/Form/FormError/FormError'
 import { MdOutlineError } from 'react-icons/md'
 import { HiCheckCircle } from 'react-icons/hi'
 import { AnimatePresence, motion } from 'framer-motion'
+import { regularFont } from '@/assets/fonts/fonts'
 
 export const StyledInput = styled(PhoneInput)`
   input {
@@ -55,25 +56,15 @@ const CustomPhoneInput: React.FC<{ name: string; disabled?: boolean }> = ({
         }`}
       >
         <AnimatePresence mode="wait">
-          {value?.trim().length > 0 && (
             <motion.h2
               key={name}
-              initial={{
-                y: 11,
-              }}
-              animate={{
-                y: -27,
-              }}
-              exit={{
-                y: 11,
-              }}
-              className={`-translate-y-7 font-[600] absolute text-[14px] w-full flex justify-start ml-0.5 h-3 ${
+            
+              className={`-translate-y-7 font-[700] text-[14px] w-full flex justify-start ml-0.5 h-0  ${
                 touched && ''
-              } `}
+              } ${regularFont.className}`}
             >
               Phone
             </motion.h2>
-          )}
         </AnimatePresence>
 
         <div className="relative">

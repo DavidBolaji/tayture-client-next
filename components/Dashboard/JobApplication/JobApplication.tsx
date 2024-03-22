@@ -73,10 +73,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
       </div>
     </div>
   ) : (
-    <div className="flex w-full items-center justify-center flex-col">
-      <div className="flex justify-start items-start w-full mb-2 text-ash_400">
-        No Result for <span className="capitalize">{type}</span>
-      </div>
+    <div className="flex w-full items-center justify-center flex-col pb-[100px]">
       <div className="bg-white w-full py-10">
         <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />
       </div>

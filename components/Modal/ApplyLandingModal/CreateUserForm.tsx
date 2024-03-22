@@ -82,7 +82,7 @@ const CreateUserForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
       >
         {({ isValid, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="mt-10">
-            <div className="grid lg:grid-cols-12 grid-cols-6 gap-3">
+            <div className="grid lg:grid-cols-12 grid-cols-6 lg:gap-3">
               <div className="col-span-6">
                 <Field
                   name="fname"

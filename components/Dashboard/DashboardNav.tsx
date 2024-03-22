@@ -33,7 +33,7 @@ const DashboardNav: React.FC = () => {
         </div>
       </nav>
       <div className="">
-        <DashboardDrawer visible={visible} isAdmin={false} />
+        <DashboardDrawer visible={visible} isAdmin={false} feedback={() => setVisible(false)} />
       </div>
     </>
   )

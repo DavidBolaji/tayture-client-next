@@ -17,13 +17,13 @@ const BuildPage = () => {
     >
       <Wrapper>
         <h1
-          className={`text-center text-3xl tracking-wider leading-[38px] ${boldFont.className}`}
+          className={`text-center text-3xl tracking-wider leading-[38px] mb-4 ${boldFont.className}`}
         >
           Choose your favorite template design
         </h1>
-        <Divider>
+        {/* <Divider>
           <span className="text-xl font-semibold">TEMPLATES</span>
-        </Divider>
+        </Divider> */}
         <div className="flex overflow-x-auto no-s">
           {['template'].map((el) => (
             <div key={el} className="flex-shrink-0 mr-3 ">

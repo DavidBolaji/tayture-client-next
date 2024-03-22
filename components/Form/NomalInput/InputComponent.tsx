@@ -45,7 +45,6 @@ const InputComponent: React.FC<InputProps> = ({
         }`}
       >
         <AnimatePresence mode="wait">
-          {!focus && rest.value && (
             <motion.label
               key="label-animation"
               initial={{
@@ -63,7 +62,6 @@ const InputComponent: React.FC<InputProps> = ({
             >
               {text}
             </motion.label>
-          )}
         </AnimatePresence>
         <input
           name={name}
