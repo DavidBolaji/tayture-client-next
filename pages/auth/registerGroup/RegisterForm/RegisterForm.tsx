@@ -94,8 +94,8 @@ const RegisterForm = ({
       validationSchema={registerSchema}
     >
       {({ handleSubmit, isSubmitting, isValid }) => (
-        <Form onSubmit={handleSubmit} className="mt-10">
-          <div className="grid lg:grid-cols-12 grid-cols-6 gap-3">
+        <Form onSubmit={handleSubmit} className="mt-10 pb-20">
+          <div className="grid lg:grid-cols-12 grid-cols-6 lg:gap-3">
             <div className="col-span-6">
               <Field
                 name="fname"
@@ -160,7 +160,7 @@ const RegisterForm = ({
                 <button
                   type="button"
                   className="text-orange cursor-pointer text-[18px]"
-                  onClick={() => router.push('/login')}
+                  onClick={() => router.push('/auth/login')}
                 >
                   Log In
                 </button>

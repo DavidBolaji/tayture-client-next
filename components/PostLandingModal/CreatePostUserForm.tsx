@@ -72,7 +72,7 @@ const CreatePostUserForm: React.FC<CreatePostUserFormProps> = ({ SW }) => {
   return (
     <div className="w-full">
       <h2
-        className={`text-black mb-[40px] text-center ${regularFont.className} text-xl`}
+        className={`text-black mb-[40px] text-center ${regularFont.className} text-sm mt-2 md:mt-0 md:text-xl`}
       >
         Your contact info
       </h2>
@@ -86,7 +86,7 @@ const CreatePostUserForm: React.FC<CreatePostUserFormProps> = ({ SW }) => {
       >
         {({ isValid, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="mt-10">
-            <div className="grid lg:grid-cols-12 grid-cols-6 gap-3">
+            <div className="grid lg:grid-cols-12 grid-cols-6 lg:gap-3">
               <div className="col-span-6">
                 <Field
                   name="fname"

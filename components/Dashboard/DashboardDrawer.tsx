@@ -27,9 +27,11 @@ const dataNav = [
 function DashboardDrawer({
   visible,
   isAdmin,
+  feedback
 }: {
   visible: boolean
   isAdmin: boolean
+  feedback: () => void
 }) {
   return (
     <AnimatePresence mode="wait">
@@ -56,8 +58,10 @@ function DashboardDrawer({
               nav.path !== '/dashboard/admin' ? (
                 <p key={nav.path} className="text-[20px]">
                   <Link
+                    onClick={feedback}
                     href={nav?.path}
                     className="hover:text-orange text-white"
+                    
                   >
                     {nav?.title}
                   </Link>
@@ -66,6 +70,7 @@ function DashboardDrawer({
                 isAdmin && (
                   <p key={nav.path} className="text-[20px] text-white">
                     <Link
+                      onClick={feedback}
                       href={nav?.path}
                       className="hover:text-orange text-white"
                     >

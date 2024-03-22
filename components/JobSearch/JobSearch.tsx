@@ -20,11 +20,11 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
           },
         }}
       >
-        <div className={cn('flex gap-2', className)}>
+        <div className={cn('flex gap-2 left-0 sm:top-2 h-3 md:h-24 md:top-2 ml-2 sm:relative w-full sm:w-auto', className)}>
           <div className="w-full">
             <Input className="h-10" placeholder="Search for a job" />
           </div>
-          <div className="whitespace-nowrap">
+          <div className="whitespace-nowrap mr-5">
             <Button
               render="light"
               // text="find"

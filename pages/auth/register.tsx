@@ -12,9 +12,6 @@ const Register = () => {
       >
         Create account with Tayture
       </h2>
-      <p className="text-[16px] text-ash_400 md:text-[18px] lg:text-[18px] text-center">
-        Sign up to get personalized learning
-      </p>
       <RegisterContainer />
     </div>
   )

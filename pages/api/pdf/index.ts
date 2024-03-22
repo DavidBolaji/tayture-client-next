@@ -2,26 +2,28 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
 import axios from 'axios'
-import queue from '@/utils/queue';
+import worker, { sampleQueue } from '@/workers/sample.worker'
+// import queue from '@/utils/queue';
 
-queue.process('generate_pdf', 20, async (job, done) => {
-  const { data, colorList, email } = job.data;
-  try {
-    await generateAndSendPDF(data, colorList, email);
-    done();
-  } catch (error) {
-    // Log the error
-    console.error('PDF generation failed:', (error as Error).message);
 
-    if (job.attemptsMade < 20) {
-      console.log(`Retrying job. Attempt ${job.attemptsMade + 1} out of 20.`);
-      return done(new Error('PDF generation failed. Retrying...'));
-    } else {
-      console.error('PDF generation failed after 10 attempts.');
-      done(error as Error);
-    }
-  }
-});
+// queue.process('generate_pdf', 20, async (job, done) => {
+//   const { data, colorList, email } = job.data;
+//   try {
+//     await generateAndSendPDF(data, colorList, email);
+//     done();
+//   } catch (error) {
+//     // Log the error
+//     console.error('PDF generation failed:', (error as Error).message);
+
+//     if (job.attemptsMade < 20) {
+//       console.log(`Retrying job. Attempt ${job.attemptsMade + 1} out of 20.`);
+//       return done(new Error('PDF generation failed. Retrying...'));
+//     } else {
+//       console.error('PDF generation failed after 10 attempts.');
+//       done(error as Error);
+//     }
+//   }
+// });
 
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -74,7 +76,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       updateSkills
     ])
 
-    queue.add('generate_pdf', { data, colorList, email: req.authUser?.email! });
+    sampleQueue.add('generate_pdf', { data, colorList, email: req.authUser?.email! });
 
     res.status(200).send({
       message:
