@@ -51,10 +51,10 @@ const items: MenuProps['items'] = [
     label: 'Post a Job',
     key: '/post_landing',
   },
-  {
-    label: 'Build CV',
-    key: '/buildcv',
-  },
+  // {
+  //   label: 'Build CV',
+  //   key: '/buildcv',
+  // },
 ]
 
 const Header = () => {
@@ -87,7 +87,7 @@ const Header = () => {
               <StyledMenu
                 mode="horizontal"
                 className={`font-semibold ${regularFont.className}`}
-                style={{ width: 410 }}
+                // style={{ width: 350 }}
                 defaultSelectedKeys={[locationCurrent]}
                 selectedKeys={[locationCurrent]}
                 onClick={(menuInfo) => router.push(menuInfo?.key)}

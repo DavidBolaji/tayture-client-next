@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=mysql://root:password@mysql:3306/db
+    depends_on:
+      - db
+
+  db:
+    container_name: mysql_db
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'password'
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
