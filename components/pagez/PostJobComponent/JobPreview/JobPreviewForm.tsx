@@ -50,14 +50,13 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
           },
         }))
       }
-      setMessage(() => res.data.message)
-      router.push('/dashboard/school')
+      // setMessage(() => res.data.message)
       queryClient.invalidateQueries({
         queryKey: ['schoolJobs'],
       })
-      // setJobData(() => {});
       queryClient.removeQueries({ queryKey: ['jobData'] })
-      return school
+      return router.push('/dashboard/school')
+      // return school
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)

@@ -32,6 +32,12 @@ export const getUser = async () => {
   const user = await Axios.get('/users/me')
   return user
 }
+
+export const getUser2 = async () => {
+  const user = await Axios.get('/users/me', { params: { add: 1 } })
+  return user
+}
+
 export const getUserAndValidate = async () => {
   const user = await Axios.get('/users/me/validate')
   return user

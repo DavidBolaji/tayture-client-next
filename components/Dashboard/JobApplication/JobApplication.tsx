@@ -5,7 +5,7 @@ import JobPoster from '@/components/JobPoster/JobPoster'
 import { IJobSchDb } from '@/pages/api/job/types'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getClientJobs, getClientJobsByType } from '@/lib/api/job'
-import { Empty, Skeleton } from 'antd'
+import { Drawer, Empty, Skeleton } from 'antd'
 import { cn } from '@/utils/helpers'
 import { useRouter } from 'next/router'
 
@@ -45,6 +45,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
     },
   })
 
+
   return data && Object.keys(data).length > 0 ? (
     <div className="grid grid-cols-12 gap-10">
       <div className="md:col-span-6 col-span-12 h-[500px] overflow-auto md:pr-5 no-s">
@@ -60,7 +61,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
             ))}
           </div>
         ) : (
-          data?.map((job: IJobSchDb) => <JobCard key={job.job_id} job={job} />)
+          data?.map((job: IJobSchDb) => <JobCard key={job.job_id} job={job} copy />)
         )}
       </div>
       <div
@@ -71,6 +72,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
       >
         <JobPoster progress={progress} />
       </div>
+      
     </div>
   ) : (
     <div className="flex w-full items-center justify-center flex-col pb-[100px]">

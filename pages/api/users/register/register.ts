@@ -1,7 +1,9 @@
 import { registerUserSchema } from './Schema/schema'
 import bcrypt from 'bcryptjs'
-import { getUserByEmail, sendTextMessageOTP } from '@/lib/services/user'
+import { getUserByEmail } from '@/lib/services/user'
 import db from '@/db/db'
+import jwt from 'jsonwebtoken'
+import { setCookie } from 'nookies'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -46,6 +48,27 @@ export default async function handler(
     },
   })
 
+  const token = jwt.sign(
+    { id: user.id },
+    process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!,
+  )
+
+  const sessionData = {
+    userId: user.id,
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    sessionToken: token,
+  }
+
+  const session = await db.session.create({
+    data: sessionData,
+  })
+
+  // Set the cookie containing the token
+  setCookie({ res }, 'token', session.sessionToken, {
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    path: '/', // Set the cookie path to '/'
+  })
+
   if (skip) {
     return res.status(200).send({
       message: 'User Created!',
@@ -53,12 +76,11 @@ export default async function handler(
     })
   }
 
-  const req2 = await sendTextMessageOTP(phone)
 
   try {
     return res.status(200).send({
       message: 'User Created!',
-      user: { ...user, pass: password, pinId: req2.data.pinId },
+      user: { ...user, pass: password },
     })
   } catch (error: unknown) {
     return res.status(400).send({ message: (error as Error).message })

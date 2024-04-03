@@ -13,6 +13,7 @@ import Spinner from '../../components/Spinner/Spinner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { Notifcation } from '@prisma/client'
+import { regularFont } from '@/assets/fonts/fonts'
 
 dayjs.extend(relativeTime)
 interface StyledCardProps {
@@ -57,9 +58,10 @@ const NotificationItem: React.FC<any> = ({
   const queryClient = useQueryClient()
   const { mutate: notificationUpdate } = useMutation({
     mutationFn: async (data: { id: string; status: boolean }) => {
-      return await Axios.put('/notification', data)
+      const req = await Axios.put('/notification/me/update', data)
+      return req.data.notification
     },
-    onSuccess: () => {
+    onSuccess: (res) => {
       queryClient.invalidateQueries({
         queryKey: ['notifications'],
       })
@@ -75,7 +77,7 @@ const NotificationItem: React.FC<any> = ({
 
   return (
     <Card
-      className={`mb-0 max-w-[460px] overflow-clip no-s rounded-none w-full ${
+      className={`mb-0 max-w-[460px] overflow-clip no-s rounded-none w-full cursor-pointer ${
         !read ? 'bg-[#faeee7] ' : ''
       }`}
     >
@@ -83,7 +85,9 @@ const NotificationItem: React.FC<any> = ({
         <div className="flex-[0.8]">
           <StyledMeta
             avatar={
-              <div className="h-full w-full flex items-center justify-center">
+              <div
+                className={`h-full w-full flex items-center justify-center ${regularFont.className}`}
+              >
                 <Avatar
                   shape="circle"
                   className="bg-gray_600 flex items-center justify-center"
@@ -91,13 +95,15 @@ const NotificationItem: React.FC<any> = ({
                 />
               </div>
             }
-            title={caption}
+            title={<h2 className={regularFont.className}>{caption}</h2>}
             description={
               <div>
-                <p className="-mt-2 overflow-hidden text-[12px]">
+                <p
+                  className={`-mt-2 overflow-hidden text-[12px] ${regularFont.className}`}
+                >
                   {fullMessage}
                 </p>
-                <small>
+                <small className={regularFont.className}>
                   Period:
                   {period}
                 </small>
@@ -175,6 +181,7 @@ const NotificationDropdown: React.FC<{
       const req = await Axios.get('/notification/me')
       return req.data.notification
     },
+    refetchInterval: 30000,
   })
 
   const msg = notification
@@ -190,9 +197,7 @@ const NotificationDropdown: React.FC<{
     .sort((a: any, b: any) => b.key! - a.key!) as unknown as MenuProps['items']
 
   const items: MenuProps['items'] = msg!
-  const show = notification
-    ? notification.some((n: any) => !n.notification_status)
-    : false
+  const show = notification ? notification.some((n: any) => !n.status) : false
 
   return (
     <StyledDropdown

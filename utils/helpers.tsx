@@ -6,6 +6,7 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { IJobSchDb } from '@/pages/api/job/types'
 import * as momentT from 'moment-timezone'
+import { Education, Profile, Skills, Summary, WorkHistory } from '@prisma/client'
 
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
@@ -190,4 +191,28 @@ export const formatTo12HourTime = (dateString: string): any => {
     return time.format('hh:mm A')
   }
   return ''
+}
+
+export const calculateProgress = (data: {
+  work: WorkHistory[]
+  profile: Profile
+  skills: Skills[]
+  education: Education[]
+  summary: Summary
+}) => {
+  let score = 0
+  if (data) {
+    if (data.education.length > 0){ score += 10; console.log('education');}
+    if (data.skills.length > 0){ score += 10; console.log('skills');}
+    if (data.work.length > 0){ score += 10; console.log('work length');}
+    if (data.profile.address){ score += 10; console.log('address');}
+    if (data.profile.cv){ score += 10; console.log('cv');}
+    if (data.profile.cover){ score += 10; console.log('cover');}
+    if (data.profile.available){ score += 10; console.log('available');}
+    if (data.profile.address){ score += 10; console.log('address');}
+    if (data.profile.workplace) {score += 5; console.log('workplace');}
+    if (data.profile.picture) {score += 5; console.log('pictire');}
+    if (data.summary.text) {score += 10; console.log('summary');}
+  }
+  return score
 }

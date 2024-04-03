@@ -154,9 +154,9 @@ const ExperienceForm: React.FC = () => {
             as={StyledInput}
           />
 
-          <h3 className="ml-1 text-[16px] font-[600]">Start date</h3>
+          <h3 className="ml-1 text-[14px] -mt-4 font-[600]">Start date</h3>
 
-          <div className="grid grid-cols-2 gap-3 mt-2">
+          <div className="grid md:grid-cols-2 md:gap-3 mt-1 md:-mb-5">
             <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
               <Field
                 name="startMonth"
@@ -165,8 +165,9 @@ const ExperienceForm: React.FC = () => {
                 text="Select start month"
                 option={months}
               />
-            </div>
-            <div className="w-full col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
+            </div> 
+            <h3 className="mb-1 ml-1 text-[14px] -mt-6 font-[600] md:hidden block">Start year</h3>
+            <div className="w-full col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1 mb-2">
               <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                 <Field name="startYear">
                   {({ field }: { field: FieldProps['field'] }) => (
@@ -210,8 +211,9 @@ const ExperienceForm: React.FC = () => {
           <AnimatePresence mode="wait">
             {values.endDate !== 'Present' && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 120 }}
+                className='md:h-[105px] h-auto'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1}}
                 transition={{
                   duration: 0.5,
                   ease: easeIn,
@@ -227,9 +229,9 @@ const ExperienceForm: React.FC = () => {
                   },
                 }}
               >
-                <h3 className="ml-1 text-[16px] font-[600]">End date</h3>
+                <h3 className="ml-1 text-[14px] font-[600] -mt-[6px] md:-mt-4">End date</h3>
 
-                <div className="grid grid-cols-2 gap-3 mt-2">
+                <div className="grid md:grid-cols-2 md:gap-3 mt-1 ">
                   <div className="col-span-2 mb-12 sm:mb-0  md:mb-0 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                     <Field
                       name="endMonth"
@@ -239,7 +241,8 @@ const ExperienceForm: React.FC = () => {
                       option={months}
                     />
                   </div>
-                  <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+                  <h3 className="mb-1 ml-1 text-[14px] md:-mt-6 -mt-[70px] sm:-mt-6  font-[600] md:hidden block">End year</h3>
+                  <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 md:mt-0 sm:mt-0 -mt-10">
                     <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                       <Field name="endYear">
                         {({ field }: { field: FieldProps['field'] }) => (
@@ -273,11 +276,15 @@ const ExperienceForm: React.FC = () => {
                           </div>
                         )}
                       </Field>
-                      <ErrorMessage name="endYear">
+                      <div className='-translate-y-2'>
+                      <ErrorMessage name="endYear" >
                         {(msg) => <FormError msg={msg} />}
                       </ErrorMessage>
+
+                      </div>
                     </div>
                   </div>
+                  
                 </div>
               </motion.div>
             )}
@@ -306,7 +313,10 @@ const ExperienceForm: React.FC = () => {
             </Field>
           </div>
 
-          <Field as={LocationComponent} city="city" state="state" lga="lga" />
+          <div>
+            <Field as={LocationComponent} city="city" state="state" lga="lga" />
+          </div>
+
 
           <Field
             name="address"
@@ -317,7 +327,7 @@ const ExperienceForm: React.FC = () => {
             spellCheck="false"
           />
 
-          <h3 className="ml-1 text-[16px] font-[600] mb-2">Roles</h3>
+          <h3 className="ml-1 text-[14px] font-[600] mb-2 -mt-3">Roles</h3>
           <FieldArray name="roles">
             {({ remove, push }: any) => (
               <div>

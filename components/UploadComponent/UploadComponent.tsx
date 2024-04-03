@@ -1,5 +1,5 @@
 import { Images } from '@/assets'
-import React, { ChangeEvent, FC, useRef, useState } from 'react'
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import Spinner from '../Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
 import axios from 'axios'
@@ -42,6 +42,17 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
       }
     }
   }
+
+  useEffect(() => {
+    if (uploadRef.current) {
+      if (typeof image === 'undefined' || image.trim().length < 1) {
+        uploadRef.current.src = "http://res.cloudinary.com/dhwlkhbet/image/upload/c_crop,g_north_east,h_250,w_200/v1696257245/tayture/tabler_photo.png"
+      } else {
+        uploadRef.current.src = image
+        setImg(() => image)
+      }
+    }
+  }, [image])
   return (
     <div>
       <div className="relative bg-[#D9D9D9] cursor-pointer mb-[24px] text-center w-[120px]  overflow-hidden h-[120px] rounded-full">
@@ -53,7 +64,7 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
             ref={uploadRef}
             /**@ts-ignore */
             src={
-              typeof image === 'undefined'
+              typeof image === 'undefined' || image.trim().length < 1
                 ? 'http://res.cloudinary.com/dhwlkhbet/image/upload/c_crop,g_north_east,h_250,w_200/v1696257245/tayture/tabler_photo.png'
                 : image
             }

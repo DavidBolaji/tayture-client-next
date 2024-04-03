@@ -86,6 +86,7 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-countdown": "^2.3.5",
     "react-dom": "18.2.0",
+    "react-floating-whatsapp": "^5.0.8",
     "react-icons": "^4.6.0",
     "react-loading-dot": "^1.0.6",
     "react-otp-input": "^3.1.1",

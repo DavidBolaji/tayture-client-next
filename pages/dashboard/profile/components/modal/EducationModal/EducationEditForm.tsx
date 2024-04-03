@@ -111,7 +111,7 @@ const EducationEditForm: React.FC<{ data: Education }> = ({ data }) => {
           />
 
           <h3 className="mb-2 ml-1 text-[16px] font-[600]">Start date</h3>
-          <div className="grid grid-cols-2 gap-3 mb-6 md:mb-0">
+          <div className="grid md:grid-cols-2 md:gap-3 mb-6 md:mb-0">
             <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
               <Field
                 name="startMonth"
@@ -121,6 +121,7 @@ const EducationEditForm: React.FC<{ data: Education }> = ({ data }) => {
                 option={months}
               />
             </div>
+            <h3 className="mb-1 ml-1 text-[16px] -mt-6 font-[600] md:hidden block">Start year</h3>
             <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 mb-6">
               <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
                 <Field name="startYear">
@@ -169,7 +170,7 @@ const EducationEditForm: React.FC<{ data: Education }> = ({ data }) => {
           </div>
           <h3 className="-mt-[12px] ml-1 text-[16px] font-[600]">End date</h3>
 
-          <div className="grid grid-cols-2 gap-3 mt-2 mb-8">
+          <div className="grid grid-cols-2 md:gap-3 mt-2 mb-8">
             <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
               <Field
                 name="endMonth"
@@ -179,6 +180,7 @@ const EducationEditForm: React.FC<{ data: Education }> = ({ data }) => {
                 option={months}
               />
             </div>
+            <h3 className="mb-1 ml-1 text-[16px] -mt-6 font-[600] md:hidden block">End year</h3>
             <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 md:mb-6">
               <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                 <Field name="endYear">

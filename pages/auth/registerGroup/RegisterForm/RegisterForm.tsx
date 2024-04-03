@@ -71,15 +71,7 @@ const RegisterForm = ({
       if (!show) {
         if (cb) return cb()
       } else {
-        setUI((prev) => {
-          return {
-            ...prev,
-            OTPModal: {
-              ...prev.OTPModal,
-              visibility: true,
-            },
-          }
-        })
+       return window.location.assign('/dashboard')
       }
     } else {
       setMessage(() => res.data.message)

@@ -163,7 +163,7 @@ const AddSchoolFormAdmin: React.FC = () => {
                 disabled={isSubmitting || !isValid || isPending}
                 bold={false}
                 hover={!(isSubmitting || !isValid)}
-                text={isSubmitting || isPending ? <Spinner /> : 'create'}
+                text={isSubmitting || isPending ? <Spinner /> : 'Create'}
                 render="light"
                 full={false}
                 type="submit"

@@ -63,7 +63,7 @@ const ExperienceCard: React.FC<ExperienceCardProp> = ({ experience }) => {
               {d.title}{' '}
               <span className="text-ash_400 text-[14px] font-[400] capitalize">
                 ({d.startMonth} {d.startYear} - {/* @ts-ignore */}
-                {d?.endDate?.length > 1
+                {d?.startMonth === d?.endMonth && d.startYear === d.endYear 
                   ? "Current"
                   : `${d.endMonth} ${d.endYear}`}
                 )

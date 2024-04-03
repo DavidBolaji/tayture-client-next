@@ -25,11 +25,11 @@ const dataNav = [
     path: '/post_landing',
     title: 'Post a Job',
   },
-  {
-    id: 'nav5',
-    path: '/buildcv',
-    title: 'Build CV',
-  },
+  // {
+  //   id: 'nav5',
+  //   path: '/buildcv',
+  //   title: 'Build CV',
+  // },
   {
     id: 'nav3',
     path: '/auth/login',

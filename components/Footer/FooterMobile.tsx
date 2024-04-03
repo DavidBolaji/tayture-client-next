@@ -43,7 +43,7 @@ function FooterMobile() {
             xs={24}
             sm={24}
             md={12}
-            className="text-white relative xl:text-[1rem] leading-[1.5rem] mt-3 z-10 text-[16px] opacity-50"
+            className="text-white relative xl:text-[1rem] leading-[1.5rem] pb-10 mt-3 z-10 text-[16px] opacity-50"
           >
             <Link href="/privacy" target="_blank">
               Privacy Policy

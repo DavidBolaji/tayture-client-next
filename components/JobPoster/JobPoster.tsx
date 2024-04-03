@@ -5,7 +5,7 @@ import { ConfigProvider, Empty, Progress, Skeleton, Space } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { FaLocationDot } from 'react-icons/fa6'
 import Button from '../Button/Button'
-import { datePosted, salaryOutput } from '@/utils/helpers'
+import { calculateProgress, datePosted, salaryOutput } from '@/utils/helpers'
 import { useQueryClient } from '@tanstack/react-query'
 import { useGlobalContext } from '@/Context/store'
 import { IUser } from '@/pages/api/users/types'
@@ -26,6 +26,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
 
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
   const user = queryClient.getQueryData(['user']) as IUser
+  const prog = queryClient.getQueryData(['profileDetails'])
   const { count, setUI } = useGlobalContext()
   const [reset, setReset] = useState(0)
 
@@ -72,27 +73,29 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
           <span>{data.school.sch_city}</span>
         </span>
         <span className="text-ash_400">
-          posted:&nbsp;
+          Posted:&nbsp;
           {datePosted(data.createdAt as string)}
         </span>
         <span className="text-ash_400">{data.applied.length} Applicant(s)</span>
       </Space>
       {isDashboard ? <BtnDashboard /> : <BtnLanding />}
-      <p className="mb-[32px]">Your profile matches 8 out of 10 of the skill</p>
-      <h3 className="text-[20px] mb-[24px]">Job Details</h3>
-      <p className="mb-[40px]">
+      {/* <p className="mb-[32px]">Your profile matches 8 out of 10 of the skill</p> */}
+      <h3 className="text-[20px] mb-2 -ml-1">Job Details</h3>
+      <div className='space-y-2 mb-4'>
+      <p>
         {' '}
         Salary range: #{`${salaryOutput(data.job_min_sal, data.job_max_sal)}`}
       </p>
-      <p className="mb-[40px]">
+      <p>
         Minimum educational qualification : {data.job_qual}
       </p>
-      <p className="mb-[40px]">
+      <p>
         Minimum years of experience: {data.job_exp} Year(s)
       </p>
+      </div>
       {data.job_role === 'teacher' && (
         <>
-          <h3 className="mb-[18px] text-[20px]">Subjects</h3>
+          <h3 className="mb-2 text-[20px]">Subjects</h3>
           <h4 className="mb-2">{data.job_title}</h4>
           <Space>
             {(JSON.parse(data.job_active.replace("'", '')) as string[]).map(
@@ -127,7 +130,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
                 },
               }}
             >
-              <Progress percent={50} type="circle" />
+              {typeof prog !== "number" ? <Progress percent={0} type="circle" />:<Progress percent={prog as number} type="circle" />}
             </ConfigProvider>
           </div>
           <div className="col-span-6 py-[24px]">

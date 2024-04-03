@@ -101,7 +101,7 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
             />
           </div>
           <div className="mb-5">
-            <h3 className={`mb-[16px] ml-1 ${regularFont.className}`}>
+            <h3 className={`mb-[30px] ml-1 ${regularFont.className}`}>
               Salary details
             </h3>
             <div

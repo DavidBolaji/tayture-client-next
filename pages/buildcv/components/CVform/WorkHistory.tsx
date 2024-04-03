@@ -86,7 +86,7 @@ export const eduData = {
 
 const WorkHistory = () => {
   const [history, setHistory] = useState(initialValuesCv.history)
-  const { colorList } = useGlobalContext()
+  const { colorList }: {colorList: any} = useGlobalContext()
   const queryClient = useQueryClient()
 
   const onDragEnd = (event: DragEndEvent) => {
