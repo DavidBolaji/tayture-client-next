@@ -111,7 +111,7 @@ const DashboardMenu: React.FC<{ collapsed: boolean }> = ({ collapsed }) => {
           return true
         })}
       />
-    <a href={'https://wa.me/+2347067799302'} target='_blank'>
+    <a href={'https://wa.me/+2347067799302'} rel="noreferrer" target='_blank'>
       {!collapsed && (
         
         <div className="absolute bottom-0  px-5 -translate-x-2 cursor-pointer">
