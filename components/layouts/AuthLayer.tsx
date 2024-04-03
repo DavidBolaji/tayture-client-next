@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getUser } from '@/lib/api/user'
-import { useQuery } from '@tanstack/react-query'
+import { getUser, getUser2 } from '@/lib/api/user'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { PropsWithChildren } from 'react'
 import HandleOTP from '../Modal/HandleOTP'
@@ -9,6 +9,7 @@ import { useGlobalContext } from '@/Context/store'
 const AuthLayer = (props: PropsWithChildren) => {
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
+  const queryClient = useQueryClient()
   const { setUI } = useGlobalContext()
   const job = router.query.job
   const profile = router.query.profile
@@ -22,16 +23,15 @@ const AuthLayer = (props: PropsWithChildren) => {
     queryKey: ['user'],
     queryFn: async () => {
       try {
-        const req = await getUser()
+        const req = await getUser2()
+        queryClient.setQueryData(['pinId'], req.data.user.pinId)
         const userData = req.data.user
-
         return userData
       } catch (error: any) {
         console.log('[ERROR]', error.message)
         throw new Error('Failed to fetch user data')
       }
     },
-    refetchOnWindowFocus: true,
   })
 
   useEffect(() => {
@@ -48,6 +48,8 @@ const AuthLayer = (props: PropsWithChildren) => {
         }))
       }
 
+      console.log(data.pinId);
+      localStorage.setItem('pinId', data.pinId)
       localStorage.setItem('email', data.email)
 
       if (job === '1') {

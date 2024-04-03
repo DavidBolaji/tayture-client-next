@@ -33,24 +33,7 @@ const CreatePostUserForm: React.FC<CreatePostUserFormProps> = ({ SW }) => {
     phone: '',
   }
 
-  const { mutate: loginMutate, isPending } = useMutation({
-    mutationFn: async (values: ILogin) => await loginUser({ ...values }),
-    onSuccess: (res) => {
-      localStorage.setItem(
-        'token',
-        JSON.stringify(
-          (res.headers as any).getAuthorization().replace('Bearer ', ''),
-        ),
-      )
-      const t = setTimeout(() => {
-        SW.next()
-        clearTimeout(t)
-      }, 1000)
-    },
-    onError: (err) => {
-      setMessage(() => (err as Error).message)
-    },
-  })
+
 
   const onSubmit = async (
     values: IRegister,
@@ -63,7 +46,7 @@ const CreatePostUserForm: React.FC<CreatePostUserFormProps> = ({ SW }) => {
     })
 
     if (res.data.message && res.data.message === 'User Created!') {
-      loginMutate({ email: values.email, password: values.password })
+      SW.next()
     } else {
       setMessage(() => res.data.message)
     }

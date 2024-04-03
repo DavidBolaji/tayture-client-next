@@ -13,7 +13,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUserSchool } from '@/lib/api/school'
 import { regularFont } from '@/assets/fonts/fonts'
 import { userSignout } from '@/lib/api/user'
-import { IUser } from '@/pages/api/users/types'
+import {destroyCookie} from 'nookies'
 import { Profile, User } from '@prisma/client'
 
 export const StyledDropdown = styled(Dropdown)`
@@ -81,7 +81,7 @@ const DropdownComponent: React.FC<{
 
     onSuccess: () => {
       window.location.assign('/auth/login')
-      localStorage.clear()
+      destroyCookie(null, 'token');
       queryClient.clear()
     },
   })
@@ -126,7 +126,7 @@ const DropdownComponent: React.FC<{
             onClick={
               isAdmin
                 ? () => router.push('/dashboard/school/new')
-                : () => console.log('object')
+                : () => router.push('/dashboard/school/new')
             }
           >
             View School
@@ -142,7 +142,7 @@ const DropdownComponent: React.FC<{
             onClick={
               isAdmin
                 ? () => router.push('/dashboard/school/manage/all')
-                : () => console.log('object')
+                : () => router.push('/dashboard/school/manage/all')
             }
           >
             Manage jobs

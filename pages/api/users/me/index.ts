@@ -1,4 +1,5 @@
 import db from '@/db/db'
+import { sendTextMessageOTP } from '@/lib/services/user'
 import verifyToken from '@/middleware/verifyToken'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -78,10 +79,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       others: true,
     },
   })
+  let pinId
+  const { add } = req.query;
+
+  if (add === '1') {
+
+    if (!user?.validated) {
+      const reqOTP = await sendTextMessageOTP(user?.phone as string)
+      if (reqOTP.data.pinId) {
+        pinId = reqOTP.data.pinId
+      }
+    }
+  }
+
 
   return res.status(200).json({
     message: `Succesful`,
-    user,
+    user: {...user, pinId},
   })
 }
 

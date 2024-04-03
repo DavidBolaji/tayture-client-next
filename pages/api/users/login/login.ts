@@ -68,8 +68,6 @@ export default async function handler(
       path: '/', // Set the cookie path to '/'
     })
 
-    res.setHeader('Authorization', `Bearer ${session.sessionToken}`)
-
     if (user?.first_time) {
       await sendWelcome({
         firstName: user.fname,

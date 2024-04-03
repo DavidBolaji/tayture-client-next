@@ -148,7 +148,7 @@ const JobSchedulePage = () => {
                     <div>Virtual</div>
                     <div className="max-w-[381px]">
                       join the meeting using this link <br />
-                      <Link href={data.link}>{data.link}</Link>
+                      {data?.link && <Link href={data?.link}>{data.link}</Link>}
                     </div>
                   </div>
                 </div>

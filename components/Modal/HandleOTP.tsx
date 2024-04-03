@@ -58,15 +58,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
     onSuccess: (res) => {
       handleClose()
-      localStorage.setItem(
-        'token',
-        //@ts-ignore
-        JSON.stringify(res.headers.getAuthorization().replace('Bearer ', '')),
-      )
-      const t = setTimeout(() => {
-        window.location.assign('/dashboard')
-        clearTimeout(t)
-      }, 3000)
+      window.location.assign('/dashboard')
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
@@ -85,7 +77,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
 
       return await valdateOTP({
         otp,
-        pinId: localStorage.getItem('pinId')!,
+        pinId: queryClient.getQueryData(['pinId'])!,
         email: localStorage.getItem('email')!,
       })
     },

@@ -34,7 +34,7 @@ const ExperienceEditForm: React.FC<{
   exp: WorkHistory & { roles: WorkRole[] }
 }> = ({ exp }) => {
   const { setUI, setMessage } = useGlobalContext()
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: WorkHistory) => {
       await Axios.put(`/users/work/me/update/${exp.id}`, data)
     },
@@ -111,9 +111,9 @@ const ExperienceEditForm: React.FC<{
             as={StyledInput}
           />
 
-          <h3 className="ml-1 text-[16px] font-[600]">Start date</h3>
+          <h3 className="ml-1 text-[14px] -mt-4 font-[600]">Start date</h3>
 
-          <div className="grid grid-cols-2 gap-3 mt-2">
+          <div className="grid md:grid-cols-2 md:gap-3 mt-1 md:-mb-5">
             <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
               <Field
                 name="startMonth"
@@ -123,7 +123,10 @@ const ExperienceEditForm: React.FC<{
                 option={months}
               />
             </div>
-            <div className="w-full col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
+            <h3 className="mb-1 ml-1 text-[14px] -mt-6 font-[600] md:hidden block">
+              Start year
+            </h3>
+            <div className="w-full col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1 mb-2">
               <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                 <Field name="startYear">
                   {({ field }: { field: FieldProps['field'] }) => (
@@ -166,10 +169,14 @@ const ExperienceEditForm: React.FC<{
           </div>
 
           <AnimatePresence mode="wait">
-            {values.endDate.length < 1 && (
+            {!(
+              values.endMonth === values.startMonth &&
+              values.endYear === values.startYear
+            ) && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 120 }}
+                className="md:h-[105px] h-auto"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{
                   duration: 0.5,
                   ease: easeIn,
@@ -185,11 +192,11 @@ const ExperienceEditForm: React.FC<{
                   },
                 }}
               >
-                <h3 className="dsm:-mt-[12px] ml-1 text-[16px] font-[600]">
+                <h3 className="ml-1 text-[14px] font-[600] -mt-[6px] md:-mt-4">
                   End date
                 </h3>
 
-                <div className="grid grid-cols-2 gap-3 mt-2">
+                <div className="grid md:grid-cols-2 md:gap-3 mt-1 ">
                   <div className="col-span-2 mb-12 sm:mb-0  md:mb-0 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                     <Field
                       name="endMonth"
@@ -199,7 +206,10 @@ const ExperienceEditForm: React.FC<{
                       option={months}
                     />
                   </div>
-                  <div className="w-full col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 mb-6">
+                  <h3 className="mb-1 ml-1 text-[14px] md:-mt-6 -mt-[70px] sm:-mt-6  font-[600] md:hidden block">
+                    End year
+                  </h3>
+                  <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 md:mt-0 sm:mt-0 -mt-10">
                     <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                       <Field name="endYear">
                         {({ field }: { field: FieldProps['field'] }) => (
@@ -234,9 +244,11 @@ const ExperienceEditForm: React.FC<{
                           </div>
                         )}
                       </Field>
-                      <ErrorMessage name="endYear">
-                        {(msg) => <FormError msg={msg} />}
-                      </ErrorMessage>
+                      <div className="-translate-y-2">
+                        <ErrorMessage name="endYear">
+                          {(msg) => <FormError msg={msg} />}
+                        </ErrorMessage>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -244,17 +256,20 @@ const ExperienceEditForm: React.FC<{
             )}
           </AnimatePresence>
 
-          <div className="mb-5">
+          <div className="mb-4">
             <Field name="endDate">
               {({ field }: { field: FieldProps['field'] }) => (
                 <CheckComponent
                   {...field}
-                  
                   options={['I currently work here']}
-                  
-                  defaultValue={['I currently work here']}
+                  defaultValue={
+                    exp.endYear === exp.startYear &&
+                    exp.startMonth === exp.endMonth
+                      ? ['I currently work here']
+                      : []
+                  }
                   onChange={(e: any) => {
-                    setFieldValue('endDate', e.length > 0 ? 'Current' : '')
+                    setFieldValue('endDate', e.length > 0 ? 'Present' : '')
                     setFieldValue(
                       'endMonth',
                       e.length > 0 ? values.startMonth : '',
@@ -269,25 +284,25 @@ const ExperienceEditForm: React.FC<{
             </Field>
           </div>
 
-          <Field as={LocationComponent} city="city" state="state" lga="lga" />
-
-          <div className="mt-[60px]">
-            <Field
-              name="address"
-              as={StyledTextarea}
-              placeholder="Address"
-              text={'Address'}
-              rows={5}
-              spellCheck="false"
-            />
+          <div>
+            <Field as={LocationComponent} city="city" state="state" lga="lga" />
           </div>
 
-          <h3 className="ml-1 text-[16px] font-[600] mb-2">Roles</h3>
+          <Field
+            name="address"
+            as={StyledTextarea}
+            placeholder="Address"
+            text={'Address'}
+            rows={5}
+            spellCheck="false"
+          />
+
+          <h3 className="ml-1 text-[14px] font-[600] mb-2 -mt-5">Roles</h3>
           <FieldArray name="roles">
             {({ remove, push }: any) => (
               <div>
                 {values.roles.length > 0 &&
-                  values.roles.map((friend, index) => (
+                  values.roles.map((_, index) => (
                     <div className="relative" key={index}>
                       <Field
                         name={`roles.${index}.role`}
@@ -318,7 +333,7 @@ const ExperienceEditForm: React.FC<{
                     <Space>
                       <FaPlus color="#FF7517" />
                       <span className="text-[12px] text-orange">
-                        Another role
+                        {values.roles.length > 0 ? 'Another role' : 'Add role'}
                       </span>
                     </Space>
                   }
@@ -326,13 +341,12 @@ const ExperienceEditForm: React.FC<{
               </div>
             )}
           </FieldArray>
-
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-10">
             <Button
-              disabled={isSubmitting || !isValid}
+              disabled={!isValid}
               bold={false}
-              hover={isSubmitting || !isValid}
-              text={false ? <Spinner /> : 'Submit'}
+              hover={isValid}
+              text={isPending ? <Spinner /> : 'Submit'}
               render="light"
               full={false}
               type="submit"

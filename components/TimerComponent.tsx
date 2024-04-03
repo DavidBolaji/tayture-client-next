@@ -5,16 +5,31 @@ import { sendTextMessageOTP } from '@/lib/services/user'
 import { regularFont } from '@/assets/fonts/fonts'
 import React, { useState } from 'react'
 import Countdown from 'react-countdown'
+import Spinner from './Spinner/Spinner'
+import { message } from 'antd'
+import { useQueryClient } from '@tanstack/react-query'
+import { User } from '@prisma/client'
 
 const TimerComponent = () => {
+  const queryClient = useQueryClient()
+  const [load, setLoad] = useState(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const [time, setTime] = useState(Date.now() + 60000)
-  const { user } = useGlobalContext()
+  const user = queryClient.getQueryData(['user']) as User
+
 
   const handleButtonClick = async () => {
-    const result = await sendTextMessageOTP(user.phone as string)
-    setTime(() => Date.now() + 60000)
-    setIsButtonDisabled(true)
+    setLoad(true)
+    try {
+      const result = await sendTextMessageOTP(user.phone as string)
+      localStorage.setItem('pinId', result.data.pinId)
+      setTime(() => Date.now() + 60000)
+      setIsButtonDisabled(true)
+      setLoad(false)
+      message.success('OTP sent')
+    } catch (e: any) {
+      console.log(e.message);
+    }
   }
 
   const handleCountdownComplete = () => {
@@ -31,7 +46,7 @@ const TimerComponent = () => {
           onClick={handleButtonClick}
           disabled={isButtonDisabled}
         >
-          {isButtonDisabled ? 'Resend OTP' : 'Resend OTP'}
+          {load ? <Spinner color='#FF7517' /> : isButtonDisabled ? 'Resend OTP' : 'Resend OTP'}
         </button>
         <Countdown
           key={time}

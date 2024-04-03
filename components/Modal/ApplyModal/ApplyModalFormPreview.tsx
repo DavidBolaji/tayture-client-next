@@ -31,6 +31,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
     'jobApplication',
   ]) as UserApply
   const activeJob = queryClient.getQueryData(['activeJob']) as IJobSchDb
+  
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: UserApply) => {
       return await createApplication({
@@ -45,8 +46,8 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
         setMessage(() => res.data.message)
         const t = setTimeout(() => {
           setMessage(() => '')
-          clearTimeout(t)
           window.location.assign('/dashboard')
+          clearTimeout(t)
         }, 300)
       } else {
         setMessage(() => res.data.message)
@@ -94,11 +95,9 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
         exp: '',
       },
     })
-    const t = setTimeout(() => {
-      SW.prev()
-      clearTimeout(t)
-    }, 2000)
+
   }
+
   return (
     <div className={`w-full px-5 ${regularFont.className}`}>
       <h2 className="text-center text-[24px] mb-[40px] text-black">

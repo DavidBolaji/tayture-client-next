@@ -73,12 +73,6 @@ const LoginForm = ({ show = true }: { show?: boolean }) => {
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
     onSuccess: async (res) => {
-      localStorage.setItem('pinId', res.data.user.pinId)
-      localStorage.setItem(
-        'token',
-        //@ts-ignore
-        JSON.stringify(res.headers.getAuthorization().replace('Bearer ', '')),
-      )
       if (!show) {
         await downloadCv()
         const t = setTimeout(() => {

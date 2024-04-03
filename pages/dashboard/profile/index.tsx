@@ -73,22 +73,27 @@ export const getServerSideProps = async (ctx: any) => {
 
   const token = cookies.token
 
-  if (!token || !jwt.verify(token, process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!)) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+console.log(token);
 
   const res = await Axios.get('/users/profile', {
     headers: {
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   })
 
   const profile = res.data.profile
 
   return { props: { profile } }
 }
+
+
+  // const token = cookies.token
+
+  // if (!token || !jwt.verify(token, process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!)) {
+  //   return {
+  //     redirect: {
+  //       destination: '/auth/login',
+  //       permanent: false,
+  //     },
+  //   }
+  // }

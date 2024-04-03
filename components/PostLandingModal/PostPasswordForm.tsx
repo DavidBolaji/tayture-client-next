@@ -28,13 +28,7 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
     onSuccess: async (res) => {
-      localStorage.setItem(
-        'token',
-        JSON.stringify(
-          (res.headers as any).getAuthorization().replace('Bearer ', ''),
-        ),
-      )
-
+ 
       const a = setTimeout(async () => {
         /**check if path exist */
         const pathExist = checkPath(res.data.user.path)
@@ -61,11 +55,8 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
           await updateUser(['school admin'])
         }
         clearTimeout(a)
+        window.location.assign(`/dashboard?school=1`)
 
-        const t = setTimeout(() => {
-          window.location.assign(`/dashboard?school=1`)
-          clearTimeout(t)
-        }, 1500)
       }, 500)
     },
     onError: (err) => {

@@ -35,6 +35,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         jobUserzId: req.authUser!.id,
       },
     })
+
+    await db.notifcation.create({
+      data: {
+        msg: `Hurray!!! you have succesfully created a job`,
+        notificationUser: req.authUser?.id as string,
+        caption: "Job created"
+      }
+    })
     return res.status(200).json({
       message: 'Job Created',
       job: job,

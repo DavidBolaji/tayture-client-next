@@ -51,10 +51,10 @@ const items: MenuProps['items'] = [
     label: 'MOST RECENT',
     key: 'recent',
   },
-  {
-    label: 'SAVED JOBS',
-    key: 'saved',
-  },
+  // {
+  //   label: 'SAVED JOBS',
+  //   key: 'saved',
+  // },
 ]
 
 const TopNav = () => {

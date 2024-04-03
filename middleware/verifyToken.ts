@@ -1,6 +1,7 @@
 import db from '@/db/db'
 import { IUser } from '@/pages/api/users/types'
 import jwt from 'jsonwebtoken'
+import {parseCookies} from 'nookies'
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 declare module 'next' {
   interface NextApiRequest {
@@ -13,7 +14,7 @@ const verifyToken =
   (next: NextApiHandler) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      const token = req.headers.authorization?.replace('Bearer ', '')
+      const token = req.cookies.token || req.headers.authorization?.split(' ')[1]
 
       if (!token) {
         return res.status(401).json({ error: 'Unauthorized: Token is missing' })

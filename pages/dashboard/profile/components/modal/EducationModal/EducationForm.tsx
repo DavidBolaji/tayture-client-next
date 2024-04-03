@@ -112,7 +112,7 @@ const EducationForm: React.FC = () => {
             text={'School'}
           />
 
-          <div>
+          <div className='-mt-5'>
             <label
               className={`mb-1 font-bold inline-block ml-1 ${regularFont.className}`}
             >
@@ -135,8 +135,8 @@ const EducationForm: React.FC = () => {
             placeholder="Field of study"
           />
 
-          <h3 className="mb-2 ml-1 text-[16px] font-[600]">Start date</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <h3 className="mb-1 ml-1 text-[16px] -mt-4 font-[600]">Start date</h3>
+          <div className="grid md:grid-cols-2 md:gap-3">
             <div className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
               <Field
                 name="startMonth"
@@ -146,8 +146,9 @@ const EducationForm: React.FC = () => {
                 option={months}
               />
             </div>
+            <h3 className="mb-1 ml-1 text-[16px] -mt-6 font-[600] md:hidden block">Start year</h3>
             <div className="w-full col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
-              <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
+              <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1 ">
                 <Field name="startYear">
                   {/* FormikProps<YourFormValues>  */}
                   {({ field }: { field: FieldProps['field'] }) => (
@@ -183,16 +184,16 @@ const EducationForm: React.FC = () => {
                   )}
                 </Field>
               </div>
-              <div className="-mt-4">
+              <div className="-mt-2">
                 <ErrorMessage name="startYear">
                   {(msg) => <FormError msg={msg} />}
                 </ErrorMessage>
               </div>
             </div>
           </div>
-          <h3 className="ml-1 text-[16px] font-[600]">End date</h3>
+          <h3 className="ml-1 text-[16px] font-[600] mt-4 md:-mt-5">End date</h3>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 md:gap-3">
             <div className="col-span-2 sm:col-span-1  md:col-span-1 lg:col-span-1 xl:col-span-1">
               <Field
                 name="endMonth"
@@ -202,6 +203,7 @@ const EducationForm: React.FC = () => {
                 option={months}
               />
             </div>
+            <h3 className="mb-1 ml-1 text-[16px] -mt-6 font-[600] md:hidden block">End year</h3>
             <div className="w-full col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1 mb-6">
               <div className="col-span-2 sm:col-span-1 dsm:col-span-1 md:col-span-1 lg:col-span-1 xl:col-span-1">
                 <Field name="endYear">

@@ -31,9 +31,9 @@ const UserForm: React.FC<UserCardProps> = ({
   summary,
   picture,
 }) => {
-  const { img, setMessage } = useGlobalContext()
+  const { img, setMessage, setImg } = useGlobalContext()
   const queryClient = useQueryClient()
-  const noImage = img.trim().length < 1
+  const noImage = img.trim().length < 1 && !picture ? true : false
   const userInitialValues = {
     fname: fname,
     lname: lname,
@@ -79,10 +79,12 @@ const UserForm: React.FC<UserCardProps> = ({
   const handleClick: any = async (values: any) => {
     mutate({ ...values, picture: img })
   }
+
+
   return (
     <>
       <div className="pt-[32px] pb-[48px] flex justify-center">
-        <UploadComponent image={img ?? picture} />
+        <UploadComponent image={typeof img === "undefined" || img.trim().length < 1 ? picture! : img!} />
       </div>
       <Formik
         initialValues={userInitialValues}
@@ -96,6 +98,7 @@ const UserForm: React.FC<UserCardProps> = ({
           isSubmitting,
           setFieldValue,
           handleChange,
+          errors,
           values,
         }) => (
           <Form
@@ -129,7 +132,7 @@ const UserForm: React.FC<UserCardProps> = ({
               spellCheck="false"
             />
 
-            <div className="-mt-20">
+            <div className="-translate-y-5">
               <label
                 className={`inline-block text-[16px] font-[500] ${regularFont.className}`}
               >
@@ -150,7 +153,7 @@ const UserForm: React.FC<UserCardProps> = ({
                 />
               </div>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center">    
               <Button
                 disabled={isSubmitting || !isValid || noImage}
                 bold={false}

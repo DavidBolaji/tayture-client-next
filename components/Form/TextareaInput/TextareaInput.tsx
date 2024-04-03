@@ -36,7 +36,6 @@ const TextareaInput: React.FC<ITextarea> = ({
         }`}
       >
         <AnimatePresence mode="wait">
-          {!focus && rest.value && (
             <motion.label
               key="label-animation"
               initial={{
@@ -54,7 +53,6 @@ const TextareaInput: React.FC<ITextarea> = ({
             >
               {text}
             </motion.label>
-          )}
         </AnimatePresence>
         <div className="relative w-full">
           <textarea

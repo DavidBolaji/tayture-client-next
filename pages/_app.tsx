@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import NextNProgress from 'nextjs-progressbar'
 import Loading from '@/components/Loading/Loading'
 import HandleUpload from '@/components/Modal/HandleUpload'
+import Whatsapp from '@/components/Whatsapp/Whatsapp'
 
 const pages = [
   'Home',
@@ -80,6 +81,7 @@ export default function App({
             <ScrollToTop />
             <NextNProgress color="#FF7517" />
             {layout}
+            <Whatsapp />
             <HandleError />
             <HandleAttention />
             <HandleApply />

@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 
 import { IoMdClose } from 'react-icons/io'
 import { RxHamburgerMenu } from 'react-icons/rx'
-// import NotificationDropdown from './NotificationDropdown';
 import DropdownComponent from './DropdownComponent'
 import NotificationDropdown from './NotificationDropdown'
 import DashboardDrawer from './DashboardDrawer'

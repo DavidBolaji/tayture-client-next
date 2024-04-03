@@ -13,9 +13,8 @@ import {
   IRegister,
   registerSchema,
 } from '@/pages/auth/registerGroup/RegisterForm/RegisterForm'
-import { loginUser, registerUser } from '@/lib/api/user'
-import { useMutation } from '@tanstack/react-query'
-import { ILogin } from '@/pages/auth/LoginForm/LoginForm'
+import { registerUser } from '@/lib/api/user'
+
 
 interface ApplyEmailFormProps {
   SW: any
@@ -23,7 +22,7 @@ interface ApplyEmailFormProps {
 
 const CreateUserForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
   const router = useRouter()
-  const { setUser, setMessage, email } = useGlobalContext()
+  const { setMessage, email } = useGlobalContext()
 
   const initilaValues: IRegister = {
     fname: '',
@@ -33,35 +32,17 @@ const CreateUserForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
     phone: '',
   }
 
-  const { mutate: loginMutate, isPending } = useMutation({
-    mutationFn: async (values: ILogin) => await loginUser({ ...values }),
-    onSuccess: (res) => {
-      localStorage.setItem(
-        'token',
-        JSON.stringify(
-          (res.headers as any).getAuthorization().replace('Bearer ', ''),
-        ),
-      )
-      const t = setTimeout(() => {
-        SW.next()
-        clearTimeout(t)
-      }, 1000)
-    },
-    onError: (err) => {
-      setMessage(() => (err as Error).message)
-    },
-  })
 
   const onSubmit = async (
     values: IRegister,
-    { resetForm, setSubmitting }: FormikHelpers<IRegister>,
+    { setSubmitting }: FormikHelpers<IRegister>,
   ) => {
     const res = await registerUser({ ...values, skip: true })
 
-    if (res.data.message && res.data.message === 'User Created!') {
-      loginMutate({ email: values.email, password: values.password })
-    } else {
+    if (!res.data.message && res.data.message !== 'User Created!') {
       setMessage(() => res.data.message)
+    } else {
+      SW.next()
     }
     setSubmitting(false)
   }
@@ -135,8 +116,8 @@ const CreateUserForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
                 <Button
                   type="submit"
                   bold={false}
-                  text={isSubmitting ? <Spinner color="white" /> : 'Next'}
-                  disabled={!isValid}
+                  text={isSubmitting  ? <Spinner color="white" /> : 'Next'}
+                  disabled={!isValid || isSubmitting}
                   hover={isValid}
                   render="light"
                 />

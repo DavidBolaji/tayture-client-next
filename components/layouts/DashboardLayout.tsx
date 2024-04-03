@@ -13,6 +13,8 @@ import AuthLayer from './AuthLayer'
 import { useQuery } from '@tanstack/react-query'
 import { getUser } from '@/lib/api/user'
 import NotificationDropdown from '../Dashboard/NotificationDropdown'
+import { Axios } from '@/request/request'
+import { calculateProgress } from '@/utils/helpers'
 
 const { Header, Sider, Content } = Layout
 
@@ -25,6 +27,15 @@ const DashboardLayout = (props: PropsWithChildren) => {
       const req = await getUser()
       return req.data.user
     },
+  })
+
+  useQuery({
+    queryKey: ['profileDetails'],
+    queryFn: async () => {
+      const req = await Axios.get('/users/me/detail')
+      const result = calculateProgress(req.data.user)
+      return result
+    }
   })
 
   const router = useRouter()

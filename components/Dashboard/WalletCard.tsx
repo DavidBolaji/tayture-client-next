@@ -6,11 +6,9 @@ import { useGlobalContext } from '@/Context/store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUser } from '@/lib/api/user'
 import HandlePayment from '../Modal/HandlePayment'
-import { InputNumber, Radio } from 'antd'
 import { useState } from 'react'
 import { Field, Form, Formik } from 'formik'
 import StyledInput from '../Form/NomalInput/StyledInput'
-import { ISchDb } from '@/pages/api/school/types'
 import { incWallet } from '@/lib/api/wallet'
 import { getUserSchool } from '@/lib/api/school'
 
@@ -103,7 +101,7 @@ function WalletCard() {
             ? school?.wallet?.wallet_balance
             : 0}
         </p>
-        <div className="scale-[0.65] -translate-x-8 -translate-y-3">
+        <div className="scale-[0.65] -translate-x-5 -translate-y-3">
           <Button
             text="Topup"
             render="dark"

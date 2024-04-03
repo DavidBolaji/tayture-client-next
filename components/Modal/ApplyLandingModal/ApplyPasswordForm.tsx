@@ -27,15 +27,7 @@ const ApplyPasswordForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
     onSuccess: (res) => {
-      localStorage.setItem(
-        'token',
-        //@ts-ignore
-        JSON.stringify(res.headers.getAuthorization().replace('Bearer ', '')),
-      )
-      const t = setTimeout(() => {
-        window.location.assign(`/dashboard?job=1`)
-        clearTimeout(t)
-      }, 1500)
+      return window.location.assign(`/dashboard?job=1`)
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
