@@ -18,7 +18,7 @@ import { useGlobalContext } from '@/Context/store'
 
 const JobSchedulePage = () => {
   const queryClient = useQueryClient()
-  const { setMessage } = useGlobalContext()
+  const { setMessage, setUI } = useGlobalContext()
   const router = useRouter()
   const data = queryClient.getQueryData([
     'activeScheduledJob',
