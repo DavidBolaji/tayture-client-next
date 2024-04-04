@@ -1,7 +1,7 @@
 import db from '@/db/db'
 import { IUser } from '@/pages/api/users/types'
 import jwt from 'jsonwebtoken'
-import {parseCookies} from 'nookies'
+
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 declare module 'next' {
   interface NextApiRequest {
