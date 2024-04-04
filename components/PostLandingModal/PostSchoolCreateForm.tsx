@@ -25,7 +25,7 @@ const initialValues = {
   sch_name: '',
 }
 
-const PostSchoolCreateForm: React.FC<{ SW: any }> = ({ SW }) => {
+const PostSchoolCreateForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move = true }) => {
   const { img, setCreateSch } = useGlobalContext()
   const noImage = img.trim().length < 1
   const handleSubmit = (data: Partial<ISchData>) => {
@@ -39,10 +39,13 @@ const PostSchoolCreateForm: React.FC<{ SW: any }> = ({ SW }) => {
           Add a school
         </h3>
 
-        <p className="text-center text-ash_400 md:text-[16px] text-[12px] max-w-[387px] mx-auto mb-[40px]">
+        {!move ? <p className="text-center text-ash_400 md:text-[16px] text-[12px] max-w-[387px] mx-auto mb-[40px]">
+          You haven&apos;t created a school before, so you&apos;ll have to create school to fund your
+          wallet
+        </p>: <p className="text-center text-ash_400 md:text-[16px] text-[12px] max-w-[387px] mx-auto mb-[40px]">
           You haven&apos;t posted a job before, so you&apos;ll have to add your
           school information
-        </p>
+        </p>}
       </div>
       <h2 className="w-full font-br font-bold">School information</h2>
       <div className="pt-[32px] flex justify-center">

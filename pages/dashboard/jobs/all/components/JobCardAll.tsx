@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react'
-import { Empty, Space, Tag } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Drawer, Empty, Space, Tag, Grid } from 'antd'
 import { useQueryClient } from '@tanstack/react-query'
 import { regularFont } from '@/assets/fonts/fonts'
 import { FaLocationDot } from 'react-icons/fa6'
 import { salaryOutput } from '@/utils/helpers'
 import { IJobSchDb } from '@/pages/api/job/types'
 import { useGlobalContext } from '@/Context/store'
+import JobAppliedPage from './JobAppliedPage'
+import JobSchedulePage from './JobSchedulePage'
+const {useBreakpoint} = Grid
 
 const JobCardAll: React.FC<{
   job: { job: IJobSchDb }
@@ -20,6 +23,8 @@ const JobCardAll: React.FC<{
     job_qual: qual,
     job_id: id,
   } = jobData.job
+  const [open, setOpen] = useState(false)
+  const screens = useBreakpoint()
   const queryClient = useQueryClient()
   const { count, setCount } = useGlobalContext()
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
@@ -31,6 +36,13 @@ const JobCardAll: React.FC<{
       queryClient.setQueryData(['activeScheduledJob'], jobData)
     }
     setCount((prev) => prev + 1)
+    if (screens.xs || (screens.sm && !screens.md)) {
+      if(!open) {
+        setOpen(true)
+      } else {
+        setOpen(false)
+      }
+    } 
   }
 
   useEffect(() => {
@@ -59,6 +71,16 @@ const JobCardAll: React.FC<{
           <Tag className="bg-ash_600 text-black">{exp} years Experience</Tag>
         </div>
       </div>
+      <Drawer
+        closable
+        open={open}
+        onClose={handleClick}
+        placement='bottom'
+        height={'80%'}
+      >
+         {type === 'applied' && <JobAppliedPage />}
+          {type === 'scheduled' && <JobSchedulePage />}
+      </Drawer>
     </>
   )
 }

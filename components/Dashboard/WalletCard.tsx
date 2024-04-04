@@ -11,6 +11,7 @@ import { Field, Form, Formik } from 'formik'
 import StyledInput from '../Form/NomalInput/StyledInput'
 import { incWallet } from '@/lib/api/wallet'
 import { getUserSchool } from '@/lib/api/school'
+import HandleCreateSchool from '../Modal/HandleCreateSchool'
 
 function WalletCard() {
   const { setUI, setMessage } = useGlobalContext()
@@ -42,6 +43,9 @@ function WalletCard() {
       })
       handlePayment()
       setMessage(() => 'Wallet successfully funded')
+      const t = setTimeout(() => {
+        setMessage(() => "")
+      }, 2000)
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
@@ -51,12 +55,14 @@ function WalletCard() {
 
   const pathExist = user?.path ? true : false
 
+
   let isSchAdmin =
     pathExist &&
     (JSON.parse(user!.path?.replace("'", '')!) as unknown as string[]).includes(
       'school admin',
     )
-
+  let isHasSch = school?.sch_id.trim().length > 0 ? true : false
+   
   const handleShow = () => {
     setUI((prev) => {
       return {
@@ -64,6 +70,18 @@ function WalletCard() {
         attentionModal: {
           ...prev.attentionModal,
           visibility: !prev.attentionModal?.visibility,
+        },
+      }
+    })
+  }
+
+  const handleCreateSchool = () => {
+    setUI((prev) => {
+      return {
+        ...prev,
+        createSchoolModal: {
+          ...prev.createSchoolModal,
+          visibility: true,
         },
       }
     })
@@ -107,7 +125,7 @@ function WalletCard() {
             render="dark"
             hover={false}
             bold={false}
-            onClick={() => (isSchAdmin ? handlePayment() : handleShow())}
+            onClick={() => (isSchAdmin ? isHasSch ? handlePayment(): handleCreateSchool() : handleShow())}
           />
         </div>
       </div>
@@ -157,6 +175,7 @@ function WalletCard() {
           </Formik>
         </div>
       </HandlePayment>
+      <HandleCreateSchool />
     </div>
   )
 }

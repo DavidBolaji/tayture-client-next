@@ -60,6 +60,9 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
+      const t = setTimeout(() => {
+        setMessage(() => "")
+      }, 2000)
     },
   })
   const handleSubmit = (values: any) => {

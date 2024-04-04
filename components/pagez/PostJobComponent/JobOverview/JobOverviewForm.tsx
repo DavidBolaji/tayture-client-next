@@ -53,7 +53,7 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
       key={0}
     >
       {({ values, isValid }) => (
-        <Form className="mt-[40px] ">
+        <Form className="mt-[40px] pb-[100px]">
           <div>
             <h3
               className={`mb-[24px] ml-1 text-[20px] text-black ${regularFont.className}`}

@@ -28,8 +28,8 @@ const initialValues: ISchAdmin = {
   ],
 }
 
-const PostSchoolAdminForm: React.FC<{ SW: any }> = ({ SW }) => {
-  const { img, createSch, setMessage } = useGlobalContext()
+const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move = true }) => {
+  const { img, createSch, setMessage, setUI } = useGlobalContext()
   const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: any) => {
@@ -37,10 +37,48 @@ const PostSchoolAdminForm: React.FC<{ SW: any }> = ({ SW }) => {
     },
     onSuccess: async (res) => {
       queryClient.setQueryData(['schId'], res.data.school.sch_id)
-      SW.next()
+      if(move) {
+        SW.next()
+      } else {
+        
+        queryClient.setQueryData(['school'], res.data.school)
+        queryClient.invalidateQueries({
+          queryKey: ['school']
+        })
+        setUI((prev) => {
+          return {
+            ...prev,
+            createSchoolModal: {
+              ...prev.createSchoolModal,
+              visibility: false,
+            },
+          }
+        })
+
+        setMessage(() => "Hurray!!!, school created succesfully, you can now fund wallet")
+        const t = setTimeout(() => {
+          setMessage(() => "")
+          window.location.reload()
+        }, 2000)
+
+
+      }
+
     },
     onError: (err) => {
+      setUI((prev) => {
+        return {
+          ...prev,
+          createSchoolModal: {
+            ...prev.createSchoolModal,
+            visibility: false,
+          },
+        }
+      })
       setMessage(() => (err as Error).message)
+      const t = setTimeout(() => {
+        setMessage(() => "")
+      }, 2000)
     },
   })
   const handleClick: any = async (values: ISchAdmin) => {

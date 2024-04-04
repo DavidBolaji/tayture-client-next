@@ -66,11 +66,17 @@ const HandleAttention = () => {
       localStorage.setItem('user', JSON.stringify(user))
       queryClient.setQueryData(['user'], user)
       handleClose()
+      const t =  setTimeout(() => {
+        setMessage(() => '')
+        clearTimeout(t)
+      }, 2000)
     },
+    
     onError: (err) => {
       setMessage(() => (err as Error).message)
     },
     mutationKey: ['users'],
+    
   })
 
   const handleOk = () => mutate()

@@ -39,7 +39,7 @@ const AuthLayer = (props: PropsWithChildren) => {
 
     if (data) {
       if (!data.validated) {
-        setUI((prev) => ({
+        setUI((prev: any) => ({
           ...prev,
           OTPModal: {
             ...prev.OTPModal,

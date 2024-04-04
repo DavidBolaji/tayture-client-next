@@ -51,6 +51,7 @@ type UIkeyz =
   | 'experienceModal'
   | 'experienceEditModal'
   | 'skillModal'
+  | 'createSchoolModal'
 
 interface IUi {
   attentionModal: {
@@ -112,6 +113,10 @@ interface IUi {
   skillModal: {
     visibility: boolean
     data?: any
+  ,}
+  createSchoolModal: {
+    visibility: boolean
+    data?: any
   }
 }
 
@@ -159,6 +164,9 @@ const uiInit: IUi = {
     visibility: false,
   },
   skillModal: {
+    visibility: false,
+  },
+  createSchoolModal: {
     visibility: false,
   },
 }

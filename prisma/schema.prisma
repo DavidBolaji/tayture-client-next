@@ -281,7 +281,7 @@ model Wallet {
 
 model Job {
   job_id         String        @id @default(uuid())
-  job_title      String        @db.VarChar(20)
+  job_title      String        @db.VarChar(100)
   job_role       String        @db.VarChar(50)
   job_active     String        @db.VarChar(50)
   job_desc       String?       @db.VarChar(255)

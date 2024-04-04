@@ -74,10 +74,12 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
           email: user.email as string,
         })
       }
-
+      const pin = queryClient.getQueryData(['pinId']) as string
+     
+      console.log(pin)
       return await valdateOTP({
         otp,
-        pinId: queryClient.getQueryData(['pinId'])!,
+        pinId: pin,
         email: localStorage.getItem('email')!,
       })
     },
@@ -101,7 +103,9 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
             }, 1000)
             router.replace('/dashboard/jobs')
           }
-          setMessage(() => 'Hurray, phone number verified')
+          setTimeout(() => {
+            setMessage(() => '')
+          }, 1000)
         }
         queryClient.invalidateQueries({
           queryKey: ['user'],

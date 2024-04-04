@@ -38,7 +38,7 @@ const UserJobPage: FC = () => {
       label: 'Scheduled',
       children: (
         <>
-          {/* {user &&
+          {user &&
             user.schedule!.length > 0 &&
             user.schedule!.map((schedule: any) => (
               <Badge.Ribbon
@@ -48,7 +48,7 @@ const UserJobPage: FC = () => {
               >
                 <JobCardAll type={type} job={schedule} />
               </Badge.Ribbon>
-            ))} */}
+            ))} 
         </>
       ),
     },

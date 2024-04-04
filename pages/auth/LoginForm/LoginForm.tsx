@@ -80,7 +80,7 @@ const LoginForm = ({ show = true }: { show?: boolean }) => {
           window.location.assign('/dashboard?profile=1')
         }, 3000)
       } else {
-        window.location.assign('/dashboard')
+        router.push('/dashboard')
       }
     },
     onError: (err) => {

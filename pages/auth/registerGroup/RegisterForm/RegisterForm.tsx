@@ -71,7 +71,8 @@ const RegisterForm = ({
       if (!show) {
         if (cb) return cb()
       } else {
-       return window.location.assign('/dashboard')
+      //  return window.location.assign('/dashboard')
+      router.push('/dashboard')
       }
     } else {
       setMessage(() => res.data.message)

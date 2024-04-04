@@ -12,6 +12,7 @@ import { ISchData, useGlobalContext } from '@/Context/store'
 
 import UploadComponent from '@/components/UploadComponent/UploadComponent'
 import Spinner from '@/components/Spinner/Spinner'
+import { FaAsterisk } from 'react-icons/fa'
 
 const initialValues = {
   sch_no_emp: '',
@@ -49,8 +50,12 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
     }, 400)
   }
   return (
-    <>
+    <div className='pb-10'>
       <h2 className="w-full font-br">School information</h2>
+      <p className='flex items-center gap-1'>
+        <FaAsterisk color="red" size={12} />
+        <span className='text-xs'>Logo is required</span>
+      </p>
       <div className="pt-[32px] flex justify-center">
         <UploadComponent />
       </div>
@@ -122,7 +127,7 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   )
 }
 
