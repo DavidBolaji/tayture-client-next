@@ -48,13 +48,8 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
           setMessage(() => '')
           window.location.assign('/dashboard')
           clearTimeout(t)
-        }, 300)
+        }, 3000)
       } else {
-        setMessage(() => res.data.message)
-
-        queryClient.invalidateQueries({
-          queryKey: ['user', 'jobs'],
-        })
         setUI((prev) => {
           return {
             ...prev,
@@ -64,12 +59,19 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
             },
           }
         })
-
+        setMessage(() => res.data.message)
+ 
         const req = await getUser()
         queryClient.setQueryData(['user'], req.data.user)
         queryClient.invalidateQueries({
-          queryKey: ['school', 'jobs'],
+          queryKey: ['user', 'jobs', 'school'],
         })
+        
+        const t = setTimeout(() => {
+          setMessage(() => '')
+          clearTimeout(t)
+        }, 3000)
+        
         if (router.query.job === '1') {
           router.replace('/dashboard/jobs')
         }

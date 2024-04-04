@@ -38,17 +38,6 @@ const HandleApplyLanding = () => {
       }
     })
   }
-  const handleShowOTP = () => {
-    setUI((prev) => {
-      return {
-        ...prev,
-        OTPModal: {
-          ...prev.OTPModal,
-          visibility: true,
-        },
-      }
-    })
-  }
 
   const handleOk = () => {}
   return (
