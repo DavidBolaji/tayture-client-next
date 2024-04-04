@@ -48,7 +48,7 @@ const AuthLayer = (props: PropsWithChildren) => {
         }))
       }
 
-      console.log(data.pinId);
+      
       localStorage.setItem('pinId', data.pinId)
       localStorage.setItem('email', data.email)
 

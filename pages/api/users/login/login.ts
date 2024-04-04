@@ -66,7 +66,8 @@ export default async function handler(
     setCookie({ res }, 'token', session.sessionToken, {
       maxAge: 30 * 24 * 60 * 60, // 30 days
       path: '/', // Set the cookie path to '/'
-      sameSite: "none"
+      sameSite: "strict",
+      secure: true
     })
 
     if (user?.first_time) {
