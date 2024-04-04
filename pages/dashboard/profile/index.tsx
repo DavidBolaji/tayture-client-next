@@ -73,7 +73,6 @@ export const getServerSideProps = async (ctx: any) => {
 
   const token = cookies.token
 
-console.log(token);
 
   const res = await Axios.get('/users/profile', {
     headers: {
