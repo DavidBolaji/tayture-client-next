@@ -3,12 +3,23 @@ import { IUser } from '@/pages/api/users/types'
 import jwt from 'jsonwebtoken'
 
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
+import { NextResponse } from 'next/server'
 declare module 'next' {
   interface NextApiRequest {
     authUser: IUser | null
     token: string
   }
 }
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+}
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders })
+}
+
 
 const verifyToken =
   (next: NextApiHandler) =>

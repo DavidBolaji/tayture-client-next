@@ -66,9 +66,9 @@ export default async function handler(
     setCookie({ res }, 'token', session.sessionToken, {
       maxAge: 30 * 24 * 60 * 60, // 30 days
       path: '/', // Set the cookie path to '/'
-      sameSite: "strict",
+      sameSite: "none",
       secure: true,
-      domain: "tayture-client-next-wswr-davidbolajis-projects.vercel.app"
+      domain: "tayture-client-next.vercel.app"
     })
 
     if (user?.first_time) {
