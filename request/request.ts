@@ -22,10 +22,8 @@ Axios.interceptors.request.use(
 
     const token = cookies.token
 
-    console.log(token);
-
     if (token) {
-      config.headers.Authorization = `Bearer ${token.replace("'", '')}`
+      config.headers.Authorization = 'Bearer ' + token
     }
 
     return config

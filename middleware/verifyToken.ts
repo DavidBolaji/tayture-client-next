@@ -15,6 +15,8 @@ const verifyToken =
   async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const token = req.cookies.token || req.headers.authorization?.split(' ')[1]
+      console.log(req.cookies.token);
+      console.log(req.headers.authorization?.split(' ')[1]);
 
       if (!token) {
         return res.status(401).json({ error: 'Unauthorized: Token is missing' })
