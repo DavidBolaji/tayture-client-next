@@ -68,7 +68,8 @@ export default async function handler(
     maxAge: 30 * 24 * 60 * 60, // 30 days
     path: '/', // Set the cookie path to '/'
     sameSite: "strict",
-    secure: true
+    secure: true,
+    domain: "tayture-client-next-wswr-davidbolajis-projects.vercel.app"
   })
 
   if (skip) {
