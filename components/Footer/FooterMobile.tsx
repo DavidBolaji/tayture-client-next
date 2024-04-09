@@ -41,7 +41,7 @@ function FooterMobile() {
             md={12}
             className="text-white relative xl:text-[1rem] leading-[1.5rem] pb-10 mt-3 z-10 text-[16px] opacity-50"
           >
-            <Link href="/privacy" target="_blank">
+            <Link href="/privacy" target="_blank" rel="noreferrer">
               Privacy Policy
             </Link>
           </Col>

@@ -15,7 +15,7 @@ const Career = () => {
       <p className="text-black max-w-[300px] md:max-w-[460px] mx-auto mb-[20px] text-center">
         Join our community to get job alerts!
       </p>
-      <a href='https://bit.ly/tenbytayture' target='_blank' className='w-10'>
+      <a href='https://bit.ly/tenbytayture' target='_blank' rel="noreferrer" className='w-10'>
         <Button
           render="dark"
           text={'Join'}

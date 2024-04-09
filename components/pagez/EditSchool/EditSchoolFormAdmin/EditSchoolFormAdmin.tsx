@@ -73,7 +73,7 @@ const EditSchoolFormAdmin: React.FC = () => {
       <div className={`${regularFont.className} mb-[32px]`}>
         
         <p className="text-ash_400 text-center">
-        Administrators help manage your school's account on Tayture. Add now.
+        Administrators help manage your school&apos;s account on Tayture. Add now.
         </p>
       </div>
       <Formik

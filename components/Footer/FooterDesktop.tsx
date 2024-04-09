@@ -86,7 +86,7 @@ function FooterDesktop() {
               © {new Date().getFullYear()} TAYTURE. All rights reserved.
             </div>
             <div className="text-white relative xl:text-[0.9rem] leading-[1.5rem] z-10 text-[14px] opacity-50">
-              <Link href="/privacy" target="_blank">
+              <Link href="/privacy" target="_blank" rel="noreferrer">
                 Privacy Policy
               </Link>
             </div>
