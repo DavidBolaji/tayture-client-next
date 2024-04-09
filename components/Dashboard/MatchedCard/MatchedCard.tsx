@@ -61,11 +61,11 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
   const [amt, setAmt] = useState<string | number>('')
 
   useEffect(() => {
-    const t = setTimeout(() => {
+    if(typeof aggregateAmt === "number" && typeof wb === "number" && typeof amountFinal === "number") {
       setAmt(Math.abs(wb - aggregateAmt - amountFinal))
-      clearInterval(t)
-    }, 3000)
-  }, [amountFinal])
+    }
+  
+  }, [amountFinal, aggregateAmt, wb])
 
   const { mutate: fundWallet, isPending } = useMutation({
     mutationFn: async (amount: string) =>
@@ -191,7 +191,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
           <div className="col-span-2 text-center">Status</div>
           <button
             disabled={matchedJob?.job?.status}
-            onClick={matchedJob?.job?.status ? () => {} : () => handlePayment()}
+            onClick={matchedJob?.job?.status ? () => {} : String(amt).trim().length > 0 ? () => handlePayment(): () => {}}
             className="absolute gap-2 bg-green-600 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center top-[50%] -translate-y-[50%]"
           >
             {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}

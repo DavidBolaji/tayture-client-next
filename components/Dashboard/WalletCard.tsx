@@ -38,10 +38,11 @@ function WalletCard() {
         wallet_balance: +amount,
       }),
     onSuccess: (res) => {
+      handlePayment()
       queryClient.invalidateQueries({
         queryKey: ['school'],
       })
-      handlePayment()
+      
       setMessage(() => 'Wallet successfully funded')
       const t = setTimeout(() => {
         setMessage(() => "")
@@ -144,10 +145,10 @@ function WalletCard() {
       >
         <div className={`my-5  ${regularFont.className}`}>
           <div>
-            <span className="text-2xl">Wallet</span>
+            <span className="text-2xl text-center">Wallet</span>
           </div>
           <div className={`mb-2 text-[12px]`}>
-            <div className="flex justify-end bg-slate-200 w-48 ml-auto py-1 pr-2 rounded-l-md">
+            <div className="flex justify-start bg-slate-200 w-48 ml-auto py-1 pr-2 rounded-l-md">
               <div className="flex items-center justify-between w-full pl-3">
                 <p>Available Balance:</p>
                 <p>₦ {!isLoading && school?.wallet?.wallet_balance}</p>
@@ -156,7 +157,7 @@ function WalletCard() {
             <hr className="mt-1 mb-8" />
           </div>
           <label className={`inline-block ml-1 mb-2 ${regularFont.className}`}>
-            Fund Wallet Amount
+            Amount
           </label>
 
           <Formik

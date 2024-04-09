@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { ButtonHTMLAttributes } from 'react'
+import React, { ButtonHTMLAttributes, RefObject } from 'react'
 import { FaCheck, FaTimes } from 'react-icons/fa'
 
 import Spinner from '../Spinner/Spinner'
@@ -16,6 +16,7 @@ interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   sm?: boolean
   verify?: boolean
   gray?: boolean
+  ref?: RefObject<HTMLButtonElement>;
 }
 
 function Button({
@@ -29,7 +30,7 @@ function Button({
   sm,
   verify,
   gray,
-  // million-ignore
+  ref,
   ...rest
 }: IButton) {
   const commonStyles = `disabled:scale-100 disabled:cursor-not-allowed px-4 py-2  rounded-[8px] transition-all  ${
@@ -56,6 +57,7 @@ function Button({
           ? 'scale-[0.8] -translate-x-3 hover:scale-[0.83]'
           : 'hover:scale-[1.04]'
       } `}
+      ref={ref}
       {...rest}
     >
       <span

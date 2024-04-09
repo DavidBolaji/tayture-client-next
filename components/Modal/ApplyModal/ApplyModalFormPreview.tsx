@@ -45,8 +45,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
       if (pathname === '/find_job') {
         setMessage(() => res.data.message)
         const t = setTimeout(() => {
-          setMessage(() => '')
-          window.location.assign('/dashboard')
+          router.push('/dashboard')
           clearTimeout(t)
         }, 3000)
       } else {
@@ -68,8 +67,8 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
         })
         
         const t = setTimeout(() => {
-          setMessage(() => '')
           clearTimeout(t)
+          SW.prev()
         }, 3000)
         
         if (router.query.job === '1') {

@@ -28,7 +28,10 @@ const initialValues: ISchAdmin = {
   ],
 }
 
-const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move = true }) => {
+const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
+  SW,
+  move = true,
+}) => {
   const { img, createSch, setMessage, setUI } = useGlobalContext()
   const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
@@ -37,14 +40,9 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
     },
     onSuccess: async (res) => {
       queryClient.setQueryData(['schId'], res.data.school.sch_id)
-      if(move) {
+      if (move) {
         SW.next()
       } else {
-        
-        queryClient.setQueryData(['school'], res.data.school)
-        queryClient.invalidateQueries({
-          queryKey: ['school']
-        })
         setUI((prev) => {
           return {
             ...prev,
@@ -54,16 +52,28 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
             },
           }
         })
+        queryClient.setQueryData(['school'], res.data.school)
+        queryClient.invalidateQueries({
+          queryKey: ['school'],
+        })
 
-        setMessage(() => "Hurray!!!, school created succesfully, you can now fund wallet")
+        setMessage(
+          () =>
+            'Hurray!!!, school created succesfully, you can now fund wallet',
+        )
         const t = setTimeout(() => {
-          setMessage(() => "")
-          window.location.reload()
-        }, 2000)
-
-
+          setMessage(() => '')
+          setUI((prev) => {
+            return {
+              ...prev,
+              paymentModal: {
+                ...prev.paymentModal,
+                visibility: !prev.paymentModal?.visibility,
+              },
+            }
+          })
+        }, 3000)
       }
-
     },
     onError: (err) => {
       setUI((prev) => {
@@ -77,7 +87,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
       })
       setMessage(() => (err as Error).message)
       const t = setTimeout(() => {
-        setMessage(() => "")
+        setMessage(() => '')
       }, 2000)
     },
   })
@@ -92,9 +102,8 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
   return (
     <div className="mt-[25px]">
       <div className={`${regularFont.className} mb-[32px]`}>
-        <h2 className="w-full font-br md:text-2xl mb-2">Admin information</h2>
-        <p className="text-ash_400 mb-12">
-          We recommend you add at least 2 admin details
+        <p className="text-ash_400 mb-12 text-center">
+        Administrators help manage your school's account on Tayture. Add now.
         </p>
       </div>
       <Formik

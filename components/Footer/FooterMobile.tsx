@@ -20,11 +20,7 @@ function FooterMobile() {
           </Col>
         </Row>
         <p className="text-white text-[15px]">
-          Tayture is an innovative platform designed to support the different
-          players in the field of education, with a focus on teachers, school
-          administrator, and parents. It provides resources, tools, personalized
-          support, and a community for enhanced teaching and learning
-          experiences.
+          Tayture is a workforce enabling solution for k-12 educators.
         </p>
         <hr className="pb-5 relative z-10 text-white opacity-[0.05]" />
 

@@ -78,7 +78,6 @@ const AddSchoolFormAdmin: React.FC = () => {
   return (
     <>
       <div className={`${regularFont.className}  mb-[32px]`}>
-        <h2 className="w-full font-br">Admin information</h2>
         <p className="text-ash_400">
           We recommend you add at least 2 admin details
         </p>

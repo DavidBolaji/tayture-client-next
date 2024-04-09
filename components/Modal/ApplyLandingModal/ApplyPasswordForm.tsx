@@ -12,6 +12,7 @@ import { ILogin } from '@/pages/auth/LoginForm/LoginForm'
 import { useGlobalContext } from '@/Context/store'
 // import Link from "next/link";
 import * as Yup from 'yup'
+import { useRouter } from 'next/router'
 
 export const passwordSchema = Yup.object().shape({
   password: Yup.string().required('Email is required'),
@@ -22,12 +23,22 @@ interface ApplyEmailFormProps {
 }
 
 const ApplyPasswordForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
-  const { setMessage, user } = useGlobalContext()
+  const { setMessage, user, setUI } = useGlobalContext()
+  const router = useRouter();
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
     onSuccess: (res) => {
-      return window.location.assign(`/dashboard?job=1`)
+      setUI((prev) => {
+        return {
+          ...prev,
+          applyLandingModal: {
+            ...prev.applyLandingModal,
+            visibility: false,
+          },
+        }
+      })
+      return router.push(`/dashboard?job=1`)
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
@@ -70,6 +81,7 @@ const ApplyPasswordForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
               name={'password'}
               type="password"
               placeholder={'Pasword'}
+              password={true}
             />
             {/* <Link href={"/forgot"} className="text-orange">
               forgot

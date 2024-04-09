@@ -9,7 +9,7 @@ import { signOut } from 'next-auth/react'
 export type IValidate = { otp: string; id: string }
 
 export const loginUser = async (data: ILogin) => {
-  const user = await axios.post('/api/users/login/login', data)
+  const user = await Axios.post('/users/login/login', data)
   return user
 }
 

@@ -5,7 +5,7 @@ import JobPoster from '@/components/JobPoster/JobPoster'
 import { IJobSchDb } from '@/pages/api/job/types'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getClientJobs, getClientJobsByType } from '@/lib/api/job'
-import { Drawer, Empty, Skeleton } from 'antd'
+import { Empty, Skeleton } from 'antd'
 import { cn } from '@/utils/helpers'
 import { useRouter } from 'next/router'
 
@@ -32,7 +32,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
         req = await getClientJobs()
       }
 
-      if (router.query.job === '1') {
+      if (router.query.jobz === '1') {
         const cur = queryClient.getQueryData(['activeJob'])
         queryClient.setQueryData(['activeJob'], cur)
       } else {
@@ -40,15 +40,15 @@ const JobApplication: React.FC<JobApplicationProps> = ({
           ['activeJob'],
           typeof req.data.job[0] === 'undefined' ? {} : req.data.job[0],
         )
-      }
+      } 
       return req.data.job
     },
   })
 
 
   return data && Object.keys(data).length > 0 ? (
-    <div className="grid grid-cols-12 gap-10">
-      <div className="md:col-span-6 col-span-12 h-[500px] overflow-auto md:pr-5 no-s">
+    <div className="grid grid-cols-12 md:gap-10">
+      <div className={`md:col-span-6 max-h-[500px] pt-2 overflow-auto no-s col-span-12`}>
         {!data && isLoading ? (
           <div className="space-y-3">
             {['1x', '2y', '3z'].map((loader) => (

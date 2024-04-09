@@ -60,7 +60,7 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
       }, 500)
     },
     onError: (err) => {
-      setMessage(() => (err as Error).message)
+      setMessage(() => (err as any).response.data.error || (err as Error).message)
     },
   })
 
@@ -100,6 +100,7 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
               name={'password'}
               type="password"
               placeholder={'Password'}
+              password={true}
             />
             {/* <Link href={"/forgot"} className="text-orange">
               forgot

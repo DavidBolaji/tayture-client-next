@@ -46,8 +46,8 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
     >
       {({ isValid, values }) => (
         <>
-          <h2 className="w-full font-br">Update information</h2>
-          <div className="pt-[32px] flex justify-center">
+          {/* <h2 className="w-full font-br">Update information</h2> */}
+          <div className="pt-[32px] flex justify-center pb-10">
             <UploadComponent image={sch.sch_logo} />
           </div>
           <Form className="mt-[40px]">
@@ -59,10 +59,11 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               text={'School name'}
               disabled={true}
             />
+            <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>No of employees</h3>
             <Field
               name="sch_no_emp"
               as={SelectInput}
-              placeholder="Select No of Employees"
+              placeholder="No of Employees"
               text={'No of Employees'}
               option={employes}
             />

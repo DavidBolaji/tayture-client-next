@@ -31,7 +31,7 @@ const CounterInput: FC<{ name: string }> = ({ name, ...rest }) => {
         >
           <FaMinus color="white" size={12} />
         </button>
-        <div className="">
+        <div className="w-20">
           <Field
             name={name}
             as={StyledInput}

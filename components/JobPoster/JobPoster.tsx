@@ -1,11 +1,11 @@
 'use client'
 import { regularFont } from '@/assets/fonts/fonts'
 import { IJobSchDb } from '@/pages/api/job/types'
-import { ConfigProvider, Empty, Progress, Skeleton, Space } from 'antd'
-import React, { FC, useEffect, useState } from 'react'
+import { ConfigProvider, Empty, Progress, Skeleton, Space, message } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { FaLocationDot } from 'react-icons/fa6'
 import Button from '../Button/Button'
-import { calculateProgress, datePosted, salaryOutput } from '@/utils/helpers'
+import {  datePosted, salaryOutput } from '@/utils/helpers'
 import { useQueryClient } from '@tanstack/react-query'
 import { useGlobalContext } from '@/Context/store'
 import { IUser } from '@/pages/api/users/types'
@@ -47,12 +47,18 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
   }
 
   useEffect(() => {
-    if (router.query.job === '1') {
+    if (router.query.jobz === '1') {
+      const appliedJobIds = typeof user !== "undefined" ? user.applied!.flatMap(applied => applied.jobId): [];
+      const isJobApplied = appliedJobIds.some((id: string) => id === data.job_id);
       if (user.validated) {
-        handleShow()
+        if(!isJobApplied) {
+          handleShow()
+        } else {
+          message.success("User has already applied for job")
+        }
       }
     }
-  }, [router.query])
+  }, [router.query.jobz])
 
   return !data ? (
     <div className="w-full h-full space-y-4">

@@ -76,12 +76,8 @@ function FooterDesktop() {
                 height={screen.lg ? '' : '90'}
               />
             </div>
-            <p className="text-white text-[14px] ml-1">
-              Tayture is an innovative platform designed to support the
-              different players in the field of education, with a focus on
-              teachers, school administrator, and parents. It provides
-              resources, tools, personalized support, and a community for
-              enhanced teaching and learning experiences.
+            <p className="text-white text-[14px] ml-1 h-20">
+             Tayture is a workforce enabling solution for k-12 educators.
             </p>
           </div>
 

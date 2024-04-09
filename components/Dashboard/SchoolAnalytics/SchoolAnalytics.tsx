@@ -29,9 +29,9 @@ const SchoolAnalytics = () => {
         <div className={`${regularFont.className}`}>
           <div className="grid grid-cols-7 mb-[20px]">
             <div className="col-span-4 ">Job Details</div>
-            <div className="col-span-1 text-center">Applied</div>
+            <div className="md:col-span-1 col-span-2 text-center text-xs md:text-md">Applied</div>
        
-            <div className="col-span-1 text-center">Selected</div>
+            <div className="col-span-1 text-center text-xs md:text-md">Selected</div>
           </div>
           {schJobList &&
             schJobList.map((j: any) => (
@@ -49,7 +49,7 @@ const SchoolAnalytics = () => {
                     </p>
                   </div>
                 </div>
-                <div className="col-span-1 items-center text-center">
+                <div className="md:col-span-1 col-span-2 items-center text-center">
                   <Link href={`/dashboard/school/manage/${j.job_id}?default=2`}>
                     {j?.applied && j?.applied.length > 0
                       ? j?.applied.length
@@ -59,7 +59,9 @@ const SchoolAnalytics = () => {
 
                 <div className="col-span-1 text-center">
                   <Link href={`/dashboard/school/manage/${j.job_id}?default=3`}>
-                    0
+                  {j?.selected && j?.selected.length > 0
+                      ? j?.selected.length
+                      : 0}
                   </Link>
                 </div>
               </div>

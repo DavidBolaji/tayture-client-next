@@ -36,7 +36,7 @@ const PostSchoolCreateForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move 
     <div>
       <div className={regularFont.className}>
         <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
-          Add a school
+        Add Account Admin
         </h3>
 
         {!move ? <p className="text-center text-ash_400 md:text-[16px] text-[12px] max-w-[387px] mx-auto mb-[40px]">
@@ -67,10 +67,11 @@ const PostSchoolCreateForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move 
               type={'text'}
               text={'School name'}
             />
+            <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>No of employees</h3>
             <Field
               name="sch_no_emp"
               as={SelectInput}
-              placeholder="Select No of Employees"
+              placeholder="No of Employees"
               text={'No of Employees'}
               option={employes}
             />

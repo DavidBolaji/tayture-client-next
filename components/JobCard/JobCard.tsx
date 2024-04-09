@@ -25,6 +25,7 @@ const JobCard: React.FC<{ job: IJobSchDb, copy?: boolean }> = ({ job, copy = fal
   const queryClient = useQueryClient()
   const { count, setCount } = useGlobalContext()
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
+  
   const handleClick = () => {
     queryClient.setQueryData(['activeJob'], job)
     setCount((prev) => prev + 1)

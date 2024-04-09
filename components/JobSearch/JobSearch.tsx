@@ -1,19 +1,58 @@
-import { ConfigProvider, Input } from 'antd'
-import React, { useState } from 'react'
+import { ConfigProvider, Input, message } from 'antd'
+import React, { useEffect, useRef, useState } from 'react'
 import Button from '../Button/Button'
 import { cn } from '@/utils/helpers'
 import { useMutation,  useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { useGlobalContext } from '@/Context/store'
+import { useRouter } from 'next/router'
+import { Select, Tag } from 'antd';
+import type { SelectProps } from 'antd';
 
 interface JobSearchProps {
   className?: string
 }
 
+type TagRender = SelectProps['tagRender']
+
+const options: SelectProps['options'] = [
+  { value: 'all', label: "All" },
+  { value: 'teacher', label: "Teacher" },
+  { value: 'admin', label: "Admin" },
+];
+
+const hashMap = {
+  all: "gold",
+  teacher: "lime",
+  admin: "green"
+}
+
+const tagRender: TagRender = (props) => {
+  const { label, value, closable, onClose } = props;
+  const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+  return (
+    <Tag
+      color={hashMap[value as "admin" | "teacher" | "all"]}
+      onMouseDown={onPreventMouseDown}
+      closable={closable}
+      onClose={onClose}
+      style={{ marginInlineEnd: 4 }}
+    >
+      {label}
+    </Tag>
+  );
+};
+
 const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
   const [val, setVal] = useState('');
   const queryClient = useQueryClient();
   const {count, setCount} = useGlobalContext()
+  const router = useRouter()
+
+  const inputRef = useRef<HTMLButtonElement | null>(null)
 
   const {mutate, isPending} = useMutation({
    mutationFn: async (title: string) => {
@@ -26,6 +65,19 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
     setCount(prev => prev - 1)
    }
   })
+
+
+  useEffect(() => {
+    if(router.query.find) {
+      Axios.get(`/job/${router.query.find}`).then((res) => {
+        setVal(res.data.job.job_title)
+       mutate(res.data.job.job_title)
+      }).catch((err) => {
+        message.error((err as Error).message)
+      })
+    }
+
+  }, [router.query])
 
   return (
     <div className="w-full ">
@@ -52,7 +104,15 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
               }
               hover={false}
               bold={false}
+              ref={inputRef}
             />
+             {/* <Select
+              tagRender={tagRender}
+              defaultValue={['gold', 'cyan']}
+              style={{ width: '100%' }}
+              options={options}
+            /> */}
+            
           </div>
         </div>
       </ConfigProvider>
