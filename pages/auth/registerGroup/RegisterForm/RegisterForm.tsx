@@ -71,8 +71,10 @@ const RegisterForm = ({
       if (!show) {
         if (cb) return cb()
       } else {
-      //  return window.location.assign('/dashboard')
-      router.push('/dashboard')
+        const t = setTimeout(() => {
+          clearTimeout(t)
+          router.push('/dashboard')
+        }, 1000)
       }
     } else {
       setMessage(() => res.data.message)
