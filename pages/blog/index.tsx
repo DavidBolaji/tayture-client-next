@@ -13,33 +13,31 @@ const Blog = () => {
       <div className="bg-blog_bg overflow-auto">
         <Wrapper>
           {/* Hero */}
-          <div className="pt-24 pb-28">
+          <div className="relative pt-10 pb-16 md:py-16 lg:pb-28 lg:pt-20">
             {/* Heading(Head and Paragraph) */}
             <div
-              className="headingWrap"
-              style={{ marginBottom: '2rem', maxWidth: '42rem' }}
+              className="headingWrap relative flex flex-col sm:flex-col sm:items-start justify-between md:mb-12 text-neutral-900 dark:text-neutral-50"
+              style={{maxWidth: '42rem' }}
             >
               <h1
-                className="text-[2rem] leading-[2rem]"
+                className="text-2xl md:text-3xl lg:text-4xl"
                 style={{ fontWeight: '900' }}
               >
                 Editor&apos;s Pick
               </h1>
               <p
-                className="text-[1.25rem] leading-[1.75rem] mt-[0.75rem] font-[400] tracking-normal"
-                style={{ color: 'rgba(107,114,128,1)' }}
+                className="tracking-normal mt-2 md:mt-3 font-normal block text-base sm:text-xl text-neutral-500 dark:text-neutral-400"
               >
                 Discover outstanding articles, Insights and Inspiration
               </p>
             </div>
 
             {/* Hero Blog*/}
-            <div className="imgWrapper flex gap-2.5 flex-row-reverse py-10 items-start mb-5 relative">
+            <div className="imgWrapper flex  py-10 items-start mb-5 relative  flex-col md:flex-row justify-end ">
               {/* Image */}
               <div
-                className="bg-black "
+                className="bg-black w-full md:w-4/5 lg:w-2/3"
                 style={{
-                  width: '65%',
                   height: '450px',
                   borderRadius: '20px',
                   backgroundRepeat: 'no-repeat',
@@ -51,14 +49,12 @@ const Blog = () => {
               ></div>
 
               {/* Article Card  */}
-              <div className="absolute left-0 top-20" style={{ width: '40%' }}>
+              <div className="md:absolute z-10 md:left-0 md:top-1/2 md:-translate-y-1/2 w-full -mt-8 md:mt-0 px-3 sm:px-6 md:px-0 md:w-3/5 lg:w-1/2 xl:w-2/5" >
                 <div
-                  className="p-12 bg-blog_bg"
+                  className="bg-blog_bg  p-4 sm:p-8 xl:py-14 md:px-10 dark:bg-neutral-900/40 backdrop-blur-lg shadow-lg dark:shadow-2xl rounded-3xl space-y-3 sm:space-y-5 "
                   style={{
-                    borderRadius: '20px',
                     backgroundColor: '#fff6',
                     backdropFilter: ' blur(16px)',
-                    boxShadow:' 0 0 #0000,  0 0 #0000, 0 0 #0000,  0 0 #0000, 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a',
                   }}
                 >
                   <BlogTagStyle
@@ -71,12 +67,7 @@ const Blog = () => {
                   />
 
                   <h2
-                    style={{
-                      fontSize: '1.3rem',
-                      lineHeight: '2rem',
-                      fontWeight: '600',
-                      marginTop: '18px',
-                    }}
+                    className='text-base sm:text-xl lg:text-2xl font-semibold '
                   >
                     <a href="#">
                       Effective classroom management strategies for new teachers
