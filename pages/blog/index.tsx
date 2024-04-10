@@ -1,24 +1,29 @@
 import React from 'react'
-import { Footer } from '@/components/Footer'
 import Wrapper from '@/components/Wrapper/Wrapper'
-import { BlogTagStyle } from './components/BlogTagStyle.styles'
-import ImgNameDate from './components/imgNameDate'
 import LikesCom from './components/LikesCom'
 import BackNext from './components/BackNext'
+import HomeLayout from '@/components/layouts/HomeLayout'
+import { BlogTagStyle } from './components/BlogTagStyle.styles'
+import { Footer } from '@/components/Footer'
+import ImgNameDate from './components/ImgNameDate'
 
 const Blog = () => {
   return (
-      <div className="bg-blog_bg">
+    <>
+      <div className="bg-blog_bg overflow-auto">
         <Wrapper>
           {/* Hero */}
           <div className="pt-24 pb-28">
             {/* Heading(Head and Paragraph) */}
             <div
-              className="headingWrap "
+              className="headingWrap"
               style={{ marginBottom: '2rem', maxWidth: '42rem' }}
             >
-              <h1 className="text-[2.25rem] leading-[2.5rem] font-black">
-                Editor's Pick
+              <h1
+                className="text-[2rem] leading-[2rem]"
+                style={{ fontWeight: '900' }}
+              >
+                Editor&apos;s Pick
               </h1>
               <p
                 className="text-[1.25rem] leading-[1.75rem] mt-[0.75rem] font-[400] tracking-normal"
@@ -53,8 +58,7 @@ const Blog = () => {
                     borderRadius: '20px',
                     backgroundColor: '#fff6',
                     backdropFilter: ' blur(16px)',
-                    boxShadow:
-                      '0 0 #0000,  0 0 #0000, 0 0 #0000,  0 0 #0000, 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;',
+                    boxShadow:' 0 0 #0000,  0 0 #0000, 0 0 #0000,  0 0 #0000, 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a',
                   }}
                 >
                   <BlogTagStyle
@@ -80,10 +84,11 @@ const Blog = () => {
                   </h2>
 
                   <ImgNameDate
-                    authName="Tunde Kelani"
-                    altImage="tayture"
-                    date="April 20, 2024"
-                    enable={false}
+                    authName="Boluwatife Adewole"
+                    // altImage="tayture"
+                      // image
+                    date="April 10, 2024"
+                    enableDash={false}
                     isColumn={true}
                   />
 
@@ -94,21 +99,26 @@ const Blog = () => {
                 <div className="p-4 sm:pt-8 sm:px-10">
                   <BackNext />
                 </div>
-
-              </div>  
+              </div>
             </div>
           </div>
 
-          <div className="p-28 bg-black h-srceen">
-            <p></p>
+          {/* Section 2 */}
+          <div className="p-28 bg-white">
+            <p>Hello</p>
+            <div style={{ height: '500px' }}></div>
           </div>
         </Wrapper>
+
+        <Footer />
       </div>
+    </>
   )
 }
 
-// Blog.getLayout = function getLayout(page: React.ReactNode) {
-//   return <HomeLayout>{page}</HomeLayout>
-// }
+
+Blog.getLayout = function getLayout(page: React.ReactNode) {
+  return <HomeLayout>{page}</HomeLayout>
+}
 
 export default Blog

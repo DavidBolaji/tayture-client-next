@@ -1,5 +1,5 @@
-import styled from "styled-components";
 
+import styled from "styled-components";
 import BlogTag from "./BlogTag";
 
 type Props = {
@@ -29,6 +29,5 @@ export const BlogTagStyle = styled(BlogTag)<Props>`
          background-color: ${({hover_bg_color})=> hover_bg_color};
          color: ${({hover_text_color})=> hover_text_color};
      }
-
-
+     
 ` 

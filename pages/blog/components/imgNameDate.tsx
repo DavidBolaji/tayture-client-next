@@ -1,16 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
-interface imgNameDateProps {
-  image?:string;
-  altImage: string;
+interface ImgNameDateProps {
   authName: string;
   date?: string;
   enableDash: boolean;
-  isColumn : boolean
+  isColumn : boolean;
+// imageSrc?:string;
+// altImage: string;
 }
 
-const ImgNameDateCont = styled.div<imgNameDateProps>`
+const ImgNameDateCont = styled.div<ImgNameDateProps>`
  &{
     display:flex;
     align-items: center;
@@ -53,11 +53,11 @@ const ImgNameDateCont = styled.div<imgNameDateProps>`
  }
 `
 
-const ImgNameDate = ({image, authName,altImage, date, enableDash, isColumn}: imgNameDateProps) => {
+const ImgNameDate = ({authName, date, enableDash, isColumn}:ImgNameDateProps) => {
   return (
-    <ImgNameDateCont isColumn = {isColumn} >
+    <ImgNameDateCont  isColumn = {isColumn} >
       <div className='authImgCont'>
-        {/* <img src={image} alt={altImage} /> */}
+        {/* <img src={imageSrc} alt={altImage} /> */}
       </div>
       <div className='nameDateCont'>
         <h2>{authName}</h2>
@@ -68,4 +68,4 @@ const ImgNameDate = ({image, authName,altImage, date, enableDash, isColumn}: img
   )
 }
 
-export default ImgNameDate
+export default ImgNameDate;

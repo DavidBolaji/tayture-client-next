@@ -15,7 +15,7 @@ const IconCont = styled.div<BackNextProps>`
   }
 
   & button {
-    font-size: 1, 25rem;
+    font-size: 1.15rem;
     line-height: 1.75rem;
     border-color: rgb(226, 232, 240);
     border-radius: 9999px;
