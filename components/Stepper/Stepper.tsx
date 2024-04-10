@@ -4,11 +4,12 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { cn } from '@/utils/helpers'
 
-const StyledStepper = styled.div`
+const StyledStepper = styled.div<{height: number}>`
   position: relative;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: hidden;
+  height: ${(prop) => prop.height};
   & > * {
     flex: 1 0 100%;
   }
@@ -33,6 +34,7 @@ interface StepperProps {
 
 const Stepper: FC<StepperProps> = ({ children, className, init,  }) => {
   const [scope, animate] = useAnimate()
+  const [activeChildHeight, setActiveChildHeight] = useState(0);
   const [cur, setCur] = useState(0)
   const total = React.Children.count(children)
   const nextBtn = useRef<HTMLButtonElement>(null)
@@ -69,7 +71,7 @@ const Stepper: FC<StepperProps> = ({ children, className, init,  }) => {
       )
       animate(
         scope.current.childNodes[cur],
-        { x: '100%', opacity: 0 },
+        { x: '100%', opacity: 0, height: "0px" },
         { duration: 2 },
       )
       await animate(
@@ -102,7 +104,7 @@ const Stepper: FC<StepperProps> = ({ children, className, init,  }) => {
       )
       animate(
         scope.current.childNodes[cur - 1],
-        { x: nextVal, opacity: 1, display: 'block' },
+        { x: nextVal, opacity: 1, display: 'block', height: "auto" },
         { duration: 2 },
       )
       setCur((prev) => prev - 1)
@@ -125,28 +127,27 @@ const Stepper: FC<StepperProps> = ({ children, className, init,  }) => {
       setStep: (step) => setStart.bind(null, step)
     })
   }, [])
-  useEffect(() => {
-    init({
-      current: cur,
-      next: moveForward,
-      prev: moveBack,
-      totalSteps: total,
-      setStep: (step) => setStart.bind(null, step)
-    })
-  }, [])
+
 
   useEffect(() => {
     setMount(true)
   }, [])
 
+  useEffect(() => {
+    if(!mount) return
+    console.log(scope.current.childNodes[cur]);
+    setActiveChildHeight(scope.current.childNodes[cur]?.scrollHeight);
+  }, [cur, mount])
+
   if (!mount) {
     return null
   }
 
-
+console.log(activeChildHeight);
   return (
     <>
       <StyledStepper
+        height={activeChildHeight}
         ref={scope}
         className={cn('no-s bg-transparent', className)}
       >

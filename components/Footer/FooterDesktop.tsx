@@ -77,7 +77,7 @@ function FooterDesktop() {
               />
             </div>
             <p className="text-white text-[14px] ml-1 h-20">
-             Tayture is a workforce enabling solution for k-12 educators.
+             Tayture is a workforce enabling-solution for k-12 educators.
             </p>
           </div>
 

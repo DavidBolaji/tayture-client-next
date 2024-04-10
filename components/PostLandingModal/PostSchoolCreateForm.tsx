@@ -31,24 +31,31 @@ const PostSchoolCreateForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move 
   const handleSubmit = (data: Partial<ISchData>) => {
     setCreateSch(() => data)
     SW?.next()
+    
+    setTimeout(() => {
+      document.getElementById('create')?.scrollIntoView({
+        behavior: 'smooth',
+      })
+    }, 2000)
+
   }
   return (
-    <div>
-      <div className={regularFont.className}>
+    <div id='hhhty'>
+      <div className={`${regularFont.className} max-w-[387px]`}>
         <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
-        Add Account Admin
+          Add a school
         </h3>
 
-        {!move ? <p className="text-center text-ash_400 md:text-[16px] text-[12px] max-w-[387px] mx-auto mb-[40px]">
+        {!move ? <p className="text-center text-ash_400 md:text-[16px] text-[12px] mx-auto">
           You haven&apos;t created a school before, so you&apos;ll have to create school to fund your
           wallet
-        </p>: <p className="text-center text-ash_400 md:text-[16px] text-[12px] max-w-[387px] mx-auto mb-[40px]">
+        </p>: <p className="text-center text-ash_400 md:text-[16px] text-[12px] mx-auto">
           You haven&apos;t posted a job before, so you&apos;ll have to add your
           school information
         </p>}
       </div>
-      <h2 className="w-full font-br font-bold">School information</h2>
-      <div className="pt-[32px] flex justify-center">
+      {/* <h2 className="w-full font-br font-bold">School information</h2> */}
+      <div className="pt-3 pb-5 flex justify-center">
         <UploadComponent />
       </div>
 

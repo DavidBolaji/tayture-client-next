@@ -40,7 +40,7 @@ const SchoolAnalytics = () => {
                   <p>{j.job_title}</p>
                   <div className="flex md:flex-row flex-col md:gap-5 items-start md:items-center">
                     <p className="text-ash_400 mb-[8px]">
-                      posted:&nbsp;
+                      Posted:&nbsp;
                       {datePosted(j.createdAt!)}
                     </p>
                     <p className="text-ash_400 -translate-y-1">

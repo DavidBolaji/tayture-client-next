@@ -78,8 +78,8 @@ const AddSchoolFormAdmin: React.FC = () => {
   return (
     <>
       <div className={`${regularFont.className}  mb-[32px]`}>
-        <p className="text-ash_400">
-          We recommend you add at least 2 admin details
+        <p className="text-ash_400 max-w-[300px] text-center mx-auto">
+        Administrators help manage your school&apos;s account on Tayture. Add now.
         </p>
       </div>
       <Formik

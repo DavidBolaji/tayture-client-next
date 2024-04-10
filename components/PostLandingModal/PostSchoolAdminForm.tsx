@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useGlobalContext } from '@/Context/store'
 import { createSchool } from '@/lib/api/school'
 import { validationSchema } from '../pagez/AddSchool/AddSchoolFormAdmin/Schema/AddSchoolAdminSchema'
+import { User } from '@prisma/client'
 type ISchAdmin = {
   [key: string]: {
     sch_admin_name: string
@@ -18,22 +19,26 @@ type ISchAdmin = {
     sch_admin_email: string
   }[]
 }
-const initialValues: ISchAdmin = {
-  participants: [
-    {
-      sch_admin_name: '',
-      sch_admin_email: '',
-      sch_admin_phone: '',
-    },
-  ],
-}
+
 
 const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
   SW,
   move = true,
 }) => {
   const { img, createSch, setMessage, setUI } = useGlobalContext()
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+  const user = queryClient.getQueryData(['user']) as User
+
+  const initialValues: ISchAdmin = {
+    participants: [
+      {
+        sch_admin_name: typeof user !== "undefined" ? `${user?.fname} ${user?.lname}`: "",
+        sch_admin_email: typeof user !== "undefined" ? user?.email : "",
+        sch_admin_phone: typeof user !== "undefined" ? user?.phone : "",
+      },
+    ],
+  }
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: any) => {
       return await createSchool(data)
@@ -100,10 +105,13 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
   }
 
   return (
-    <div className="mt-[25px]">
+    <div id="create" className="mt-[25px] max-w-[300px] w-auto text-center">
       <div className={`${regularFont.className} mb-[32px]`}>
+      <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
+          Add Account Admin
+        </h3>
         <p className="text-ash_400 mb-12 text-center">
-        Administrators help manage your school&apos;s account on Tayture. Add now.
+          Administrators help manage your school&apos;s account on Tayture. Add now.
         </p>
       </div>
       <Formik
@@ -113,7 +121,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
         validationSchema={validationSchema}
       >
         {({ values, handleSubmit, isSubmitting, isValid }) => (
-          <Form className="w-full " onSubmit={handleSubmit}>
+          <Form className="w-full" onSubmit={handleSubmit}>
             <FieldArray name="participants">
               {({ push, remove }) => (
                 <>
@@ -151,7 +159,8 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
                     </div>
                   ))}
 
-                  <Button
+                 <div className='text-left'>
+                 <Button
                     render="light"
                     transparent
                     onClick={() =>
@@ -172,6 +181,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
                       </Space>
                     }
                   />
+                 </div>
                 </>
               )}
             </FieldArray>

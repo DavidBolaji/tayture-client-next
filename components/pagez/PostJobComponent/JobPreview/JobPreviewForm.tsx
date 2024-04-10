@@ -105,7 +105,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
         <Form className="w-full">
           <div>
             <h3
-              className={`mb-[14px] ml-1 text-[20px] text-black ${regularFont.className}`}
+               className={`mb-[14px] ml-1 text-[20px] text-center text-black ${regularFont.className}`}
             >
               Select Teacher or Administrator?
             </h3>

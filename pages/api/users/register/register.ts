@@ -76,7 +76,7 @@ export default async function handler(
       path: '/', // Set the cookie path to '/'
       sameSite: 'none',
       secure: process.env.NEXT_PUBLIC_ENV === 'dev' ? false : true,
-      domain: process.env.NEXT_PUBLIC_ENV === "dev" ? "localhost:5000": "tayture-client-next.vercel.app"
+      // domain: process.env.NEXT_PUBLIC_ENV === "dev" ? "localhost:5000": "tayture-client-next.vercel.app"
     })
 
     // Set the cookie containing the token
@@ -84,7 +84,7 @@ export default async function handler(
       httpOnly: true,
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 6min
       path: '/', // Set the cookie path to '/'
-      domain: process.env.NEXT_PUBLIC_ENV === "dev" ? "localhost:5000": "tayture-client-next.vercel.app"
+      // domain: process.env.NEXT_PUBLIC_ENV === "dev" ? "localhost:5000": "tayture-client-next.vercel.app"
     })
 
     if (skip) {

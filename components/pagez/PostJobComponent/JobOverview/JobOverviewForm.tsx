@@ -24,10 +24,14 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
     const time = setTimeout(() => {
       if (typeof document !== 'undefined') {
         const doc = document.querySelector('.ant-layout-content')
+        document.getElementById('jobPreview')?.scrollIntoView({
+          behavior: 'smooth',
+        })
         doc?.scrollTo({
           behavior: 'smooth',
           top: 0,
         })
+
       }
       clearTimeout(time)
     }, 1500)
@@ -56,7 +60,7 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
         <Form className="mt-[20px] pb-[100px] w-full">
           <div>
             <h3
-              className={`mb-[14px] ml-1 text-[20px] text-black ${regularFont.className}`}
+              className={`mb-[14px] ml-1 text-[20px] text-center text-black ${regularFont.className}`}
             >
               Select Teacher or Administrator?
             </h3>
