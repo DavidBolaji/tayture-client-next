@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer'
 import ImgNameDate from './components/ImgNameDate'
 import SectionCont from './components/helpers/SectionCont'
 import ArticlesCatCard from './components/ArticlesCatCard'
+import HeadingDesc from './components/HeadingDesc'
 
 const Blog = () => {
   return (
@@ -15,7 +16,7 @@ const Blog = () => {
       <div className="bg-blog_bg overflow-auto">
         <Wrapper>
           {/* Hero */}
-          <div className="relative pt-10 md:py-16 lg:pb-10 lg:pt-20">
+          <div className="relative pt-10 md:py-12 lg:pb-10 lg:pt-20">
             {/* Heading(Head and Paragraph) */}
             <div
               className="headingWrap relative flex flex-col sm:flex-col sm:items-start justify-between md:mb-12 text-neutral-900 dark:text-neutral-50"
@@ -33,16 +34,13 @@ const Blog = () => {
             </div>
 
             {/* Hero Blog*/}
-            <div className="imgWrapper flex  py-10 items-start mb-5 relative  flex-col md:flex-row justify-end ">
+            <div className="imgWrapper flex  pt-10 sm:pt-0 items-start sm:mb-5 relative  flex-col md:flex-row justify-end ">
               {/* Image */}
               <div
-                className="bg-black w-full md:w-4/5 lg:w-2/3 bg-cover"
+                className="bg-black w-full md:w-4/5 lg:w-2/3  bg-center bg-no-repeat bg-cover"
                 style={{
                   height: '450px',
                   borderRadius: '20px',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center center',
                   background:
                     'url(https://images.unsplash.com/photo-1440778303588-435521a205bc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)',
                 }}
@@ -79,7 +77,7 @@ const Blog = () => {
                     date="April 10, 2024"
                     enableDash={false}
                     isColumn={true}
-                    bg_color = 'black'
+                    bg_color="black"
                   />
 
                   <LikesCom />
@@ -94,34 +92,83 @@ const Blog = () => {
           </div>
 
           {/* Section 2 */}
-          <SectionCont bg_color="bg-[rgb(242,242,242)]">
+          <SectionCont bg_color="bg-[rgb(242,242,242)]" class_name="my-12">
+
             {/* Header Section 2 */}
-            <div className="relative flex flex-col sm:flex-row sm:items-end justify-between mb-10 md:mb-12 text-neutral-900 dark:text-neutral-50">
-              <div className="max-w-2xl">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
-                  Top trending topics
-                </h2>
-                <span className="mt-2 md:mt-3 font-normal block text-base sm:text-xl text-neutral-500 dark:text-neutral-400">
-                  {/* the number of topics will be length of articles array + 1 */}
-                  Discover 233 topics
-                </span>
-              </div>
-            </div>
+            <HeadingDesc
+              heading="Top trending topics"
+              description="Discover 233 topics"
+            />
 
             {/* Articles Category Card  */}
             <div className="artcilesCatCard">
               <div className="-mx-2 xl:-mx-4 relative whitespace-nowrap -mx-2 xl:-mx-4 overflow-hidden">
-                <ArticlesCatCard category='Admin' totalCatArticles='20 Articles' categoryColor='#EAB308'  rank='#1' bg_color_rank = "#FEF9C3" text_color_rank = "#EAB308" bg_image_url='url(https://img.freepik.com/free-photo/entrepreneurs-meeting-office_23-2148898688.jpg?t=st=1712831917~exp=1712835517~hmac=d3e6c62789e340457130f14c892e245e2ef8c4512b82811c35b14a24a7067daf&w=996)'/>
-                <ArticlesCatCard category='Teachers' totalCatArticles='10 Articles' categoryColor='#EF4444' rank='#2' bg_color_rank ="#FEE2E2" text_color_rank ="#EF4444" bg_image_url='url(https://img.freepik.com/free-photo/medium-shot-smiley-woman-with-white-board_23-2149272221.jpg?t=st=1712842359~exp=1712845959~hmac=84e9b41ce746cc752babc2926fce09ad0cbbcbc874c4f2d5d43eea19bf34aee6&w=996)'/>
-                <ArticlesCatCard category='Pupils' totalCatArticles='10 Articles' categoryColor='rgb(99,102,241)' rank='#3' bg_color_rank ="rgb(224 231 255)" text_color_rank = "rgb(55 48 163)" bg_image_url='url(https://img.freepik.com/free-photo/front-view-kid-doing-homework_23-2149610742.jpg?t=st=1712843045~exp=1712846645~hmac=255d35bf764718bb1864a29615708666ff743c47584a097c64569468025cde32&w=996)'/>
-                <ArticlesCatCard category='Parents' totalCatArticles='15 Articles' categoryColor='#EC4899' bg_image_url='url(https://img.freepik.com/free-photo/medium-shot-happy-parents-girl_23-2148960586.jpg?t=st=1712843236~exp=1712846836~hmac=07be2995070489fcd7c2bfd1fd7478b5f955c7e6b3a1dbeb692eb84c18d2a136&w=996)'/>
-                <ArticlesCatCard category='Events' totalCatArticles='10 Articles' categoryColor='#EF4444' bg_image_url='url(https://img.freepik.com/free-photo/portrait-elegant-professional-businessman-speaking-conference_23-2150917212.jpg?t=st=1712843534~exp=1712847134~hmac=32fdc9959a700b0f44530679b47b24c93de6fc7bec1224bdd6c7c580a00de2ea&w=740)'/>
-                <ArticlesCatCard category='Events' totalCatArticles='10 Articles' categoryColor='#EF4444' bg_image_url='url(https://img.freepik.com/free-photo/portrait-elegant-professional-businessman-speaking-conference_23-2150917212.jpg?t=st=1712843534~exp=1712847134~hmac=32fdc9959a700b0f44530679b47b24c93de6fc7bec1224bdd6c7c580a00de2ea&w=740)'/>
+                <ArticlesCatCard
+                  category="Admin"
+                  totalCatArticles="20 Articles"
+                  categoryColor="#EAB308"
+                  rank="#1"
+                  bg_color_rank="#FEF9C3"
+                  text_color_rank="#EAB308"
+                  bg_image_url="url(https://img.freepik.com/free-photo/entrepreneurs-meeting-office_23-2148898688.jpg?t=st=1712831917~exp=1712835517~hmac=d3e6c62789e340457130f14c892e245e2ef8c4512b82811c35b14a24a7067daf&w=996)"
+                />
+                <ArticlesCatCard
+                  category="Teachers"
+                  totalCatArticles="10 Articles"
+                  categoryColor="#EF4444"
+                  rank="#2"
+                  bg_color_rank="#FEE2E2"
+                  text_color_rank="#EF4444"
+                  bg_image_url="url(https://img.freepik.com/free-photo/medium-shot-smiley-woman-with-white-board_23-2149272221.jpg?t=st=1712842359~exp=1712845959~hmac=84e9b41ce746cc752babc2926fce09ad0cbbcbc874c4f2d5d43eea19bf34aee6&w=996)"
+                />
+                <ArticlesCatCard
+                  category="Pupils"
+                  totalCatArticles="10 Articles"
+                  categoryColor="rgb(99,102,241)"
+                  rank="#3"
+                  bg_color_rank="rgb(224 231 255)"
+                  text_color_rank="rgb(55 48 163)"
+                  bg_image_url="url(https://img.freepik.com/free-photo/front-view-kid-doing-homework_23-2149610742.jpg?t=st=1712843045~exp=1712846645~hmac=255d35bf764718bb1864a29615708666ff743c47584a097c64569468025cde32&w=996)"
+                />
+                <ArticlesCatCard
+                  category="Parents"
+                  totalCatArticles="15 Articles"
+                  categoryColor="#EC4899"
+                  bg_image_url="url(https://img.freepik.com/free-photo/medium-shot-happy-parents-girl_23-2148960586.jpg?t=st=1712843236~exp=1712846836~hmac=07be2995070489fcd7c2bfd1fd7478b5f955c7e6b3a1dbeb692eb84c18d2a136&w=996)"
+                />
+                <ArticlesCatCard
+                  category="Events"
+                  totalCatArticles="10 Articles"
+                  categoryColor="#EF4444"
+                  bg_image_url="url(https://img.freepik.com/free-photo/portrait-elegant-professional-businessman-speaking-conference_23-2150917212.jpg?t=st=1712843534~exp=1712847134~hmac=32fdc9959a700b0f44530679b47b24c93de6fc7bec1224bdd6c7c580a00de2ea&w=740)"
+                />
+                <ArticlesCatCard
+                  category="Events"
+                  totalCatArticles="10 Articles"
+                  categoryColor="#EF4444"
+                  bg_image_url="url(https://img.freepik.com/free-photo/portrait-elegant-professional-businessman-speaking-conference_23-2150917212.jpg?t=st=1712843534~exp=1712847134~hmac=32fdc9959a700b0f44530679b47b24c93de6fc7bec1224bdd6c7c580a00de2ea&w=740)"
+                />
+              </div>
+            </div>
+
+          </SectionCont>
+
+          {/* Section 3 */}
+
+          <SectionCont bg_color="none">
+
+            {/* Heading and Buttons for Categories */}
+            <div className='flex flex-col mb-8 relative'>
+
+              {/* Heading */}
+              <HeadingDesc heading='Latest Articles' description='Discover the most outstanding articles in all topics targetted at better K-12 Education'/>
+              
+              {/* Buttons for Categories */}
+              <div className='flex justify-between'>
+                
               </div>
             </div>
           </SectionCont>
-
-          
         </Wrapper>
 
         <Footer />
