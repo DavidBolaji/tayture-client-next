@@ -6,6 +6,7 @@ interface ImgNameDateProps {
   date?: string;
   enableDash: boolean;
   isColumn : boolean;
+  bg_color?: string;
 // imageSrc?:string;
 // altImage: string;
 }
@@ -18,7 +19,7 @@ const ImgNameDateCont = styled.div<ImgNameDateProps>`
  }
 
  & .authImgCont{
-    background-color: black;
+    background-color: ${({bg_color}) => bg_color};
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
@@ -28,7 +29,7 @@ const ImgNameDateCont = styled.div<ImgNameDateProps>`
 
  & h2{
     color: rgba(55,65,81);
-    font-weight:500;
+    font-weight:800;
     font-size:0.875rem;
     line-height: 1.25rem;
     
@@ -53,9 +54,9 @@ const ImgNameDateCont = styled.div<ImgNameDateProps>`
  }
 `
 
-const ImgNameDate = ({authName, date, enableDash, isColumn}:ImgNameDateProps) => {
+const ImgNameDate = ({authName, date, enableDash, isColumn, bg_color}:ImgNameDateProps) => {
   return (
-    <ImgNameDateCont  isColumn = {isColumn} >
+    <ImgNameDateCont  isColumn = {isColumn} bg_color ={bg_color}>
       <div className='authImgCont'>
         {/* <img src={imageSrc} alt={altImage} /> */}
       </div>

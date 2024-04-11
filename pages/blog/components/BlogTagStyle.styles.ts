@@ -5,8 +5,8 @@ import BlogTag from "./BlogTag";
 type Props = {
     bg_color: string;
     text_color: string;
-    hover_bg_color: string;
-    hover_text_color:string;
+    hover_bg_color?: string;
+    hover_text_color?:string;
 }
 
 export const BlogTagStyle = styled(BlogTag)<Props>`

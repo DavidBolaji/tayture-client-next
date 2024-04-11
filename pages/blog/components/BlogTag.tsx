@@ -1,6 +1,6 @@
 interface BlogTagProps {
   text: string;
-  tag_link: string;
+  tag_link?: string;
   className?: string;
 }
 
