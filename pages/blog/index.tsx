@@ -6,6 +6,7 @@ import HomeLayout from '@/components/layouts/HomeLayout'
 import { BlogTagStyle } from './components/BlogTagStyle.styles'
 import { Footer } from '@/components/Footer'
 import ImgNameDate from './components/ImgNameDate'
+import SectionCont from './components/helpers/SectionCont'
 
 const Blog = () => {
   return (
@@ -13,11 +14,11 @@ const Blog = () => {
       <div className="bg-blog_bg overflow-auto">
         <Wrapper>
           {/* Hero */}
-          <div className="relative pt-10 pb-16 md:py-16 lg:pb-28 lg:pt-20">
+          <div className="relative pt-10 pb-16 md:py-16 lg:pb-10 lg:pt-20">
             {/* Heading(Head and Paragraph) */}
             <div
               className="headingWrap relative flex flex-col sm:flex-col sm:items-start justify-between md:mb-12 text-neutral-900 dark:text-neutral-50"
-              style={{maxWidth: '42rem' }}
+              style={{ maxWidth: '42rem' }}
             >
               <h1
                 className="text-2xl md:text-3xl lg:text-4xl"
@@ -25,9 +26,7 @@ const Blog = () => {
               >
                 Editor&apos;s Pick
               </h1>
-              <p
-                className="tracking-normal mt-2 md:mt-3 font-normal block text-base sm:text-xl text-neutral-500 dark:text-neutral-400"
-              >
+              <p className="tracking-normal mt-2 md:mt-3 font-normal block text-base sm:text-xl text-neutral-500 dark:text-neutral-400">
                 Discover outstanding articles, Insights and Inspiration
               </p>
             </div>
@@ -49,7 +48,7 @@ const Blog = () => {
               ></div>
 
               {/* Article Card  */}
-              <div className="md:absolute z-10 md:left-0 md:top-1/2 md:-translate-y-1/2 w-full -mt-8 md:mt-0 px-3 sm:px-6 md:px-0 md:w-3/5 lg:w-1/2 xl:w-2/5" >
+              <div className="md:absolute z-10 md:left-0 md:top-1/2 md:-translate-y-1/2 w-full -mt-8 md:mt-0 px-3 sm:px-6 md:px-0 md:w-3/5 lg:w-1/2 xl:w-2/5">
                 <div
                   className="bg-blog_bg  p-4 sm:p-8 xl:py-14 md:px-10 dark:bg-neutral-900/40 backdrop-blur-lg shadow-lg dark:shadow-2xl rounded-3xl space-y-3 sm:space-y-5 "
                   style={{
@@ -66,9 +65,7 @@ const Blog = () => {
                     hover_text_color="white"
                   />
 
-                  <h2
-                    className='text-base sm:text-xl lg:text-2xl font-semibold '
-                  >
+                  <h2 className="text-base sm:text-xl lg:text-2xl font-semibold ">
                     <a href="#">
                       Effective classroom management strategies for new teachers
                     </a>
@@ -77,7 +74,7 @@ const Blog = () => {
                   <ImgNameDate
                     authName="Boluwatife Adewole"
                     // altImage="tayture"
-                      // image
+                    // image
                     date="April 10, 2024"
                     enableDash={false}
                     isColumn={true}
@@ -95,10 +92,30 @@ const Blog = () => {
           </div>
 
           {/* Section 2 */}
-          <div className="p-28 bg-white">
-            <p>Hello</p>
-            <div style={{ height: '500px' }}></div>
-          </div>
+          <SectionCont bg_color='bg-neutral-100'>
+
+            {/* Header Section 2 */}
+            <div className="relative flex flex-col sm:flex-row sm:items-end justify-between mb-10 md:mb-12 text-neutral-900 dark:text-neutral-50">
+              <div className="max-w-2xl">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
+                  Top trending topics
+                </h2>
+                <span className="mt-2 md:mt-3 font-normal block text-base sm:text-xl text-neutral-500 dark:text-neutral-400">
+                  {/* the number of topics will be length of articles array + 1 */}
+                  Discover 233 topics
+                </span>
+              </div>
+            </div>
+
+            {/* Articles Category Card  */}
+            <div className='artcilesCatCard'>
+              <ul className='-mx-2 xl:-mx-4'>
+                <li className='relative inline-block px-2 xl:px-4'>A</li>
+                <li className='relative inline-block px-2 xl:px-4'>B</li>
+                <li className='relative inline-block px-2 xl:px-4'>C</li>
+              </ul>
+            </div>
+          </SectionCont>
         </Wrapper>
 
         <Footer />
@@ -106,7 +123,6 @@ const Blog = () => {
     </>
   )
 }
-
 
 Blog.getLayout = function getLayout(page: React.ReactNode) {
   return <HomeLayout>{page}</HomeLayout>
