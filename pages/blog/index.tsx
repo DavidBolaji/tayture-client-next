@@ -9,6 +9,8 @@ import ImgNameDate from './components/ImgNameDate'
 import SectionCont from './components/helpers/SectionCont'
 import ArticlesCatCard from './components/ArticlesCatCard'
 import HeadingDesc from './components/HeadingDesc'
+import NavItem from './components/NavItem'
+import { HiOutlineArrowRight } from "react-icons/hi";
 
 const Blog = () => {
   return (
@@ -93,7 +95,6 @@ const Blog = () => {
 
           {/* Section 2 */}
           <SectionCont bg_color="bg-[rgb(242,242,242)]" class_name="my-12">
-
             {/* Header Section 2 */}
             <HeadingDesc
               heading="Top trending topics"
@@ -150,22 +151,28 @@ const Blog = () => {
                 />
               </div>
             </div>
-
           </SectionCont>
 
           {/* Section 3 */}
 
           <SectionCont bg_color="none">
-
             {/* Heading and Buttons for Categories */}
-            <div className='flex flex-col mb-8 relative'>
-
+            <div className="flex flex-col mb-8 relative">
               {/* Heading */}
-              <HeadingDesc heading='Latest Articles' description='Discover the most outstanding articles in all topics targetted at better K-12 Education'/>
-              
+              <HeadingDesc
+                heading="Latest Articles"
+                description="Discover the most outstanding articles in all topics targetted at better K-12 Education"
+              />
+
               {/* Buttons for Categories */}
-              <div className='flex justify-between'>
-                
+              <div className="flex justify-between">
+                <nav className="relative flex w-full overflow-x-auto text-sm md:text-base">
+                  <NavItem />
+                </nav>
+                <button className="flex-shrink-0 relative h-auto inline-flex items-center justify-center rounded-full transition-colors border-transparent bg-white text-neutral-900 text-sm sm:text-base font-medium px-6 hidden md:!flex ">
+                  <span>View all</span>
+                  <HiOutlineArrowRight className='w-6 h-5 ml-3'/>
+                </button>
               </div>
             </div>
           </SectionCont>
