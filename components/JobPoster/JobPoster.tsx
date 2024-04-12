@@ -24,6 +24,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
   const router = useRouter()
   const isDashboard = path === '/dashboard/jobs'
 
+
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
   const user = queryClient.getQueryData(['user']) as IUser
   const prog = queryClient.getQueryData(['profileDetails'])
@@ -73,7 +74,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
       >
         {data.job_title}
       </h2>
-      <Space className="space-x-[24px]">
+      <Space className="md:space-x-[24px] md:text-md sm:text-sm text-xs space-x-2">
         <span className="flex gap-2 items-center">
           <FaLocationDot className="text-orange" />
           <span>{data.school.sch_city}</span>
@@ -100,7 +101,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
       </p>
       </div>
       {data.job_role === 'teacher' && (
-        <>
+        <div className='mb-3'>
           <h3 className="mb-2 text-[20px]">Subjects</h3>
           <h4 className="mb-2">{data.job_title}</h4>
           <Space>
@@ -109,7 +110,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
                 return (
                   <span
                     key={e}
-                    className="ml-1 text-[12px] text-ash_400 inline-block mb-[24px]"
+                    className="ml-1 text-[12px] text-ash_400 inline-block"
                   >
                     - {e}
                   </span>
@@ -117,7 +118,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
               },
             )}
           </Space>
-        </>
+        </div>
       )}
       {data.job_desc && (
         <>
@@ -126,7 +127,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
         </>
       )}
 
-      {progress && (
+      {isDashboard && (
         <div className="grid grid-cols-10 gap-2 border rounded-lg border-ash_600 overflow-hidden">
           <div className="col-span-4 bg-orange justify-center items-center flex">
             <ConfigProvider
@@ -136,17 +137,20 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
                 },
               }}
             >
+              <div className='md:scale-0 scale-75'>
               {typeof prog !== "number" ? <Progress percent={0} type="circle" />:<Progress percent={prog as number} type="circle" />}
+
+              </div>
             </ConfigProvider>
           </div>
           <div className="col-span-6 py-[24px]">
-            <h3 className="text-[16px] text-black_200">
+            <h3 className="md:text-[16px] text-black_200 text-sm md:ml-0 ml-1">
               Complete your profile
             </h3>
             <p className="text-ash_400 text-[12px] ml-1">
               Add more skills you have to your profile to rate higher for jobs
             </p>
-            <div className="scale-75 -ml-8 mt-1">
+            <div className="scale-75 md:-ml-8 -ml-5 mt-1">
               <Button render="light" text="Complete setup" bold={false} />
             </div>
           </div>

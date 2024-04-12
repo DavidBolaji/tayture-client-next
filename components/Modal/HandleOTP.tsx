@@ -4,7 +4,7 @@ import { useGlobalContext } from '@/Context/store'
 import React, { useEffect, useState } from 'react'
 
 import OTPModal from './OTPModal/OTPModal'
-import { Col, Row } from 'antd'
+import { Col, Row, Grid } from 'antd'
 import { Images } from '@/assets'
 import Image from 'next/image'
 import { regularFont } from '@/assets/fonts/fonts'
@@ -23,7 +23,10 @@ export const checkPath = (path: string | null) => {
   return true
 }
 
+const {useBreakpoint} = Grid
+
 const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
+  const screen = useBreakpoint()
   const { ui, setUI, user, setMessage } = useGlobalContext()
   const queryClient = useQueryClient()
   const [mounted, setMounted] = useState(false)
@@ -150,15 +153,13 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
       <Row>
         <Col
           span={24}
-          className={`w-full relative dsm:mb-[32px] md:mb-[16px] mb-[16px] ${regularFont.className}`}
+          className={`w-full relative md:mb-[16px] mb-[16px] ${regularFont.className}`}
         >
-          <div className="flex w-[300px] items-center mx-auto justify-center mt-5">
+          <div className="flex items-center mx-auto justify-center mt-5">
             <Image
               src={Images.Mail}
               alt="mail"
-              width={190}
-              height={127}
-              className=""
+              className="md:w-[190px] w-[150px] md:h-[127px] md:scale-0"
               priority
             />
           </div>
@@ -169,12 +170,12 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
           >
             Enter OTP
           </h2>
-          <div className={`px-[49px] ${regularFont.className}`}>
-            <p className="text-ash_400 -mt-1 mb-[20px] text-[12px] xl:text-center sm:text-center md:text-center dsm:text-center lg:text-center text-center">
+          <div className={`md:px-[49px] ${regularFont.className}`}>
+            <p className="text-ash_400 -mt-1 mb-[20px] text-[12px] xl:text-center sm:text-center md:text-center lg:text-center text-center">
               Enter the One-time Password you receive via SMS below.
             </p>
           </div>
-          <div className="text-center flex justify-center items-center mb-[8px] px-20">
+          <div className="text-center flex justify-center items-center md:mb-[8px] px-20">
             {isPending || isValidating ? (
               <Spinner color="orange" />
             ) : (
@@ -185,13 +186,13 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
                 placeholder="****"
                 inputStyle={{
                   border: 'none',
-                  width: 50,
-                  height: 50,
+                  width: screen.md ? 50: 40,
+                  height: screen.md ? 50: 40,
                   borderRadius: 10,
                   outline: 'none',
                 }}
                 containerStyle={{
-                  gap: 32,
+                  gap: screen.md ? 32: 8,
                   border: '0px',
                 }}
                 shouldAutoFocus

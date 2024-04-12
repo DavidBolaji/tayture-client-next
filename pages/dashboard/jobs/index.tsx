@@ -6,10 +6,10 @@ import JobSearch from '@/components/JobSearch/JobSearch'
 import JobApplication from '@/components/Dashboard/JobApplication/JobApplication'
 import TopNav from '@/components/TopNav/TopNav'
 
-const JobsPage: React.FC = () => {
+const JobsPage: React.FC = (props) => {
   return (
     <div className="">
-      <div className="overflow-x-auto w-full  no-s ">
+      <div className="overflow-x-auto w-full no-s ">
         <div className="flex space-x-4 mb-5">
           {dataJobs.map((d) => (
             <div key={d.id} className="min-w-[300px]">
@@ -26,13 +26,13 @@ const JobsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="mb-[40px] mt-10">
+      <div className="mt-5 md:-ml-2">
         <JobSearch />
       </div>
-      <div className='mt-24 sm:-mt-10  bg-black'>
+      <div className='mt-10 sm:-mt-10'>
         <TopNav />
       </div>
-      <JobApplication progress />
+      <JobApplication progress={true} />
     </div>
   )
 }

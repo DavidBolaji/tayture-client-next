@@ -23,9 +23,9 @@ export const StyledApplyLandingModal = styled(Modal)`
       font-size: 12px;
       border-color: #e9e8e8;
       border-width: 1px;
-      padding: 8px;
-      margin-left: -40px;
-      margin-top: 8px;
+      padding: 5px;
+      margin-left: -20px;
+      margin-top: 3px;
     }
   }
 `

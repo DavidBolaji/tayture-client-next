@@ -66,7 +66,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
       </div>
       <div
         className={cn(
-          'bg-white w-full col-span-6 rounded-[10px] border px-[32px] pt-[40px] h-[500px] pb-20 overflow-auto md:block hidden no-s',
+          'bg-white w-full col-span-6 rounded-[10px] border px-[32px] pt-[40px] md:block hidden no-s',
           className,
         )}
       >

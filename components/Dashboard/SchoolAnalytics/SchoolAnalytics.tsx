@@ -31,11 +31,12 @@ const SchoolAnalytics = () => {
             <div className="col-span-4 ">Job Details</div>
             <div className="md:col-span-1 col-span-2 text-center text-xs md:text-md">Applied</div>
        
-            <div className="col-span-1 text-center text-xs md:text-md">Selected</div>
+            <div className="col-span-1 text-center text-xs md:text-md">Hired</div>
           </div>
           {schJobList &&
             schJobList.map((j: any) => (
-              <div key={j.job_id} className="grid grid-cols-7 mb-[20px]">
+              <Link key={j.job_id} href={`/dashboard/school/manage/${j.job_id}?default=2`}>
+              <div  className="grid grid-cols-7 mb-[20px]">
                 <div className="col-span-4">
                   <p>{j.job_title}</p>
                   <div className="flex md:flex-row flex-col md:gap-5 items-start md:items-center">
@@ -50,21 +51,22 @@ const SchoolAnalytics = () => {
                   </div>
                 </div>
                 <div className="md:col-span-1 col-span-2 items-center text-center">
-                  <Link href={`/dashboard/school/manage/${j.job_id}?default=2`}>
+                  {/* <Link href={`/dashboard/school/manage/${j.job_id}?default=2`}> */}
                     {j?.applied && j?.applied.length > 0
                       ? j?.applied.length
                       : 0}
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
                 <div className="col-span-1 text-center">
-                  <Link href={`/dashboard/school/manage/${j.job_id}?default=3`}>
+                  {/* <Link href={`/dashboard/school/manage/${j.job_id}?default=3`}> */}
                   {j?.selected && j?.selected.length > 0
                       ? j?.selected.length
                       : 0}
-                  </Link>
+                  {/* </Link> */}
                 </div>
               </div>
+              </Link>
             ))}
         </div>
        

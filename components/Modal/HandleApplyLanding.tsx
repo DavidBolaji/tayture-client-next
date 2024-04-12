@@ -55,7 +55,7 @@ const HandleApplyLanding = () => {
       }
       close={handleClose}
     >
-      <Stepper init={setSW} className="overflow-hidden mx-10">
+      <Stepper init={setSW} className="overflow-hidden">
         <ApplyEmailForm SW={SW} />
 
         {user.fname ? (

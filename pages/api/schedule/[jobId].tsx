@@ -28,6 +28,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 jobId: req.query.jobId as string,
               },
             },
+            hired:{
+              where: {
+                jobId: req.query.jobId as string,
+              }
+            }
           },
         },
         job: {

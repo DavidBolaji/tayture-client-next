@@ -16,6 +16,7 @@ export default async function handler(
   const school = await db.school.findMany({
     include: {
       sch_admin: true,
+      job: true
     },
   })
   res.status(200).json({ message: 'Succesful', school })

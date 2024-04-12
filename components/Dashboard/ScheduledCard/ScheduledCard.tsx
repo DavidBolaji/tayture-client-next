@@ -1,5 +1,5 @@
 'use client'
-import { Alert, Space, Switch, Tag } from 'antd'
+import { Alert, Modal, Space, Switch, Tag } from 'antd'
 
 import { useGlobalContext } from '@/Context/store'
 import { MdOutlineError } from 'react-icons/md'
@@ -10,10 +10,10 @@ import { checkIsExpMatch, checkIsQualMatch } from '@/utils/helpers'
 import { useQueryClient } from '@tanstack/react-query'
 import { ISchDb } from '@/pages/api/school/types'
 import { FaBook, FaPenSquare, FaPlusSquare } from 'react-icons/fa'
-import { CheckBtn, CloseBtn } from '@/components/Button/Button'
 import HandleSchedule from '@/components/HandleSchedule'
 import { useState } from 'react'
 import Link from 'next/link'
+import Button from '@/components/Button/Button'
 
 interface ScheduledCardProps {
   params: { jobId: string }
@@ -28,6 +28,7 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
 }) => {
   const { setMessage, setUI } = useGlobalContext()
   const [status, setStatus] = useState<'create' | 'edit' | 'view'>('create')
+  const [open, setOpen] = useState(false)
 
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
@@ -67,22 +68,6 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
       <div className="min-w-[900px] ">
-        <Alert
-          type="error"
-          showIcon
-          message={
-            <p className={`text-[12px] ${regularFont.className}`}>
-              Click the pay button and make payment in order to gain access to
-              scheduling applicants for interview.
-            </p>
-          }
-          className="bg-transparent -translate-x-1 -translate-y-3 border-none text-[15px] -mb-2"
-          icon={
-            <span className="inline-block mt-2 -translate-y-1">
-              <MdOutlineError color="#B3261E" />
-            </span>
-          }
-        />
         <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky -top-1 z-50">
           <div className="col-span-1">Name</div>
           <div className="col-span-3">Details</div>
@@ -206,13 +191,42 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
                   )}
                 </div>
                 <div className="col-span-2 scale-90 text-center -translate-y-2 translate-x-2">
-                  <Switch />
+                  {/* {match.user.hired && match.user.hired.length > 0 ? (
+                    <Switch checked disabled />
+                  ) : (
+                    <div onClick={() => setOpen(true)} className='relative'>
+                      <Switch
+                      disabled
+                      className='bg-[#898a8b]'
+                        defaultValue={false}
+                      />
+                    </div>
+                  )} */}
+                  <Switch
+                     
+                      className='bg-[#898a8b]'
+                        // defaultValue={false}
+                      />
                 </div>
               </div>
             ))}
         </div>
       </div>
       <HandleSchedule status={status} />
+      <Modal open={open} onCancel={() => setOpen(false)}
+        okText="Yes"
+        cancelText="No"
+        // onOk={() => mutate()}
+      >
+      <h3
+      className={`font-[600] text-black_400 text-[18px] mb-4 ${regularFont.className}`}
+    >
+      🚫 Attention!
+    </h3>
+    <p className={`text-[14px] ${regularFont.className}`}>
+    Are you sure you want to proceed with this?
+    </p>
+      </Modal>
     </div>
   )
 }

@@ -37,7 +37,7 @@ const TimerComponent = () => {
   }
 
   return (
-    <div className="w-full text-center mt-16">
+    <div className="w-full text-center md:mt-16 mt-5">
       <div
         className={`flex justify-center items-center ${regularFont.className}`}
       >

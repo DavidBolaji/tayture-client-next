@@ -1,6 +1,5 @@
 "use client"
-import { Images } from '@/assets'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { FloatingWhatsApp } from 'react-floating-whatsapp'
 
 const Whatsapp = () => {

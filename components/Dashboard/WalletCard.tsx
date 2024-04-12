@@ -143,18 +143,18 @@ function WalletCard() {
         amount={+amt}
         valid={String(amt).trim().length > 0}
       >
-        <div className={`my-5  ${regularFont.className}`}>
-          <div>
-            <span className="text-2xl text-center">Wallet</span>
+        <div className={`w-full ${regularFont.className}`}>
+          <div className='w-full'>
+            <span className="text-2xl block text-center mb-2">Wallet</span>
           </div>
           <div className={`mb-2 text-[12px]`}>
-            <div className="flex justify-start bg-slate-200 w-48 ml-auto py-1 pr-2 rounded-l-md">
+            <div className="flex bg-slate-200 w-48 mr-auto py-1 pr-2 rounded-l-md">
               <div className="flex items-center justify-between w-full pl-3">
                 <p>Available Balance:</p>
                 <p>₦ {!isLoading && school?.wallet?.wallet_balance}</p>
               </div>
             </div>
-            <hr className="mt-1 mb-8" />
+            <hr className="mt-1 mb-2" />
           </div>
           <label className={`inline-block ml-1 mb-2 ${regularFont.className}`}>
             Amount

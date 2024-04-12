@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { FaLocationDot } from 'react-icons/fa6'
 
-const JobAppliedPage = () => {
+const JobAppliedPage:React.FC = (props) => {
   const queryClient = useQueryClient()
   const router = useRouter()
   const data = queryClient.getQueryData(['activeAppliedJob']) as IJobSchDb
@@ -58,7 +58,7 @@ const JobAppliedPage = () => {
           posted:&nbsp;
           {datePosted(data.createdAt as string)}
         </span>
-        {/* <span className="text-ash_400">{data.applied.length} Applicant(s)</span> */}
+        
       </Space>
       <BtnDashboard />
       <p className="mb-[32px]">Your profile matches 8 out of 10 of the skill</p>

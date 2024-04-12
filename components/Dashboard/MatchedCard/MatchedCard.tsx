@@ -1,5 +1,5 @@
 'use client'
-import { Alert, notification } from 'antd'
+import { Alert } from 'antd'
 
 import { useGlobalContext } from '@/Context/store'
 import { MdOutlineError } from 'react-icons/md'
@@ -38,10 +38,11 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 }) => {
   const { jobId } = params
 
-  const { setMessage, setUI } = useGlobalContext()
+  const { setMessage, setUI, setCount, ui } = useGlobalContext()
 
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
+ 
 
   /**
    * wallet balance,
@@ -134,7 +135,22 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         },
       }))
     }
+  } 
+  const handlePayment2 = () => {
+    setAmt(Math.abs(wb - aggregateAmt - amountFinal))
+      /** Display modal  */
+      setUI((prev) => ({
+        ...prev,
+        paymentModal: {
+          ...prev.paymentModal,
+          visibility: true,
+        },
+      }))
   }
+
+console.log(amt);
+
+  
   const onFailure = () => {
     setMessage(() => 'Network error, please try again after a while')
   }
@@ -167,7 +183,16 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
       <div className="min-w-[900px] ">
-        <Alert
+        {matchedJob?.job?.status ? <Alert
+          type="success"
+          showIcon
+          message={
+            <p className={`text-[12px] ${regularFont.className}`}>
+              You have already paid for this job. Click the schedule button to invite candidate for interview and view invited candidate on interview tab
+            </p>
+          }
+          className="bg-transparent -translate-x-1 -translate-y-3 border-none text-[15px] -mb-2"
+        />:<Alert
           type="error"
           showIcon
           message={
@@ -182,7 +207,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
               <MdOutlineError color="#B3261E" />
             </span>
           }
-        />
+        />}
         <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky -top-1 z-50">
           <div className="col-span-1">Name</div>
           <div className="col-span-4">Details</div>
@@ -191,7 +216,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
           <div className="col-span-2 text-center">Status</div>
           <button
             disabled={matchedJob?.job?.status}
-            onClick={matchedJob?.job?.status ? () => {} : String(amt).trim().length > 0 ? () => handlePayment(): () => {}}
+            onClick={matchedJob?.job?.status ? () => {} : String(amt).trim().length > 0 ? () => handlePayment(): () => handlePayment2()}
             className="absolute gap-2 bg-green-600 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center top-[50%] -translate-y-[50%]"
           >
             {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}
@@ -297,12 +322,12 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         amount={+amt}
         valid={String(amt).trim().length > 0}
       >
-        <div className={`my-5  ${regularFont.className}`}>
+        <div className={`${regularFont.className}`}>
           <div>
-            <span className="text-2xl">Wallet</span>
+            <span className="text-2xl block text-center mb-3">Wallet</span>
           </div>
           <div className={`mb-2 text-[12px]`}>
-            <div className="flex justify-end bg-slate-200 w-48 ml-auto py-1 pr-2 rounded-l-md">
+            <div className="flex bg-slate-200 w-48 mr-auto py-1 pr-2 rounded-l-md">
               <div className="flex items-center justify-between w-full pl-3">
                 <p>Available Balance:</p>
                 <p>₦ {wb}</p>
@@ -321,7 +346,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
             Fund Wallet Amount
           </label>
 
-          {String(amt).trim().length > 0 && (
+          {/* {String(amt).trim().length > 0 && ( */}
             <Formik
               onSubmit={(data: any) => {
                 setAmt(data.amount)
@@ -329,6 +354,8 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
               initialValues={{
                 amount: amt,
               }}
+              enableReinitialize
+              key={String(ui.postLandingModal?.visibility)}
             >
               {({ handleSubmit }) => (
                 <Form onChange={handleSubmit}>
@@ -336,7 +363,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
                 </Form>
               )}
             </Formik>
-          )}
+          {/* )} */}
         </div>
       </HandlePayment>
       <HandleSchedule status={'create'} />

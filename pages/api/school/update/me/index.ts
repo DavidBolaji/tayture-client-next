@@ -20,7 +20,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     'sch_city',
     'sch_lga',
     'sch_phone',
-    'sch_admin',
+    'sch_admin',,
+    'active'
   ]
 
   const keys = Object.keys(req.body)

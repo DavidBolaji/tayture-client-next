@@ -24,13 +24,19 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { formatTo12HourTime } from '@/utils/helpers'
 import { v4 as uuid } from 'uuid'
-
+import styled from "@emotion/styled"
 dayjs.extend(utc)
 dayjs().utcOffset('local')
 
 interface ScheduleFormProps {
   status: 'view' | 'edit' | 'create'
 }
+
+const StyledCheckbox = styled(Checkbox)`
+.ant-checkbox-wrapper::after {
+  content: '' !important;
+}
+`
 
 const ScheduleForm: React.FC<ScheduleFormProps> = ({ status }) => {
   const queryClient = useQueryClient()
@@ -368,7 +374,8 @@ const ScheduleForm: React.FC<ScheduleFormProps> = ({ status }) => {
             <div className="my-8">
               <h2 className="mb-1 text-md">Reminder</h2>
               <div className="flex gap-2 items-center">
-                <Checkbox
+                <StyledCheckbox
+                  className='border-orange rounded-md border'
                   key={String(values.reminder)}
                   onChange={(e) => {
                     setFieldValue('reminder', e.target.checked ? true : false)

@@ -79,7 +79,7 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
   return (
     <div className="w-full">
       <h2
-        className={`text-black mb-[40px] text-center ${regularFont.className} text-xl`}
+        className={`text-black mb-[40px] text-center ${regularFont.className} text-sm md:text-xl`}
       >
         Enter your password
       </h2>
