@@ -127,12 +127,27 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* BR Firma Regular */
+@font-face {
+  font-family: 'BR Firma Regular';
+  src: url('/fonts/BR_Firma_Regular.otf') format('opentype');
+}
+
+input::placeholder {
+  font-family: 'BR Firma Regular'; /* Replace "Arial" with your preferred font family */
+  --tw-text-opacity: 1;
+  color: rgb(112 100 92 / var(--tw-text-opacity));
+}
+
+
 /* 
 .ant-picker-focused.ant-picker {
   border-color: #FFA466 !important;
   box-shadow: 0 0 0 2px #FFA466;
   outline: 0;
 } */
+
 
 @media (max-width: 573px){
   .ant-modal {
