@@ -10,6 +10,7 @@ interface SmallArticleCardProps {
   tag_hover_bg_color: string
   tag_hover_text_color: string
   heading_text: string
+  description?: string
   ImgNameDate_bg_color: string
   authImgCont_wi_hei: string
   likes_num: string
@@ -17,6 +18,8 @@ interface SmallArticleCardProps {
   likesCom_bg_color: string
   img_src: string
   alt_img: string
+  is_bg_border: boolean
+  is_description: boolean
 }
 
 const SmallArticleCard = ({
@@ -33,9 +36,16 @@ const SmallArticleCard = ({
   likesCom_bg_color,
   img_src,
   alt_img,
+  is_bg_border,
+  is_description,
+  description,
 }: SmallArticleCardProps) => {
   return (
-    <div className="SmallArticleCard relative flex group flex-row items-center sm:p-4 sm:rounded-3xl sm:bg-white sm:border border-neutral-200 h-full ">
+    <div
+      className={`SmallArticleCard relative flex group flex-row items-center sm:p-4 sm:rounded-3xl  border-neutral-200 h-full ${
+        is_bg_border ? 'sm:bg-white sm:border' : ''
+      }`}
+    >
       <a className="absolute inset-0 z-0" href="#"></a>
       {/* tag heading auth date like comm cont */}
       <div className="flex flex-col flex-grow">
@@ -51,11 +61,21 @@ const SmallArticleCard = ({
               hover_text_color={tag_hover_text_color}
             />
           </div>
-          <h2 className="block font-semibold text-sm sm:text-base">
-            <a className="line-clamp-2" href="#">
-              {heading_text}
-            </a>
-          </h2>
+          <a className="block">
+            <h2 className="block font-medium sm:font-semibold text-neutral-900 text-sm sm:text-base xl:text-lg">
+              <span className="line-clamp-2">{heading_text}</span>
+            </h2>
+            {is_description && (
+              // <div className='hidden sm:block sm:mt-2'>
+              //   <span className="text-neutral-500 text-sm hidden sm:block sm:mt-2 leading-relaxed line-clamp-2">
+              //     {description}
+              //   </span>
+              // </div>
+              <h2 className="block text-neutral-500 text-sm  sm:block sm:mt-2 hidden leading-relaxed">
+                <span className="line-clamp-2">{description}</span>
+              </h2>
+            )}
+          </a>
           <ImgNameDate
             authName="Tayture"
             date="April 12, 2024"
@@ -76,7 +96,7 @@ const SmallArticleCard = ({
       </div>
       <a
         href="#"
-        className="block relative flex-shrink-0 w-24 h-24 sm:w-40 sm:h-full ml-3 sm:ml-5 rounded-2xl overflow-hidden z-0"
+        className="block relative flex-shrink-0 w-24 h-24 sm:w-64 sm:h-full ml-3 sm:ml-5 rounded-2xl overflow-hidden z-0"
       >
         <img
           src={img_src}

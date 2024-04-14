@@ -218,6 +218,8 @@ const Blog = () => {
                     likesCom_bg_color="rgba(249,250,251)"
                     img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
                     alt_img="Lorem ipsum"
+                    is_bg_border={true}
+                    is_description={false}
                   />
                   <SmallArticleCard
                     tag_text="Pupils"
@@ -233,6 +235,8 @@ const Blog = () => {
                     likesCom_bg_color="rgba(249,250,251)"
                     img_src="https://img.freepik.com/free-photo/young-girls-spending-time-home_23-2149489564.jpg?t=st=1713042037~exp=1713045637~hmac=ccbec82c88554f41606c23b80aa02461ccedc467d82a7396c05c70b14c35326f&w=360"
                     alt_img="Lorem ipsum"
+                    is_bg_border={true}
+                    is_description={false}
                   />
                   <SmallArticleCard
                     tag_text="Parents"
@@ -248,6 +252,8 @@ const Blog = () => {
                     likesCom_bg_color="rgba(249,250,251)"
                     img_src="https://img.freepik.com/free-photo/medium-shot-family-together-home_23-2149160316.jpg?t=st=1713113078~exp=1713116678~hmac=7e887d6b596123021b0dbf4862433f546d89337fba9852c23088f966df9853fb&w=360"
                     alt_img="Lorem ipsum"
+                    is_bg_border={true}
+                    is_description={false}
                   />
                 </div>
               </div>
@@ -359,7 +365,149 @@ const Blog = () => {
               </div>
             </SectionCont>
 
-            
+            {/* Section 5 Latest Articels*/}
+            <SectionCont bg_color="none">
+              <div className="flex flex-col lg:flex-row">
+                {/* left */}
+                <div className="left_cont w-full lg:w-3/5 xl:w-2/3 xl:pr-14">
+                  <HeadingDesc
+                    heading="Lorem Ipsum"
+                    description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam optio nulla odit."
+                  />
+
+                  <div className="articles_cont grid gap-6 md:gap-8 ">
+                    <SmallArticleCard
+                      tag_text="Admin"
+                      tag_text_color="#EAB308"
+                      tag_bg_color="#FEF9C3"
+                      tag_hover_text_color="white"
+                      tag_hover_bg_color="#EAB308"
+                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
+                      ImgNameDate_bg_color="#EAB308"
+                      authImgCont_wi_hei="1.75rem"
+                      likes_num="20"
+                      comments_num="25"
+                      likesCom_bg_color="rgba(249,250,251)"
+                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
+                      alt_img="Lorem ipsum"
+                      is_bg_border={false}
+                      is_description={true}
+                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                    />
+                    <SmallArticleCard
+                      tag_text="Admin"
+                      tag_text_color="#EAB308"
+                      tag_bg_color="#FEF9C3"
+                      tag_hover_text_color="white"
+                      tag_hover_bg_color="#EAB308"
+                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
+                      ImgNameDate_bg_color="#EAB308"
+                      authImgCont_wi_hei="1.75rem"
+                      likes_num="20"
+                      comments_num="25"
+                      likesCom_bg_color="rgba(249,250,251)"
+                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
+                      alt_img="Lorem ipsum"
+                      is_bg_border={false}
+                      is_description={true}
+                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                    />
+                    <SmallArticleCard
+                      tag_text="Admin"
+                      tag_text_color="#EAB308"
+                      tag_bg_color="#FEF9C3"
+                      tag_hover_text_color="white"
+                      tag_hover_bg_color="#EAB308"
+                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
+                      ImgNameDate_bg_color="#EAB308"
+                      authImgCont_wi_hei="1.75rem"
+                      likes_num="20"
+                      comments_num="25"
+                      likesCom_bg_color="rgba(249,250,251)"
+                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
+                      alt_img="Lorem ipsum"
+                      is_bg_border={false}
+                      is_description={true}
+                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                    />
+                    <SmallArticleCard
+                      tag_text="Admin"
+                      tag_text_color="#EAB308"
+                      tag_bg_color="#FEF9C3"
+                      tag_hover_text_color="white"
+                      tag_hover_bg_color="#EAB308"
+                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
+                      ImgNameDate_bg_color="#EAB308"
+                      authImgCont_wi_hei="1.75rem"
+                      likes_num="20"
+                      comments_num="25"
+                      likesCom_bg_color="rgba(249,250,251)"
+                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
+                      alt_img="Lorem ipsum"
+                      is_bg_border={false}
+                      is_description={true}
+                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                    />
+                    <SmallArticleCard
+                      tag_text="Admin"
+                      tag_text_color="#EAB308"
+                      tag_bg_color="#FEF9C3"
+                      tag_hover_text_color="white"
+                      tag_hover_bg_color="#EAB308"
+                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
+                      ImgNameDate_bg_color="#EAB308"
+                      authImgCont_wi_hei="1.75rem"
+                      likes_num="20"
+                      comments_num="25"
+                      likesCom_bg_color="rgba(249,250,251)"
+                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
+                      alt_img="Lorem ipsum"
+                      is_bg_border={false}
+                      is_description={true}
+                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                    />
+                    <SmallArticleCard
+                      tag_text="Admin"
+                      tag_text_color="#EAB308"
+                      tag_bg_color="#FEF9C3"
+                      tag_hover_text_color="white"
+                      tag_hover_bg_color="#EAB308"
+                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
+                      ImgNameDate_bg_color="#EAB308"
+                      authImgCont_wi_hei="1.75rem"
+                      likes_num="20"
+                      comments_num="25"
+                      likesCom_bg_color="rgba(249,250,251)"
+                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
+                      alt_img="Lorem ipsum"
+                      is_bg_border={false}
+                      is_description={true}
+                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
+                    />
+                    <SmallArticleCard
+                      tag_text="Admin"
+                      tag_text_color="#EAB308"
+                      tag_bg_color="#FEF9C3"
+                      tag_hover_text_color="white"
+                      tag_hover_bg_color="#EAB308"
+                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
+                      ImgNameDate_bg_color="#EAB308"
+                      authImgCont_wi_hei="1.75rem"
+                      likes_num="20"
+                      comments_num="25"
+                      likesCom_bg_color="rgba(249,250,251)"
+                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
+                      alt_img="Lorem ipsum"
+                      is_bg_border={false}
+                      is_description={true}
+                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                    />
+                  </div>
+                </div>
+                {/* Right */}
+                <div className="right_cont w-full space-y-7 mt-24 lg:mt-0 lg:w-2/5 lg:pl-10 xl:pl-0 xl:w-1/3 "></div>
+              </div>
+            </SectionCont>
           </Wrapper>
 
           <Footer />
