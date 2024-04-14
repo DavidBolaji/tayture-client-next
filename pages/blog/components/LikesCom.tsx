@@ -9,6 +9,7 @@ const LikesComCont = styled.div<LikesComProps>`
   & {
     margin-top: 18.75px;
     display: flex;
+    z-index: 1;
   }
 
   & div{

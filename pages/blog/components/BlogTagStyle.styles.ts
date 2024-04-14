@@ -14,6 +14,7 @@ export const BlogTagStyle = styled(BlogTag)<Props>`
 &{
     background-color: ${(props)=>props.bg_color};
     color: ${({text_color})=> text_color};
+    z-index:1;
     border-radius: 10px;
     font-size: 0.75rem;
     font-weight: 500;

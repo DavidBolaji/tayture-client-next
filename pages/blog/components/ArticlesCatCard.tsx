@@ -12,6 +12,7 @@ interface ArticlesCatCardProps {
   category: string
   totalCatArticles: string
   categoryColor: string
+  authImgCont_wi_hei:string
 }
 
 const ArticlesCatCardCont = styled.div<ArticlesCatCardProps>`
@@ -55,6 +56,7 @@ const ArticlesCatCard = ({
   category,
   totalCatArticles,
   categoryColor,
+  authImgCont_wi_hei,
 }: ArticlesCatCardProps) => {
   return (
     <ArticlesCatCardCont className="relative inline-block px-2 xl:px-4 whitespace-normal">
@@ -84,6 +86,7 @@ const ArticlesCatCard = ({
           enableDash={false}
           isColumn={true}
           bg_color={categoryColor}
+          authImgCont_wi_hei={authImgCont_wi_hei}
         />
       </a>
     </ArticlesCatCardCont>
