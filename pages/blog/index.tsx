@@ -22,20 +22,7 @@ const Blog = () => {
           {/* Hero */}
           <div className="relative pt-10 md:py-12 lg:pb-10 lg:pt-20">
             {/* Heading(Head and Paragraph) */}
-            <div
-              className="headingWrap relative flex flex-col sm:flex-col sm:items-start justify-between md:mb-12 text-neutral-900 dark:text-neutral-50"
-              style={{ maxWidth: '42rem' }}
-            >
-              <h1
-                className="text-2xl md:text-3xl lg:text-4xl"
-                style={{ fontWeight: '900' }}
-              >
-                Editor&apos;s Pick
-              </h1>
-              <p className="tracking-normal mt-2 md:mt-3 font-normal block text-base sm:text-xl text-neutral-500 dark:text-neutral-400">
-                Discover outstanding articles, Insights and Inspiration
-              </p>
-            </div>
+            <HeadingDesc heading='Editor&apos;s Pick' description='Discover outstanding articles, Insights and Inspiration'/>
 
             {/* Hero Blog*/}
             <div className="imgWrapper flex  pt-10 sm:pt-0 items-start sm:mb-5 relative  flex-col md:flex-row justify-end ">
