@@ -11,7 +11,7 @@ interface SmallArticleCardVerticalProps {
   tag_hover_text_color: string
   heading_text: string
   ImgNameDate_bg_color: string
-  ImgNameDate_width_hei: string
+  authImgCont_wi_hei: string
   likes_num: string
   comments_num: string
   likesCom_bg_color: string
@@ -27,7 +27,7 @@ const SmallArticleCardVertical = ({
   tag_hover_text_color,
   heading_text,
   ImgNameDate_bg_color,
-  ImgNameDate_width_hei,
+  authImgCont_wi_hei,
   likes_num,
   comments_num,
   likesCom_bg_color,
@@ -46,7 +46,7 @@ const SmallArticleCardVertical = ({
           <img
             src={img_src}
             alt={alt_img}
-            className="object-cover object-cover absolute inset-0 w-full h-full"
+            className="object-cover object-cover  inset-0 w-full h-full"
             sizes="(max-width: 600px) 480px, 800px"
           />
         </a>
@@ -75,7 +75,7 @@ const SmallArticleCardVertical = ({
             enableDash={true}
             isColumn={false}
             bg_color={ImgNameDate_bg_color}
-            width_hei={ImgNameDate_width_hei}
+            authImgCont_wi_hei= {authImgCont_wi_hei}
           />
         </div>
         {/* tag heading auth date cont */}
