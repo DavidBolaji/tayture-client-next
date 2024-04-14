@@ -11,7 +11,7 @@ interface SmallArticleCardProps {
   tag_hover_text_color: string
   heading_text: string
   ImgNameDate_bg_color: string
-  ImgNameDate_width_hei: string
+  authImgCont_wi_hei: string
   likes_num: string
   comments_num: string
   likesCom_bg_color: string
@@ -27,7 +27,7 @@ const SmallArticleCard = ({
   tag_hover_text_color,
   heading_text,
   ImgNameDate_bg_color,
-  ImgNameDate_width_hei,
+  authImgCont_wi_hei,
   likes_num,
   comments_num,
   likesCom_bg_color,
@@ -59,10 +59,10 @@ const SmallArticleCard = ({
           <ImgNameDate
             authName="Tayture"
             date="April 12, 2024"
-            enableDash={true}
-            isColumn={false}
+            enableDash={false}
+            isColumn={true}
             bg_color={ImgNameDate_bg_color}
-            width_hei={ImgNameDate_width_hei}
+            authImgCont_wi_hei={authImgCont_wi_hei}
           />
         </div>
         {/* likes and comment */}

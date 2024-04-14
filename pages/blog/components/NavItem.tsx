@@ -10,7 +10,7 @@ const NavItem = ({}: NavItemProps) => {
   }
 
   return (
-    <ul className="flex  sm:space-x-2">
+    <ul className="flex  sm:space-x-2 pb-6">
       <li className="relative flex-shrink-0">
         <button
           className={`text-neutral-500 flex items-center justify-center font-[600] px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full ${activeButton === 0 ? 'bg-black text-white' : 'hover:bg-neutral-100 hover:text-neutral-900'}`}

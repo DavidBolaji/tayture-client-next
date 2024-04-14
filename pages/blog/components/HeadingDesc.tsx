@@ -3,11 +3,12 @@ import React from 'react'
 interface HeadingDescProps {
   heading: string
   description: string
+  class_name?: string
 }
 
-const HeadingDesc = ({ heading, description }: HeadingDescProps) => {
+const HeadingDesc = ({ heading, description,class_name }: HeadingDescProps) => {
   return (
-    <div className="relative flex flex-col sm:flex-row sm:items-end justify-between mb-10 md:mb-12 text-neutral-900">
+    <div className={`relative flex flex-col sm:flex-row sm:items-end justify-between mb-10 md:mb-12 text-neutral-900 ${class_name}`}>
       <div className="max-w-2xl">
         <h2 className="text-2xl md:text-3xl lg:text-3xl font-[900]">
           {heading}

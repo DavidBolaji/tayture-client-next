@@ -3,7 +3,11 @@ import { CiHeart } from 'react-icons/ci'
 import styled from 'styled-components'
 import { BsChatSquareDots } from 'react-icons/bs'
 
-interface LikesComProps {}
+interface LikesComProps {
+  likes_num: string
+  comments_num: string
+  bg_color: string
+}
 
 const LikesComCont = styled.div<LikesComProps>`
   & {
@@ -28,7 +32,7 @@ const LikesComCont = styled.div<LikesComProps>`
     padding-inline: 0.75rem;
     display:flex;
     align-items: center;
-    background-color: rgba(249,250,251);
+    background-color: ${({bg_color})=> bg_color};
     border-radius: 9999px;
     min-width: 68px;
     height: 2rem;
@@ -55,19 +59,19 @@ const LikesComCont = styled.div<LikesComProps>`
   }
 `
 
-const LikesCom = ({}: LikesComProps) => {
+const LikesCom = ({ likes_num, comments_num, bg_color,}: LikesComProps) => {
   return (
-    <LikesComCont>
+    <LikesComCont bg_color ={bg_color}>
       <div className="likesCont">
         <button>
           <CiHeart />
-          <p>20</p>
+          <p>{likes_num}</p>
         </button>
       </div>
       <div className="comCont">
         <a href="#">
           <BsChatSquareDots />
-          <p>20</p>
+          <p>{comments_num}</p>
         </a>
       </div>
     </LikesComCont>

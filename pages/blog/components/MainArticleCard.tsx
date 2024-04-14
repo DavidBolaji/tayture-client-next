@@ -16,7 +16,8 @@ interface MainArticleCardProps {
   likes_num: string 
   comments_num: string  
   likesCom_bg_color: string
-  ImgNameDate_width_hei: string
+  authImgCont_wi_hei: string
+  ImgNameDate_bg_color:string
 }
 
 const MainArticleCard = ({
@@ -32,7 +33,8 @@ const MainArticleCard = ({
   likes_num,
   comments_num,
   likesCom_bg_color,
-  ImgNameDate_width_hei,
+  authImgCont_wi_hei,
+  ImgNameDate_bg_color,
 }: MainArticleCardProps) => {
   return (
     <div className="group relative flex flex-col h-full">
@@ -60,15 +62,15 @@ const MainArticleCard = ({
           date="April 12, 2024"
           enableDash= {true}
           isColumn= {false}
-          bg_color="yellow"
-          width_hei = {ImgNameDate_width_hei}
+          bg_color={ImgNameDate_bg_color}
+          authImgCont_wi_hei = {authImgCont_wi_hei}
+          
         />
 
         <h2 className="block font-semibold text-neutral-900 text-base sm:text-lg md:text-xl mt-4">
           <a
             className="line-clamp-2"
-            title="Microsoft announces a five-year commitment to create bigger opportunities for people with disabilities"
-            href="/single/this-is-single-slug"
+            href="#"
           >
             {article_heading}
           </a>
