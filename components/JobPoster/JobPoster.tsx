@@ -102,7 +102,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
       </div>
       {data.job_role === 'teacher' && (
         <div className='mb-3'>
-          <h3 className="mb-2 text-[20px]">Subjects</h3>
+          <h3 className="mb-2 text-[20px]">Role</h3>
           <h4 className="mb-2">{data.job_title}</h4>
           <Space>
             {(JSON.parse(data.job_active.replace("'", '')) as string[]).map(
@@ -150,8 +150,9 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
             <p className="text-ash_400 text-[12px] ml-1">
               Add more skills you have to your profile to rate higher for jobs
             </p>
+
             <div className="scale-75 md:-ml-8 -ml-5 mt-1">
-              <Button render="light" text="Complete setup" bold={false} />
+              <Button render="light" text="Complete setup" bold={false} onClick={() => router.push('/dashboard/profile')} />
             </div>
           </div>
         </div>

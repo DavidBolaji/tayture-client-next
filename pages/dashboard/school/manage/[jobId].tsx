@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ConfigProvider, Space, Tabs, TabsProps, Tag } from 'antd'
 
 import { useRouter } from 'next/router'
@@ -13,7 +13,7 @@ import { regularFont } from '@/assets/fonts/fonts'
 const ManageJobTable:React.FC = (props) => {
   const router = useRouter()
   const jobId = router.query.jobId
-  const defaultKey = router.query.default
+  const [key, setKey] = useState('2')
 
   const { data: mJob, isLoading } = useQuery({
     queryKey: [`job/${jobId}`],
@@ -32,10 +32,19 @@ const ManageJobTable:React.FC = (props) => {
 
   const onChange = () => {}
 
+  useEffect(() => {
+    if(router.query.default) {
+      setKey(router.query.default as string)
+    }
+
+  }, [router])
+
+
+
   const items: TabsProps['items'] = [
     {
       key: '2',
-      label: 'Matched',
+      label: "Applicants",
       children: (
         <MatchedCard
           loading={isLoading}
@@ -83,7 +92,8 @@ const ManageJobTable:React.FC = (props) => {
         </Space>
       </Tag>
       <Tabs
-        defaultActiveKey={!defaultKey ? '2' : (defaultKey as string)}
+        key={key}
+        defaultActiveKey={key}
         items={items}
         onChange={onChange}
       />

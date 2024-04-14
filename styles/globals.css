@@ -136,8 +136,17 @@ body {
 
 input::placeholder {
   font-family: 'BR Firma Regular'; /* Replace "Arial" with your preferred font family */
-  --tw-text-opacity: 1;
+  opacity:   var(--tw-text-opacity);
   color: rgb(112 100 92 / var(--tw-text-opacity));
+}
+
+h1, h2, h3, div, span{
+  font-family: 'BR Firma Regular';
+}
+
+label {
+  font-family: 'BR Firma Regular';
+  font-weight: 700;
 }
 
 

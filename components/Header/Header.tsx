@@ -87,12 +87,13 @@ const Header = () => {
               <StyledMenu
                 mode="horizontal"
                 className={`font-semibold ${regularFont.className}`}
-                // style={{ width: 350 }}
+                style={{ width: 'auto' }}
                 defaultSelectedKeys={[locationCurrent]}
                 selectedKeys={[locationCurrent]}
                 onClick={(menuInfo) => router.push(menuInfo?.key)}
                 theme="dark"
                 items={items}
+                
               />
             </div>
             <div className="md:flex gap-3 hidden">

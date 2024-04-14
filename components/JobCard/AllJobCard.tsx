@@ -33,7 +33,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
     : job.map((j: Job) => (
         <div
           key={j.job_id}
-          className="col-span-4 bg-white gap-2 border hover:shadow rounded-md h-52 relative overflow-hidden"
+          className="md:col-span-4 col-span-12 bg-white gap-2 border hover:shadow rounded-md h-52 relative overflow-hidden"
         >
           <div
             className={`p-3 border-b flex justify-between ${regularFont.className}`}

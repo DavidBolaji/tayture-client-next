@@ -1,27 +1,38 @@
-import { FaEyeSlash } from 'react-icons/fa'
+import { FaEyeSlash, FaMoneyBill } from 'react-icons/fa'
 import { notification } from 'antd'
 import ListComponent from './ListComponent'
 import CVComponent from './CVComponent'
+import HandlePayment from './Modal/HandlePayment'
+import { regularFont } from '@/assets/fonts/fonts'
 
-const BlurComponent: React.FC = () => {
+const BlurComponent: React.FC<{pay: () => void, status: boolean, redirect: () => void,}> = ({pay, status, redirect}) => {
   const [api, contextHolder] = notification.useNotification()
+  console.log(status);
 
   const openNotification = () => {
     api.open({
-      message: '👋 Hi there!',
+      message: <div className='uppercase text-[14px]'>👋 Fund wallet to complete hiring.</div>,
       description: (
         <div>
-          <p className="text-[12px] mb-2">
-            Ready to unlock all the amazing features and access user profiles?
+          <button
+            disabled={status}
+            onClick={status ? redirect : pay}
+            className=" gap-2 bg-green-600 disabled:bg-green-100 disabled:cursor-not-allowed text-white px-5 mb-2 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center"
+          >
+            <FaMoneyBill />
+            <span>{!status ? 'Fund wallet' : 'Funded'}</span>
+          </button>
+          <p className={`text-[12px] mb-2 ${regularFont.className}`}>
+            Funding your wallet allows you to proceed to interview stage. 
             🚀{' '}
           </p>
           <p className="text-[12px] mb-2">
-            Simply click the Pay button to make your payment.
+            Remember, funds in your wallet remain yours until you successfully hire a candidate on Tayture.
+           
           </p>
-          <p className="text-[12px] mb-2">
+          <p className="text-[12px] font-bold mb-2 italic">
             {' '}
-            💳 This will not only grant you access to users CV but will also
-            enable you to take various actions within our platform.
+            💳 10,000 per candidate.
           </p>
         </div>
       ),
@@ -32,7 +43,7 @@ const BlurComponent: React.FC = () => {
     <div className="items-center mb-[8px] relative">
       {contextHolder}
       <div className="z-30 absolute w-full top-[20%] -left-12 cursor-pointer">
-        <div className="flex items-center flex-col" onClick={openNotification}>
+        <div className="flex items-center flex-col" onClick={status ? redirect: openNotification}>
           <FaEyeSlash />
           <span className="text-[12px]">Tap to view details</span>
         </div>

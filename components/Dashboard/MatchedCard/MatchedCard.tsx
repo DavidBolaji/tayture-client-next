@@ -24,6 +24,7 @@ import { Field, Form, Formik } from 'formik'
 import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import Spinner from '@/components/Spinner/Spinner'
 import HandleSchedule from '@/components/HandleSchedule'
+import { useRouter } from 'next/router'
 
 interface MatchedCardProps {
   params: { jobId: string }
@@ -147,9 +148,6 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         },
       }))
   }
-
-console.log(amt);
-
   
   const onFailure = () => {
     setMessage(() => 'Network error, please try again after a while')
@@ -179,6 +177,11 @@ console.log(amt);
       }
     })
   }
+
+  const router = useRouter()
+
+  const handleClick = matchedJob?.job?.status ? () => console.log('object') : String(amt).trim().length > 0 ? () => handlePayment(): () => handlePayment2()
+  const redirect = () => router.push(`/dashboard/school/manage/${jobId}?default=3`)
 
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
@@ -216,7 +219,7 @@ console.log(amt);
           <div className="col-span-2 text-center">Status</div>
           <button
             disabled={matchedJob?.job?.status}
-            onClick={matchedJob?.job?.status ? () => {} : String(amt).trim().length > 0 ? () => handlePayment(): () => handlePayment2()}
+            onClick={handleClick}
             className="absolute gap-2 bg-green-600 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center top-[50%] -translate-y-[50%]"
           >
             {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}
@@ -245,7 +248,7 @@ console.log(amt);
                     title="Qualification"
                     text={match.qual}
                   />
-                  <BlurComponent />
+                  <BlurComponent redirect={redirect} pay={handleClick} status={matchedJob?.job?.status} />
                 </div>
 
                 <div className="col-span-2">

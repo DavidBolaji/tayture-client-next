@@ -1,19 +1,51 @@
 'use client'
-import { Alert, Modal, Space, Switch, Tag } from 'antd'
+import { Modal,Switch, Tag } from 'antd'
 
 import { useGlobalContext } from '@/Context/store'
-import { MdOutlineError } from 'react-icons/md'
 import ListComponent from '@/components/ListComponent'
 import { FaCircleCheck, FaCircleXmark } from 'react-icons/fa6'
 import { regularFont } from '@/assets/fonts/fonts'
 import { checkIsExpMatch, checkIsQualMatch } from '@/utils/helpers'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ISchDb } from '@/pages/api/school/types'
 import { FaBook, FaPenSquare, FaPlusSquare } from 'react-icons/fa'
 import HandleSchedule from '@/components/HandleSchedule'
 import { useState } from 'react'
 import Link from 'next/link'
-import Button from '@/components/Button/Button'
+import styled from '@emotion/styled'
+import { Axios } from '@/request/request'
+import { User } from '@prisma/client'
+import { useRouter } from 'next/router'
+import { AxiosError } from 'axios'
+
+export const StyledModal = styled(Modal)`
+  overflow: hidden;
+  border-radius: 10px;
+  && {
+    > * .ant-btn-primary {
+      background-color: #ff7517;
+    }
+    > * .ant-btn-default:hover {
+      color: #ff7517;
+      border: 1px solid #ff7517;
+    }
+    > * .ant-btn-primary:hover {
+      color: #ff7517;
+      background-color: transparent;
+      border: 1px solid #ff7517;
+    }
+    > * .ant-modal-close-icon {
+      background-color: #faf9f9;
+      border-radius: 50px;
+      font-size: 12px;
+      border-color: #e9e8e8;
+      border-width: 1px;
+      padding: 5px;
+      margin-left: -20px;
+      margin-top: 3px;
+    }
+  }
+`
 
 interface ScheduledCardProps {
   params: { jobId: string }
@@ -29,9 +61,32 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
   const { setMessage, setUI } = useGlobalContext()
   const [status, setStatus] = useState<'create' | 'edit' | 'view'>('create')
   const [open, setOpen] = useState(false)
+  const [id, setId] = useState('')
+  const router = useRouter()
 
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
+  const user = queryClient.getQueryData(['user']) as User
+
+  const {mutate, isPending} = useMutation({
+    mutationFn: async () => {
+      return await Axios.post('/hired/create', {
+        userId: id,
+        jobId: router.query.jobId
+      })
+    },
+    onSuccess: (res) => {
+      setOpen(false)
+      setMessage(() => res.data.message)
+      queryClient.invalidateQueries({
+        queryKey: [`job/scheduled/${router.query.jobId}`]
+      })
+      setId('')
+    },
+    onError: (error) => {
+      setMessage(() => (error as AxiosError<{error: string}>).response?.data?.error ||(error as Error).message)
+    }
+  })
 
   const handleModalSchedule = (
     modal: 'create' | 'view' | 'edit',
@@ -190,33 +245,40 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
                     </Link>
                   )}
                 </div>
-                <div className="col-span-2 scale-90 text-center -translate-y-2 translate-x-2">
-                  {/* {match.user.hired && match.user.hired.length > 0 ? (
-                    <Switch checked disabled />
+                <div onClick={() => setOpen(true)} className="col-span-2 scale-90 text-center -translate-y-2 translate-x-2">
+                  {match.user.hired && match.user.hired.length > 0 ? (
+                    <Switch checked disabled style={{
+                      backgroundColor: '#ff7517'
+                    }} />
                   ) : (
-                    <div onClick={() => setOpen(true)} className='relative'>
+                    <div className='relative'>
                       <Switch
-                      disabled
+                      loading={isPending}
+                      value={false}
+                      onClick={() => {
+                        setOpen(true)
+                        setId(match.user.id)
+                      }}
                       className='bg-[#898a8b]'
                         defaultValue={false}
                       />
                     </div>
-                  )} */}
-                  <Switch
-                     
-                      className='bg-[#898a8b]'
-                        // defaultValue={false}
-                      />
+                  )}
+                 
                 </div>
               </div>
             ))}
         </div>
       </div>
       <HandleSchedule status={status} />
-      <Modal open={open} onCancel={() => setOpen(false)}
+      <StyledModal open={open} onCancel={() => setOpen(false)}
         okText="Yes"
         cancelText="No"
-        // onOk={() => mutate()}
+        onOk={() => {
+          setOpen(false)
+          mutate()
+        }}
+        
       >
       <h3
       className={`font-[600] text-black_400 text-[18px] mb-4 ${regularFont.className}`}
@@ -224,9 +286,9 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
       🚫 Attention!
     </h3>
     <p className={`text-[14px] ${regularFont.className}`}>
-    Are you sure you want to proceed with this?
+    Are you sure you want to proceed with this action?
     </p>
-      </Modal>
+      </StyledModal>
     </div>
   )
 }
