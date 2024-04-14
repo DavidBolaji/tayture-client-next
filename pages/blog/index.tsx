@@ -251,6 +251,26 @@ const Blog = () => {
                 </div>
               </div>
             </SectionCont>
+
+            {/* Section 4 */}
+            <SectionCont bg_color="bg-[rgb(242,242,242)]">
+              <div className="flex flex-col mb-8 relative">
+                <HeadingDesc
+                  heading="Lorem Ipsum"
+                  description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam optio nulla odit."
+                />
+                <nav className="relative flex w-full overflow-x-auto text-sm md:text-base">
+                  <NavItem />
+                </nav>
+              </div>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+                <div className='grid gap-6'>
+                  
+                </div>
+                <div className='lg:col-span-2'></div>
+                <div className='grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-1 md:col-span-3 xl:col-span-1'></div>
+              </div>
+            </SectionCont>
           </Wrapper>
 
           <Footer />
