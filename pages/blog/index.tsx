@@ -15,7 +15,9 @@ import { HiOutlineArrowRight } from "react-icons/hi";
 const Blog = () => {
   return (
     <>
-      <div className="bg-blog_bg overflow-auto">
+      <div className="bg-blog_bg overflow-auto h-[99vh]">
+        <div className='bg-blog_bg'>
+
         <Wrapper>
           {/* Hero */}
           <div className="relative pt-10 md:py-12 lg:pb-10 lg:pt-20">
@@ -179,6 +181,8 @@ const Blog = () => {
         </Wrapper>
 
         <Footer />
+        </div>
+
       </div>
     </>
   )
