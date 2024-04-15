@@ -472,42 +472,6 @@ const Blog = () => {
                       is_description={true}
                       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
                     />
-                    <SmallArticleCard
-                      tag_text="Admin"
-                      tag_text_color="#EAB308"
-                      tag_bg_color="#FEF9C3"
-                      tag_hover_text_color="white"
-                      tag_hover_bg_color="#EAB308"
-                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
-                      ImgNameDate_bg_color="#EAB308"
-                      authImgCont_wi_hei="1.75rem"
-                      likes_num="20"
-                      comments_num="25"
-                      likesCom_bg_color="rgba(249,250,251)"
-                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
-                      alt_img="Lorem ipsum"
-                      is_bg_border={false}
-                      is_description={true}
-                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
-                    />
-                    <SmallArticleCard
-                      tag_text="Admin"
-                      tag_text_color="#EAB308"
-                      tag_bg_color="#FEF9C3"
-                      tag_hover_text_color="white"
-                      tag_hover_bg_color="#EAB308"
-                      heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
-                      ImgNameDate_bg_color="#EAB308"
-                      authImgCont_wi_hei="1.75rem"
-                      likes_num="20"
-                      comments_num="25"
-                      likesCom_bg_color="rgba(249,250,251)"
-                      img_src="https://img.freepik.com/free-photo/portrait-african-young-businesswoman-holding-mobile-phone-hand-looking-away_23-2148190733.jpg?t=st=1713113376~exp=1713116976~hmac=dc4ebdf1082c96f828a5138bf6f588d50a2a78944491e293b9fbee4dc77c7b18&w=360"
-                      alt_img="Lorem ipsum"
-                      is_bg_border={false}
-                      is_description={true}
-                      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
-                    />
                   </div>
 
                   {/* Pagination */}
