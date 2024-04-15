@@ -41,7 +41,7 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
         )
 
       const isLt2M = files[0].size / 1024 / 1024 < 2
-      if (!isLt2M) return setMessage(() => 'Image must smaller than 2MB!')
+      if (!isLt2M) return setMessage(() => 'Image must be smaller than 2MB!')
       setLoading(true)
 
       const formData = new FormData()
@@ -128,7 +128,7 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
               {values.cv ? 'Replace' : 'Upload'}
             </button>
             <small className="text-ash_400 ml-2 mt-2 inline-block ">
-              DOC, PDF (5mb)
+              DOC, PDF (2mb)
             </small>
             <input
               type="file"

@@ -34,7 +34,9 @@ const JobCardAll: React.FC<{
       queryClient.setQueryData(['activeAppliedJob'], jobData.job)
     } else if (type === 'scheduled') {
       queryClient.setQueryData(['activeScheduledJob'], jobData)
-    }
+    } else if (type === 'hired') {
+      queryClient.setQueryData(['activeHiredJob'], jobData)
+    } 
     setCount((prev) => prev + 1)
     if (screens.xs || (screens.sm && !screens.md)) {
       if(!open) {

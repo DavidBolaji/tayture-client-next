@@ -78,7 +78,7 @@ const NotificationItem: React.FC<any> = ({
   return (
     <Card
       className={`mb-0 max-w-[460px] overflow-clip no-s rounded-none w-full cursor-pointer ${
-        !read ? 'bg-[#faeee7] ' : ''
+      !read ? 'bg-[#faeee7] ' : ''
       }`}
     >
       <div className="w-full flex items-center">

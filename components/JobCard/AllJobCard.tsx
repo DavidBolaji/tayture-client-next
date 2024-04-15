@@ -18,8 +18,8 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
   const queryClient = useQueryClient()
   const {setMessage} = useGlobalContext()
   const {mutate} = useMutation({
-    mutationFn: async (active: boolean) => {
-      return await Axios.put('/school/update/me', {active})
+    mutationFn: async ({active, jobId}: {active: boolean, jobId: string}) => {
+      return await Axios.put(`/job/update/${jobId}`, {active})
     },
     onSuccess: (res) => {
       queryClient.invalidateQueries({
@@ -33,7 +33,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
     : job.map((j: Job) => (
         <div
           key={j.job_id}
-          className="md:col-span-4 col-span-12 bg-white gap-2 border hover:shadow rounded-md h-52 relative overflow-hidden"
+          className="md:col-span-6 col-span-12 bg-white gap-2 border hover:shadow rounded-md h-52 relative overflow-hidden"
         >
           <div
             className={`p-3 border-b flex justify-between ${regularFont.className}`}
@@ -62,7 +62,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
             <div className={`${regularFont.className} text-xs space-x-2`}>
               <span>Experience:</span>
               <Tag color="green" className={`${regularFont.className} text-xs`}>
-                {j.job_exp} year&apos;s
+                {j.job_exp} years
               </Tag>
             </div>
 
@@ -107,9 +107,9 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
               </div>
             </div>
             <div className={`space-x-1 ${regularFont.className} text-xs`}>
-              {j.status && (
+              {j.active && (
                 <Switch
-                  onClick={() => mutate(false)}
+                  onClick={() => mutate({active: false, jobId: j.job_id})}
                   defaultChecked
                   checkedChildren={
                     <span
@@ -128,9 +128,9 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
                   className="bg-[#8a8a8a]"
                 />
               )}
-              {!j.status && (
+              {!j.active && (
                 <Switch
-                onClick={() => mutate(true)}
+                onClick={() => mutate({active: true, jobId: j.job_id})}
                   checkedChildren={
                     <span
                       className={`${regularFont.className} text-[10px] block`}
@@ -152,7 +152,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
           </div>
         </div>
       ))
-  return <div className="grid grid-cols-12">{jobList}</div>
+  return <div className="grid grid-cols-12 gap-3 pb-10 overflow-auto no-s">{jobList}</div>
 }
 
 export default AllJobCard

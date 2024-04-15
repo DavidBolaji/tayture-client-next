@@ -1,11 +1,11 @@
 'use client'
-import { Modal,Switch, Tag } from 'antd'
+import { Alert, Modal,Switch, Tag } from 'antd'
 
 import { useGlobalContext } from '@/Context/store'
 import ListComponent from '@/components/ListComponent'
 import { FaCircleCheck, FaCircleXmark } from 'react-icons/fa6'
 import { regularFont } from '@/assets/fonts/fonts'
-import { checkIsExpMatch, checkIsQualMatch } from '@/utils/helpers'
+import { checkFileExtension, checkIsExpMatch, checkIsQualMatch } from '@/utils/helpers'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ISchDb } from '@/pages/api/school/types'
 import { FaBook, FaPenSquare, FaPlusSquare } from 'react-icons/fa'
@@ -17,6 +17,7 @@ import { Axios } from '@/request/request'
 import { User } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { AxiosError } from 'axios'
+import CVComponent from '@/components/CVComponent'
 
 export const StyledModal = styled(Modal)`
   overflow: hidden;
@@ -123,15 +124,15 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
       <div className="min-w-[900px] ">
-        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky -top-1 z-50">
-          <div className="col-span-1">Name</div>
+        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky -top-1 ">
+          <div className="col-span-2">Name</div>
           <div className="col-span-3">Details</div>
           <div className="col-span-1 text-center">Experience</div>
           <div className="col-span-2 text-center">Qualification</div>
 
           <div className="col-span-1 ">Interview</div>
           <div className="col-span-2 text-end mr-4">Assesement</div>
-          <div className="col-span-2 text-center">Hired</div>
+          <div className="col-span-1 text-center">Hired</div>
         </div>
         <div className="border bord border-b-0 mb-32">
           {!loading &&
@@ -141,7 +142,7 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
                 key={`${match.user.id}_scheduled`}
                 className="grid grid-cols-12 border-b p-[24px] hover:bg-slate-50 transition-colors duration-300"
               >
-                <div className="col-span-1">
+                <div className="col-span-2">
                   <h3 className="mb-2">
                     {match.user.fname} {match.user.lname}
                   </h3>
@@ -157,6 +158,13 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
                     title="Qualification"
                     text={match.user.applied[0].qual}
                   />
+                  
+                  {match.user.applied[0].cv ? 
+                  <Link className='text-black' href={`${match.user.applied[0].cv}`} target='_blank'>
+                  <CVComponent 
+                   ext={checkFileExtension(match.user.applied[0].cv)}
+                  name={match.user.applied[0].cv.split('/')[match.user.applied[0].cv.split('/').length - 1]}
+                  /> </Link>: <Alert showIcon message={'User has not uploaded cv'} type="info" /> }
                 </div>
 
                 <div className="col-span-1">
@@ -245,7 +253,7 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
                     </Link>
                   )}
                 </div>
-                <div onClick={() => setOpen(true)} className="col-span-2 scale-90 text-center -translate-y-2 translate-x-2">
+                <div onClick={() => setOpen(true)} className="col-span-1 scale-90 text-center -translate-y-2 translate-x-2">
                   {match.user.hired && match.user.hired.length > 0 ? (
                     <Switch checked disabled style={{
                       backgroundColor: '#ff7517'

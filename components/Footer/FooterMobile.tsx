@@ -20,7 +20,7 @@ function FooterMobile() {
           </Col>
         </Row>
         <p className="text-white text-[15px]">
-          Tayture is a workforce enabling-solution for k-12 educators.
+          Tayture is a workforce-enabling solution for k-12 educators.
         </p>
         <hr className="pb-5 relative z-10 text-white opacity-[0.05]" />
 

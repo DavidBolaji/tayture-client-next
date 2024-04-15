@@ -32,7 +32,7 @@ const UserImage: React.FC<{ picture: string | null }> = ({ picture }) => {
     }
     const isLt2M = file.size / 1024 / 1024 < 2
     if (!isLt2M) {
-      setMessage(() => 'Image must smaller than 2MB!')
+      setMessage(() => 'Image must be smaller than 2MB!')
       return
     }
     setFileList([...x])

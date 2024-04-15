@@ -34,7 +34,7 @@ const sendScheduleMail = async ({
   let cTime =
     current.getHours() + ':' + current.getMinutes() + ':' + current.getSeconds()
   let dateTime = cDate + ' ' + cTime
-  const templatePath = './views/schedule.ejs'
+  const templatePath = path.join(process.cwd(), 'views', 'schedule.ejs')
   const dat = await ejs.renderFile(templatePath, {
     firstName,
     company,

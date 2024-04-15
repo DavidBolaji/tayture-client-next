@@ -1,5 +1,6 @@
 'use client'
 import { Field, FieldArray, Form, Formik, FormikHelpers } from 'formik'
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import DateInput from '../../Form/DateInput/DateInput'
 import { SelectInput } from '../../Form/SelectInput/SelectInput'
@@ -200,6 +201,7 @@ const ScheduleForm: React.FC<ScheduleFormProps> = ({ status }) => {
             <Field
               name="date"
               as={DateInput}
+              minDate={dayjs(new Date(Date.now()).toISOString(), 'YYYY-MM-DD')}
               picker="date"
               text={'Interview date'}
               placeholder="MM/DD/YYYY"

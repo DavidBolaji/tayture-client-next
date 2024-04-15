@@ -77,6 +77,37 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
       profile: true,
       others: true,
+      hired: {
+        include: {
+          job: {
+            select: {
+              job_title: true,
+              job_role: true,
+              job_desc: true,
+              job_exp: true,
+              job_qual: true,
+              job_min_sal: true,
+              job_max_sal: true,
+              job_resumption: true,
+              job_active: true,
+              createdAt: true,
+              applied: {
+                select: {
+                  id: true,
+                },
+              },
+              school: {
+                select: {
+                  sch_id: true,
+                  sch_lga: true,
+                  sch_city: true,
+                  sch_state: true,
+                },
+              },
+            },
+          },
+        },
+      }
     },
   })
   let pinId

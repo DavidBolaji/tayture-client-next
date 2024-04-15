@@ -148,7 +148,7 @@ function WalletCard() {
             <span className="text-2xl block text-center mb-2">Wallet</span>
           </div>
           <div className={`mb-2 text-[12px]`}>
-            <div className="flex bg-slate-200 w-48 mr-auto py-1 pr-2 rounded-l-md">
+            <div className="flex bg-slate-200 w-48 mx-auto py-1 pr-2 rounded-l-md">
               <div className="flex items-center justify-between w-full pl-3">
                 <p>Available Balance:</p>
                 <p>₦ {!isLoading && school?.wallet?.wallet_balance}</p>

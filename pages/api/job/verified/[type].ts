@@ -19,6 +19,7 @@ export default async function handler(
       school: {
         sch_verified: 1,
       },
+      active: true
     },
     select: {
       job_id: true,
@@ -47,6 +48,9 @@ export default async function handler(
       },
       applied: true,
     },
+    orderBy: {
+      createdAt: 'desc'
+    }
   })
 
   return res.status(200).json({ message: 'Succesful', job })

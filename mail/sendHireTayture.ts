@@ -1,26 +1,21 @@
-import ejs from 'ejs'
 import path from 'path'
+import ejs from 'ejs'
 import transporter from './transporter'
 
 interface ImailOptions {
   from: string
   to: string
   cc?: string[]
-  bcc?: string[]
   subject: string
   html: string
 }
 
-const sendRemainderMail = async ({
-  user,
-  firstName,
-  job_title,
-  email,
+const sendHireTayture = async ({
+ job_title,
+ school
 }: {
-  user: string
-  firstName: string
   job_title: string
-  email: string
+  school: string
 }) => {
   let current = new Date()
   let cDate =
@@ -32,29 +27,26 @@ const sendRemainderMail = async ({
   let cTime =
     current.getHours() + ':' + current.getMinutes() + ':' + current.getSeconds()
   let dateTime = cDate + ' ' + cTime
-  const templatePath = path.join(process.cwd(), 'views', 'reminder.ejs')
+  const templatePath = path.join(process.cwd(), 'views', 'hire.ejs')
   const dat = await ejs.renderFile(templatePath, {
-    firstName,
-    user,
-    job_title,
-    email,
+   job_title,
+   school
   })
 
   const mailOption: ImailOptions = {
-    from: 'Tayture <hello@tayture.com>',
-    to: email,
-    bcc: ['info@tayture.com'],
-    subject: `🌟 Interview Reminder 🌟 <${dateTime}>`,
+    from: 'Tayture <support@tayture.com>',
+    to: 'hello@tayture.com',
+    subject: `🌟 Hire complete 🌟 <${dateTime}>`,
     html: dat,
   }
 
   try {
     await transporter.sendMail(mailOption)
-    console.log('Reminder mail sent succesfully')
+    console.log('Hire tayture mail sent succesfully')
   } catch (error) {
     //@ts-ignore
     console.log('Error sending mail', error)
   }
 }
 
-export default sendRemainderMail
+export default sendHireTayture

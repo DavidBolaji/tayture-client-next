@@ -6,7 +6,7 @@ import { cn } from '@/utils/helpers'
 
 const StyledStepper = styled.div<{height: number}>`
   position: relative;
-  display: flex;
+display: flex;
   flex-wrap: nowrap;
   overflow-x: hidden;
   height: ${(prop) => prop.height};

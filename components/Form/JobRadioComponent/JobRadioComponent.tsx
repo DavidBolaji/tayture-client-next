@@ -189,7 +189,7 @@ const JobRadioComponent: FC<{ name: string; name2: string; SW: any }> = ({
                   }}
                   animate={{
                     opacity: 1,
-                    height: 225,
+                    height: 290,
                     transition: { type: 'spring' },
                   }}
                   exit={{

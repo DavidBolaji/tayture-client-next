@@ -8,11 +8,13 @@ import { FC, useState } from 'react'
 import JobCardAll from './components/JobCardAll'
 import JobAppliedPage from './components/JobAppliedPage'
 import JobSchedulePage from './components/JobSchedulePage'
+import { Hired } from '@prisma/client'
+import JobHiredPage from './components/JobHiredPage'
 
-const UserJobPage: FC = () => {
+const UserJobPage: FC = (props) => {
   const queryClient = useQueryClient()
   const [type, setType] = useState<'applied' | 'scheduled' | 'hired'>('applied')
-  const user = queryClient.getQueryData(['user']) as unknown as IUser
+  const user = queryClient.getQueryData(['user']) as unknown as IUser & {hired: Hired[]}
   const items: TabsProps['items'] = [
     {
       key: 'applied',
@@ -55,6 +57,21 @@ const UserJobPage: FC = () => {
     {
       key: 'hired',
       label: 'Hired',
+      children: (
+        <>
+          {user &&
+            user.hired!.length > 0 &&
+            user.schedule!.map((hired: any) => (
+              <Badge.Ribbon
+                key={`${hired.job.job_id}_hired`}
+                color="green"
+                text="Hired"
+              >
+                <JobCardAll type={type} job={hired} />
+              </Badge.Ribbon>
+            ))} 
+        </>
+      ),
     },
   ]
   const handleChange = (page: any) => {
@@ -78,6 +95,7 @@ const UserJobPage: FC = () => {
         <div className="md:block hidden col-span-6 mt-14 bg-white px-5 py-3 rounded-md w-full">
           {type === 'applied' && <JobAppliedPage />}
           {type === 'scheduled' && <JobSchedulePage />}
+          {type === 'hired' && <JobHiredPage />}
         </div>
       </div>
     </div>

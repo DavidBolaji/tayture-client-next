@@ -6,17 +6,24 @@ import HandlePayment from './Modal/HandlePayment'
 import { regularFont } from '@/assets/fonts/fonts'
 
 const BlurComponent: React.FC<{pay: () => void, status: boolean, redirect: () => void,}> = ({pay, status, redirect}) => {
-  const [api, contextHolder] = notification.useNotification()
-  console.log(status);
+
+  const [api, contextHolder] = notification.useNotification({
+    maxCount: 1
+  })
 
   const openNotification = () => {
+    
     api.open({
+      key: 'update',
       message: <div className='uppercase text-[14px]'>👋 Fund wallet to complete hiring.</div>,
       description: (
         <div>
           <button
             disabled={status}
-            onClick={status ? redirect : pay}
+            onClick={() => {
+             api.destroy('update')
+              pay()
+            }}
             className=" gap-2 bg-green-600 disabled:bg-green-100 disabled:cursor-not-allowed text-white px-5 mb-2 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center"
           >
             <FaMoneyBill />

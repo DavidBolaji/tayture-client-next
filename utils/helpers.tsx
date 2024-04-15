@@ -23,6 +23,7 @@ const matchQualHash: { [key: string]: number } = {
   DOCTORATE: 7,
 }
 const matchExpHash: { [key: string]: number } = {
+  'less than 1': 0,
   '1': 1,
   '2': 2,
   '3': 3,

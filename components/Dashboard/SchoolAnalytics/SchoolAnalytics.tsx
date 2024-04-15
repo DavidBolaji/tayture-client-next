@@ -60,8 +60,8 @@ const SchoolAnalytics = () => {
 
                 <div className="col-span-1 text-center">
                   {/* <Link href={`/dashboard/school/manage/${j.job_id}?default=3`}> */}
-                  {j?.selected && j?.selected.length > 0
-                      ? j?.selected.length
+                  {j?.hired && j?.hired.length > 0
+                      ? j?.hired.length
                       : 0}
                   {/* </Link> */}
                 </div>

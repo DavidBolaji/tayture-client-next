@@ -30,7 +30,9 @@ const ManageJobTable:React.FC = (props) => {
     },
   })
 
-  const onChange = () => {}
+  const onChange = (ke: any) => {
+    setKey(ke);
+  }
 
   useEffect(() => {
     if(router.query.default) {

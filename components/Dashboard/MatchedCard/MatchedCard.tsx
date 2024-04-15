@@ -211,7 +211,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
             </span>
           }
         />}
-        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky -top-1 z-50">
+        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky -top-1 ">
           <div className="col-span-1">Name</div>
           <div className="col-span-4">Details</div>
           <div className="col-span-2 text-center">Experience</div>
@@ -330,7 +330,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
             <span className="text-2xl block text-center mb-3">Wallet</span>
           </div>
           <div className={`mb-2 text-[12px]`}>
-            <div className="flex bg-slate-200 w-48 mr-auto py-1 pr-2 rounded-l-md">
+            <div className="flex bg-slate-200 w-48 mx-auto py-1 pr-2 rounded-l-md">
               <div className="flex items-center justify-between w-full pl-3">
                 <p>Available Balance:</p>
                 <p>₦ {wb}</p>
@@ -340,8 +340,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
             <div className="flex gap-2 items-center bg-slate-400 px-2 py-1">
               <FaCircleInfo />
               <small>
-                Fund wallet with the bellow amount or more to complete pyment
-                process
+              Fund wallet with the amount below or more to complete process
               </small>
             </div>
           </div>
