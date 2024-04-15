@@ -96,7 +96,7 @@ const SmallArticleCard = ({
       </div>
       <a
         href="#"
-        className="block relative flex-shrink-0 w-24 h-24 sm:w-64 sm:h-full ml-3 sm:ml-5 rounded-2xl overflow-hidden z-0"
+        className="block relative flex-shrink-0 w-24 h-24 sm:w-52 sm:h-full ml-3 sm:ml-5 rounded-2xl overflow-hidden z-0"
       >
         <img
           src={img_src}

@@ -11,7 +11,7 @@ interface LikesComProps {
 
 const LikesComCont = styled.div<LikesComProps>`
   & {
-    margin-top: 18.75px;
+    // margin-top: 10px;
     display: flex;
     z-index: 1;
   }

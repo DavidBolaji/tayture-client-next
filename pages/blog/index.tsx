@@ -14,6 +14,8 @@ import { HiOutlineArrowRight } from 'react-icons/hi'
 import MainArticleCard from './components/MainArticleCard'
 import SmallArticleCard from './components/SmallArticleCard'
 import SmallArticleCardVertical from './components/SmallArticleCardVertical'
+import WidgetHeading from './components/WidgetHeading'
+import WidgetTags from './components/WidgetTags'
 
 const Blog = () => {
   return (
@@ -371,7 +373,7 @@ const Blog = () => {
                 {/* left */}
                 <div className="left_cont w-full lg:w-3/5 xl:w-2/3 xl:pr-14">
                   <HeadingDesc
-                    heading="Lorem Ipsum"
+                    heading="Latest Articles"
                     description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam optio nulla odit."
                   />
 
@@ -505,7 +507,42 @@ const Blog = () => {
                   </div>
                 </div>
                 {/* Right */}
-                <div className="right_cont w-full space-y-7 mt-24 lg:mt-0 lg:w-2/5 lg:pl-10 xl:pl-0 xl:w-1/3 "></div>
+                <div className="right_cont w-full space-y-7 mt-24 lg:mt-0 lg:w-2/5 lg:pl-10 xl:pl-0 xl:w-1/3 ">
+                  {/* Heading and Tags Container */}
+                  <div className="rounded-3xl overflow-hidden bg-neutral-100">
+                    {/* heading */}
+                    <WidgetHeading heading_text="Tags" view_all_link="#" />
+
+                    {/* Tags Container */}
+                    <div className='flex flex-wrap p-4 xl:p-5'>
+                      <WidgetTags 
+                      tag_text='Admin'
+                      tag_link='#'
+                      tot_articles='20'
+                      />
+                      <WidgetTags 
+                      tag_text='Educators'
+                      tag_link='#'
+                      tot_articles='10'
+                      />
+                      <WidgetTags 
+                      tag_text='Pupils'
+                      tag_link='#'
+                      tot_articles='15'
+                      />
+                      <WidgetTags 
+                      tag_text='Parents'
+                      tag_link='#'
+                      tot_articles='25'
+                      />
+                      <WidgetTags 
+                      tag_text='Events'
+                      tag_link='#'
+                      tot_articles='20'
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </SectionCont>
           </Wrapper>
