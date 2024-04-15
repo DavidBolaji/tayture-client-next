@@ -22,27 +22,6 @@ const JobHiredPage:React.FC = (props) => {
     setReset((prev) => prev + 1)
   }, [data, count])
 
-//   const handleShow = () => {
-//     setUI((prev) => {
-//       return {
-//         ...prev,
-//         applyModal: {
-//           ...prev.applyModal,
-//           visibility: true,
-//         },
-//       }
-//     })
-//   }
-
-//   useEffect(() => {
-//     if (router.query.job === '1') {
-//       if (user.validated) {
-//         handleShow()
-//       }
-//     }
-//   }, [router.query])
-
-  console.log(data);
 
   return !data ? null : Object.keys(data).length > 0 ? (
     <div className={`m-0 p-0 ${regularFont.className}`}>
