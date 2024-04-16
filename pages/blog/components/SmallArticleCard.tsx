@@ -20,6 +20,9 @@ interface SmallArticleCardProps {
   alt_img: string
   is_bg_border: boolean
   is_description: boolean
+  authImgCont_is_image: boolean
+  authImgCont_imageSrc?: string
+  authImgCont_altImage?: string
 }
 
 const SmallArticleCard = ({
@@ -39,6 +42,9 @@ const SmallArticleCard = ({
   is_bg_border,
   is_description,
   description,
+  authImgCont_is_image,
+  authImgCont_imageSrc,
+  authImgCont_altImage,
 }: SmallArticleCardProps) => {
   return (
     <div
@@ -83,6 +89,9 @@ const SmallArticleCard = ({
             isColumn={true}
             bg_color={ImgNameDate_bg_color}
             authImgCont_wi_hei={authImgCont_wi_hei}
+            is_image={authImgCont_is_image}
+            imageSrc={authImgCont_imageSrc}
+            altImage={authImgCont_altImage}
           />
         </div>
         {/* likes and comment */}

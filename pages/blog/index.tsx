@@ -5,7 +5,6 @@ import BackNext from './components/BackNext'
 import HomeLayout from '@/components/layouts/HomeLayout'
 import { BlogTagStyle } from './components/BlogTagStyle.styles'
 import { Footer } from '@/components/Footer'
-import ImgNameDate from './components/ImgNameDate'
 import SectionCont from './components/helpers/SectionCont'
 import ArticlesCatCard from './components/ArticlesCatCard'
 import HeadingDesc from './components/HeadingDesc'
@@ -19,6 +18,7 @@ import WidgetTags from './components/WidgetTags'
 import PopularPostCard from './components/PopularPostCard'
 import TrendingTopic from './components/TrendingTopic'
 import Pagination from './components/Pagination'
+import ImgNameDate from './components/ImgNameDate'
 
 const Blog = () => {
   return (
@@ -84,6 +84,7 @@ const Blog = () => {
                       isColumn={true}
                       bg_color="black"
                       authImgCont_wi_hei="2.5rem"
+                      is_image= {false}
                     />
 
                     <LikesCom
@@ -121,6 +122,7 @@ const Blog = () => {
                     text_color_rank="#EAB308"
                     bg_image_url="url(https://img.freepik.com/free-photo/entrepreneurs-meeting-office_23-2148898688.jpg?t=st=1712831917~exp=1712835517~hmac=d3e6c62789e340457130f14c892e245e2ef8c4512b82811c35b14a24a7067daf&w=996)"
                     authImgCont_wi_hei="2.5rem"
+                    authImgCont_is_image = {false}
                   />
                   <ArticlesCatCard
                     category="Teachers"
@@ -131,6 +133,7 @@ const Blog = () => {
                     text_color_rank="#EF4444"
                     bg_image_url="url(https://img.freepik.com/free-photo/medium-shot-smiley-woman-with-white-board_23-2149272221.jpg?t=st=1712842359~exp=1712845959~hmac=84e9b41ce746cc752babc2926fce09ad0cbbcbc874c4f2d5d43eea19bf34aee6&w=996)"
                     authImgCont_wi_hei="2.5rem"
+                    authImgCont_is_image = {false}
                   />
                   <ArticlesCatCard
                     category="Pupils"
@@ -141,6 +144,7 @@ const Blog = () => {
                     text_color_rank="rgb(55 48 163)"
                     bg_image_url="url(https://img.freepik.com/free-photo/front-view-kid-doing-homework_23-2149610742.jpg?t=st=1712843045~exp=1712846645~hmac=255d35bf764718bb1864a29615708666ff743c47584a097c64569468025cde32&w=996)"
                     authImgCont_wi_hei="2.5rem"
+                    authImgCont_is_image = {false}
                   />
                   <ArticlesCatCard
                     category="Parents"
@@ -148,6 +152,7 @@ const Blog = () => {
                     categoryColor="#EC4899"
                     bg_image_url="url(https://img.freepik.com/free-photo/medium-shot-happy-parents-girl_23-2148960586.jpg?t=st=1712843236~exp=1712846836~hmac=07be2995070489fcd7c2bfd1fd7478b5f955c7e6b3a1dbeb692eb84c18d2a136&w=996)"
                     authImgCont_wi_hei="2.5rem"
+                    authImgCont_is_image = {false}
                   />
                   <ArticlesCatCard
                     category="Events"
@@ -155,6 +160,7 @@ const Blog = () => {
                     categoryColor="#EF4444"
                     bg_image_url="url(https://img.freepik.com/free-photo/portrait-elegant-professional-businessman-speaking-conference_23-2150917212.jpg?t=st=1712843534~exp=1712847134~hmac=32fdc9959a700b0f44530679b47b24c93de6fc7bec1224bdd6c7c580a00de2ea&w=740)"
                     authImgCont_wi_hei="2.5rem"
+                    authImgCont_is_image = {false}
                   />
                   <ArticlesCatCard
                     category="Events"
@@ -162,6 +168,7 @@ const Blog = () => {
                     categoryColor="#EF4444"
                     bg_image_url="url(https://img.freepik.com/free-photo/portrait-elegant-professional-businessman-speaking-conference_23-2150917212.jpg?t=st=1712843534~exp=1712847134~hmac=32fdc9959a700b0f44530679b47b24c93de6fc7bec1224bdd6c7c580a00de2ea&w=740)"
                     authImgCont_wi_hei="2.5rem"
+                    authImgCont_is_image = {false}
                   />
                 </div>
               </div>
@@ -206,6 +213,7 @@ const Blog = () => {
                   likes_num="20"
                   comments_num="25"
                   likesCom_bg_color="rgba(249,250,251)"
+                  authImgCont_is_image ={false}
                 />
 
                 <div className="grid gap-6 md:gap-8">
@@ -225,6 +233,7 @@ const Blog = () => {
                     alt_img="Lorem ipsum"
                     is_bg_border={true}
                     is_description={false}
+                    authImgCont_is_image = {false}
                   />
                   <SmallArticleCard
                     tag_text="Pupils"
@@ -242,6 +251,7 @@ const Blog = () => {
                     alt_img="Lorem ipsum"
                     is_bg_border={true}
                     is_description={false}
+                    authImgCont_is_image = {false}
                   />
                   <SmallArticleCard
                     tag_text="Parents"
@@ -259,6 +269,7 @@ const Blog = () => {
                     alt_img="Lorem ipsum"
                     is_bg_border={true}
                     is_description={false}
+                    authImgCont_is_image = {false}
                   />
                 </div>
               </div>
@@ -300,6 +311,7 @@ const Blog = () => {
                     likesCom_bg_color="rgba(249,250,251)"
                     img_src="https://img.freepik.com/free-photo/media-star-reviews-laptop-fans_482257-81654.jpg?t=st=1713119967~exp=1713123567~hmac=ebdd7f1610a47975298d2faa02af3726d19d6ec81f3cc20eefca21cd68b088c9&w=996"
                     alt_img="Lorem ipsum"
+                    authImgCont_is_image = {false}
                   />
                   <SmallArticleCardVertical
                     tag_text="Admin"
@@ -315,6 +327,7 @@ const Blog = () => {
                     likesCom_bg_color="rgba(249,250,251)"
                     img_src="https://img.freepik.com/free-photo/media-star-reviews-laptop-fans_482257-81654.jpg?t=st=1713119967~exp=1713123567~hmac=ebdd7f1610a47975298d2faa02af3726d19d6ec81f3cc20eefca21cd68b088c9&w=996"
                     alt_img="Lorem ipsum"
+                    authImgCont_is_image = {false}
                   />
                 </div>
                 <div className="lg:col-span-2">
@@ -333,6 +346,7 @@ const Blog = () => {
                     likes_num="20"
                     comments_num="25"
                     likesCom_bg_color="rgba(249,250,251)"
+                    authImgCont_is_image = {false}
                   />
                 </div>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-1 md:col-span-3 xl:col-span-1">
@@ -350,6 +364,7 @@ const Blog = () => {
                     likesCom_bg_color="rgba(249,250,251)"
                     img_src="https://img.freepik.com/free-photo/media-star-reviews-laptop-fans_482257-81654.jpg?t=st=1713119967~exp=1713123567~hmac=ebdd7f1610a47975298d2faa02af3726d19d6ec81f3cc20eefca21cd68b088c9&w=996"
                     alt_img="Lorem ipsum"
+                    authImgCont_is_image = {false}
                   />
                   <SmallArticleCardVertical
                     tag_text="Admin"
@@ -365,6 +380,7 @@ const Blog = () => {
                     likesCom_bg_color="rgba(249,250,251)"
                     img_src="https://img.freepik.com/free-photo/media-star-reviews-laptop-fans_482257-81654.jpg?t=st=1713119967~exp=1713123567~hmac=ebdd7f1610a47975298d2faa02af3726d19d6ec81f3cc20eefca21cd68b088c9&w=996"
                     alt_img="Lorem ipsum"
+                    authImgCont_is_image = {false}
                   />
                 </div>
               </div>
@@ -399,6 +415,7 @@ const Blog = () => {
                       is_bg_border={false}
                       is_description={true}
                       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                      authImgCont_is_image = {false}
                     />
                     <SmallArticleCard
                       tag_text="Admin"
@@ -417,6 +434,7 @@ const Blog = () => {
                       is_bg_border={false}
                       is_description={true}
                       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                      authImgCont_is_image = {false}
                     />
                     <SmallArticleCard
                       tag_text="Admin"
@@ -435,6 +453,7 @@ const Blog = () => {
                       is_bg_border={false}
                       is_description={true}
                       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                      authImgCont_is_image = {false}
                     />
                     <SmallArticleCard
                       tag_text="Admin"
@@ -453,6 +472,7 @@ const Blog = () => {
                       is_bg_border={false}
                       is_description={true}
                       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                      authImgCont_is_image = {false}
                     />
                     <SmallArticleCard
                       tag_text="Admin"
@@ -471,6 +491,7 @@ const Blog = () => {
                       is_bg_border={false}
                       is_description={true}
                       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab.Lorem ipsum dolor sit amet consectetur adipisicing elit."
+                      authImgCont_is_image = {false}
                     />
                   </div>
 
@@ -531,21 +552,29 @@ const Blog = () => {
                         popular_post_tag="#"
                         popular_post_heading="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nemo excepturi saepe."
                         popular_post_image="https://img.freepik.com/free-photo/medium-shot-family-together-home_23-2149160316.jpg?t=st=1713113078~exp=1713116678~hmac=7e887d6b596123021b0dbf4862433f546d89337fba9852c23088f966df9853fb&w=360"
+                        popular_post_image_alt='lorem ipsum'
+                        authImgCont_is_image= {false}
                       />
                       <PopularPostCard
                         popular_post_tag="#"
                         popular_post_heading="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nemo excepturi saepe."
                         popular_post_image="https://img.freepik.com/free-photo/medium-shot-family-together-home_23-2149160316.jpg?t=st=1713113078~exp=1713116678~hmac=7e887d6b596123021b0dbf4862433f546d89337fba9852c23088f966df9853fb&w=360"
+                        popular_post_image_alt='lorem ipsum'
+                        authImgCont_is_image= {false}
                       />
                       <PopularPostCard
                         popular_post_tag="#"
                         popular_post_heading="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nemo excepturi saepe."
                         popular_post_image="https://img.freepik.com/free-photo/medium-shot-family-together-home_23-2149160316.jpg?t=st=1713113078~exp=1713116678~hmac=7e887d6b596123021b0dbf4862433f546d89337fba9852c23088f966df9853fb&w=360"
+                        popular_post_image_alt='lorem ipsum'
+                        authImgCont_is_image= {false}
                       />
                       <PopularPostCard
                         popular_post_tag="#"
                         popular_post_heading="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nemo excepturi saepe."
                         popular_post_image="https://img.freepik.com/free-photo/medium-shot-family-together-home_23-2149160316.jpg?t=st=1713113078~exp=1713116678~hmac=7e887d6b596123021b0dbf4862433f546d89337fba9852c23088f966df9853fb&w=360"
+                        popular_post_image_alt='lorem ipsum'
+                        authImgCont_is_image= {false}
                       />
                     </div>
                   </div>

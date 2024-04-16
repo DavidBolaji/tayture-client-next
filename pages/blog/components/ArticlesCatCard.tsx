@@ -12,7 +12,10 @@ interface ArticlesCatCardProps {
   category: string
   totalCatArticles: string
   categoryColor: string
-  authImgCont_wi_hei:string
+  authImgCont_wi_hei: string
+  authImgCont_is_image: boolean
+  authImgCont_imageSrc?: string
+  authImgCont_altImage?: string
 }
 
 const ArticlesCatCardCont = styled.div<ArticlesCatCardProps>`
@@ -20,15 +23,15 @@ const ArticlesCatCardCont = styled.div<ArticlesCatCardProps>`
     width: calc(20%);
   }
 
-  @media (max-width:1024px){
+  @media (max-width: 1024px) {
     & {
-      width: calc(33.3333%)
+      width: calc(33.3333%);
     }
   }
 
-  @media (max-width:499px){
+  @media (max-width: 499px) {
     & {
-      width: calc(50%)
+      width: calc(50%);
     }
   }
 `
@@ -57,6 +60,9 @@ const ArticlesCatCard = ({
   totalCatArticles,
   categoryColor,
   authImgCont_wi_hei,
+  authImgCont_is_image,
+  authImgCont_imageSrc,
+  authImgCont_altImage,
 }: ArticlesCatCardProps) => {
   return (
     <ArticlesCatCardCont className="relative inline-block px-2 xl:px-4 whitespace-normal">
@@ -87,6 +93,9 @@ const ArticlesCatCard = ({
           isColumn={true}
           bg_color={categoryColor}
           authImgCont_wi_hei={authImgCont_wi_hei}
+          is_image={authImgCont_is_image}
+          imageSrc={authImgCont_imageSrc}
+          altImage={authImgCont_altImage}
         />
       </a>
     </ArticlesCatCardCont>

@@ -18,6 +18,9 @@ interface MainArticleCardProps {
   likesCom_bg_color: string
   authImgCont_wi_hei: string
   ImgNameDate_bg_color:string
+  authImgCont_is_image: boolean
+  authImgCont_imageSrc?: string
+  authImgCont_altImage?: string
 }
 
 const MainArticleCard = ({
@@ -35,6 +38,9 @@ const MainArticleCard = ({
   likesCom_bg_color,
   authImgCont_wi_hei,
   ImgNameDate_bg_color,
+  authImgCont_is_image,
+  authImgCont_imageSrc,
+  authImgCont_altImage,
 }: MainArticleCardProps) => {
   return (
     <div className="group relative flex flex-col h-full">
@@ -64,6 +70,9 @@ const MainArticleCard = ({
           isColumn= {false}
           bg_color={ImgNameDate_bg_color}
           authImgCont_wi_hei = {authImgCont_wi_hei}
+          is_image={authImgCont_is_image}
+          imageSrc={authImgCont_imageSrc}
+          altImage={authImgCont_altImage}
           
         />
 

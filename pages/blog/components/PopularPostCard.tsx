@@ -7,6 +7,9 @@ interface PopularPostCardProps {
   popular_post_tag: string
   popular_post_image: string
   popular_post_image_alt: string
+  authImgCont_is_image: boolean
+  authImgCont_imageSrc?: string
+  authImgCont_altImage?: string
 }
 
 function PopularPostCard({
@@ -14,6 +17,9 @@ function PopularPostCard({
   popular_post_tag,
   popular_post_image,
   popular_post_image_alt,
+  authImgCont_is_image,
+  authImgCont_imageSrc,
+  authImgCont_altImage,
 }: PopularPostCardProps) {
   return (
     <div className="relative flex flex-row justify-between items-center p-4 xl:px-5 xl:py-6 hover:bg-neutral-200 dark:hover:bg-neutral-700">
@@ -26,6 +32,9 @@ function PopularPostCard({
           date="April 15, 2024"
           enableDash={false}
           isColumn={true}
+          is_image={authImgCont_is_image}
+          imageSrc={authImgCont_imageSrc}
+          altImage={authImgCont_altImage}
         />
 
         <h2 className="nc-card-title block text-sm sm:text-base font-medium sm:font-semibold text-neutral-900 dark:text-neutral-100">

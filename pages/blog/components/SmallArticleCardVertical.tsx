@@ -17,6 +17,9 @@ interface SmallArticleCardVerticalProps {
   likesCom_bg_color: string
   img_src: string
   alt_img: string
+  authImgCont_is_image: boolean
+  authImgCont_imageSrc?: string
+  authImgCont_altImage?: string
 }
 
 const SmallArticleCardVertical = ({
@@ -33,6 +36,9 @@ const SmallArticleCardVertical = ({
   likesCom_bg_color,
   img_src,
   alt_img,
+  authImgCont_is_image,
+  authImgCont_imageSrc,
+  authImgCont_altImage,
 }: SmallArticleCardVerticalProps) => {
   return (
     <div className="SmallArticleCardVertical relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full">
@@ -76,11 +82,14 @@ const SmallArticleCardVertical = ({
             isColumn={false}
             bg_color={ImgNameDate_bg_color}
             authImgCont_wi_hei= {authImgCont_wi_hei}
+            is_image={authImgCont_is_image}
+            imageSrc={authImgCont_imageSrc}
+            altImage={authImgCont_altImage}
           />
         </div>
         {/* tag heading auth date cont */}
 
-        <h2 className="block text-base font-semibold text-neutral-900 dark:text-neutral-100">
+        <h2 className="block text-base font-semibold text-neutral-900 ">
           <a className="line-clamp-2" href="#">
             {heading_text}
           </a>
