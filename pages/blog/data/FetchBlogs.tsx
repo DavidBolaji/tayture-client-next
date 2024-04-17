@@ -187,7 +187,7 @@ const mockBlogs: BlogPost[] = [
     author: 'Tayture',
     date: `April 12, 2024`,
     hor_image_src:
-      'https://img.freepik.com/free-photo/portrait-elegant-professional-businessman-speaking-conference_23-2150917212.jpg?t=st=1712843534~exp=1712847134~hmac=32fdc9959a700b0f44530679b47b24c93de6fc7bec1224bdd6c7c580a00de2ea&w=740',
+      'https://img.freepik.com/free-photo/group-business-women-participating-panel-discussion_53876-26298.jpg?t=st=1713393889~exp=1713397489~hmac=13caff07ca263f33fd73c5b0cd7f716e5f849cba59a5eee371d3d501acf81590&w=996',
     ver_image_src:
       'https://img.freepik.com/free-photo/full-shot-people-correcting-grammar-mistakes_23-2150171159.jpg?t=st=1713310607~exp=1713314207~hmac=101954df015e0f3dcd7c176e4ccd34eadac8e0cec3bd2f228b330c89d378d200&w=360',
     category: 'Events',

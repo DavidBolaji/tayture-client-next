@@ -7,11 +7,7 @@ import { BlogTagStyle } from './components/BlogTagStyle.styles'
 import { Footer } from '@/components/Footer'
 import SectionCont from './components/helpers/SectionCont'
 import HeadingDesc from './components/HeadingDesc'
-import NavItem from './components/NavItem'
-import { HiOutlineArrowRight } from 'react-icons/hi'
-import MainArticleCard from './components/MainArticleCard'
 import SmallArticleCard from './components/SmallArticleCard'
-import SmallArticleCardVertical from './components/SmallArticleCardVertical'
 import WidgetHeading from './components/WidgetHeading'
 import WidgetTags from './components/WidgetTags'
 import PopularPostCard from './components/PopularPostCard'
@@ -19,7 +15,8 @@ import TrendingTopic from './components/TrendingTopic'
 import Pagination from './components/Pagination'
 import ImgNameDate from './components/ImgNameDate'
 import TrendingTopics from './components/TrendingTopics'
-import K12Section from './components/k12Section'
+import MustRead from './components/MustRead'
+import K12Section from './components/K12Section'
 
 const Blog = () => {
   return (
@@ -102,123 +99,14 @@ const Blog = () => {
                 </div>
               </div>
             </div>
-
             {/* Section 2 */}
             <TrendingTopics />
 
             {/* Section 3  K12_centered*/}
             <K12Section />
-            
-            {/* Section 4 */}
-            <SectionCont bg_color="bg-[rgb(242,242,242)]" class_name="mb-12">
-              {/* Heading and Navigation */}
-              <div className="flex flex-col mb-8 relative">
-                <HeadingDesc
-                  heading="Must Read"
-                  description="Discover indispensable articles offering crucial insights and expert advice tailored to administrators, educators, students, and parents."
-                />
-                <div className="flex justify-between">
-                  <nav className="relative flex w-full overflow-x-auto text-sm md:text-base">
-                    <NavItem />
-                  </nav>
-                  <button className="flex-shrink-0 relative h-12 inline-flex items-center justify-center rounded-full transition-colors border-transparentbg-black_200 hover:bg-orange bg-black_200 hover:bg-orange text-white text-sm sm:text-base font-medium px-6 hidden md:!flex ">
-                    <span>View all</span>
-                    <HiOutlineArrowRight className="w-6 h-5 ml-3" />
-                  </button>
-                </div>
-              </div>
 
-              {/* Articles Cont */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="grid gap-6">
-                  <SmallArticleCardVertical
-                    tag_text="Admin"
-                    tag_text_color="#EAB308"
-                    tag_bg_color="#FEF9C3"
-                    tag_hover_text_color="white"
-                    tag_hover_bg_color="#EAB308"
-                    heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
-                    ImgNameDate_bg_color="#EAB308"
-                    authImgCont_wi_hei="1.75rem"
-                    likes_num="20"
-                    comments_num="25"
-                    likesCom_bg_color="rgba(249,250,251)"
-                    img_src="https://img.freepik.com/free-photo/media-star-reviews-laptop-fans_482257-81654.jpg?t=st=1713119967~exp=1713123567~hmac=ebdd7f1610a47975298d2faa02af3726d19d6ec81f3cc20eefca21cd68b088c9&w=996"
-                    alt_img="Lorem ipsum"
-                    authImgCont_is_image={false}
-                  />
-                  <SmallArticleCardVertical
-                    tag_text="Admin"
-                    tag_text_color="#EAB308"
-                    tag_bg_color="#FEF9C3"
-                    tag_hover_text_color="white"
-                    tag_hover_bg_color="#EAB308"
-                    heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
-                    ImgNameDate_bg_color="#EAB308"
-                    authImgCont_wi_hei="1.75rem"
-                    likes_num="20"
-                    comments_num="25"
-                    likesCom_bg_color="rgba(249,250,251)"
-                    img_src="https://img.freepik.com/free-photo/media-star-reviews-laptop-fans_482257-81654.jpg?t=st=1713119967~exp=1713123567~hmac=ebdd7f1610a47975298d2faa02af3726d19d6ec81f3cc20eefca21cd68b088c9&w=996"
-                    alt_img="Lorem ipsum"
-                    authImgCont_is_image={false}
-                  />
-                </div>
-                <div className="lg:col-span-2">
-                  <MainArticleCard
-                    img_src="https://img.freepik.com/free-photo/study-group-african-people_23-2149156377.jpg?t=st=1712928955~exp=1712932555~hmac=21fa6f9318c79b9a8a94158bbff8a5007638cfa4d73058d70539756ff0632ba6&w=996"
-                    alt_img="Lorem ipsum"
-                    tag_text="Educators"
-                    tag_text_color="#EF4444"
-                    tag_bg_color="#FEE2E2"
-                    tag_hover_text_color="white"
-                    tag_hover_bg_color="#EF4444"
-                    authImgCont_wi_hei="2.7rem"
-                    ImgNameDate_bg_color="#EF4444"
-                    article_heading="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
-                    article_description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum commodi voluptas quaerat enim porro similique officia libero, maxime omnis delectus impedit dolores amet ratione facilis molestiae ea at minima assumenda!"
-                    likes_num="20"
-                    comments_num="25"
-                    likesCom_bg_color="rgba(249,250,251)"
-                    authImgCont_is_image={false}
-                  />
-                </div>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-1 md:col-span-3 xl:col-span-1">
-                  <SmallArticleCardVertical
-                    tag_text="Admin"
-                    tag_text_color="#EAB308"
-                    tag_bg_color="#FEF9C3"
-                    tag_hover_text_color="white"
-                    tag_hover_bg_color="#EAB308"
-                    heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
-                    ImgNameDate_bg_color="#EAB308"
-                    authImgCont_wi_hei="1.75rem"
-                    likes_num="20"
-                    comments_num="25"
-                    likesCom_bg_color="rgba(249,250,251)"
-                    img_src="https://img.freepik.com/free-photo/media-star-reviews-laptop-fans_482257-81654.jpg?t=st=1713119967~exp=1713123567~hmac=ebdd7f1610a47975298d2faa02af3726d19d6ec81f3cc20eefca21cd68b088c9&w=996"
-                    alt_img="Lorem ipsum"
-                    authImgCont_is_image={false}
-                  />
-                  <SmallArticleCardVertical
-                    tag_text="Admin"
-                    tag_text_color="#EAB308"
-                    tag_bg_color="#FEF9C3"
-                    tag_hover_text_color="white"
-                    tag_hover_bg_color="#EAB308"
-                    heading_text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore culpa vitae natus in distinctio ab."
-                    ImgNameDate_bg_color="#EAB308"
-                    authImgCont_wi_hei="1.75rem"
-                    likes_num="20"
-                    comments_num="25"
-                    likesCom_bg_color="rgba(249,250,251)"
-                    img_src="https://img.freepik.com/free-photo/media-star-reviews-laptop-fans_482257-81654.jpg?t=st=1713119967~exp=1713123567~hmac=ebdd7f1610a47975298d2faa02af3726d19d6ec81f3cc20eefca21cd68b088c9&w=996"
-                    alt_img="Lorem ipsum"
-                    authImgCont_is_image={false}
-                  />
-                </div>
-              </div>
-            </SectionCont>
+            {/* Section 4 */}
+            <MustRead/>
 
             {/* Section 5 Latest Articels*/}
             <SectionCont bg_color="none">
