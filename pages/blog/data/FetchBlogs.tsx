@@ -1,26 +1,22 @@
 // Defining the structure of a blog post
 interface BlogPost {
-  id: number
-  title: string
-  content: string
-  author: string
-  date: string
-  hor_image_src: string
-  ver_image_src: string
-  category: string
-  likes: number
-  comments: number
-  category_text_hoverBg_color: string
-  category_bg_color: string
-  is_editors_pick: boolean
-  is_k12_centered: boolean
-  is_must_read: boolean
-  is_popular_post: boolean
-  is_main_article: boolean
-}
-
-function setId(id: number): number {
-  return
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  date: string;
+  hor_image_src: string;
+  ver_image_src: string;
+  category: string;
+  likes: number;
+  comments: number;
+  category_text_hoverBg_color: string;
+  category_bg_color: string;
+  is_editors_pick: boolean;
+  is_k12_centered: boolean;
+  is_must_read: boolean;
+  is_popular_post: boolean;
+  is_main_article: boolean;
 }
 
 // Function to calculate category colors based on category name
@@ -29,23 +25,23 @@ function getCategoryColors(
 ): [textColor: string, bgColor: string] {
   switch (category) {
     case 'Admins':
-      return ['#EAB308', '#FEF9C3']
+      return ['#EAB308', '#FEF9C3'];
     case 'Educators':
-      return ['#EF4444', '#FEE2E2']
+      return ['#EF4444', '#FEE2E2'];
     case 'Pupils':
-      return ['rgb(55 48 163)', '#FEF9C3']
+      return ['rgb(55 48 163)', '#FEF9C3'];
     case 'Parents':
-      return ['#EC4899', '#FFEAF5']
+      return ['#EC4899', '#FFEAF5'];
     case 'Events':
-      return ['#779A4A', '#EEFFD8']
+      return ['#779A4A', '#EEFFD8'];
     default:
-      return ['black', 'rgb(242,242,242)']
+      return ['black', 'rgb(242,242,242)'];
   }
 }
 
 // Function to generate random numbers between 5 and 30
 function getRandomNumber(): number {
-  return Math.floor(Math.random() * (30 - 5 + 1)) + 5
+  return (Math.floor(Math.random() * (30 - 5 + 1)) + 5)
 }
 
 // function to return an array of any amount of random numbers between min and max
@@ -346,8 +342,7 @@ updateMainArticleForCategory(mockBlogs, 'is_must_read')
 
 // Function to fetch blogs from the mock database
 const FetchBlogs = (): BlogPost[] => {
-  console.log(mockBlogs)
-  return mockBlogs
+  return mockBlogs;
 }
 
-export default FetchBlogs
+export default FetchBlogs;

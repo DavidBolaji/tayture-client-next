@@ -1,12 +1,12 @@
 // Defining the structure of a blog post
 interface CategoryDetails {
-  id: number
-  category: string
-  image_src: string
-  category_color: string
-  tag_bg_color: string
-  rank?: number
-  tot_articles: number
+  id: number;
+  category: string;
+  image_src: string;
+  category_color: string;
+  tag_bg_color: string;
+  rank?: number;
+  tot_articles: number;
 }
 
 // Function to calculate category colors based on category name
@@ -15,17 +15,17 @@ function getCategoryColors(
 ): [textColor: string, bgColor: string] {
   switch (category) {
     case 'Admins':
-      return ['#EAB308', '#FEF9C3']
+      return ['#EAB308', '#FEF9C3'];
     case 'Educators':
-      return ['#EF4444', '#FEE2E2']
+      return ['#EF4444', '#FEE2E2'];
     case 'Pupils':
-      return ['rgb(55 48 163)', '#FEF9C3']
+      return ['rgb(55 48 163)', '#FEF9C3'];
     case 'Parents':
-      return ['#EC4899', '#FFEAF5']
+      return ['#EC4899', '#FFEAF5'];
     case 'Events':
-      return ['#779A4A', '#EEFFD8']
+      return ['#779A4A', '#EEFFD8'];
     default:
-      return ['black', 'rgb(242,242,242)']
+      return ['black', 'rgb(242,242,242)'];
   }
 }
 

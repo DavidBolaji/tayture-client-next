@@ -25,6 +25,7 @@ function TrendingTopic({
         date={no_articles}
         isColumn={true}
         enableDash={false}
+        is_image = {false}
       />
     </a>
   )

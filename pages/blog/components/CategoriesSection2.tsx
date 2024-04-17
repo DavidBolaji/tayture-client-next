@@ -31,7 +31,7 @@ function CategoriesSection2() {
             authImgCont_wi_hei="2.5rem"
             authImgCont_is_image={false}
           />
-        ),
+        )
       )}
     </div>
   )
