@@ -2,7 +2,6 @@ import { FaEyeSlash, FaMoneyBill } from 'react-icons/fa'
 import { notification } from 'antd'
 import ListComponent from './ListComponent'
 import CVComponent from './CVComponent'
-import HandlePayment from './Modal/HandlePayment'
 import { regularFont } from '@/assets/fonts/fonts'
 
 const BlurComponent: React.FC<{pay: () => void, status: boolean, redirect: () => void,}> = ({pay, status, redirect}) => {

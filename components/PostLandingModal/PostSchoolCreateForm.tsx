@@ -30,18 +30,18 @@ const PostSchoolCreateForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move 
   const noImage = img.trim().length < 1
   const handleSubmit = (data: Partial<ISchData>) => {
     setCreateSch(() => data)
-    SW?.next()
-    
+    document.getElementById('create')?.scrollIntoView({
+      behavior: 'smooth',
+    })
+   
     setTimeout(() => {
-      document.getElementById('create')?.scrollIntoView({
-        behavior: 'smooth',
-      })
-    }, 2000)
+      SW?.next()
+    }, 2500)
 
   }
   return (
     <div id='hhhty'>
-      <div className={`${regularFont.className} max-w-[387px]`}>
+      <div className={`${regularFont.className} max-w-[387px] text-center mx-auto`}>
         <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
           Add a school
         </h3>

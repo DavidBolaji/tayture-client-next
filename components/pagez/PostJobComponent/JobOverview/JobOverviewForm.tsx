@@ -13,6 +13,10 @@ import { jobValidationSchema } from '../Schema/JobValidationSchema'
 import Button from '@/components/Button/Button'
 import JobRadioComponent from '@/components/Form/JobRadioComponent/JobRadioComponent'
 import { useQueryClient } from '@tanstack/react-query'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
+dayjs().utcOffset('local')
 
 const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
   const queryClient = useQueryClient()
@@ -143,6 +147,7 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
                 as={DateInput}
                 picker="date"
                 placeholder="MM/DD/YYYY"
+                minDate={dayjs(new Date(Date.now()).toISOString(), 'YYYY-MM-DD')}
               />
             </div>
             <div>

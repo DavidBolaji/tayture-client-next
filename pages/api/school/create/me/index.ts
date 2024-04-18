@@ -67,7 +67,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         msg: `Hurray!!! you have succesfully created a school`,
         notificationUser: req.authUser?.id as string,
-        caption: "Job created"
+        caption: "School created"
       }
     })
     

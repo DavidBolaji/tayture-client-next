@@ -9,11 +9,11 @@ import debounce from 'lodash/debounce'
 import { Job } from '@prisma/client'
 import Spinner from '../Spinner/Spinner'
 
-interface JobSearchProps {
+interface JobSearchDashboardProps {
   className?: string
 }
 
-const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
+const JobSearchDashboard: React.FC<JobSearchDashboardProps> = ({ className }) => {
   const [val, setVal] = useState('')
   const [names, setNames] = useState<string[]>([])
   const queryClient = useQueryClient()
@@ -28,7 +28,7 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
     onSuccess: (res) => {
       queryClient.setQueryData(['activeJob'], res.job[0])
       queryClient.setQueryData(['jobs'], res.job)
-      setCount((prev: number) => prev - 1)
+      setCount((prev) => prev - 1)
     },
   })
 
@@ -73,10 +73,11 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
           placeholder="Search for a job"
           value={val}
           onChange={(e) => handleSearch(e.target.value)}
+          allowClear
         />
       </div>
       <div
-        className={`w-full absolute ${!names.length && !isPending ? '-bottom-40' : '-bottom-24'} text-xs mt-1 bg-white hidden group-focus-within:block py-2 rounded-md space-y-1 max-h-[100px] overflow-auto no-s ${val && 'group-hover:block'}`}
+        className={`w-full z-30 absolute ${!names.length && !isPending ? '-bottom-28' : '-bottom-14'} text-xs mt-1 bg-white hidden group-focus-within:block py-2 rounded-md space-y-1 max-h-[100px] overflow-auto no-s ${val && 'group-hover:block'}`}
       >
         {isPending ? (
           <div className="w-full h-full flex items-center justify-center">
@@ -105,4 +106,4 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
   )
 }
 
-export default JobSearch
+export default JobSearchDashboard

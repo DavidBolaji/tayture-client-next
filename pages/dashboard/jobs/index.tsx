@@ -1,10 +1,11 @@
 import React from 'react'
 import { dataJobs } from '@/utils/data'
 import DashboardCard from '@/components/Dashboard/DashboardCard'
-import JobSearch from '@/components/JobSearch/JobSearch'
+
 
 import JobApplication from '@/components/Dashboard/JobApplication/JobApplication'
 import TopNav from '@/components/TopNav/TopNav'
+import JobSearchDashboard from '@/components/JobSearch/JobSearchDashboard'
 
 const JobsPage: React.FC = (props) => {
   return (
@@ -27,9 +28,9 @@ const JobsPage: React.FC = (props) => {
       </div>
 
       <div className="mt-5 md:-ml-2">
-        <JobSearch />
+        <JobSearchDashboard />
       </div>
-      <div className='mt-10 sm:-mt-10'>
+      <div className='mt-2 sm:mt-3'>
         <TopNav />
       </div>
       <JobApplication progress={true} />
