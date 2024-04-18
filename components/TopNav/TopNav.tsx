@@ -50,11 +50,7 @@ const items: MenuProps['items'] = [
   {
     label: 'MOST RECENT',
     key: 'recent',
-  },
-  // {
-  //   label: 'SAVED JOBS',
-  //   key: 'saved',
-  // },
+  }
 ]
 
 const TopNav = () => {
@@ -67,6 +63,7 @@ const TopNav = () => {
     <MenuStyled
       onClick={onClick}
       selectedKeys={[current]}
+      defaultSelectedKeys={['recent']}
       mode="horizontal"
       items={items}
       className={`${regularFont.className}`}

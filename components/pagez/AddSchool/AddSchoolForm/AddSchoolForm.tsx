@@ -51,11 +51,7 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
   }
   return (
     <div className='pb-10'>
-      <h2 className="w-full font-br">School information</h2>
-      <p className='flex items-center gap-1'>
-        <FaAsterisk color="red" size={12} />
-        <span className='text-xs'>Logo is required</span>
-      </p>
+
       <div className="pt-[32px] flex justify-center">
         <UploadComponent />
       </div>
@@ -75,13 +71,15 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               type={'text'}
               text={'School name'}
             />
+            <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>No of employees</h3>
             <Field
               name="sch_no_emp"
               as={SelectInput}
-              placeholder="Select No of Employees"
+              placeholder="No of Employees"
               text={'No of Employees'}
               option={employes}
             />
+            
             <Field
               as={LocationComponent}
               city="sch_city"

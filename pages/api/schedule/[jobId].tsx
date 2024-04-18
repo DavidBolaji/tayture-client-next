@@ -28,7 +28,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 jobId: req.query.jobId as string,
               },
             },
+            hired: {
+              where: {
+                jobId: req.query.jobId as string,
+              }
+            }
           },
+         
         },
         job: {
           include: {
@@ -37,14 +43,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 jobId: req.query.jobId as string,
               },
             },
+            hired: {
+              where: {
+                jobId: req.query.jobId as string,
+              }
+            }
           },
+          
         },
+       
         test: true,
         instruction: true,
       },
     })
 
     const [scheduled] = await Promise.all([req1])
+
     return res.status(200).json({
       message: 'Applied fetched succesfully',
       scheduled: {

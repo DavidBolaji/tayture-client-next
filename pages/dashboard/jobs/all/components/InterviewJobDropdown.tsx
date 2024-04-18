@@ -6,7 +6,7 @@ import { salaryOutput } from '@/utils/helpers'
 const InterviewJobDropdown: FC<{ data: any }> = ({ data }) => (
   <motion.div
     initial={{ opacity: 0, height: 0, y: -20 }}
-    animate={{ opacity: 1, height: 120, y: 0 }}
+    animate={{ opacity: 1, height: 190, y: 0 }}
     transition={{
       duration: 0.5,
       ease: easeIn,
@@ -30,7 +30,7 @@ const InterviewJobDropdown: FC<{ data: any }> = ({ data }) => (
     <p className="mb-[24px] mt-1 ml-1">
       Salary Range: #{salaryOutput(data.job_min_sal, data.job_max_sal)}
     </p>
-    <div className=" col-span-1 flex items-center gap-3">
+    <div className="space-y-2">
       <div className="flex flex-col">
         <span className="text-[14px] font-bold text-black_200">
           Minimum qualification

@@ -2,6 +2,9 @@ import styled from '@emotion/styled'
 import { Modal } from 'antd'
 
 export const StyledApplyModal = styled(Modal)`
+.ant-modal-content {
+  padding: 20px 24px !important;
+}
   && {
     > * .ant-btn-primary {
       background-color: #ff7517;
@@ -21,9 +24,9 @@ export const StyledApplyModal = styled(Modal)`
       font-size: 12px;
       border-color: #e9e8e8;
       border-width: 1px;
-      padding: 8px;
-      margin-left: -40px;
-      margin-top: 8px;
+      padding: 5px;
+      margin-left: -20px;
+      margin-top: 3px;
     }
   }
 `

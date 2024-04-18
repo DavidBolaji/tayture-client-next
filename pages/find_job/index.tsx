@@ -16,8 +16,8 @@ const FindJob = () => {
           <div className="mt-20 h-full scale-90">
             <JobApplication progress={false} className="h-screen" />
           </div>
-          <Explore />
-          <div className="mt-[96px] mb-20">
+          {/* <Explore /> */}
+          <div className="mt-10 mb-20">
             <Career />
           </div>
         </div>

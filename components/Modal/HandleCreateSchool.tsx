@@ -45,7 +45,7 @@ const HandleCreateSchool = () => {
     >
       <Stepper init={setSW} className="overflow-hidden w-full">
         <PostSchoolCreateForm SW={SW} move={false} />
-        <PostSchoolAdminForm SW={SW}  />
+        <PostSchoolAdminForm SW={SW} move={false}  />
       </Stepper>
     </PostLandingModal>
   )

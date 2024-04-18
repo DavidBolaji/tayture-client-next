@@ -3,6 +3,7 @@ import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import Spinner from '../Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
 import axios from 'axios'
+import { FaAsterisk } from 'react-icons/fa'
 
 const UploadComponent: FC<{ image?: string }> = ({ image }) => {
   const uploadRef = useRef<HTMLImageElement | null>(null)
@@ -71,6 +72,7 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
             alt=""
             className="object-cover w-full h-full"
           />
+               
           <input
             ref={inputRef}
             id="upload"
@@ -84,9 +86,15 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
               <Spinner color="#FF7517" />{' '}
             </div>
           )}
+           
         </label>
       </div>
-      <div className="flex justify-between -ml-16 max-w-[200px]">
+      <p className='-mt-5 mb-5 whitespace-nowrap w-full -ml-2 flex items-center justify-center gap-1'>
+        <FaAsterisk color="red" size={12} />
+        <span className='text-xs italic'>Logo is required</span>
+      </p>
+      <div className="flex relative justify-between -ml-16 max-w-[200px]">
+
         <button
           onClick={() => inputRef.current?.click()}
           className="mr-3 px-[20px] text-[12px] py-[8px] bg-black text-white rounded-full whitespace-nowrap"

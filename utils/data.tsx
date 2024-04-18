@@ -1673,6 +1673,7 @@ export const exp = [
   { key: 'senior', value: 'Senior level' },
 ]
 export const expL = [
+  { key: 'less than 1', value: 'less than a year' },
   { key: '1', value: '1 years' },
   { key: '2', value: '2 years' },
   { key: '3', value: '3 years' },
@@ -1699,6 +1700,14 @@ export const accessData = [
 ]
 
 export const AdministratorHire = [
+  {
+    key: 'Principal',
+    value: 'Principal',
+  },
+  {
+    key: 'Head of School',
+    value: 'Head of School',
+  },
   {
     key: 'Vice Principal',
     value: 'Vice Principal',

@@ -1,14 +1,13 @@
 import { regularFont } from '@/assets/fonts/fonts'
-import { getUser } from '@/lib/api/user'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {getUser2 } from '@/lib/api/user'
+import { useQuery} from '@tanstack/react-query'
 import React from 'react'
 
 const RenderName = () => {
-  const queryClient = useQueryClient()
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const req = await getUser()
+      const req = await getUser2()
       return req.data.user
     },
   })

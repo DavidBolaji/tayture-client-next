@@ -86,6 +86,7 @@ model User {
   sessions         Session[]
   applied          Applied[]
   matched          Matched[]
+  hired            Hired[]
   transaction      Transaction[]
   viewed           ViewedMatch[]
   schedule         Schedule[]
@@ -289,6 +290,7 @@ model Job {
   job_max_sal    String        @db.VarChar(255)
   job_exp        String        @db.VarChar(30)
   job_qual       String        @db.VarChar(30)
+  active         Boolean       @default(true)
   job_resumption DateTime
   job_no_hires   String
   status         Boolean       @default(false)
@@ -298,6 +300,7 @@ model Job {
   jobUserzId     String
   applied        Applied[]
   matched        Matched[]
+  hired          Hired[]
   viewed         ViewedMatch[]
   transaction    Transaction[]
   schedule       Schedule[]
@@ -306,6 +309,17 @@ model Job {
 
   @@index([jobSchoolId])
   @@index([jobUserzId])
+}
+
+model Hired {
+  id String @id @default(uuid())
+  jobId String
+  job Job @relation(fields: [jobId], references: [job_id])
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+   @@index([jobId])
+  @@index([userId])
 }
 
 model Notifcation {

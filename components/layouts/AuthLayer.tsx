@@ -53,7 +53,7 @@ const AuthLayer = (props: PropsWithChildren) => {
       localStorage.setItem('email', data.email)
 
       if (job === '1') {
-        router.push('/dashboard/jobs?job=1')
+        router.push('/dashboard/jobs?jobz=1')
       }
       if (profile === '1') {
         router.push('/dashboard/profile?profile=2')

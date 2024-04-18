@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from '../Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { IUser } from '@/pages/api/users/types'

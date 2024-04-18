@@ -76,6 +76,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
+    const note = db.notifcation.create({
+      data: {
+        msg: `Hurray!!! you have succesfully created a schedule`,
+        notificationUser: req.authUser?.id as string,
+        caption: "Schedule created"
+      }
+    })
+    const note3 = db.notifcation.create({
+      data: {
+        msg: `Hurray!!! you have succesfully been scheduled for a job`,
+        notificationUser: req.body['userId'] as string,
+        caption: "Job Schedule"
+      }
+    })
+
+    await Promise.all([note, note3])
     sendScheduleMail({
       email: req.body['email'],
       firstName: req.body['fname'],

@@ -13,7 +13,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUserSchool } from '@/lib/api/school'
 import { regularFont } from '@/assets/fonts/fonts'
 import { userSignout } from '@/lib/api/user'
-import {destroyCookie} from 'nookies'
 import { Profile, User } from '@prisma/client'
 
 export const StyledDropdown = styled(Dropdown)`
@@ -80,9 +79,8 @@ const DropdownComponent: React.FC<{
     },
 
     onSuccess: () => {
-      window.location.assign('/auth/login')
-      destroyCookie(null, 'token');
       queryClient.clear()
+      window.location.assign('/auth/login')
     },
   })
 
@@ -223,6 +221,3 @@ const DropdownComponent: React.FC<{
 }
 
 export default DropdownComponent
-// export function getServerSideProps() {
-
-// }

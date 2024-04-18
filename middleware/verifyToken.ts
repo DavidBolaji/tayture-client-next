@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { NextResponse } from 'next/server'
+
 declare module 'next' {
   interface NextApiRequest {
     authUser: IUser | null
@@ -24,13 +25,12 @@ export async function OPTIONS() {
 const verifyToken =
   (next: NextApiHandler) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
+
     try {
       const token = req.cookies.token || req.headers.authorization?.split(' ')[1]
-      console.log(req.cookies.token);
-      console.log(req.headers.authorization?.split(' ')[1]);
-
+    
       if (!token) {
-        return res.status(401).json({ error: 'Unauthorized: Token is missing' })
+        return res.status(403).json({ error: 'Unauthorized: Token is missing or expired' })
       }
 
       let decodedUser
@@ -46,7 +46,7 @@ const verifyToken =
             where: { sessionToken: token },
           })
           return res
-            .status(401)
+            .status(403)
             .json({ error: 'Unauthorized: Token has expired' })
         } else {
           return res.status(401).json({ error: 'Unauthorized: Invalid token' })

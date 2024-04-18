@@ -20,7 +20,8 @@ const DateInput: FC<{
   picker: 'date' | 'year'
   defaultValue?: any
   disabled: boolean
-}> = ({ name, format, picker, defaultValue, disabled }) => {
+  minDate: any
+}> = ({ name, format, picker, defaultValue, disabled, minDate }) => {
   const {
     getFieldProps,
     handleBlur,
@@ -49,13 +50,17 @@ const DateInput: FC<{
           picker={picker}
           defaultValue={defaultValue}
           disabled={disabled}
-          onChange={(_, dateString) => {
+          
+          minDate={minDate}
+          onChange={(_, dateString: any) => {
             setFieldValue(name, dateString)
           }}
           onBlur={(e) => {
             setFieldTouched(name)
           }}
+          
           className={`w-full px-3 py-3${regularFont.className}`}
+          // {...rest}
         />
       </div>
       <ErrorMessage name={name!}>

@@ -11,7 +11,7 @@ import { Education, Profile, Skills, Summary, WorkHistory } from '@prisma/client
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
-export const AMOUNT_PER_HIRE = 10000
+export const AMOUNT_PER_HIRE = 25000
 
 const matchQualHash: { [key: string]: number } = {
   SSCE: 1,
@@ -23,6 +23,7 @@ const matchQualHash: { [key: string]: number } = {
   DOCTORATE: 7,
 }
 const matchExpHash: { [key: string]: number } = {
+  'less than 1': 0,
   '1': 1,
   '2': 2,
   '3': 3,
@@ -215,4 +216,31 @@ export const calculateProgress = (data: {
     if (data.summary.text) {score += 10; console.log('summary');}
   }
   return score
+}
+
+export const formatNumberToK = (value: string) => {
+  const numList = value.split('-')
+  const nNumList = numList.map(n =>  {
+    const num = Number(n.trim().replace(',',''))
+
+    if (isNaN(num)) {
+      console.log('entered');
+      return null; // Return null if value is not a valid number
+    }
+
+    if (num < 1000) {
+      return num.toString(); // Return the number as is if it's less than 1000
+  }
+  
+  const suffixes = ['', 'k', 'M', 'B', 'T']; // Add more suffixes if needed
+  const suffixIndex = Math.floor(Math.log10(num) / 3);
+  const shortValue = (num / Math.pow(1000, suffixIndex)).toFixed(0);
+  return shortValue + suffixes[suffixIndex]
+  })
+  
+  if (nNumList.length > 1) {
+   return `${nNumList[0]} - ${nNumList[1]}/month`
+  } else {
+    return `${nNumList[0]}/month`
+  }
 }

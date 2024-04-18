@@ -6,6 +6,7 @@ export const StyledModal = styled(Modal)`
   width: 550px !important;
   border-radius: 10px;
   height: 300px;
+  background-color: #f6f7f8;
 
   .ant-modal-header {
     padding: 0px;
@@ -15,7 +16,6 @@ export const StyledModal = styled(Modal)`
     box-shadow: none;
     padding: 30px;
     & > * {
-      /* margin-bottom: 10px; */
       padding-bottom: 40px;
     }
   }
@@ -26,10 +26,13 @@ export const StyledModal = styled(Modal)`
       font-size: 12px;
       border-color: #e9e8e8;
       border-width: 1px;
-      padding: 8px;
-      margin-left: -40px;
-      margin-top: 8px;
+      padding: 5px;
+      margin-left: -20px;
+      margin-top: 3px;
     }
   }
-  background-color: #f6f7f8;
+
+  @media (max-width: 573px){
+    max-width: 90% !important;
+  }
 `

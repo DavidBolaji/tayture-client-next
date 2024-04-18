@@ -9,6 +9,9 @@ const PostJobComponent = () => {
 
   return (
     <div className={`${regularFont.className} w-full`}>
+      <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
+        {SW?.current === 0 ? "Add Job" : "Review"}
+      </h3>
       <Stepper init={(start) => setSW(start)} className="bg-white">
         <JobOverviewForm SW={SW} />
         <JobPreviewForm SW={SW} />

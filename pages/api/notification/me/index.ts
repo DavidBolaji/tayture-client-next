@@ -16,6 +16,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       where: {
         notificationUser: req.authUser!.id,
       },
+      orderBy: {
+        createdAt: 'desc'
+      }
     })
 
     return res.status(200).json({

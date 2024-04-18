@@ -20,6 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         applied: true,
         matched: true,
         viewed: true,
+        hired: true
       },
     })
 

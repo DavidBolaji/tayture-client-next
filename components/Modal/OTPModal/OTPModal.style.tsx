@@ -26,10 +26,18 @@ export const StyledModal = styled(Modal)`
       font-size: 12px;
       border-color: #e9e8e8;
       border-width: 1px;
-      padding: 8px;
-      margin-left: -40px;
-      margin-top: 8px;
+      padding: 5px;
+      margin-left: -20px;
+      margin-top: 3px;
     }
   }
   background-color: #f6f7f8;
+
+  @media (max-width: 673px) {
+    max-width: 87% !important;
+    height: 256px !important;
+   .ant-modal-content {
+    height: 366px !important;
+  }
+  }
 `

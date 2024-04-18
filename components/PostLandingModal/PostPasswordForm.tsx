@@ -60,7 +60,7 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
       }, 500)
     },
     onError: (err) => {
-      setMessage(() => (err as Error).message)
+      setMessage(() => (err as any).response.data.error || (err as Error).message)
     },
   })
 
@@ -79,7 +79,7 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
   return (
     <div className="w-full">
       <h2
-        className={`text-black mb-[40px] text-center ${regularFont.className} text-xl`}
+        className={`text-black mb-[40px] text-center ${regularFont.className} text-sm md:text-xl`}
       >
         Enter your password
       </h2>
@@ -100,6 +100,7 @@ const PostPasswordForm: React.FC<PostPasswordFormProps> = ({ SW }) => {
               name={'password'}
               type="password"
               placeholder={'Password'}
+              password={true}
             />
             {/* <Link href={"/forgot"} className="text-orange">
               forgot

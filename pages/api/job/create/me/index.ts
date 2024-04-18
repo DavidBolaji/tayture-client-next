@@ -1,4 +1,5 @@
 import db from '@/db/db'
+import sendJobPosted from '@/mail/sendJobPosted'
 import verifyToken from '@/middleware/verifyToken'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -36,15 +37,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
-    await db.notifcation.create({
+    const note = db.notifcation.create({
       data: {
         msg: `Hurray!!! you have succesfully created a job`,
         notificationUser: req.authUser?.id as string,
         caption: "Job created"
       }
     })
+    const sch = await db.school.findFirst({
+      where: {
+        sch_id: job.jobSchoolId
+      }
+    })
+    const [, school] = await Promise.all([note, sch])
+    sendJobPosted({
+      job_title: job.job_title,
+      school: school?.sch_name as string
+    })
     return res.status(200).json({
-      message: 'Job Created',
+      message: school?.sch_verified ? 
+      'You have successfully posted a vacancy. All our users have been notified. You can also copy and share the link to the job on your social media handles' 
+      :
+       'You have successfully posted a vacancy. All our users will be notified shortly. You will be contacted for school verification.',
       job: job,
     })
   } catch (error) {

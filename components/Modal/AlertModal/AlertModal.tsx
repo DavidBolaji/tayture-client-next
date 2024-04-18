@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { StyledModal } from './AlertModal.style'
-import Button from '../../Button/Button'
+// import Button from '../../Button/Button'
 import { regularFont } from '@/assets/fonts/fonts'
 
 const AlertModal: React.FC<{
   isOpen: boolean
   close: () => void
-  msg: string
+  msg: string | ReactNode
 }> = ({ isOpen, close, msg }) => (
   <StyledModal open={isOpen} closable footer={null}>
     <div className="bg-black [56px] w-full  flex justify-between items-center pt-[15px] px-6">
@@ -15,7 +15,7 @@ const AlertModal: React.FC<{
       >
         {msg}
       </p>
-      <div>
+      {/* <div>
         <Button
           text="OKAY"
           bold={false}
@@ -23,7 +23,7 @@ const AlertModal: React.FC<{
           render="dark"
           className="text-orange text-[12px] pl-5 md:text-[16px] md:pl-0"
         />
-      </div>
+      </div> */}
     </div>
   </StyledModal>
 )

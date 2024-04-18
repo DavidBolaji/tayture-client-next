@@ -53,34 +53,47 @@ export default async function handler(
     process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!,
   )
 
+  const rToken = jwt.sign(
+    { id: user.id },
+    process.env.NEXT_PUBLIC_NEXTAUTH_SECRET_TWO!,
+  )
+
   const sessionData = {
     userId: user.id,
-    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    // expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + 900000), // 15 min
     sessionToken: token,
   }
 
-  const session = await db.session.create({
-    data: sessionData,
-  })
-
-  // Set the cookie containing the token
-  setCookie({ res }, 'token', session.sessionToken, {
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-    path: '/', // Set the cookie path to '/'
-    sameSite: "none",
-    secure: true,
-    domain: "tayture-client-next.vercel.app"
-  })
-
-  if (skip) {
-    return res.status(200).send({
-      message: 'User Created!',
-      user: { ...user, pass: password },
-    })
-  }
-
-
   try {
+    const session = await db.session.create({
+      data: sessionData,
+    })
+
+    // Set the cookie containing the token
+    setCookie({ res }, 'token', session.sessionToken, {
+      expires: session.expires,
+      path: '/', // Set the cookie path to '/'
+      sameSite: 'none',
+      secure: process.env.NEXT_PUBLIC_ENV === 'dev' ? false : true,
+      domain: process.env.NEXT_PUBLIC_ENV === "dev" ? "": "tayture-client-next.vercel.app"
+    })
+
+    // Set the cookie containing the token
+    setCookie({ res }, 'refreshToken', rToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 6min
+      path: '/', // Set the cookie path to '/'
+      domain: process.env.NEXT_PUBLIC_ENV === "dev" ? "": "tayture-client-next.vercel.app"
+    })
+
+    if (skip) {
+      return res.status(200).send({
+        message: 'User Created!',
+        user: { ...user, pass: password },
+      })
+    }
+
     return res.status(200).send({
       message: 'User Created!',
       user: { ...user, pass: password },

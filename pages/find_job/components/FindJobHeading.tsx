@@ -2,9 +2,11 @@ import { Images } from '@/assets'
 import { boldFont } from '@/assets/fonts/fonts'
 import JobSearch from '@/components/JobSearch/JobSearch'
 import Image from 'next/image'
-import React from 'react'
+import { useRouter } from 'next/router'
+import React, { useEffect } from 'react'
 
 const FindJobHeading = () => {
+ 
   return (
     <div className="grid grid-cols-12 sticky -top-10 min-h-16 bg-[#faf9f9] z-30">
       <div className="col-span-2 xs:col-span-1">
@@ -20,7 +22,7 @@ const FindJobHeading = () => {
             Find the right <span className="text-orange">Job</span> for you
           </h2>
           <div className="w-full md:mt-0 mt-3 flex justify-center h-full items-center md:bg-transparent bg-[#faf9f9] z-20 md:relative absolute md:top-3 sm:top-20 top-12 px-10 sm:px-20 md:bottom-0 sm:bottom-16 bottom-24">
-            <JobSearch className="items-center justify-center absolute" />
+            <JobSearch className="items-center justify-center absolute"  />
           </div>
         </div>
       </div>

@@ -39,9 +39,12 @@ const HandlePostLanding = () => {
     })
   }
 
+
+
   const handleOk = () => {}
   return (
     <PostLandingModal
+      height={"auto"}
       ok={handleOk}
       isOpen={
         ui.postLandingModal?.visibility
@@ -60,10 +63,10 @@ const HandlePostLanding = () => {
         )}
         <PostSchoolCreateForm SW={SW} />
         <PostSchoolAdminForm SW={SW} />
-        <div>
+        <div className='w-full'>
           <JobOverviewForm SW={SW} />
         </div>
-        <div>
+        <div className='w-full' id="jobPreview">
           <JobPreviewForm SW={SW} />
         </div>
       </Stepper>
