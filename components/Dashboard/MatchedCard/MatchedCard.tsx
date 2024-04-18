@@ -20,11 +20,14 @@ import { createTransaction } from '@/lib/api/transaction'
 import HandlePayment from '@/components/Modal/HandlePayment'
 import { incWallet } from '@/lib/api/wallet'
 import { useEffect, useState } from 'react'
-import { Field, Form, Formik } from 'formik'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import Spinner from '@/components/Spinner/Spinner'
 import HandleSchedule from '@/components/HandleSchedule'
 import { useRouter } from 'next/router'
+import * as Yup from 'yup';
+import FormError from '@/components/Form/FormError/FormError'
+
 
 interface MatchedCardProps {
   params: { jobId: string }
@@ -150,7 +153,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
   }
   
   const onFailure = () => {
-    setMessage(() => 'Network error, please try again after a while')
+    setMessage(() => 'User aborted task')
   }
 
   const handleSchedule = ({
@@ -182,6 +185,24 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 
   const handleClick = matchedJob?.job?.status ? () => console.log('object') : String(amt).trim().length > 0 ? () => handlePayment(): () => handlePayment2()
   const redirect = () => router.push(`/dashboard/school/manage/${jobId}?default=3`)
+  const [valid1, setValid] = useState(+String(amt).trim().length < 1)
+
+
+  const valid = (values: any) => {
+    const errors:  {amount?: string} = {};
+  
+    const { amount } = values;
+    const isValidAmount =  +String(amount) >= Math.abs(wb - aggregateAmt - amountFinal);
+    setValid(isValidAmount)
+    if (!isValidAmount) {
+      errors.amount = `Amount cannot be less than ${Math.abs(wb - aggregateAmt - amountFinal)}`;
+    }
+  
+    return errors;
+  } 
+
+
+  
 
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
@@ -323,7 +344,8 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         onSuccess={onSuccess}
         onFailure={onFailure}
         amount={+amt}
-        valid={String(amt).trim().length > 0}
+        valid={valid1}
+        // valid={valid.}
       >
         <div className={`${regularFont.className}`}>
           <div>
@@ -358,10 +380,16 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
               }}
               enableReinitialize
               key={String(ui.postLandingModal?.visibility)}
+              // validationSchema={validationSchema}
+              validateOnChange
+              validate={valid}
             >
-              {({ handleSubmit }) => (
-                <Form onChange={handleSubmit}>
-                  <Field name="amount" as={StyledInput} type="num" />
+              {({ handleSubmit, handleChange }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Field onChange={handleSubmit} name="amount" as={StyledInput} type="num" />
+                  {/* <ErrorMessage name={"amount"}>
+                    {(msg) => <FormError msg={msg} />}
+                  </ErrorMessage> */}
                 </Form>
               )}
             </Formik>

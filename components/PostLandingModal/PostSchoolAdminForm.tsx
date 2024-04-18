@@ -105,7 +105,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
   }
 
   return (
-    <div id="create" className="mt-[25px] max-w-[300px] w-auto text-center">
+    <div id="create" className="mt-[25px] w-full text-center">
       <div className={`${regularFont.className} mb-[32px]`}>
       <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
           Add Account Admin

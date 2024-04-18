@@ -3,7 +3,7 @@ import { regularFont } from '@/assets/fonts/fonts'
 import { IUser } from '@/pages/api/users/types'
 
 import { useQueryClient } from '@tanstack/react-query'
-import { Badge, ConfigProvider, Tabs, TabsProps } from 'antd'
+import { Badge, ConfigProvider, Empty, Tabs, TabsProps } from 'antd'
 import { FC, useState } from 'react'
 import JobCardAll from './components/JobCardAll'
 import JobAppliedPage from './components/JobAppliedPage'
@@ -14,14 +14,16 @@ import JobHiredPage from './components/JobHiredPage'
 const UserJobPage: FC = (props) => {
   const queryClient = useQueryClient()
   const [type, setType] = useState<'applied' | 'scheduled' | 'hired'>('applied')
-  const user = queryClient.getQueryData(['user']) as unknown as IUser & {hired: Hired[]}
+  const user = queryClient.getQueryData(['user']) as unknown as IUser & {
+    hired: Hired[]
+  }
   const items: TabsProps['items'] = [
     {
       key: 'applied',
       label: 'Applied',
       children: (
         <>
-          {user &&
+          {user && user.applied ? (
             user.applied!.length > 0 &&
             user.applied!.map((applied: any) => (
               <Badge.Ribbon
@@ -31,7 +33,12 @@ const UserJobPage: FC = (props) => {
               >
                 <JobCardAll type={type} job={applied} />
               </Badge.Ribbon>
-            ))}
+            ))
+          ) : (
+            <div className="flex items-center justify-center">
+              <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />
+            </div>
+          )}
         </>
       ),
     },
@@ -40,7 +47,7 @@ const UserJobPage: FC = (props) => {
       label: 'Scheduled',
       children: (
         <>
-          {user &&
+          {user && user.schedule ? (
             user.schedule!.length > 0 &&
             user.schedule!.map((schedule: any) => (
               <Badge.Ribbon
@@ -50,7 +57,12 @@ const UserJobPage: FC = (props) => {
               >
                 <JobCardAll type={type} job={schedule} />
               </Badge.Ribbon>
-            ))} 
+            ))
+          ) : (
+            <div className="flex items-center justify-center">
+              <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />
+            </div>
+          )}
         </>
       ),
     },
@@ -59,7 +71,7 @@ const UserJobPage: FC = (props) => {
       label: 'Hired',
       children: (
         <>
-          {user &&
+          {user && user.hired ? (
             user.hired!.length > 0 &&
             user.schedule!.map((hired: any) => (
               <Badge.Ribbon
@@ -69,7 +81,12 @@ const UserJobPage: FC = (props) => {
               >
                 <JobCardAll type={type} job={hired} />
               </Badge.Ribbon>
-            ))} 
+            ))
+          ) : (
+            <div className="flex items-center justify-center">
+              <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />
+            </div>
+          )}
         </>
       ),
     },

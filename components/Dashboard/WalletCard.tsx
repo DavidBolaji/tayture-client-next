@@ -38,7 +38,6 @@ function WalletCard() {
         wallet_balance: +amount,
       }),
     onSuccess: (res) => {
-      handlePayment()
       queryClient.invalidateQueries({
         queryKey: ['school'],
       })
@@ -50,7 +49,6 @@ function WalletCard() {
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
-      handlePayment()
     },
   })
 
@@ -104,7 +102,7 @@ function WalletCard() {
   }
 
   const onFailure = () => {
-    setMessage(() => 'Network Error!!!, please try again after a while')
+    setMessage(() => 'User aborted task')
   }
   return (
     <div className="bg-[#FFC299;] h-[202px] overflow-hidden grid-cols-7 rounded-[18px] py-[28px] md:px-[40px] px-5 flex items-center justify-between mb-[32px] relative">

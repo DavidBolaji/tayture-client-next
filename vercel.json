@@ -1,4 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "installCommand": "npm install -force"
+  "buildCommand": "bun run build",
+  "installCommand": "bun install -force"
 }

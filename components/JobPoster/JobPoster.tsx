@@ -49,7 +49,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
 
   useEffect(() => {
     if (router.query.jobz === '1') {
-      const appliedJobIds = typeof user !== "undefined" ? user.applied!.flatMap(applied => applied.jobId): [];
+      const appliedJobIds = typeof user !== "undefined" ? user?.applied!.flatMap(applied => applied.jobId): [];
       const isJobApplied = appliedJobIds.some((id: string) => id === data.job_id);
       if (user.validated) {
         if(!isJobApplied) {
