@@ -7,6 +7,7 @@ type Props = {
     text_color?: string;
     hover_bg_color?: string;
     hover_text_color?:string;
+    text?: string
 }
 
 export const BlogTagStyle = styled(BlogTag)<Props>`
