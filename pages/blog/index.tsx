@@ -18,6 +18,7 @@ import TrendingTopics from './components/TrendingTopics'
 import MustRead from './components/MustRead'
 import K12Section from './components/K12Section'
 import LatestArcticlesSection from './components/LatestArcticlesSection'
+import SingleBlogTemplate from './pages/SingleBlogTemplate'
 
 const Blog = () => {
   return (
@@ -107,11 +108,11 @@ const Blog = () => {
             <K12Section />
 
             {/* Section 4 */}
-            <MustRead/>
+            <MustRead />
 
             {/* Section 5 Latest Articels*/}
-            <LatestArcticlesSection/>
-            
+            <LatestArcticlesSection />
+
           </Wrapper>
 
           <Footer />
