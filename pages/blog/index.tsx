@@ -113,6 +113,7 @@ const Blog = () => {
             {/* Section 5 Latest Articels*/}
             <LatestArcticlesSection />
 
+
           </Wrapper>
 
           <Footer />
