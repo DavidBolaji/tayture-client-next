@@ -1,18 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
-import Image from 'next/image'
 import { BlogTagStyle } from './BlogTagStyle.styles'
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './imgNameDate'
+
 
 interface ArticlesCatCardProps {
   rank?: string
   bg_color_rank?: string
   text_color_rank?: string
-  bg_image_url: string
-  category: string
-  totalCatArticles: string
-  categoryColor: string
-  authImgCont_wi_hei:string
+  bg_image_url?: string
+  category?: string
+  totalCatArticles?: string
+  categoryColor?: string
+  authImgCont_wi_hei?:string
 }
 
 const ArticlesCatCardCont = styled.div<ArticlesCatCardProps>`

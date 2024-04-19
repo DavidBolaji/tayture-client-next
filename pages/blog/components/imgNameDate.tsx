@@ -4,10 +4,10 @@ import styled from '@emotion/styled'
 interface StyledDateProps {
   isColumn: boolean
   bg_color?: string
-  authImgCont_wi_hei: string
+  authImgCont_wi_hei?: string
 }
 interface ImgNameDateProps {
-  authName: string
+  authName?: string
   date?: string
   enableDash: boolean
 }
