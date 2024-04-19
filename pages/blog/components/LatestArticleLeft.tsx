@@ -39,6 +39,7 @@ function LatestArticleLeft() {
             tag_hover_text_color="white"
             tag_hover_bg_color={blog.category_text_hoverBg_color}
             heading_text={blog.title}
+
             ImgNameDate_bg_color={blog.category_text_hoverBg_color}
             authImgCont_wi_hei="1.75rem"
             likes_num={`${blog.likes}`}
@@ -47,7 +48,8 @@ function LatestArticleLeft() {
             img_src={blog.ver_image_src}
             alt_img="Lorem ipsum"
             is_bg_border={false}
-            is_description={false}
+            is_description={true}
+            description={blog.content}
             authImgCont_is_image={false}
           />
         ))}
