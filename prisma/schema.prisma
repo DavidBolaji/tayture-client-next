@@ -70,26 +70,26 @@ model User {
   password_reset_expires Int?     @default(0)
   validation_token       String?
 
+  blogs     Blog[]
+  blogLikes Like[]
+  comment   Comment[]
+
   summary   Summary?
   work      WorkHistory[]
   education Education[]
   skills    Skills[]
 
-  blog_likes       Blog[]        @relation("blog_likes")
-  comment_likes    Comment[]     @relation("comment_likes")
-  blog_comments    Blog[]
-  comment_comments Comment[]
-  wallet           Wallet?
-  accounts         Account[]
-  job              Job[]
-  notification     Notifcation[]
-  sessions         Session[]
-  applied          Applied[]
-  matched          Matched[]
-  hired            Hired[]
-  transaction      Transaction[]
-  viewed           ViewedMatch[]
-  schedule         Schedule[]
+  wallet       Wallet?
+  accounts     Account[]
+  job          Job[]
+  notification Notifcation[]
+  sessions     Session[]
+  applied      Applied[]
+  matched      Matched[]
+  hired        Hired[]
+  transaction  Transaction[]
+  viewed       ViewedMatch[]
+  schedule     Schedule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -193,44 +193,64 @@ model Session {
 }
 
 model Blog {
-  blog_id               String    @id @default(uuid()) @map("blog_id")
-  blog_user             String
-  title                 String?
-  banner                String?
-  content               Json?
-  tags                  Json?
-  total_likes           Int       @default(0)
-  total_comments        Int       @default(0)
-  total_reads           Int       @default(0)
-  total_parent_comments Int?
-  created_at            DateTime  @default(now())
-  blog_user_fk          User      @relation(fields: [blog_user], references: [id])
-  user_blog_likes       User[]    @relation(name: "blog_likes")
-  comments              Comment[]
+  id     String @id @default(uuid())
+  banner String
+  title  String
+  except String
+  text   String
 
-  @@index([blog_user])
+  blogCategoryId String
+  categories     Categories @relation(fields: [blogCategoryId], references: [id])
+
+  likes      Like[]
+  blogUserId String
+  user       User   @relation(fields: [blogUserId], references: [id])
+
+  comment Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([blogUserId])
+  @@index([blogCategoryId])
+}
+
+model Like {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  blogId String
+  blog   Blog   @relation(fields: [blogId], references: [id])
+
+  @@index([userId])
+  @@index([blogId])
 }
 
 model Comment {
-  comment_id        Int      @id @default(autoincrement())
-  comment_blog_id   String
-  comment_user_id   String
-  parent_comment_id Int
-  comment           String
-  created_at        DateTime @default(now())
-  comment_like      Int      @default(0)
-  reply_count       Int      @default(0)
+  id      String  @id @default(uuid())
+  comment String
+  active  Boolean @default(true)
 
-  comment_user_fk    User?     @relation(fields: [comment_user_id], references: [id])
-  comment_blog_fk    Blog?     @relation(fields: [comment_blog_id], references: [blog_id])
-  user_comment_likes User[]    @relation(name: "comment_likes")
-  parent_comment_fk  Comment?  @relation("ChildComments", fields: [parent_comment_id], references: [comment_id], onDelete: NoAction, onUpdate: NoAction)
-  child_comments     Comment[] @relation("ChildComments")
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
-  @@index([comment_blog_id])
-  @@index([comment_user_id])
-  @@index([parent_comment_id])
-  @@index([comment_id])
+  blogId String
+  blog   Blog   @relation(fields: [blogId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([blogId])
+}
+
+model Categories {
+  id    String @id @default(uuid())
+  title String
+
+  blog           Blog[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model SchoolAdmin {
@@ -312,13 +332,13 @@ model Job {
 }
 
 model Hired {
-  id String @id @default(uuid())
-  jobId String
-  job Job @relation(fields: [jobId], references: [job_id])
+  id     String @id @default(uuid())
+  jobId  String
+  job    Job    @relation(fields: [jobId], references: [job_id])
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
-   @@index([jobId])
+  @@index([jobId])
   @@index([userId])
 }
 
@@ -326,7 +346,7 @@ model Notifcation {
   id               String   @id @default(uuid())
   caption          String   @db.VarChar(50)
   msg              String   @db.VarChar(255)
-  status           Boolean      @default(false)
+  status           Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   notificationUser String

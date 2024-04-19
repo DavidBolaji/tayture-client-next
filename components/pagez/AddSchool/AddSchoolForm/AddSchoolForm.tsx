@@ -12,7 +12,6 @@ import { ISchData, useGlobalContext } from '@/Context/store'
 
 import UploadComponent from '@/components/UploadComponent/UploadComponent'
 import Spinner from '@/components/Spinner/Spinner'
-import { FaAsterisk } from 'react-icons/fa'
 
 const initialValues = {
   sch_no_emp: '',

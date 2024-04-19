@@ -160,7 +160,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
               src={Images.Mail}
               alt="mail"
               className="md:w-[190px] w-[150px] md:h-[127px] md:scale-0"
-              priority
+              
             />
           </div>
         </Col>

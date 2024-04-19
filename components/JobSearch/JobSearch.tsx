@@ -54,7 +54,20 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
           message.error((err as Error).message)
         })
     }
-  }, [router.query])
+  }, [router.query, mutate])
+
+  useEffect(() => {
+    if (val.length === 0) {
+      Axios.get(`/job`)
+        .then((res) => {
+          queryClient.setQueryData(['activeJob'], res.data.job[0])
+          queryClient.setQueryData(['jobs'], res.data.job)
+        })
+        .catch((err) => {
+          message.error((err as Error).message)
+        })
+    }
+  }, [val, queryClient, router.query.find])
 
   const debouncedSearch = useRef(
     debounce((value: string) => mutate(value), 500),
@@ -67,16 +80,21 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
 
   return (
     <div className="w-full relative group">
-      <div className={cn(' w-full', className)}>
+      <div className={cn('w-full', className)}>
         <Input
-          className="h-10 focus:border-orange focus:shadow-none"
+          className="h-10 border-orange focus:border-orange focus:shadow-none"
           placeholder="Search for a job"
           value={val}
           onChange={(e) => handleSearch(e.target.value)}
+          allowClear
         />
       </div>
       <div
-        className={`w-full absolute ${!names.length && !isPending ? '-bottom-40' : '-bottom-24'} text-xs mt-1 bg-white hidden group-focus-within:block py-2 rounded-md space-y-1 max-h-[100px] overflow-auto no-s ${val && 'group-hover:block'}`}
+        className={`w-full absolute ${
+          !names.length && !isPending ? 'top-10' : 'top-10'
+        } text-xs mt-1 bg-white hidden group-focus-within:block py-2 rounded-md space-y-1 max-h-[100px] overflow-auto no-s ${
+          val && 'group-hover:block'
+        } shadow-md`}
       >
         {isPending ? (
           <div className="w-full h-full flex items-center justify-center">
@@ -84,14 +102,14 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
           </div>
         ) : !names.length ? (
           <Empty className="scale-75" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        ) : (
+        ) : val ? (
           names.map((name) => (
             <p
               key={name}
               className="cursor-pointer transition-colors duration-300 mx-2 p-2 hover:bg-[#fdfdfd] border-b"
               onClick={() => {
-                console.log('click');
-                
+                console.log('click')
+
                 setVal(name)
                 select(name)
               }}
@@ -99,6 +117,8 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
               {name}
             </p>
           ))
+        ) : (
+          <Empty className="scale-75" image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
       </div>
     </div>

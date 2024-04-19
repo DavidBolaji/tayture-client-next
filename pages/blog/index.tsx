@@ -5,7 +5,7 @@ import BackNext from './components/BackNext'
 import HomeLayout from '@/components/layouts/HomeLayout'
 import { BlogTagStyle } from './components/BlogTagStyle.styles'
 import { Footer } from '@/components/Footer'
-import ImgNameDate from './components/ImgNameDate'
+
 import SectionCont from './components/helpers/SectionCont'
 import ArticlesCatCard from './components/ArticlesCatCard'
 import HeadingDesc from './components/HeadingDesc'
@@ -19,11 +19,12 @@ import WidgetTags from './components/WidgetTags'
 import PopularPostCard from './components/PopularPostCard'
 import TrendingTopic from './components/TrendingTopic'
 import Pagination from './components/Pagination'
+import ImgNameDate from './components/ImgNameDate'
 
 const Blog = () => {
   return (
     <>
-      <div className="bg-blog_bg overflow-auto h-[99vh]">
+      <div className="bg-blog_bg h-[90vh] overflow-y-scroll no-s">
         <div className="bg-blog_bg">
           <Wrapper>
             {/* Hero */}
@@ -111,7 +112,7 @@ const Blog = () => {
 
               {/* Articles Category Card  */}
               <div className="artcilesCatCard">
-                <div className="-mx-2 xl:-mx-4 relative whitespace-nowrap -mx-2 xl:-mx-4 overflow-hidden">
+                <div className="relative whitespace-nowrap -mx-2 xl:-mx-4 overflow-hidden">
                   <ArticlesCatCard
                     category="Admin"
                     totalCatArticles="20 Articles"
@@ -183,7 +184,7 @@ const Blog = () => {
                   <nav className="relative flex w-full overflow-x-auto text-sm md:text-base">
                     <NavItem />
                   </nav>
-                  <button className="flex-shrink-0 relative h-12 inline-flex items-center justify-center rounded-full transition-colors border-transparent bg-black_200 hover:bg-orange text-white text-sm sm:text-base font-medium px-6 hidden md:!flex ">
+                  <button className="flex-shrink-0 relative h-12 items-center justify-center rounded-full transition-colors border-transparent bg-black_200 hover:bg-orange text-white text-sm sm:text-base font-medium px-6 hidden md:!flex ">
                     <span>View all</span>
                     <HiOutlineArrowRight className="w-6 h-5 ml-3" />
                   </button>
@@ -276,7 +277,7 @@ const Blog = () => {
                   <nav className="relative flex w-full overflow-x-auto text-sm md:text-base">
                     <NavItem />
                   </nav>
-                  <button className="flex-shrink-0 relative h-12 inline-flex items-center justify-center rounded-full transition-colors border-transparentbg-black_200 hover:bg-orange bg-black_200 hover:bg-orange text-white text-sm sm:text-base font-medium px-6 hidden md:!flex ">
+                  <button className="flex-shrink-0 relative h-12 items-center justify-center rounded-full transition-colors border-transparentbg-black_200  bg-black_200 hover:bg-orange text-white text-sm sm:text-base font-medium px-6 hidden md:!flex ">
                     <span>View all</span>
                     <HiOutlineArrowRight className="w-6 h-5 ml-3" />
                   </button>
@@ -565,10 +566,11 @@ const Blog = () => {
                     <div className="flex flex-col divide-y divide-neutral-200">
                       <PopularPostCard
                         popular_post_tag="#"
+                        popular_post_image_alt='one'
                         popular_post_heading="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nemo excepturi saepe."
                         popular_post_image="https://img.freepik.com/free-photo/medium-shot-family-together-home_23-2149160316.jpg?t=st=1713113078~exp=1713116678~hmac=7e887d6b596123021b0dbf4862433f546d89337fba9852c23088f966df9853fb&w=360"
                       />
-                      <PopularPostCard
+                      {/* <PopularPostCard
                         popular_post_tag="#"
                         popular_post_heading="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nemo excepturi saepe."
                         popular_post_image="https://img.freepik.com/free-photo/medium-shot-family-together-home_23-2149160316.jpg?t=st=1713113078~exp=1713116678~hmac=7e887d6b596123021b0dbf4862433f546d89337fba9852c23088f966df9853fb&w=360"
@@ -582,7 +584,7 @@ const Blog = () => {
                         popular_post_tag="#"
                         popular_post_heading="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nemo excepturi saepe."
                         popular_post_image="https://img.freepik.com/free-photo/medium-shot-family-together-home_23-2149160316.jpg?t=st=1713113078~exp=1713116678~hmac=7e887d6b596123021b0dbf4862433f546d89337fba9852c23088f966df9853fb&w=360"
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -615,8 +617,8 @@ const Blog = () => {
               </div>
             </SectionCont>
           </Wrapper>
-
           <Footer />
+
         </div>
       </div>
     </>

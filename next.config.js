@@ -22,7 +22,7 @@ const nextConfig = {
   },
   images: {
     domains: ['res.cloudinary.com','img.freepik.com'],
-    domains: ['img.freepik.com'],
+    // domains: ['img.freepik.com'],
   },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
