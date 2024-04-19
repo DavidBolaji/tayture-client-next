@@ -17,6 +17,7 @@ import ImgNameDate from './components/ImgNameDate'
 import TrendingTopics from './components/TrendingTopics'
 import MustRead from './components/MustRead'
 import K12Section from './components/K12Section'
+import LatestArcticlesSection from './components/LatestArcticlesSection'
 
 const Blog = () => {
   return (
@@ -109,6 +110,9 @@ const Blog = () => {
             <MustRead/>
 
             {/* Section 5 Latest Articels*/}
+            <LatestArcticlesSection/>
+            
+            {/* Section 5 Latest Articels*/}
             <SectionCont bg_color="none">
               <div className="flex flex-col lg:flex-row">
                 {/* left */}
@@ -117,7 +121,6 @@ const Blog = () => {
                     heading="Latest Articles"
                     description="Explore our newest articles featuring the latest trends, research findings, and practical tips to stay informed and inspired in this ever-evolving landscape"
                   />
-
                   {/* Latest articles */}
                   <div className="latest_articles_cont grid gap-6 md:gap-8 ">
                     <SmallArticleCard

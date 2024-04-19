@@ -23,6 +23,7 @@ interface SmallArticleCardProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
+  ref?: React.RefObject<HTMLDivElement>
 }
 
 const SmallArticleCard = ({
@@ -45,13 +46,16 @@ const SmallArticleCard = ({
   authImgCont_is_image,
   authImgCont_imageSrc,
   authImgCont_altImage,
+  ref,
 }: SmallArticleCardProps) => {
   return (
     <div
       className={`SmallArticleCard relative flex group flex-row items-center sm:p-4 sm:rounded-3xl  border-neutral-200 h-full ${
         is_bg_border ? 'sm:bg-white sm:border' : ''
       }`}
+     ref={ref} 
     >
+      
       <a className="absolute inset-0 z-0" href="#"></a>
       {/* tag heading auth date like comm cont */}
       <div className="flex flex-col flex-grow">

@@ -1,55 +1,25 @@
-import React, { useState } from 'react'
-import BtnPagination from './BtnPagination'
+import React from 'react';
+import BtnPagination from './BtnPagination';
 
-interface PaginationProps {}
-
-function Pagination({}: PaginationProps) {
-  const [activeButton, updateActiveButton] = useState(1)
-
-  function handleClick(btnPos) {
-    updateActiveButton(btnPos)
-  }
-
-  return (
-    <nav className="nc-Pagination inline-flex space-x-1 text-base font-medium">
-      <BtnPagination
-        class_name={
-          activeButton === 1
-            ? 'bg-black text-white'
-            : 'bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-6000'
-        }
-        page_num="1"
-        onClick={() => handleClick(1)}
-      />
-      <BtnPagination
-        class_name={
-          activeButton === 2
-            ? 'bg-black text-white'
-            : 'bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-6000'
-        }
-        page_num="2"
-        onClick={() => handleClick(2)}
-      />
-      <BtnPagination
-        class_name={
-          activeButton === 3
-            ? 'bg-black text-white'
-            : 'bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-6000'
-        }
-        page_num="3"
-        onClick={() => handleClick(3)}
-      />
-      <BtnPagination
-        class_name={
-          activeButton === 4
-            ? 'bg-black text-white'
-            : 'bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-6000'
-        }
-        page_num="4"
-        onClick={() => handleClick(4)}
-      />
-    </nav>
-  )
+interface PaginationProps {
+    total_pages: number;
+    currentPage: number;
+    onPageChange: (pageNumber: number) => void;
 }
 
-export default Pagination
+function Pagination({ total_pages, currentPage, onPageChange }: PaginationProps) {
+    return (
+        <nav className="nc-Pagination inline-flex space-x-1 text-base font-medium">
+            {[...Array(total_pages)].map((_, index) => (
+                <BtnPagination
+                    key={index}
+                    page_num={index + 1}
+                    isActive={currentPage === index + 1}
+                    onClick={() => onPageChange(index + 1)}
+                />
+            ))}
+        </nav>
+    );
+}
+
+export default Pagination;

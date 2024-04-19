@@ -5,7 +5,7 @@ interface NavItemProps {}
 const NavItem = ({}: NavItemProps) => {
   const [activeButton, setActiveButton] = useState(0)
 
-  const handleButtonClick = (buttonNumber) => {
+  const handleButtonClick = (buttonNumber:any) => {
     setActiveButton(buttonNumber)
   }
 
