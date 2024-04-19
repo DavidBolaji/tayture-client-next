@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BlogTagStyle } from './BlogTagStyle.styles'
+// import { BlogTagStyle } from './BlogTagStyle.styles'
 import ImgNameDate from './imgNameDate'
 
 
@@ -67,13 +67,13 @@ const ArticlesCatCard = ({
             bg_image_url={bg_image_url}
             className="bg-cover object-cover rounded-2xl w-full p-[0.75rem]"
           >
-            <BlogTagStyle
+            {/* <BlogTagStyle
               // text={!rank ? true : false}
               bg_color={bg_color_rank}
               text_color={text_color_rank}
               //   hover_bg_color="rgb(133 77 14)"
               //   hover_text_color="white"
-            />
+            /> */}
           </ImgCont>
         </div>
 
