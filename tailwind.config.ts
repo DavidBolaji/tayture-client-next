@@ -29,6 +29,7 @@ const config: Config = {
         black_200: '#232323',
         black_400: '#050505',
         success2: '#34C759',
+        blog_bg:'rgb(248 248 248/1)',
       },
       backgroundImage: {
         parallax: 'url("/bg.webp")',

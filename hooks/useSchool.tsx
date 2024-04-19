@@ -47,7 +47,7 @@ const useSchool = () => {
       title: 'School Logo',
       dataIndex: 'sch_logo',
       key: 'sch_logo',
-      render: (_, record) => <Image width={50} src={record.sch_logo} />,
+      render: (_, record) => <Image width={50} src={record.sch_logo} alt="school logo" />,
     },
     {
       title: 'School name',

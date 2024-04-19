@@ -4,8 +4,9 @@ import Spinner from '../Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
 import axios from 'axios'
 import { FaAsterisk } from 'react-icons/fa'
+import Image from 'next/image'
 
-const UploadComponent: FC<{ image?: string }> = ({ image }) => {
+const UploadComponent: FC<{ image?: string, blog?:boolean }> = ({ image, blog = false }) => {
   const uploadRef = useRef<HTMLImageElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [loading, setLoading] = useState(false)
@@ -53,7 +54,7 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
         setImg(() => image)
       }
     }
-  }, [image])
+  }, [image, setImg])
   return (
     <div>
       <div className="relative bg-[#D9D9D9] cursor-pointer mb-[24px] text-center w-[120px]  overflow-hidden h-[120px] rounded-full">
@@ -91,7 +92,7 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
       </div>
       <p className='-mt-5 mb-5 whitespace-nowrap w-full -ml-2 flex items-center justify-center gap-1'>
         <FaAsterisk color="red" size={12} />
-        <span className='text-xs italic'>Logo is required</span>
+        <span className='text-xs italic'>{blog ? 'Blog banner' : 'Logo'} is required</span>
       </p>
       <div className="flex relative justify-between -ml-16 max-w-[200px]">
 
