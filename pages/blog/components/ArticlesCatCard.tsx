@@ -68,7 +68,7 @@ const ArticlesCatCard = ({
             className="bg-cover object-cover rounded-2xl w-full p-[0.75rem]"
           >
             <BlogTagStyle
-              text={rank}
+              // text={!rank ? true : false}
               bg_color={bg_color_rank}
               text_color={text_color_rank}
               //   hover_bg_color="rgb(133 77 14)"
