@@ -13,6 +13,7 @@ const hashType = {
   CREDIT: 'success',
   DEBIT: 'magenta',
   LOCKED: 'violet',
+  UNLOCKED: 'purple'
 }
 
 
