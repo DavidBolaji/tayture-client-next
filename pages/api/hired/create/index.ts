@@ -2,6 +2,7 @@ import db from '@/db/db'
 import sendHireTayture from '@/mail/sendHireTayture'
 import sendHireUser from '@/mail/sendHireUser'
 import verifyToken from '@/middleware/verifyToken'
+import { AMOUNT_PER_HIRE, formatNumber } from '@/utils/helpers'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 
@@ -14,30 +15,58 @@ const handler = async (
 
 
   try {
-    const jobCreate = await db.hired.create({
-      data: {
-       userId: req.body.userId,
-       jobId: req.body.jobId
-      },
-      select:{
-        job: {
-          select: {
-            job_title: true,
-            school: {
-              select: {
-                sch_name: true,
-                user: {
-                  select: {
-                    fname: true,
-                    email: true
+    const jobCreate = await db.$transaction(async (tx) => {
+      const h = await tx.hired.create({
+        data: {
+         userId: req.body.userId,
+         jobId: req.body.jobId
+        },
+        select:{
+          job: {
+            select: {
+              job_title: true,
+              school: {
+                select: {
+                  sch_name: true,
+                  sch_id: true,
+                  user: {
+                    select: {
+                      fname: true,
+                      email: true
+                    }
                   }
                 }
               }
             }
-          }
-        },
-      }
-    })
+          },
+        }
+      })
+
+       const r = tx.wallet.update({
+         where: {
+           walletUserId: req.authUser?.id
+         },
+         data: {
+           wallet_locked_balance: {
+             decrement: AMOUNT_PER_HIRE
+           }
+         }
+       })
+ 
+       const v = tx.transaction.create({
+         data: {
+           type: 'DEBIT',
+           amount: AMOUNT_PER_HIRE,
+           userId: req.authUser!.id,
+           message: `Succesful Hiring of ${req.body['role']} at ₦${formatNumber((AMOUNT_PER_HIRE), "NGN", {})}`,
+           schoolId: h.job.school.sch_id,
+         }
+         
+       })
+       
+        await Promise.all([r, v])
+        return h;
+     })
     const note = db.notifcation.create({
         data: {
           msg: `Hurray!!! you have been Hired `,

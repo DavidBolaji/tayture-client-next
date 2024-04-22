@@ -101,7 +101,7 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
                 disabled={true}
               />
             </div>
-            <div className="text-center">
+            <div className="text-center pb-20">
               <Button
                 disabled={!isValid || noImage}
                 bold={false}

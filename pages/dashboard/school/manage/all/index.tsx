@@ -1,8 +1,7 @@
 import ScheduledCard from '@/components/Dashboard/ScheduledCard/ScheduledCard'
 import AllJobCard from '@/components/JobCard/AllJobCard'
-import { getScheduledJobUsers } from '@/lib/api/schedule'
-import { Axios } from '@/request/request'
-import { Job, School } from '@prisma/client'
+
+import { Hired, Job, School } from '@prisma/client'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ConfigProvider, Tabs, TabsProps } from 'antd'
 import { useRouter } from 'next/router'
@@ -11,10 +10,7 @@ import React from 'react'
 const ManageAllPage:React.FC = (props) => {
     const router = useRouter() 
     const queryClient = useQueryClient();
-    const school = queryClient.getQueryData(['school']) as School & {job: Job[]}
-
-
-    
+    const school = queryClient.getQueryData(['school']) as School & {job: (Job & {hired: Hired[]})[]}
     const onChange = () => {}
   
     const items: TabsProps['items'] = [
@@ -24,18 +20,7 @@ const ManageAllPage:React.FC = (props) => {
         children: (
           <AllJobCard job={school.job} />
         ),
-      },
-      // {
-      //   key: 'interviews',
-      //   label: 'Interviews',
-      //   children: (
-      //     <ScheduledCard
-      //       loading={isLoading}
-      //       matchedJob={sJob}
-      //       params={{ jobId: jobId as string }}
-      //     />
-      //   ),
-      // },
+      }
     ]
   
     return (

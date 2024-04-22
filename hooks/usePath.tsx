@@ -1,5 +1,5 @@
 'use client'
-import { useParams, usePathname } from 'next/navigation'
+import {  usePathname } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -8,7 +8,6 @@ const usePath = () => {
   const router = useRouter()
   const jobId = router.query.jobId
   const scheduleId = router.query.scheduleId
-  // const { jobId, id } = useParams();
   const [locationCurrent, setLoc] = useState('')
 
   useEffect(() => {
@@ -39,6 +38,8 @@ const usePath = () => {
         ? '/dashboard/school'
         : pathname === '/dashboard/school/post'
         ? '/dashboard/school'
+        : pathname === '/dashboard/school/transaction'
+        ? '/dashboard/school'
         : pathname === '/dashboard/school/draft'
         ? '/dashboard/school'
         : pathname === '/dashboard/school/manage/all'
@@ -65,7 +66,7 @@ const usePath = () => {
         ? 'admin'
         : pathname?.split('/')[pathname?.split('/').length - 1]
     setLoc(key)
-  }, [pathname])
+  }, [pathname, jobId, scheduleId])
 
   return { locationCurrent }
 }

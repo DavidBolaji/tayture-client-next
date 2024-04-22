@@ -1,12 +1,12 @@
 'use client'
 import { useAnimate } from 'framer-motion'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode,  useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { cn } from '@/utils/helpers'
 
 const StyledStepper = styled.div<{height: number}>`
   position: relative;
-display: flex;
+  display: flex;
   flex-wrap: nowrap;
   overflow-x: hidden;
   height: ${(prop) => prop.height};
@@ -135,7 +135,7 @@ const Stepper: FC<StepperProps> = ({ children, className, init,  }) => {
 
   useEffect(() => {
     if(!mount) return
-    console.log(scope.current.childNodes[cur]);
+   
     setActiveChildHeight(scope.current.childNodes[cur]?.scrollHeight);
   }, [cur, mount])
 
@@ -143,7 +143,7 @@ const Stepper: FC<StepperProps> = ({ children, className, init,  }) => {
     return null
   }
 
-console.log(activeChildHeight);
+
   return (
     <>
       <StyledStepper

@@ -1,0 +1,23 @@
+import db from '@/db/db'
+import { Transaction } from '@prisma/client'
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+type Data = {
+  message: string
+  transaction?: Transaction[]
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>,
+) {
+  if (req.method !== 'GET')
+    return res.status(405).json({ message: 'Method not allowed' })
+
+  const transaction = await db.transaction.findMany({
+    orderBy: {
+        createdAt: "desc"
+    }
+  })
+  res.status(200).json({ message: 'Succesful', transaction })
+}

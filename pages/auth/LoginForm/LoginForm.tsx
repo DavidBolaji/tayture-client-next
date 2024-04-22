@@ -87,7 +87,7 @@ const LoginForm = ({ show = true }) => {
       }
     },
     onError: (err) => {
-      setMessage(() => (err as AxiosError<{error: string}>).response?.data?.error ||(err as Error).message)
+      setMessage(() => (err as AxiosError<{error: string}>).response?.data?.error || (err as Error).message)
     },
   })
 

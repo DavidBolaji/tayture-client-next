@@ -65,6 +65,7 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
   const [id, setId] = useState('')
   const router = useRouter()
 
+
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
   const user = queryClient.getQueryData(['user']) as User
@@ -73,7 +74,8 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
     mutationFn: async () => {
       return await Axios.post('/hired/create', {
         userId: id,
-        jobId: router.query.jobId
+        jobId: router.query.jobId,
+        role: matchedJob.job.job_title
       })
     },
     onSuccess: (res) => {
@@ -120,7 +122,7 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
       clearTimeout(t)
     }, 500)
   }
-
+  
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
       <div className="min-w-[900px] ">
@@ -169,8 +171,8 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
 
                 <div className="col-span-1">
                   {checkIsExpMatch({
-                    exp: match.user.applied[0].exp,
-                    job: matchedJob.job.job_exp,
+                    exp: match?.user?.applied[0]?.exp,
+                    job: matchedJob?.job?.job_exp,
                   }) ? (
                     <div className="w-full flex justify-center">
                       <FaCircleCheck color="green" size={20} />

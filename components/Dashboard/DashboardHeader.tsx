@@ -10,6 +10,7 @@ import { useGlobalContext } from '@/Context/store'
 import { useQuery } from '@tanstack/react-query'
 import { getUser } from '@/lib/api/user'
 import NotificationDropdown from './NotificationDropdown'
+import Whatsapp2 from '../Whatsapp/Whatsapp2'
 
 const { Header } = Layout
 
@@ -103,6 +104,7 @@ const DashboardHeader: React.FC<{
           </div>
 
           {/* <div className="mx-[20px]"> */}
+          {/* <Whatsapp2 /> */}
           <NotificationDropdown mobile={false} />
           {/* </div> */}
           <DropdownComponent isAdmin={isSchAdmin} />

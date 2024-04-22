@@ -13,7 +13,6 @@ import HandleApplyLanding from '@/components/Modal/HandleApplyLanding'
 import HandlePostLanding from '@/components/Modal/HandlePostLanding'
 import { AnimatePresence, motion } from 'framer-motion'
 import NextNProgress from 'nextjs-progressbar'
-import Loading from '@/components/Loading/Loading'
 import HandleUpload from '@/components/Modal/HandleUpload'
 import Whatsapp from '@/components/Whatsapp/Whatsapp'
 
