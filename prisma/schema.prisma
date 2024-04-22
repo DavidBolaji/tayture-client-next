@@ -440,20 +440,6 @@ model Transaction {
   @@index([schoolId])
 }
 
-// model Transaction {
-//   id          String   @id @default(uuid())
-//   amount      Int
-//   type        WalletState
-//   message     String
-//   createdAt   DateTime @default(now())
-//   updatedAt   DateTime @updatedAt
-
-//   transactionId  String
-//   transaction  Transaction @relation(fields: [transactionId], references: [id])
-
-//   @@index([transactionId])
-// }
-
 model Schedule {
   id          String        @id @default(uuid())
   date        DateTime

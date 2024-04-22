@@ -152,7 +152,7 @@ const WalletCard2 = () => {
         </div>
       </div>
       <Link href={'/dashboard/school/transaction'} className="absolute left-0 bottom-0 h-8 px-5 bg-[#eed2bf] text-black flex items-center w-full justify-between">
-        <div>View Transactiions</div>
+        <div>View Transactions</div>
         <div>
           <FaCaretRight />
         </div>

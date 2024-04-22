@@ -1,28 +1,30 @@
-'use client'
-
+"use client"
 import { useGlobalContext } from '@/Context/store'
 import React, { useEffect, useState } from 'react'
 import AlertModal from './Modal/AlertModal/AlertModal'
 
 const HandleError = () => {
-  const { message, setMessage, setCount } = useGlobalContext()
+  const { message, setMessage } = useGlobalContext()
   const [modal, setModal] = useState<boolean>(false)
+
   useEffect(() => {
-    let t: any;
+    let timeout: NodeJS.Timeout
+
     if (message.trim().length > 0) {
       setModal(true)
-      const t = setTimeout(() => {
-        setMessage(() => "")
-         clearTimeout(t)
-       }, 3000)
+      timeout = setTimeout(() => {
+        setMessage("")
+        setModal(false)
+      }, 3000)
     } else {
       setModal(false)
     }
-    
-// remove xler
-  }, [message])
+
+    return () => clearTimeout(timeout)
+  }, [message, setMessage])
+
   return (
-    <AlertModal isOpen={modal} close={() => setMessage('')} msg={message} />
+    <AlertModal isOpen={modal} close={() => setMessage('')} msg={message} timeout={3000} />
   )
 }
 

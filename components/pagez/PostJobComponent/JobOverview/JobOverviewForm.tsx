@@ -80,7 +80,7 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
               <Field
                 name="job_title"
                 as={StyledInput}
-                placeholder="Subject"
+                placeholder="job title"
                 type={'text'}
                 maxLength={30}
               />
