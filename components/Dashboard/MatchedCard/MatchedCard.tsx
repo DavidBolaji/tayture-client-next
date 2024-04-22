@@ -18,15 +18,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ISchDb } from '@/pages/api/school/types'
 import { createTransaction } from '@/lib/api/transaction'
 import HandlePayment from '@/components/Modal/HandlePayment'
-import { incWallet } from '@/lib/api/wallet'
+import { decWallet, incWallet } from '@/lib/api/wallet'
 import { useEffect, useState } from 'react'
-import { ErrorMessage, Field, Form, Formik } from 'formik'
+import {  Field, Form, Formik } from 'formik'
 import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import Spinner from '@/components/Spinner/Spinner'
 import HandleSchedule from '@/components/HandleSchedule'
 import { useRouter } from 'next/router'
-import * as Yup from 'yup';
-import FormError from '@/components/Form/FormError/FormError'
+
 
 
 interface MatchedCardProps {
@@ -42,7 +41,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 }) => {
   const { jobId } = params
 
-  const { setMessage, setUI, setCount, ui } = useGlobalContext()
+  const { setMessage, setUI, ui } = useGlobalContext()
 
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
@@ -55,34 +54,44 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
    **/
   const wb = school?.wallet.wallet_balance
   const noOfHires = +matchedJob?.job?.job_no_hires
-  const aggregateAmt = matchedJob?.aggregate?._sum?.amount ?? 0
+  // const aggregateAmt = matchedJob?.aggregate?._sum?.amount ?? 0
   const curAppCount = matchedJob?.applied?.length
   const complete = curAppCount >= noOfHires
 
-  const left = noOfHires - curAppCount
+  const isScheduled = matchedJob?.job?.noScheduled
+  const isHired = matchedJob?.job?.job_no_hires
+  const hasBeenPaidfor = matchedJob?.job?.noPaid
+  const isLeft = isHired - hasBeenPaidfor
+
   const amountFinal = complete
     ? AMOUNT_PER_HIRE * noOfHires
     : AMOUNT_PER_HIRE * curAppCount
   const [amt, setAmt] = useState<string | number>('')
 
   useEffect(() => {
-    if(typeof aggregateAmt === "number" && typeof wb === "number" && typeof amountFinal === "number") {
-      setAmt(Math.abs(wb - aggregateAmt - amountFinal))
+    if(typeof wb === "number" && typeof amountFinal === "number") {
+      setAmt(Math.abs(wb - amountFinal))
     }
   
-  }, [amountFinal, aggregateAmt, wb])
+  }, [amountFinal, wb])
 
   const { mutate: fundWallet, isPending } = useMutation({
     mutationFn: async (amount: string) =>
       await incWallet({
         wallet_balance: +amount,
+        schoolId: school.sch_id
       }),
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
+      await decWallet({
+        wallet_balance: Math.abs(amountFinal),
+        schoolId: school.sch_id,
+        role: matchedJob?.job.job_title
+      })
       queryClient.invalidateQueries({
         queryKey: ['school'],
       })
 
-      setMessage(() => 'Wallet successfully funded')
+      setMessage(() => 'Wallet funded and Booking successful')
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
@@ -109,25 +118,27 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 
   const onSuccess = () => {
     /**fund wallet */
-    fundWallet(String(Math.abs(wb - aggregateAmt - amountFinal)))
+    fundWallet(String(amt) as string)
     /**create transaction */
     mutate({
-      amount: amountFinal,
-      noPaid: complete ? noOfHires : curAppCount,
+      complete,
+      noPaid: complete ? noOfHires : curAppCount - hasBeenPaidfor,
       schoolId: school.sch_id,
       jobId: jobId,
     })
   }
 
   const handlePayment = () => {
-    const canSchedule = wb - aggregateAmt > amountFinal
+    const canSchedule = wb >= amountFinal
     if (canSchedule) {
       /**proceed to create transaction and update job status to paid */
       mutate({
         amount: amountFinal,
-        noPaid: complete ? noOfHires : curAppCount,
+        noPaid: complete ? noOfHires : curAppCount - hasBeenPaidfor,
         schoolId: school.sch_id,
         jobId: jobId,
+        isFunded: true,
+        role: matchedJob.job.job_title
       })
     } else {
       /** Display modal  */
@@ -140,8 +151,9 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
       }))
     }
   } 
+
   const handlePayment2 = () => {
-    setAmt(Math.abs(wb - aggregateAmt - amountFinal))
+    setAmt(Math.abs(wb - amountFinal + (AMOUNT_PER_HIRE * hasBeenPaidfor)))
       /** Display modal  */
       setUI((prev) => ({
         ...prev,
@@ -165,20 +177,34 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
     fname: string
     email: string
   }) => {
-    setUI((prev) => {
-      return {
-        ...prev,
-        scheduleModal: {
-          data: {
-            ...prev.scheduleModal?.data,
-            fname,
-            email,
-            id,
+  // 3(paidfor) > //schedule
+    if((hasBeenPaidfor >  isScheduled) || (isLeft === 0)) {
+      setUI((prev) => {
+        return {
+          ...prev,
+          scheduleModal: {
+            data: {
+              ...prev.scheduleModal?.data,
+              fname,
+              email,
+              id,
+            },
+            visibility: true,
           },
+        }
+      })
+    } else {
+      setAmt(Math.abs(wb - amountFinal + (AMOUNT_PER_HIRE * hasBeenPaidfor)))
+      /** Display modal  */
+      setUI((prev) => ({
+        ...prev,
+        paymentModal: {
+          ...prev.paymentModal,
           visibility: true,
         },
-      }
-    })
+      }))
+    }
+
   }
 
   const router = useRouter()
@@ -192,17 +218,14 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
     const errors:  {amount?: string} = {};
   
     const { amount } = values;
-    const isValidAmount =  +String(amount) >= Math.abs(wb - aggregateAmt - amountFinal);
+    const isValidAmount =  +String(amount) >= Math.abs(wb - amountFinal);
     setValid(isValidAmount)
     if (!isValidAmount) {
-      errors.amount = `Amount cannot be less than ${Math.abs(wb - aggregateAmt - amountFinal)}`;
+      errors.amount = `Amount cannot be less than ${Math.abs(wb- amountFinal)}`;
     }
   
     return errors;
   } 
-
-
-  
 
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>

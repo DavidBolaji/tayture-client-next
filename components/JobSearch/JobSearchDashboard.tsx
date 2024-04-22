@@ -78,8 +78,10 @@ const JobSearchDashboard: React.FC<JobSearchProps> = ({ className }) => {
     debouncedSearch(value)
   }
 
+  const divRef = useRef<HTMLDivElement | null>(null)
+
   return (
-    <div className="w-full relative group">
+    <div className="w-full relative group" ref={divRef}>
       <div className={cn('w-full', className)}>
         <Input
           className="h-10 border-orange focus:border-orange focus:shadow-none"
@@ -101,7 +103,7 @@ const JobSearchDashboard: React.FC<JobSearchProps> = ({ className }) => {
             <Spinner color="orange" />
           </div>
         ) : !names.length ? (
-          <Empty className="scale-75" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          null
         ) : val ? (
           names.map((name) => (
             <p
@@ -110,13 +112,14 @@ const JobSearchDashboard: React.FC<JobSearchProps> = ({ className }) => {
               onClick={() => {
                 setVal(name)
                 select(name)
+                divRef.current?.focus()
               }}
             >
               {name}
             </p>
           ))
         ) : (
-          <Empty className="scale-75" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          null
         )}
       </div>
     </div>

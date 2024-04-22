@@ -17,6 +17,7 @@ const ManageJobTable:React.FC = (props) => {
 
   const { data: mJob, isLoading } = useQuery({
     queryKey: [`job/${jobId}`],
+    enabled: typeof jobId !== "undefined",
     queryFn: async () => {
       const req = await getAppliedJobUsers(jobId as string)
       return req.data.applied
@@ -24,6 +25,7 @@ const ManageJobTable:React.FC = (props) => {
   })
   const { data: sJob, isLoading: sLoading } = useQuery({
     queryKey: [`job/scheduled/${jobId}`],
+    enabled: typeof jobId !== "undefined",
     queryFn: async () => {
       const req = await getScheduledJobUsers(jobId as string)
       return req.data.scheduled

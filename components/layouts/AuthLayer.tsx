@@ -67,7 +67,7 @@ const AuthLayer = (props: PropsWithChildren) => {
         router.push('/dashboard/school/new?post_job=1')
       }
     }
-  }, [mounted, data, job, school, setUI, router])
+  }, [mounted, data, job, school, setUI, router, profile])
 
   if (!mounted || isLoading) {
     return <div>loading...</div>

@@ -11,7 +11,7 @@ import { Education, Profile, Skills, Summary, WorkHistory } from '@prisma/client
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
-export const AMOUNT_PER_HIRE = 25000
+export const AMOUNT_PER_HIRE = 1000
 
 const matchQualHash: { [key: string]: number } = {
   SSCE: 1,

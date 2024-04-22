@@ -1,8 +1,8 @@
 import { regularFont } from '@/assets/fonts/fonts'
-import { formatNumberToK, salaryOutput } from '@/utils/helpers'
-import { Job } from '@prisma/client'
-import {  Switch, Tag, message } from 'antd'
-import React from 'react'
+import { AMOUNT_PER_HIRE, formatNumberToK, salaryOutput } from '@/utils/helpers'
+import { Hired, Job, School, Wallet } from '@prisma/client'
+import { Switch, Tag, message } from 'antd'
+import React, { useState } from 'react'
 import { FaClock, FaShareAlt } from 'react-icons/fa'
 import moment from 'moment'
 import Link from 'next/link'
@@ -10,27 +10,160 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { useGlobalContext } from '@/Context/store'
 
+import { Field, Form, Formik } from 'formik'
+import StyledInput from '../Form/NomalInput/StyledInput'
+import HandlePayment from '../Modal/HandlePayment'
+import { FaCircleInfo } from 'react-icons/fa6'
+import { incWallet } from '@/lib/api/wallet'
+
 interface IAllJobCard {
-  job: Job[] | []
+  job: (Job & { hired: Hired[] })[] | []
 }
 
 const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
   const queryClient = useQueryClient()
-  const {setMessage} = useGlobalContext()
-  const {mutate} = useMutation({
-    mutationFn: async ({active, jobId}: {active: boolean, jobId: string}) => {
-      return await Axios.put(`/job/update/${jobId}`, {active})
+  const { setMessage, setUI, ui } = useGlobalContext()
+  const [mutateState, setMutate] = useState<any>(null)
+  const [amt, setAmt] = useState<string>('')
+  const school = queryClient.getQueryData(['school']) as School & {
+    wallet: Wallet
+  }
+  const wb = school?.wallet?.wallet_balance
+  const [valid1, setValid] = useState(+String(amt).trim().length < 1)
+
+  const { mutate } = useMutation({
+    mutationFn: async ({
+      active,
+      jobId,
+      refund,
+      amt,
+      schoolId,
+    }: {
+      active: boolean
+      jobId: string
+      refund: boolean
+      amt: number
+      schoolId: string
+    }) => {
+      return await Axios.put(`/job/update/hired/${jobId}`, {
+        active,
+        refund,
+        amt,
+        schoolId,
+      })
     },
     onSuccess: (res) => {
       queryClient.invalidateQueries({
-        queryKey: ['school']
+        queryKey: ['school'],
       })
       setMessage(() => res.data.message)
-    }
+      setMutate(null)
+    },
   })
+
+  const { mutate: fundWallet, isPending } = useMutation({
+    mutationFn: async (amount: string) =>
+      await incWallet({
+        wallet_balance: +amount,
+        schoolId: school.sch_id
+      }),
+    onSuccess: async (res) => {
+      mutate(mutateState)
+      queryClient.invalidateQueries({
+        queryKey: ['school'],
+      })
+
+      setMessage(() => 'Wallet funded and Booking successful')
+    },
+    onError: (err) => {
+      setMessage(() => (err as Error).message)
+    },
+  })
+
+  const handleSwitch = (active: boolean, job: Job & { hired: Hired[] }) => {
+    /**
+     * We first check if active is false i.e cancel job.
+      We determine whether to refund based on whether pendingHire is greater than 0 or if there are no hires (job.hired.length === 0).
+      We then call mutate() with the appropriate parameters.
+     */
+    const pendingHire = job.noPaid - job.hired.length
+    const unlockFundAmt = AMOUNT_PER_HIRE * pendingHire
+    const triggerUnlockFund = pendingHire > 0
+    const refund = triggerUnlockFund || job.hired.length === 0
+
+    if (active && refund) {
+      console.log('active and refund')
+      if (school.wallet.wallet_balance < unlockFundAmt) {
+        //set current state for payment
+        setMutate({
+          active,
+          jobId: job.job_id,
+          refund, // move from locked to main balance
+          amt: unlockFundAmt,
+          schoolId: school.sch_id,
+        })
+       // set amt to pay
+        setAmt(String(unlockFundAmt))
+
+        // show fund wallet modal
+        setUI((prev) => ({
+          ...prev,
+          paymentModal: {
+            ...prev.paymentModal,
+            visibility: true,
+          },
+        }))
+
+      }
+      return mutate({
+        /**
+         * Active determines direction
+         * active is false and refund true move from locked to main balance
+         * active is true and refund true move from main balance to locked
+         */
+        active,
+        jobId: job.job_id,
+        refund, // move from locked to main balance
+        amt: unlockFundAmt,
+        schoolId: school.sch_id,
+      })
+    }
+
+    return mutate({
+      active,
+      jobId: job.job_id,
+      refund, // move from locked to main balance
+      amt: unlockFundAmt,
+      schoolId: school.sch_id,
+    })
+  }
+
+  const onFailure = () => {
+    setMessage(() => 'User aborted task')
+  }
+
+  const onSuccess = () => {
+    //fund wallet
+    fundWallet(String(amt) as string)
+  }
+
+  const valid = (values: any) => {
+    const errors:  {amount?: string} = {};
+  
+    const { amount } = values;
+    const isValidAmount =  +String(amount) >= Math.abs(wb - mutateState.amt);
+    setValid(isValidAmount)
+    if (!isValidAmount) {
+      errors.amount = `Amount cannot be less than ${Math.abs(wb- mutateState.amt)}`;
+    }
+  
+    return errors;
+  }
+
+
   const jobList = !job
     ? []
-    : job.map((j: Job) => (
+    : job.map((j: Job & { hired: Hired[] }) => (
         <div
           key={j.job_id}
           className="md:col-span-6 col-span-12 bg-white gap-2 border hover:shadow rounded-md h-52 relative overflow-hidden"
@@ -109,7 +242,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
             <div className={`space-x-1 ${regularFont.className} text-xs`}>
               {j.active && (
                 <Switch
-                  onClick={() => mutate({active: false, jobId: j.job_id})}
+                  onClick={() => handleSwitch(false, j)}
                   defaultChecked
                   checkedChildren={
                     <span
@@ -130,7 +263,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
               )}
               {!j.active && (
                 <Switch
-                onClick={() => mutate({active: true, jobId: j.job_id})}
+                  onClick={() => handleSwitch(true, j)}
                   checkedChildren={
                     <span
                       className={`${regularFont.className} text-[10px] block`}
@@ -152,7 +285,61 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
           </div>
         </div>
       ))
-  return <div className="grid grid-cols-12 gap-3 pb-10 overflow-auto no-s">{jobList}</div>
+
+  return (
+    <div className="grid grid-cols-12 gap-3 pb-10 overflow-auto no-s">
+      {jobList}
+      <HandlePayment
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        amount={+amt}
+        valid={valid1}
+
+      >
+        <div className={`${regularFont.className}`}>
+          <div>
+            <span className="text-2xl block text-center mb-3">Wallet</span>
+          </div>
+          <div className={`mb-2 text-[12px]`}>
+            <div className="flex bg-slate-200 w-48 mx-auto py-1 pr-2 rounded-l-md">
+              <div className="flex items-center justify-between w-full pl-3">
+                <p>Available Balance:</p>
+                <p>₦ {wb}</p>
+              </div>
+            </div>
+            <hr className="mt-1 mb-2 " />
+            <div className="flex gap-2 items-center bg-slate-400 px-2 py-1">
+              <FaCircleInfo />
+              <small>
+              Fund wallet with the amount below or more to complete process
+              </small>
+            </div>
+          </div>
+          <label className={`inline-block ml-1 mb-2 ${regularFont.className}`}>
+            Fund Wallet Amount
+          </label>
+            <Formik
+              onSubmit={(data: any) => {
+                setAmt(data.amount)
+              }}
+              initialValues={{
+                amount: amt,
+              }}
+              enableReinitialize
+              key={String(ui.postLandingModal?.visibility)}
+              validateOnChange
+              validate={valid}
+            >
+              {({ handleSubmit }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Field onChange={handleSubmit} name="amount" as={StyledInput} type="num" />
+                </Form>
+              )}
+            </Formik>
+        </div>
+      </HandlePayment>
+    </div>
+  )
 }
 
 export default AllJobCard

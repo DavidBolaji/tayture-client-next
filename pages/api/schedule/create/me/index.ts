@@ -58,6 +58,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
+   await db.job.update({
+      where: {
+        job_id: req.body['jobId'] 
+      },
+      data: {
+        noScheduled: {
+          increment: 1
+        }
+      }
+    })
+
     const scheduleId = result.id
 
     await db.instruction.deleteMany({

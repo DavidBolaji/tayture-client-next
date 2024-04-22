@@ -298,6 +298,7 @@ model Wallet {
   user           User   @relation(fields: [walletUserId], references: [id])
   walletUserId   String @unique
   wallet_balance Int    @default(0)
+  wallet_locked_balance Int  @default(0)
 }
 
 model Job {
@@ -310,10 +311,15 @@ model Job {
   job_max_sal    String        @db.VarChar(255)
   job_exp        String        @db.VarChar(30)
   job_qual       String        @db.VarChar(30)
-  active         Boolean       @default(true)
+  active         Boolean      @default(true) // job visibility
   job_resumption DateTime
   job_no_hires   String
-  status         Boolean       @default(false)
+
+  noPaid      Int      @default(0)
+  noScheduled Int      @default(0)
+  deducted    Boolean? @default(false)
+
+  status         Boolean       @default(false)   // job payment
   school         School        @relation(fields: [jobSchoolId], references: [sch_id])
   jobSchoolId    String
   user           User          @relation(fields: [jobUserzId], references: [id])
@@ -322,7 +328,6 @@ model Job {
   matched        Matched[]
   hired          Hired[]
   viewed         ViewedMatch[]
-  transaction    Transaction[]
   schedule       Schedule[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
@@ -421,22 +426,33 @@ model Assesement {
 model Transaction {
   id          String   @id @default(uuid())
   amount      Int
-  noPaid      Int
-  noScheduled Int      @default(0)
-  deducted    Boolean? @default(false)
+  type        WalletState
+  message     String
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   schoolId    String
   school      School   @relation(fields: [schoolId], references: [sch_id])
-  jobId       String
-  job         Job      @relation(fields: [jobId], references: [job_id])
+ 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([userId])
   @@index([schoolId])
-  @@index([jobId])
 }
+
+// model Transaction {
+//   id          String   @id @default(uuid())
+//   amount      Int
+//   type        WalletState
+//   message     String
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+
+//   transactionId  String
+//   transaction  Transaction @relation(fields: [transactionId], references: [id])
+
+//   @@index([transactionId])
+// }
 
 model Schedule {
   id          String        @id @default(uuid())
@@ -472,6 +488,13 @@ enum Status {
   PENDING
   ACCEPTED
   DECLINED
+}
+
+enum WalletState {
+  CREDIT
+  DEBIT
+  LOCKED
+  UNLOCKED
 }
 
 model Instruction {

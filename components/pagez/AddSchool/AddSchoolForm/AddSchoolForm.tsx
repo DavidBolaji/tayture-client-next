@@ -110,7 +110,7 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
                 text={'Phone No'}
               />
             </div>
-            <div className="text-center">
+            <div className="text-center mb-10">
               <Button
                 disabled={!isValid || noImage}
                 bold={false}

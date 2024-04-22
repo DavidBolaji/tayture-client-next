@@ -6,6 +6,7 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import DropdownComponent from './DropdownComponent'
 import NotificationDropdown from './NotificationDropdown'
 import DashboardDrawer from './DashboardDrawer'
+import Whatsapp2 from '../Whatsapp/Whatsapp2'
 
 const DashboardNav: React.FC = () => {
   const [visible, setVisible] = useState(false)
@@ -16,12 +17,20 @@ const DashboardNav: React.FC = () => {
     <>
       <nav className="justify-between relative z-[5000] shadow-lg shrink-0 bg-[#050505] h-[5rem] xl:px-[4rem] px-[1.5rem] py-[1.25rem] flex items-center">
         <DropdownComponent isAdmin={false} />
-        {/* <ul className="xl:flex hidden items-center gap-[4rem] ">{renderNav}</ul> */}
+        <div className="scale-75 mt-24 -translate-x-12">
+          <a
+            href={'https://wa.me/+2347067799302'}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <Whatsapp2 />
+          </a>
+        </div>
         <div className="flex gap-[0.625rem]">
           <NotificationDropdown mobile />
           <div
             onClick={toggle}
-            className="dsm:hidden block cursor-pointer hover:scale-[1.05] duration-300 transition-transform"
+            className="block cursor-pointer hover:scale-[1.05] duration-300 transition-transform"
           >
             {visible ? (
               <IoMdClose color="white" size={30} />
@@ -32,7 +41,11 @@ const DashboardNav: React.FC = () => {
         </div>
       </nav>
       <div className="">
-        <DashboardDrawer visible={visible} isAdmin={false} feedback={() => setVisible(false)} />
+        <DashboardDrawer
+          visible={visible}
+          isAdmin={false}
+          feedback={() => setVisible(false)}
+        />
       </div>
     </>
   )

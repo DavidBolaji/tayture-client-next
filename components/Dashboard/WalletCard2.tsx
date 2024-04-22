@@ -1,7 +1,7 @@
 import Button from '../Button/Button'
 import { Images } from '@/assets'
 import Image from 'next/image'
-import { regularFont } from '@/assets/fonts/fonts'
+import { boldFont, regularFont } from '@/assets/fonts/fonts'
 import { useGlobalContext } from '@/Context/store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUser } from '@/lib/api/user'
@@ -12,8 +12,12 @@ import StyledInput from '../Form/NomalInput/StyledInput'
 import { incWallet } from '@/lib/api/wallet'
 import { getUserSchool } from '@/lib/api/school'
 import HandleCreateSchool from '../Modal/HandleCreateSchool'
+import { FaCaretRight, FaLock } from 'react-icons/fa'
+import Link from 'next/link'
+import { formatNumber } from '@/utils/helpers'
+import { Axios } from '@/request/request'
 
-function WalletCard() {
+const WalletCard2 = () => {
   const { setUI, setMessage } = useGlobalContext()
   const queryClient = useQueryClient()
   const { data: school, isLoading } = useQuery({
@@ -32,20 +36,19 @@ function WalletCard() {
     },
   })
 
+
   const { mutate, isPending } = useMutation({
-    mutationFn: async (amount: string) =>
-      await incWallet({
-        wallet_balance: +amount,
-      }),
-    onSuccess: (res) => {
+    mutationFn: async ({amount, schoolId}: {amount: string, schoolId: string}) =>
+      {
+        await Axios.put('/wallet/update/me', {wallet_balance: +amount, schoolId})
+      },
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['school'],
+        queryKey: ['school', 'allTransactions'],
       })
       
       setMessage(() => 'Wallet successfully funded')
-      const t = setTimeout(() => {
-        setMessage(() => "")
-      }, 2000)
+
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
@@ -98,27 +101,47 @@ function WalletCard() {
     })
   }
   const onSuccess = () => {
-    mutate(amt as string)
+    mutate({amount: amt as string, schoolId: school.sch_id})
   }
 
   const onFailure = () => {
     setMessage(() => 'User aborted task')
   }
   return (
-    <div className="bg-[#FFC299] h-[202px] overflow-hidden grid-cols-7 rounded-[18px] py-[28px] md:px-[40px] px-5 flex items-center justify-between mb-[32px] relative">
-      <div
-        className={`font-[600] text-[24px] col-span-5 max-w-[425px] ${regularFont.className}`}
-      >
-        <span className="inline-block text-[#666666] text-[12px] md:text-[16px]">
-          Wallet balance
-        </span>
-        <p className="md:text-[40px] mb-[16px] text-[18px] whitespace-nowrap font-bolder text-black">
-          ₦{' '}
+    <div className={`bg-[#ffc299] h-[242px]  p-6 rounded-2xl relative overflow-hidden mb-5 ${regularFont.className}`}>
+      <div className="border-b relative pb-1 border-[#666666] flex justify-between">
+        <div>
+          <div className={`inline-block text-[#666666] text-[12px] md:text-[16px] ${boldFont.className}`}>Wallet Balance</div>
+          <div className={`md:text-[30px] text-[18px] whitespace-nowrap font-bolder text-black ${boldFont.className}`}> ₦{' '}
           {!isLoading && school?.wallet?.wallet_balance
-            ? school?.wallet?.wallet_balance
+            ? formatNumber(school?.wallet?.wallet_balance, 'NGN', {})
+            : 0}</div>
+        </div>
+        {/* <div>
+          <FaEye />
+        </div> */}
+      </div>
+      <div className='flex flex-col gap-3 mt-3'>
+        <div>
+          <div className={`inline-block text-[#666666] text-[10px] md:text-[14px] ${boldFont.className}`}>Locked Balance</div>
+          <div className="flex gap-2 items-center">
+            <FaLock />
+            <div className={boldFont.className}>
+            ₦{' '}
+            {!isLoading && school?.wallet?.wallet_locked_balance
+            ? formatNumber(school?.wallet?.wallet_locked_balance, 'NGN', {})
             : 0}
-        </p>
-        <div className="scale-[0.65] -translate-x-5 -translate-y-3">
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-7  md:-right-6 -right-10">
+        <Image
+          src={Images.Wallet}
+          className="md:scale-100 scale-75"
+          alt="wallet"
+        />
+      </div>
+        <div className='flex justify-end flex-col-reverse w-[120px] relative z-10'>
           <Button
             text="Topup"
             render="dark"
@@ -128,13 +151,12 @@ function WalletCard() {
           />
         </div>
       </div>
-      <div className="absolute dsm:bottom-0 md:right-10 -right-10">
-        <Image
-          src={Images.Wallet}
-          className="md:scale-100 scale-75"
-          alt="wallet"
-        />
-      </div>
+      <Link href={'/dashboard/school/transaction'} className="absolute left-0 bottom-0 h-8 px-5 bg-[#eed2bf] text-black flex items-center w-full justify-between">
+        <div>View Transactiions</div>
+        <div>
+          <FaCaretRight />
+        </div>
+      </Link>
       <HandlePayment
         onSuccess={onSuccess}
         onFailure={onFailure}
@@ -179,4 +201,4 @@ function WalletCard() {
   )
 }
 
-export default WalletCard
+export default WalletCard2

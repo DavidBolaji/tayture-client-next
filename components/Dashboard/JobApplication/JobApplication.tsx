@@ -22,7 +22,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
 }) => {
   const queryClient = useQueryClient()
   const router = useRouter()
-  const { isLoading, data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['jobs'],
     queryFn: async () => {
       let req
@@ -43,20 +43,21 @@ const JobApplication: React.FC<JobApplicationProps> = ({
       } 
       return req.data.job
     },
+    // refetchInterval: 1000,
   })
 
 
   return data && Object.keys(data).length > 0 ? (
     <div className="grid grid-cols-12 md:gap-10">
-      <div className={`md:col-span-6 max-h-[500px] pt-2 overflow-auto no-s col-span-12`}>
-        {!data && isLoading ? (
+      <div className={`md:col-span-6 max-h-[500px] pt-2 overflow-auto no-s col-span-12 pb-5`}>
+        {!data && isPending ? (
           <div className="space-y-3">
             {['1x', '2y', '3z'].map((loader) => (
               <Skeleton
                 key={loader}
                 className="border p-3 rounded-[10px]"
-                loading={isLoading}
-                active={isLoading}
+                loading={isPending}
+                active={isPending}
               />
             ))}
           </div>

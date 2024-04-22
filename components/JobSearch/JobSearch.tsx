@@ -77,9 +77,10 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
     setVal(value)
     debouncedSearch(value)
   }
+  const divRef = useRef<HTMLDivElement | null>(null)
 
   return (
-    <div className="w-full relative group">
+    <div className="w-full relative group" ref={divRef}>
       <div className={cn('w-full', className)}>
         <Input
           className="h-10 border-orange focus:border-orange focus:shadow-none"
@@ -101,24 +102,28 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
             <Spinner color="orange" />
           </div>
         ) : !names.length ? (
-          <Empty className="scale-75" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          null
         ) : val ? (
           names.map((name) => (
+            <>
             <p
               key={name}
               className="cursor-pointer transition-colors duration-300 mx-2 p-2 hover:bg-[#fdfdfd] border-b"
               onClick={() => {
-                console.log('click')
-
+               
                 setVal(name)
                 select(name)
+                divRef.current?.focus()
+
               }}
             >
               {name}
             </p>
+           
+            </>
           ))
         ) : (
-          <Empty className="scale-75" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          null
         )}
       </div>
     </div>

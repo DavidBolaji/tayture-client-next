@@ -71,7 +71,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
         setMessage(() => res.data.message)
  
         const req = await getUser()
-        queryClient.setQueryData(['user'], req.data.user)
+        queryClient.setQueryData(['user'], () => req.data.user)
         queryClient.invalidateQueries({
           queryKey: ['user', 'jobs', 'school'],
         })
