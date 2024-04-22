@@ -80,10 +80,8 @@ export default function App({
           >
             <ScrollToTop />
             <NextNProgress color="#FF7517" />
-            {layout}
-            
-              <Whatsapp />
-            
+              {layout}
+            <Whatsapp />
             <HandleError />
             <HandleAttention />
             <HandleApply />
