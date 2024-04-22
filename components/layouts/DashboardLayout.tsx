@@ -157,7 +157,7 @@ const DashboardLayout = (props: PropsWithChildren) => {
 
           <Content
             style={{
-              padding: '0px 12px 100px 12px',
+              padding: '0px 12px 150px 12px',
               marginTop: 50,
               minHeight: '100vh',
               height: '100vh',

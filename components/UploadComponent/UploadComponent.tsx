@@ -94,7 +94,7 @@ const UploadComponent: FC<{ image?: string, blog?:boolean }> = ({ image, blog = 
         <FaAsterisk color="red" size={12} />
         <span className='text-xs italic'>{blog ? 'Blog banner' : 'Logo'} is required</span>
       </p>
-      <div className="flex relative justify-between -ml-16 max-w-[200px]">
+      <div className="sm:flex relative justify-between -ml-16 max-w-[200px] hidden">
 
         <button
           onClick={() => inputRef.current?.click()}
@@ -105,6 +105,21 @@ const UploadComponent: FC<{ image?: string, blog?:boolean }> = ({ image, blog = 
         <button
           onClick={() => (uploadRef.current!.src = ' ')}
           className="ml-3 px-[20px] text-[12px] py-[8px] border border-black rounded-full whitespace-nowrap"
+        >
+          Remove photo
+        </button>
+      </div>
+      <div className="sm:hidden flex flex-col space-y-2">
+
+        <button
+          onClick={() => inputRef.current?.click()}
+          className="px-[20px] text-[12px] py-[8px] bg-black text-white rounded-full whitespace-nowrap"
+        >
+          Change photo
+        </button>
+        <button
+          onClick={() => (uploadRef.current!.src = ' ')}
+          className="px-[20px] text-[12px] py-[8px] border border-black rounded-full whitespace-nowrap"
         >
           Remove photo
         </button>

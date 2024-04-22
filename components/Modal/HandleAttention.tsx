@@ -32,7 +32,7 @@ const HandleAttention = () => {
       }
     })
   }
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       /**check if path exist */
       const pathExist = checkPath(user!.path)
@@ -86,6 +86,7 @@ const HandleAttention = () => {
       isOpen={
         ui.attentionModal?.visibility ? ui.attentionModal?.visibility : false
       }
+      loading={isPending}
       close={handleClose}
     />
   )

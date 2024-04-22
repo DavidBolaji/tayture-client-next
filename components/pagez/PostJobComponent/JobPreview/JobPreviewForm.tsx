@@ -124,7 +124,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
               <Field
                 name="job_title"
                 as={StyledInput}
-                placeholder="Subject"
+                placeholder="Job title"
                 type={'text'}
                 maxLength={30}
                 disabled

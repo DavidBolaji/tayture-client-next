@@ -17,7 +17,8 @@ const DashboardNav: React.FC = () => {
     <>
       <nav className="justify-between relative z-[5000] shadow-lg shrink-0 bg-[#050505] h-[5rem] xl:px-[4rem] px-[1.5rem] py-[1.25rem] flex items-center">
         <DropdownComponent isAdmin={false} />
-        <div className="scale-75 mt-24 -translate-x-12">
+        <div className="flex gap-[0.625rem]">
+        <div className="scale-50 translate-y-[23px] translate-x-[13px]">
           <a
             href={'https://wa.me/+2347067799302'}
             rel="noreferrer"
@@ -26,7 +27,6 @@ const DashboardNav: React.FC = () => {
             <Whatsapp2 />
           </a>
         </div>
-        <div className="flex gap-[0.625rem]">
           <NotificationDropdown mobile />
           <div
             onClick={toggle}

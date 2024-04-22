@@ -22,7 +22,7 @@ const useTransaction = () => {
   const { data: transactions, isPending } = useQuery({
     queryKey: ['allTransactions'],
     queryFn: async () => {
-      const req = await Axios.get('/transaction')
+      const req = await Axios.get('/transaction/me')
 
       return req.data.transaction
     },
@@ -38,15 +38,44 @@ const useTransaction = () => {
       width: 50,
       render: (_, record, idx) => idx + 1,
     },
-    {
-      title: 'Name',
-      dataIndex: 'message',
-      key: 'message',
+    // {
+    //   title: 'Name',
+    //   dataIndex: 'message',
+    //   key: 'message',
 
+    //   render: (_, record) => (
+    //     <div className="">
+    //       <h3 className='text-sm'>{record.message}</h3>
+    //       <span className='text-[10px]'>{record.id}</span>
+    //     </div>
+    //   ),
+    // },
+
+    {
+      title: 'State',
+      dataIndex: 'type',
+      key: 'type',
+      width: 100,
       render: (_, record) => (
-        <div className="">
-          <h3 className='text-sm'>{record.message}</h3>
-          <span className='text-[10px]'>{record.id}</span>
+        <Tag className="bg-[#f4f5fb] space-x-1" color={hashType[record.type]} >
+         
+          <span className='text-[10px] inline-block  lowercase'>{record.type}</span>
+        </Tag>
+      ),
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
+      width: 100,
+      render: (_, record) => (
+        <div className="bg-[#f4f5fb] flex items-center justify-start gap-1">
+          <div className="-translate-y-[45px]">
+            {record.type === 'CREDIT' && <GiReceiveMoney color="lime" />}
+            {record.type === 'DEBIT' && <GiPayMoney color="red" />}
+            {record.type === 'LOCKED' && <FaHandHolding color="yellow" />}
+          </div>
+          <div>{formatNumber(record.amount, 'NGN', {})}</div>
         </div>
       ),
     },
@@ -62,6 +91,15 @@ const useTransaction = () => {
         </div>
       ),
     },
+  ]
+
+  const columns2: ColumnsType<Transaction> = [
+    {
+      title: '',
+      dataIndex: 's/n',
+      key: 's/n',
+      render: (_, record, idx) => idx + 1,
+    },
     {
       title: 'State',
       dataIndex: 'type',
@@ -73,41 +111,17 @@ const useTransaction = () => {
         </Tag>
       ),
     },
-    {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
-      render: (_, record) => (
-        <div className="bg-[#f4f5fb] flex items-center justify-start gap-1">
-          <div className="-translate-y-[45px]">
-            {record.type === 'CREDIT' && <GiReceiveMoney color="lime" />}
-            {record.type === 'DEBIT' && <GiPayMoney color="red" />}
-            {record.type === 'LOCKED' && <FaHandHolding color="yellow" />}
-          </div>
-          <div>{formatNumber(record.amount, 'NGN', {})}</div>
-        </div>
-      ),
-    },
-  ]
-
-  const columns2: ColumnsType<Transaction> = [
-    {
-      title: '',
-      dataIndex: 's/n',
-      key: 's/n',
-      render: (_, record, idx) => idx + 1,
-    },
-    {
-      title: 'Name',
-      dataIndex: 'message',
-      key: 'message',
-      render: (_, record) => (
-        <div className="">
-          <h3 className="text-sm">{record.message}</h3>
-          <span className="text-xs">{record.id}</span>
-        </div>
-      ),
-    },
+    // {
+    //   title: 'Name',
+    //   dataIndex: 'message',
+    //   key: 'message',
+    //   render: (_, record) => (
+    //     <div className="">
+    //       <h3 className="text-sm">{record.message}</h3>
+    //       <span className="text-xs">{record.id}</span>
+    //     </div>
+    //   ),
+    // },
 
     {
       title: 'Amount',

@@ -1,17 +1,19 @@
 import React from 'react'
 import { StyledAttentionModal } from './AttentionModal.style'
 import { regularFont } from '@/assets/fonts/fonts'
+import { Spin } from 'antd'
 
 const AttentionModal: React.FC<{
   isOpen: boolean
   close: () => void
   ok: () => void
-}> = ({ isOpen, close, ok }) => (
+  loading: boolean
+}> = ({ isOpen, close, ok, loading }) => (
   <StyledAttentionModal
     open={isOpen}
     closable
     onOk={ok}
-    okText="Yes"
+    okText={loading ? <Spin /> :"Yes"}
     cancelText="No"
     onCancel={close}
   >

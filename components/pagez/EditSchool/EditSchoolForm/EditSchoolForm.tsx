@@ -35,7 +35,20 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
   const noImage = img.trim().length < 1 && sch.sch_logo.trim().length < 1
   const handleSubmit = (data: Partial<ISchData>) => {
     setCreateSch(() => data)
-    SW.next()
+    const t = setTimeout(() => {
+      if (typeof document !== 'undefined') {
+        const doc = document.querySelector('.ant-layout-content')
+        doc?.scrollTo({
+          behavior: 'smooth',
+          top: 0,
+        })
+      }
+      const b = setTimeout(() => {
+        SW?.next()
+        clearTimeout(b)
+      }, 600)
+      clearTimeout(t)
+    }, 400)
   }
   return (
     <Formik

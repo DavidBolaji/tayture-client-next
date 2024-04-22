@@ -10,11 +10,11 @@ const EditSchool = () => {
   const [SW, setSW] = useState<any>(null)
   return (
     <div className={`${regularFont.className} w-full`}>
-      <Stepper init={(init) => setSW(init)} className="bg-white">
-        <div>
+      <Stepper  init={(init) => setSW(init)} className="bg-white">
+        <div className='w-full'>
           <EditSchoolForm SW={SW} />
         </div>
-        <div>
+        <div className='w-full'>
           <EditSchoolFormAdmin />
         </div>
       </Stepper>

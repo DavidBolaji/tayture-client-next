@@ -7,6 +7,7 @@ export const StyledModal = styled(Modal)`
   top: 90%;
   max-width: 100% !important;
   width: 850px !important;
+  position: relative;
 
   .ant-modal-close {
     display: none;
