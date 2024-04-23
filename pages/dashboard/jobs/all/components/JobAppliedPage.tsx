@@ -1,6 +1,6 @@
 import { useGlobalContext } from '@/Context/store'
-import { regularFont } from '@/assets/fonts/fonts'
-import BtnDashboard from '@/components/JobPoster/BtnDashboard'
+import { boldFont, regularFont } from '@/assets/fonts/fonts'
+import Button from '@/components/Button/Button'
 import { IJobSchDb } from '@/pages/api/job/types'
 import { IUser } from '@/pages/api/users/types'
 import { datePosted, salaryOutput } from '@/utils/helpers'
@@ -8,6 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Empty, Skeleton, Space } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { FaCheck } from 'react-icons/fa'
 import { FaLocationDot } from 'react-icons/fa6'
 
 const JobAppliedPage:React.FC = (props) => {
@@ -42,8 +43,10 @@ const JobAppliedPage:React.FC = (props) => {
     }
   }, [router.query])
 
-  return !data ? null : Object.keys(data).length > 0 ? (
-    <div className={`m-0 p-0 ${regularFont.className}`}>
+  
+
+  return !data ? null: Object.keys(data).length > 0 ? (
+    <div className={`m-0 px-5 py-3 bg-white ${regularFont.className}`}>
       <h2
         className={`text-[24px] ${regularFont.className} text-black mb-[16px]`}
       >
@@ -55,14 +58,30 @@ const JobAppliedPage:React.FC = (props) => {
           <span>{data.school.sch_city}</span>
         </span>
         <span className="text-ash_400">
-          posted:&nbsp;
+          Posted:&nbsp;
           {datePosted(data.createdAt as string)}
         </span>
         
       </Space>
-      <BtnDashboard />
-      <p className="mb-[32px]">Your profile matches 8 out of 10 of the skill</p>
-      <h3 className="text-[12px] mb-[24px]">Job Details</h3>
+      <div className='my-[24px] ml-1'>
+      <Button
+          disabled
+          render="dark"
+          text={
+            <>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-orange inline-block p-1">
+                  <FaCheck color="#000" size={10} />
+                </span>
+                <span>Applied</span>
+              </div>
+            </>
+          }
+          bold={false}
+        />
+      </div>
+      {/* <p className="mb-[32px]">Your profile matches 8 out of 10 of the skill</p> */}
+      <h3 className={`text-[12px] md:text-[16px] mb-[10px] ${boldFont.className}`}>Job Details</h3>
       <p className="mb-[10px]">
         {' '}
         Salary range: #{`${salaryOutput(data.job_min_sal, data.job_max_sal)}`}

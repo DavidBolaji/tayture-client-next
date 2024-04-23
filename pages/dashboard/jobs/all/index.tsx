@@ -17,14 +17,14 @@ const UserJobPage: FC = (props) => {
   const user = queryClient.getQueryData(['user']) as unknown as IUser & {
     hired: Hired[]
   }
+
   const items: TabsProps['items'] = [
     {
       key: 'applied',
       label: 'Applied',
       children: (
         <>
-          {user && user.applied ? (
-            user.applied!.length > 0 &&
+          {user?.applied!.length > 0 ? (
             user.applied!.map((applied: any) => (
               <Badge.Ribbon
                 color="black"
@@ -34,11 +34,7 @@ const UserJobPage: FC = (props) => {
                 <JobCardAll type={type} job={applied} />
               </Badge.Ribbon>
             ))
-          ) : (
-            <div className="flex items-center justify-center">
-              <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />
-            </div>
-          )}
+          ):<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </>
       ),
     },
@@ -47,8 +43,7 @@ const UserJobPage: FC = (props) => {
       label: 'Scheduled',
       children: (
         <>
-          {user && user.schedule ? (
-            user.schedule!.length > 0 &&
+          {user?.schedule!.length > 0 ? (
             user.schedule!.map((schedule: any) => (
               <Badge.Ribbon
                 key={`${schedule.job.job_id}_scheduled`}
@@ -58,11 +53,7 @@ const UserJobPage: FC = (props) => {
                 <JobCardAll type={type} job={schedule} />
               </Badge.Ribbon>
             ))
-          ) : (
-            <div className="flex items-center justify-center">
-              <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />
-            </div>
-          )}
+          ):<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
         </>
       ),
     },
@@ -71,9 +62,8 @@ const UserJobPage: FC = (props) => {
       label: 'Hired',
       children: (
         <>
-          {user && user.hired ? (
-            user.hired!.length > 0 &&
-            user.schedule!.map((hired: any) => (
+          {user?.hired!.length > 0 ? (
+            user.hired!.map((hired: any) => (
               <Badge.Ribbon
                 key={`${hired.job.job_id}_hired`}
                 color="green"
@@ -82,11 +72,7 @@ const UserJobPage: FC = (props) => {
                 <JobCardAll type={type} job={hired} />
               </Badge.Ribbon>
             ))
-          ) : (
-            <div className="flex items-center justify-center">
-              <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />
-            </div>
-          )}
+          ): <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </>
       ),
     },
@@ -109,7 +95,7 @@ const UserJobPage: FC = (props) => {
             <Tabs type="card" items={items} onChange={handleChange} />
           </ConfigProvider>
         </div>
-        <div className="md:block hidden col-span-6 mt-14 bg-white px-5 py-3 rounded-md w-full">
+        <div className="md:block hidden col-span-6 mt-14 rounded-md w-full">
           {type === 'applied' && <JobAppliedPage />}
           {type === 'scheduled' && <JobSchedulePage />}
           {type === 'hired' && <JobHiredPage />}
