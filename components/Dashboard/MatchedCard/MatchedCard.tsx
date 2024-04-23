@@ -229,6 +229,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
+      
       <div className="min-w-[900px] ">
         {matchedJob?.job?.status ? <Alert
           type="success"
@@ -255,20 +256,21 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
             </span>
           }
         />}
-        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky -top-1 ">
-          <div className="col-span-1">Name</div>
-          <div className="col-span-4">Details</div>
-          <div className="col-span-2 text-center">Experience</div>
-          <div className="col-span-2 text-center">Qualification</div>
-          <div className="col-span-2 text-center">Status</div>
-          <button
+         <button
             disabled={matchedJob?.job?.status}
             onClick={handleClick}
-            className="absolute gap-2 bg-green-600 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center top-[50%] -translate-y-[50%]"
+            className="sticky top-0 gap-2 bg-green-600 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center mb-3"
           >
             {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}
             <span>{matchedJob?.job?.status ? 'Paid' : 'Pay'}</span>
           </button>
+        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky top-10 ">  
+          <div className="col-span-1">Name</div>
+          <div className="col-span-4">Details</div>
+          <div className="col-span-2 text-center">Experience</div>
+          <div className="col-span-2 text-center">Qualification</div>
+          <div className="col-span-2">Status</div>
+         
         </div>
         <div className="border bord border-b-0 mb-32">
           {!loading &&
@@ -323,40 +325,38 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
                     </div>
                   )}
                 </div>
-                <div className="col-span-2 text-center justify-center">
+                <div className="col-span-2 text-center justify-end">
+                
                   {matchedJob.job && (
-                    <Button
-                      disabled={
-                        !matchedJob?.job?.status ||
-                        (matchedJob?.job?.schedule &&
-                          matchedJob?.job?.schedule
-                            .map((e: any) => e.user.id)
-                            .includes(match.user.id))
-                      }
-                      render="light"
-                      text={
-                        <>
-                          <div className="flex items-center gap-2">
-                            <FaClock color="#000" size={16} />
-                            <span>
-                              {matchedJob.job.schedule
-                                .map((e: any) => e.user.id)
-                                .includes(match.user.id)
-                                ? 'Scheduled'
-                                : 'Schedule'}
-                            </span>
-                          </div>
-                        </>
-                      }
-                      bold={false}
-                      onClick={() =>
-                        handleSchedule({
-                          id: match.user.id,
-                          fname: match.user.fname,
-                          email: match.user.email,
-                        })
-                      }
-                    />
+                    <button
+                    disabled={
+                      !matchedJob?.job?.status ||
+                      (matchedJob?.job?.schedule &&
+                        matchedJob?.job?.schedule
+                          .map((e: any) => e.user.id)
+                          .includes(match.user.id))
+                    }
+                    onClick={() =>
+                      handleSchedule({
+                        id: match.user.id,
+                        fname: match.user.fname,
+                        email: match.user.email,
+                      })
+                    }
+                    className="gap-2 disabled:bg-[#FFA466] bg-orange text-black px-5 py-1 rounded-md cursor-pointer  flex items-center justify-center mb-3"
+                  >
+                   
+                    <div className="flex items-center gap-2">
+                                    <FaClock color="#000" size={16} />
+                                    <span>
+                                      {matchedJob.job.schedule
+                                        .map((e: any) => e.user.id)
+                                        .includes(match.user.id)
+                                        ? 'Scheduled'
+                                        : 'Schedule'}
+                                    </span>
+                                  </div>
+                  </button>
                   )}
                 </div>
               </div>

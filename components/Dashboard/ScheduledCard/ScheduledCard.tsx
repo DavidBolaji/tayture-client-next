@@ -293,10 +293,10 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
       <h3
       className={`font-[600] text-black_400 text-[18px] mb-4 ${regularFont.className}`}
     >
-      🚫 Attention!
+      🚫 Confirmation
     </h3>
     <p className={`text-[14px] ${regularFont.className}`}>
-    Are you sure you want to proceed with this action?
+    Applicant has been hired?
     </p>
       </StyledModal>
     </div>
