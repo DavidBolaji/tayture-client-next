@@ -42,8 +42,8 @@ const DashboardLayout = (props: PropsWithChildren) => {
   const router = useRouter()
   const isSchAdmin = !user
     ? false
-    : user.path && typeof user.path === 'string' && user.path.trim() !== ''
-    ? JSON.parse(user.path.replace(/'/g, '"')).includes('school admin')
+    : user?.path && typeof user?.path === 'string' && user?.path?.trim() !== ""
+    ? JSON.parse( user?.path.replace(/'/g, '"')).includes('school admin')
     : false
 
   const handleClick = (link: string) => {

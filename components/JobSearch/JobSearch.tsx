@@ -9,6 +9,7 @@ import debounce from 'lodash/debounce'
 import { Job } from '@prisma/client'
 import Spinner from '../Spinner/Spinner'
 
+
 interface JobSearchProps {
   className?: string
 }
@@ -48,13 +49,16 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
       Axios.get(`/job/${router.query.find}`)
         .then((res) => {
           setVal(res.data.job.job_title)
-          mutate(res.data.job.job_title)
+        
+          queryClient.setQueryData(['activeJob'], res.data.job)
+          queryClient.setQueryData(['jobs'], [res.data.job])
+          // mutate(res.data.job.job_title)
         })
         .catch((err) => {
           message.error((err as Error).message)
         })
     }
-  }, [router.query, mutate])
+  }, [router.query, queryClient])
 
   useEffect(() => {
     if (val.length === 0) {
@@ -88,6 +92,7 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
           value={val}
           onChange={(e) => handleSearch(e.target.value)}
           allowClear
+          
         />
       </div>
       <div

@@ -18,6 +18,33 @@ export default async function handler(
     where: {
       job_id: req.query.jobId as string,
     },
+    select: {
+      job_id: true,
+      job_title: true,
+      job_role: true,
+      job_active: true,
+      job_desc: true,
+      job_min_sal: true,
+      job_max_sal: true,
+      job_exp: true,
+      job_qual: true,
+      job_resumption: true,
+      job_no_hires: true,
+      jobSchoolId: true,
+      jobUserzId: true,
+      createdAt: true,
+      updatedAt: true,
+      school: {
+        select: {
+          sch_id: true,
+          sch_city: true,
+          sch_state: true,
+          sch_lga: true,
+          sch_address: true,
+        },
+      },
+      applied: true,
+    },
   })
 
   res
