@@ -166,7 +166,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
     : job.map((j: Job & { hired: Hired[] }) => (
         <div
           key={j.job_id}
-          className="md:col-span-6 col-span-12 bg-white gap-2 border hover:shadow rounded-md h-52 relative overflow-hidden"
+          className="md:col-span-6 col-span-12 bg-white gap-2 border hover:shadow rounded-md h-60 relative overflow-hidden"
         >
           <div
             className={`p-3 border-b flex justify-between ${regularFont.className}`}
@@ -196,6 +196,13 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
               <span>Experience:</span>
               <Tag color="green" className={`${regularFont.className} text-xs`}>
                 {j.job_exp} years
+              </Tag>
+            </div>
+
+            <div className={`${regularFont.className} text-xs space-x-2`}>
+              <span>Vacancy:</span>
+              <Tag color="green" className={`${regularFont.className} text-xs`}>
+                {j.job_no_hires}
               </Tag>
             </div>
 

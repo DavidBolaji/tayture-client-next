@@ -22,7 +22,9 @@ const TimerComponent = () => {
     setLoad(true)
     try {
       const result = await sendTextMessageOTP(user.phone as string)
-      localStorage.setItem('pinId', result.data.pinId)
+      console.log(result?.data?.pinId)
+      queryClient.setQueryData(['pinId'], () => result?.data?.pinId)
+      localStorage.setItem('pinId', result?.data?.pinId)
       setTime(() => Date.now() + 60000)
       setIsButtonDisabled(true)
       setLoad(false)

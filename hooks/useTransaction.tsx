@@ -8,6 +8,8 @@ import { GiPayMoney, GiReceiveMoney } from 'react-icons/gi'
 import moment from 'moment'
 import { formatNumber } from '@/utils/helpers'
 import { FaHandHolding } from 'react-icons/fa6'
+import { FaLockOpen } from 'react-icons/fa'
+import { GrLock, GrUnlock } from 'react-icons/gr'
 
 const hashType = {
   CREDIT: 'success',
@@ -28,7 +30,7 @@ const useTransaction = () => {
     },
   })
 
-  const limitTransaction = transactions ? transactions?.slice(0, 2) : []
+  const limitTransaction = transactions ? transactions?.slice(0, 4) : []
 
   const columns: ColumnsType<Transaction> = [
     {
@@ -74,6 +76,7 @@ const useTransaction = () => {
             {record.type === 'CREDIT' && <GiReceiveMoney color="lime" />}
             {record.type === 'DEBIT' && <GiPayMoney color="red" />}
             {record.type === 'LOCKED' && <FaHandHolding color="yellow" />}
+            {record.type === 'UNLOCKED' && <FaLockOpen color="green" />}
           </div>
           <div>{formatNumber(record.amount, 'NGN', {})}</div>
         </div>
@@ -132,7 +135,8 @@ const useTransaction = () => {
           <div className="-translate-y-[45px]">
             {record.type === 'CREDIT' && <GiReceiveMoney color="lime" />}
             {record.type === 'DEBIT' && <GiPayMoney color="red" />}
-            {record.type === 'LOCKED' && <FaHandHolding color="yellow" />}
+            {record.type === 'LOCKED' && <GrLock color="yellow" />}
+            {record.type === 'UNLOCKED' && <GrUnlock color="purple" />}
           </div>
           <div>{formatNumber(record.amount, 'NGN', {})}</div>
         </div>

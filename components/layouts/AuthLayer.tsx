@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { PropsWithChildren } from 'react'
 import HandleOTP from '../Modal/HandleOTP'
 import { useGlobalContext } from '@/Context/store'
+import Spinner from '../Spinner/Spinner'
 
 const AuthLayer = (props: PropsWithChildren) => {
   const router = useRouter()
@@ -24,7 +25,7 @@ const AuthLayer = (props: PropsWithChildren) => {
     queryFn: async () => {
       try {
         const req = await getUser2()
-        queryClient.setQueryData(['pinId'], req.data.user.pinId)
+        queryClient.setQueryData(['pinId'], () => req.data.user.pinId)
         const userData = req.data.user
         return userData
       } catch (error: any) {
@@ -48,8 +49,10 @@ const AuthLayer = (props: PropsWithChildren) => {
         }))
       }
 
-      
-      localStorage.setItem('pinId', data.pinId)
+
+      if (typeof data.pinId !== "undefined" && data.pinId.trim().length > 0) {
+        localStorage.setItem('pinId', data.pinId)
+      }
       localStorage.setItem('email', data.email)
 
       if (job === '1') {
@@ -70,7 +73,7 @@ const AuthLayer = (props: PropsWithChildren) => {
   }, [mounted, data, job, school, setUI, router, profile])
 
   if (!mounted || isLoading) {
-    return <div>loading...</div>
+    return <div className='flex h-screen w-full justify-center items-center'><Spinner color="orange" /></div>
   }
 
   if (isError) {

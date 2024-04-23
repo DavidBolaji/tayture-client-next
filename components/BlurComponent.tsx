@@ -55,7 +55,7 @@ const BlurComponent: React.FC<{pay: () => void, status: boolean, redirect: () =>
         </div>
       </div>
       <div className="items-center mb-[8px] relative blur-sm">
-        <ListComponent
+        {/* <ListComponent
           key="l1"
           col
           title="Highest Education"
@@ -72,7 +72,7 @@ const BlurComponent: React.FC<{pay: () => void, status: boolean, redirect: () =>
           col
           title="skills"
           text="communication, classroom management"
-        />
+        /> */}
         <div className="mt-2 -translate-x-6 scale-75">
           <CVComponent name="david.pdf" ext="pdf" onClick={() => {}} />
         </div>
