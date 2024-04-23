@@ -8,6 +8,7 @@ import { IJobSchDb } from '@/pages/api/job/types'
 import { useGlobalContext } from '@/Context/store'
 import JobAppliedPage from './JobAppliedPage'
 import JobSchedulePage from './JobSchedulePage'
+import JobHiredPage from './JobHiredPage'
 const {useBreakpoint} = Grid
 
 const JobCardAll: React.FC<{
@@ -30,11 +31,14 @@ const JobCardAll: React.FC<{
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
 
   const handleClick = () => {
+    console.log('triggered')
     if (type === 'applied') {
       queryClient.setQueryData(['activeAppliedJob'], jobData.job)
     } else if (type === 'scheduled') {
       queryClient.setQueryData(['activeScheduledJob'], jobData)
     } else if (type === 'hired') {
+      console.log('hired')
+      console.log(jobData)
       queryClient.setQueryData(['activeHiredJob'], jobData)
     } 
     setCount((prev) => prev + 1)
@@ -48,6 +52,7 @@ const JobCardAll: React.FC<{
   }
 
   useEffect(() => {
+    if(!open) return;
     handleClick()
   }, [type])
 
@@ -82,6 +87,7 @@ const JobCardAll: React.FC<{
       >
          {type === 'applied' && <JobAppliedPage />}
           {type === 'scheduled' && <JobSchedulePage />}
+          {type === 'hired' && <JobHiredPage />}
       </Drawer>
     </>
   )

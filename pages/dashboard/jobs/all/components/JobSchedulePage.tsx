@@ -56,9 +56,12 @@ const JobSchedulePage = () => {
   const handleYes = (data: any) => {
     mutate({ ...data })
   }
+  const handleShow = () => {
+    setShow(true)
+  }
 
   return (
-    <div className={`pr-5 ${regularFont.className}`}>
+    <div className={` bg-white px-5 py-3 ${regularFont.className}`}>
       {!data ? null : (
         <Badge.Ribbon
           text={
@@ -75,7 +78,7 @@ const JobSchedulePage = () => {
               ? 'red'
               : 'grey'
           }
-          className="-translate-y-3 translate-x-10"
+          className="-translate-y-3 translate-x-5"
         >
           <h3
             className={`mb-[24px] text-black_400 font-[500] text-center text-[20px] md:text-[24px] ${regularFont.className}`}
@@ -99,7 +102,7 @@ const JobSchedulePage = () => {
             <p className="text-[14px] mb-[8px]">{data.job.job_desc}</p>
             <button
               type="button"
-              onClick={() => setShow((prev) => !prev)}
+              onClick={handleShow}
               className="bg-transparent text-orange text-[14px] md:text-[16px] mb-[24px]"
             >
               More details

@@ -39,6 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                   sch_state: true,
                 },
               },
+              createdAt: true
             },
           },
         },

@@ -1,30 +1,26 @@
 import { useGlobalContext } from '@/Context/store'
-import { regularFont } from '@/assets/fonts/fonts'
-import BtnDashboard from '@/components/JobPoster/BtnDashboard'
-import { IJobSchDb } from '@/pages/api/job/types'
-import { IUser } from '@/pages/api/users/types'
-import { datePosted, salaryOutput } from '@/utils/helpers'
+import { boldFont, regularFont } from '@/assets/fonts/fonts'
+import Button from '@/components/Button/Button'
+import {  salaryOutput } from '@/utils/helpers'
 import { useQueryClient } from '@tanstack/react-query'
-import { Empty, Skeleton, Space } from 'antd'
-import { useRouter } from 'next/router'
+import { Empty, Space } from 'antd'
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
+import { FaCheck } from 'react-icons/fa'
 import { FaLocationDot } from 'react-icons/fa6'
 
 const JobHiredPage:React.FC = (props) => {
   const queryClient = useQueryClient()
-  const router = useRouter()
   const data = queryClient.getQueryData(['activeHiredJob']) as any
-  const user = queryClient.getQueryData(['user']) as IUser
   const { count, setUI } = useGlobalContext()
-  const [reset, setReset] = useState(0)
+  const [, setReset] = useState(0)
 
   useEffect(() => {
     setReset((prev) => prev + 1)
   }, [data, count])
 
-
   return !data ? null : Object.keys(data).length > 0 ? (
-    <div className={`m-0 p-0 ${regularFont.className}`}>
+    <div className={`m-0 px-5 py-3 bg-white ${regularFont.className} border`}>
       <h2
         className={`text-[24px] ${regularFont.className} text-black mb-[16px]`}
       >
@@ -36,14 +32,30 @@ const JobHiredPage:React.FC = (props) => {
           <span>{data.job.school.sch_city}</span>
         </span>
         <span className="text-ash_400">
-          Posted:&nbsp;
-          {datePosted(data.job.createdAt as string)}
+          Resumption:&nbsp;
+          {moment(data.job.job_resumption).format("DD MMM YYYY")}
         </span>
         
       </Space>
-      <BtnDashboard />
+      <div className='my-[24px] ml-1'>
+      <Button
+          disabled
+          render="dark"
+          text={
+            <>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-orange inline-block p-1">
+                  <FaCheck color="#000" size={10} />
+                </span>
+                <span>Hired</span>
+              </div>
+            </>
+          }
+          bold={false}
+        />
+      </div>
       
-      <h3 className="text-[20px] mb-[12px]">Job Details</h3>
+      <h3 className={`text-[12px] md:text-[16px] mb-[10px] ${boldFont.className}`}>Job Details</h3>
       <p className="mb-[10px]">
         {' '}
         Salary range: #{`${salaryOutput(data.job.job_min_sal, data.job.job_max_sal)}`}
