@@ -61,7 +61,7 @@ const JobSchedulePage = () => {
   }
 
   return (
-    <div className={` bg-white px-5 py-3 ${regularFont.className}`}>
+    <div className={` bg-white border rounded-md px-5 py-3 ${regularFont.className}`}>
       {!data ? null : (
         <Badge.Ribbon
           text={
@@ -78,10 +78,10 @@ const JobSchedulePage = () => {
               ? 'red'
               : 'grey'
           }
-          className="-translate-y-3 translate-x-5"
+          className="md:-translate-y-3 border -translate-y-8 translate-x-5 "
         >
           <h3
-            className={`mb-[24px] text-black_400 font-[500] text-center text-[20px] md:text-[24px] ${regularFont.className}`}
+            className={`mb-[24px] text-black_400 font-[500] text-center text-[20px] md:text-[24px] md:mt-0 mt-5 ${regularFont.className}`}
           >
             Invitation to interview
           </h3>
