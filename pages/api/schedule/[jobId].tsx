@@ -54,14 +54,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const [scheduled, job] = await Promise.all([req1, jobs])
 
-    console.log({
-      scheduled: [...scheduled].map(({ job, user, ...rest }) => ({
-        ...rest,
-        user,
-      })),
-      job: job.data.job,
-    })
-
     return res.status(200).json({
       message: 'Scheduled fetched succesfully',
       scheduled: {

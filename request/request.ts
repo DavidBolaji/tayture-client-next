@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { parseCookies } from 'nookies'
-import Router from 'next/router';
+
 
 let url =
   process.env.NEXT_PUBLIC_ENV === 'prod'
@@ -34,8 +34,8 @@ Axios.interceptors.response.use(
   async (error) => {
     const prevRequest = error?.config;
     if (error?.response?.status === 401) {
-      console.log(error.response);
-      await Router.push('/auth/login'); // Redirect to login page
+    
+      window.location.assign('/auth/login'); // Redirect to login page
     } else if (error?.response?.status === 403 && !prevRequest?.sent) {
       prevRequest.sent = true;
       try {
