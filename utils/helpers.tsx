@@ -224,7 +224,6 @@ export const formatNumberToK = (value: string) => {
     const num = Number(n.trim().replace(',',''))
 
     if (isNaN(num)) {
-      console.log('entered');
       return null; // Return null if value is not a valid number
     }
 
