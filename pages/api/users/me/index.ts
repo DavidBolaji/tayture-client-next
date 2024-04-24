@@ -17,6 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           jobId: true,
           job: {
             select: {
+              job_id: true,
               job_title: true,
               job_role: true,
               job_desc: true,
@@ -49,6 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         include: {
           job: {
             select: {
+              job_id: true,
               job_title: true,
               job_role: true,
               job_desc: true,
@@ -82,6 +84,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         include: {
           job: {
             select: {
+              job_id: true,
               job_title: true,
               job_role: true,
               job_desc: true,

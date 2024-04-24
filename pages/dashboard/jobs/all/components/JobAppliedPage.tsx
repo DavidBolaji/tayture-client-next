@@ -43,19 +43,19 @@ const JobAppliedPage:React.FC = (props) => {
     }
   }, [router.query])
 
-  
+  console.log(data)
 
   return !data ? null: Object.keys(data).length > 0 ? (
     <div className={`m-0 px-5 py-3 bg-white ${regularFont.className}`}>
       <h2
         className={`text-[24px] ${regularFont.className} text-black mb-[16px]`}
       >
-        {data.job_title}
+        {data?.job_title}
       </h2>
       <Space className="space-x-[24px]">
         <span className="flex gap-2 items-center">
           <FaLocationDot className="text-orange" />
-          <span>{data.school.sch_city}</span>
+          <span>{data?.school?.sch_city}</span>
         </span>
         <span className="text-ash_400">
           Posted:&nbsp;
@@ -87,12 +87,12 @@ const JobAppliedPage:React.FC = (props) => {
         Salary range: #{`${salaryOutput(data.job_min_sal, data.job_max_sal)}`}
       </p>
       <p className="mb-[10px]">
-        Minimum educational qualification : {data.job_qual}
+        Minimum educational qualification : {data?.job_qual}
       </p>
       <p className="mb-[10px]">
-        Minimum years of experience: {data.job_exp} Year(s)
+        Minimum years of experience: {data?.job_exp} Year(s)
       </p>
-      {data.job_role === 'teacher' && (
+      {data?.job_role === 'teacher' && (
         <>
           <h3 className="mb-[18px] text-[20px]">Subjects</h3>
           <h4 className="mb-2">{data.job_title}</h4>
