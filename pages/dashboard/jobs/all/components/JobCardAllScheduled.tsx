@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Drawer, Empty, Space, Tag, Grid } from 'antd'
 import { useQueryClient } from '@tanstack/react-query'
-import { regularFont } from '@/assets/fonts/fonts'
+import { boldFont, regularFont } from '@/assets/fonts/fonts'
 import { FaLocationDot } from 'react-icons/fa6'
 import { salaryOutput } from '@/utils/helpers'
 import { IJobSchDb } from '@/pages/api/job/types'
@@ -48,24 +48,26 @@ const JobCardAllScheduled: React.FC<{
       queryClient.setQueryData(['activeScheduledJob'], jobData)
     }
   }, [idx, queryClient, jobData])
+
+
  
   return (
     <>
       <div
         onClick={handleClick}
         key={`${id}`}
-        className={`transition-all relative -z-[0] min-w-[350px] rounded-md cursor-pointer hover:shadow-md p-[24px] border mb-5 ${
+        className={`transition-all rounded-md cursor-pointer hover:shadow-md p-[24px] border mb-5 ${
           data?.jobId === id ? 'border-orange' : 'border-ash_400 '
         } ${regularFont.className}`}
       >
-        <h2 className="mb-[16px]">{title}</h2>
+        <h2 className={`mb-3 text-[14px] ${boldFont.className}`}>{title}</h2>
         <Space>
           <FaLocationDot className="text-orange" />
           <span>
             {lga}, {city}, {state}
           </span>
         </Space>
-        <div className=" mt-[24px] whitespace-break-spaces space-y-2 ">
+        <div className=" mt-[10px] whitespace-break-spaces space-y-2 ">
           <Tag className="bg-ash_600 text-black">#{salaryOutput(min, max)}</Tag>
           <Tag className="bg-ash_600 text-black">{qual}</Tag>
           <Tag className="bg-ash_600 text-black">{exp} years Experience</Tag>

@@ -48,7 +48,7 @@ const JobCard: React.FC<{ job: IJobSchDb, copy?: boolean }> = ({ job, copy = fal
         navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONTEND_API}/find_job?find=${id}`);
         message.success('Link copied to clipboard');
       }}
-      className='absolute z-[1000] top-1 right-1 bg-orange p-3 cursor-pointer'>
+      className='absolute z-[0] top-1 right-1 bg-orange p-3 cursor-pointer'>
         <AiOutlineCopy />
       </div>}
       <div

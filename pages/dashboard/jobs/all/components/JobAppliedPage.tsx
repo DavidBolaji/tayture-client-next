@@ -43,7 +43,7 @@ const JobAppliedPage:React.FC = (props) => {
     }
   }, [router.query])
 
-  console.log(data)
+  
 
   return !data ? null: Object.keys(data).length > 0 ? (
     <div className={`m-0 px-5 py-3 bg-white ${regularFont.className}`}>
