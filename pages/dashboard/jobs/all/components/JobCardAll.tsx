@@ -30,8 +30,7 @@ const JobCardAll: React.FC<{
   const { count, setCount } = useGlobalContext()
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
 
-  const handleClick = () => {
-    console.log('triggered')
+  const setPage = () => {
     if (type === 'applied') {
       queryClient.setQueryData(['activeAppliedJob'], jobData.job)
     } else if (type === 'scheduled') {
@@ -41,6 +40,9 @@ const JobCardAll: React.FC<{
       console.log(jobData)
       queryClient.setQueryData(['activeHiredJob'], jobData)
     } 
+  }
+  const handleClick = () => {
+    setPage();
     setCount((prev) => prev + 1)
     if (screens.xs || (screens.sm && !screens.md)) {
       if(!open) {
@@ -52,6 +54,7 @@ const JobCardAll: React.FC<{
   }
 
   useEffect(() => {
+    setPage()
     if(!open) return;
     handleClick()
   }, [type])
