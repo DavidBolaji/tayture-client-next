@@ -1,22 +1,28 @@
 'use client'
 import { regularFont } from '@/assets/fonts/fonts'
-import { IUser } from '@/pages/api/users/types'
 
-import { useQueryClient } from '@tanstack/react-query'
-import { Badge, ConfigProvider, Empty, Tabs, TabsProps } from 'antd'
+import { useQuery } from '@tanstack/react-query'
+import { Badge, ConfigProvider, Skeleton, Tabs, TabsProps } from 'antd'
 import { FC, useState } from 'react'
-import JobCardAll from './components/JobCardAll'
 import JobAppliedPage from './components/JobAppliedPage'
 import JobSchedulePage from './components/JobSchedulePage'
-import { Hired } from '@prisma/client'
 import JobHiredPage from './components/JobHiredPage'
+import JobCardAll2 from './components/JobCardAll2'
+import JobCardAllApplied from './components/JobCardAllApplied'
+import JobCardAllScheduled from './components/JobCardAllScheduled'
+import JobCardAllHired from './components/JobCardAllHired'
+import { getUser2 } from '@/lib/api/user'
+import Spinner from '@/components/Spinner/Spinner'
 
 const UserJobPage: FC = (props) => {
-  const queryClient = useQueryClient()
-  const [type, setType] = useState<'applied' | 'scheduled' | 'hired'>('applied')
-  const user = queryClient.getQueryData(['user']) as unknown as IUser & {
-    hired: Hired[]
+ const [type, setType] = useState<'applied' | 'scheduled' | 'hired'>('applied')
+ const {data: user, isPending} = useQuery({
+  queryKey: ['user'],
+  queryFn: async () => { const req = await getUser2();
+    const user = req.data.user
+    return user
   }
+ })
 
   const items: TabsProps['items'] = [
     {
@@ -24,17 +30,17 @@ const UserJobPage: FC = (props) => {
       label: 'Applied',
       children: (
         <>
-          {user?.applied!.length > 0 ? (
-            user.applied!.map((applied: any) => (
+          {isPending ? <Skeleton loading={isPending} active />: user?.applied!.length > 0 ? (
+            user.applied!.map((applied: any, idx: number) => (
               <Badge.Ribbon
                 color="black"
                 text="Applied"
-                key={`${applied.job_id}_applied`}
+                key={`${applied.jobId}_applied`}
               >
-                <JobCardAll type={type} job={applied} />
+                <JobCardAllApplied job={applied} idx={idx} />
               </Badge.Ribbon>
             ))
-          ):<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+          ):<JobCardAll2 type={type} />}
         </>
       ),
     },
@@ -43,17 +49,17 @@ const UserJobPage: FC = (props) => {
       label: 'Scheduled',
       children: (
         <>
-          {user?.schedule!.length > 0 ? (
-            user.schedule!.map((schedule: any) => (
+          {isPending ? <Skeleton loading={isPending} active /> : user?.schedule!.length > 0 ? (
+            user.schedule!.map((schedule: any, idx: number) => (
               <Badge.Ribbon
-                key={`${schedule.job.job_id}_scheduled`}
+                key={`${schedule.jobId}_scheduled`}
                 color="grey"
                 text="Scheduled"
               >
-                <JobCardAll type={type} job={schedule} />
+                <JobCardAllScheduled job={schedule} idx={idx} />
               </Badge.Ribbon>
             ))
-          ):<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> }
+          ):<JobCardAll2 type={type} />}
         </>
       ),
     },
@@ -62,17 +68,17 @@ const UserJobPage: FC = (props) => {
       label: 'Hired',
       children: (
         <>
-          {user?.hired!.length > 0 ? (
-            user.hired!.map((hired: any) => (
+          {isPending ? <Spinner /> : user?.hired!.length > 0 ? (
+            user.hired!.map((hired: any, idx: number) => (
               <Badge.Ribbon
                 key={`${hired.job.job_id}_hired`}
                 color="green"
                 text="Hired"
               >
-                <JobCardAll type={type} job={hired} />
+                <JobCardAllHired job={hired} idx={idx} />
               </Badge.Ribbon>
             ))
-          ): <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+          ): <JobCardAll2 type={type} />}
         </>
       ),
     },
@@ -92,7 +98,7 @@ const UserJobPage: FC = (props) => {
               },
             }}
           >
-            <Tabs type="card" items={items} onChange={handleChange} />
+            <Tabs  type="card" items={items} onChange={handleChange} />
           </ConfigProvider>
         </div>
         <div className="md:block hidden col-span-6 mt-14 rounded-md w-full">

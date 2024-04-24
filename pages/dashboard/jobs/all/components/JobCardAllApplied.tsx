@@ -7,14 +7,12 @@ import { salaryOutput } from '@/utils/helpers'
 import { IJobSchDb } from '@/pages/api/job/types'
 import { useGlobalContext } from '@/Context/store'
 import JobAppliedPage from './JobAppliedPage'
-import JobSchedulePage from './JobSchedulePage'
-import JobHiredPage from './JobHiredPage'
 const {useBreakpoint} = Grid
 
-const JobCardAll: React.FC<{
-  job: { job: IJobSchDb }
-  type: 'applied' | 'scheduled' | 'hired'
-}> = ({ job: jobData, type }) => {
+const JobCardAllApplied: React.FC<{
+  job: { job: IJobSchDb, jobId: string }
+  idx: number
+}> = ({ job: jobData, idx}) => {
   const {
     job_title: title,
     school: { sch_lga: lga, sch_city: city, sch_state: state },
@@ -28,18 +26,10 @@ const JobCardAll: React.FC<{
   const screens = useBreakpoint()
   const queryClient = useQueryClient()
   const { count, setCount } = useGlobalContext()
-  const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
+  const data = queryClient.getQueryData(['activeAppliedJob']) as IJobSchDb
 
   const setPage = () => {
-    if (type === 'applied') {
-      queryClient.setQueryData(['activeAppliedJob'], jobData.job)
-    } else if (type === 'scheduled') {
-      queryClient.setQueryData(['activeScheduledJob'], jobData)
-    } else if (type === 'hired') {
-      console.log('hired')
-      console.log(jobData)
-      queryClient.setQueryData(['activeHiredJob'], jobData)
-    } 
+    queryClient.setQueryData(['activeAppliedJob'], jobData.job)
   }
   const handleClick = () => {
     setPage();
@@ -54,16 +44,17 @@ const JobCardAll: React.FC<{
   }
 
   useEffect(() => {
-    setPage()
-    if(!open) return;
-    handleClick()
-  }, [type])
+    if (idx === 0) {
+      queryClient.setQueryData(['activeAppliedJob'], jobData.job)
+    }
+  }, [idx, queryClient, jobData])
 
+ 
   return (
     <>
       <div
         onClick={handleClick}
-        key={`${id}_${type}`}
+        key={`${id}`}
         className={`transition-all relative -z-[0] min-w-[350px] rounded-md cursor-pointer hover:shadow-md p-[24px] border mb-5 ${
           data?.job_id === id ? 'border-orange' : 'border-ash_400 '
         } ${regularFont.className}`}
@@ -88,12 +79,10 @@ const JobCardAll: React.FC<{
         placement='bottom'
         height={'80%'}
       >
-         {type === 'applied' && <JobAppliedPage />}
-          {type === 'scheduled' && <JobSchedulePage />}
-          {type === 'hired' && <JobHiredPage />}
+        <JobAppliedPage />
       </Drawer>
     </>
   )
 }
 
-export default JobCardAll
+export default JobCardAllApplied
