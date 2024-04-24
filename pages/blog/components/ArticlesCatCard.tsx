@@ -71,7 +71,7 @@ const ArticlesCatCard = ({
         <div className="flex-shrink-0 relative w-full  aspect-w-7 aspect-h-5 overflow-hidden rounded-3xl overflow-hidden group">
           <ImgCont
             bg_image_url={bg_image_url}
-            className="bg-cover object-cover rounded-2xl w-full p-[0.75rem]"
+            className="bg-cover object-cover rounded-2xl w-full p-[0.75rem] "
           >
             <BlogTagStyle
               text={rank}
@@ -84,6 +84,8 @@ const ArticlesCatCard = ({
         </div>
 
         {/* Category total articles color */}
+        <div className='mt-4'>
+
         <ImgNameDate
           authName={category}
           // altImage="tayture"
@@ -97,6 +99,7 @@ const ArticlesCatCard = ({
           imageSrc={authImgCont_imageSrc}
           altImage={authImgCont_altImage}
         />
+        </div>
       </a>
     </ArticlesCatCardCont>
   )

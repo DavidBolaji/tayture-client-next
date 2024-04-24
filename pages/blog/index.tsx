@@ -19,6 +19,8 @@ import MustRead from './components/MustRead'
 import K12Section from './components/K12Section'
 import LatestArcticlesSection from './components/LatestArcticlesSection'
 import SingleBlogTemplate from './pages/SingleBlogTemplate'
+import SingleCategoryTemplate from './pages/SingleCategoryTemplate'
+import NewsletterSection from './components/Newsletter/NewsletterSection'
 
 const Blog = () => {
   return (
@@ -113,8 +115,12 @@ const Blog = () => {
             {/* Section 5 Latest Articels*/}
             <LatestArcticlesSection />
 
+            <SingleBlogTemplate />
 
+            <NewsletterSection />
           </Wrapper>
+
+          {/* <SingleCategoryTemplate /> */}
 
           <Footer />
         </div>

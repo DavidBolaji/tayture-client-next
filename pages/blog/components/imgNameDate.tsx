@@ -12,13 +12,13 @@ interface ImgNameDateProps {
   imageSrc?:string;
   altImage?: string;
   is_image: boolean
+  is_mt?:boolean
 }
 
 const ImgNameDateCont = styled.div<ImgNameDateProps>`
   & {
     display: flex;
     align-items: center;
-    margin-top: 18.75px;
   }
 
   & .authImgCont {
