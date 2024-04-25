@@ -39,7 +39,7 @@ const sendPasswordMail = async ({
   })
 
   const mailOption: ImailOptions = {
-    from: 'Tayture <support@tayture.com>',
+    from: 'Tayture <hello@tayture.com>',
     to: email,
     subject: `Important Information Regarding Your Account<${dateTime}>`,
     html: dat,

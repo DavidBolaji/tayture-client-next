@@ -33,7 +33,7 @@ const sendCvMail = async ({
   let dateTime = cDate + ' ' + cTime
 
   const mailOption: ImailOptions = {
-    from: 'complaint@tayture.com',
+    from: 'hello@tayture.com',
     to: 'hello@tayture.com',
     subject: `Resume <${dateTime}>`,
     html: `<p>Dear ${firstName}, \n attached to this mail is your cv. Thank you for using Tayture</p>`,

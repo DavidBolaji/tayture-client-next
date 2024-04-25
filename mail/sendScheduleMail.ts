@@ -46,7 +46,7 @@ const sendScheduleMail = async ({
   const mailOption: ImailOptions = {
     from: 'Tayture <hello@tayture.com>',
     to: email,
-    bcc: ['info@tayture.com'],
+    // bcc: ['info@tayture.com'],
     subject: `🌟 Interview Invitation - Please Confirm Your Attendance 🌟 <${dateTime}>`,
     html: dat,
   }

@@ -55,7 +55,7 @@ const sendAssesementResultMail = async ({
   const mailOption: ImailOptions = {
     from: 'Tayture <hello@tayture.com>',
     to: email,
-    bcc: ['assesement@tayture.com'],
+    // bcc: ['assesement@tayture.com'],
     subject: `Here comes the result of your satisfaction calculator <${dateTime}>`,
     html: dat,
   }

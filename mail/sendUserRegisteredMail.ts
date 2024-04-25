@@ -23,7 +23,7 @@ const sendUserRegisteredMail = async ({ name }: { name: string }) => {
 
   const mailOption: ImailOptions = {
     from: 'hello@tayture.com',
-    to: 'support@tayture.com',
+    to: 'hello@tayture.com',
     subject: `User signed up <${dateTime}>`,
     html: `<p>Hurray, ${name} just registerd</p>`,
   }
@@ -50,7 +50,7 @@ export const sendSchCreateddMail = async ({ name }: { name: string }) => {
 
   const mailOption: ImailOptions = {
     from: 'hello@tayture.com',
-    to: 'support@tayture.com',
+    to: 'hello@tayture.com',
     subject: `School Created <${dateTime}>`,
     html: `<p>Hurray, ${name} just created a school page</p>`,
   }
@@ -77,7 +77,7 @@ export const sendJobPostedMail = async ({ name }: { name: string }) => {
 
   const mailOption: ImailOptions = {
     from: 'hello@tayture.com',
-    to: 'support@tayture.com',
+    to: 'hello@tayture.com',
     subject: `Job Posted <${dateTime}>`,
     html: `<p>Hurray, ${name} just posted a job</p>`,
   }

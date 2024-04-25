@@ -2,22 +2,26 @@ import nodemailer from 'nodemailer'
 // import { env } from "../config";
 
 const transporter = nodemailer.createTransport({
-  host: 'tayture.com',
+  service: "zoho",
+  host: 'smtpro.zoho.in',
   port: 465,
   secure: true,
   auth: {
     user: 'hello@tayture.com',
     pass: '.g?Ov?}oty$0',
+    // pass: `${process.env.NEXT_PUBLIC_MAIL_AUTH_PASS_ONE}`,
   },
 })
 
 export const transporter2 = nodemailer.createTransport({
-  host: 'tayture.com',
+  service: "zoho",
+  host: 'smtpro.zoho.in',
   port: 465,
   secure: true,
   auth: {
-    user: 'support@tayture.com',
-    pass: process.env.NEXT_PUBLIC_MAIL_AUTH_PASS_TWO,
+    user: 'hello@tayture.com',
+    pass: '.g?Ov?}oty$0',
+    // pass: `${process.env.NEXT_PUBLIC_MAIL_AUTH_PASS_ONE}`,
   },
 })
 
