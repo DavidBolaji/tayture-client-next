@@ -43,7 +43,7 @@ const sendRemainderMail = async ({
   const mailOption: ImailOptions = {
     from: 'Tayture <hello@tayture.com>',
     to: email,
-    bcc: ['info@tayture.com'],
+    // bcc: ['info@tayture.com'],
     subject: `🌟 Interview Reminder 🌟 <${dateTime}>`,
     html: dat,
   }

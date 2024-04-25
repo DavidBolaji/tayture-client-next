@@ -1,10 +1,14 @@
-'use client'
+
 import Button from '@/components/Button/Button'
 import React from 'react'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
+import sendWelcomeMail from '@/mail/sendWelcomeMail'
+import { Axios } from '@/request/request'
 
 const NavigationButton = () => {
-  const router = useRouter()
+  const send = async () => {
+    await Axios.post('/mail/welcome', {firstName: 'David', email: 'odavidbolaji14@gmail.com'})
+  }
 
   return (
     <Button
@@ -13,7 +17,8 @@ const NavigationButton = () => {
       render="light"
       text="Start Now"
       hover
-      onClick={() => router.push('/auth/register')}
+      onClick={send}
+      // onClick={() => router.push('/auth/register')}
     />
   )
 }
