@@ -7,12 +7,9 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   try {
-    // await sendWelcomeMail({
-    //   firstName: req.body.firstName,
-    //   email: req.body.email,
-    // })
-    await sendUserRegisteredMail({
-      name: 'David'
+    await sendWelcomeMail({
+      firstName: req.body.firstName,
+      email: req.body.email,
     })
     return res.status(200).send({ message: 'SMS sent succesfully' })
   } catch (error: any) {
