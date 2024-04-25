@@ -28,6 +28,7 @@ const pages = [
   'BuildPage',
   'One',
   'Blog',
+  'SingleBlogTemplate',
 ]
 
 export default function App({

@@ -2,6 +2,7 @@ import React from 'react'
 import { BlogTagStyle } from './BlogTagStyle.styles'
 import ImgNameDate from './ImgNameDate'
 import LikesCom from './LikesCom'
+import Link from 'next/link'
 
 interface SmallArticleCardProps {
   tag_text: string
@@ -23,7 +24,8 @@ interface SmallArticleCardProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
-  ref?: React.RefObject<HTMLDivElement>
+  // ref?: React.RefObject<HTMLDivElement>
+  blog_id:number,
 }
 
 const SmallArticleCard = ({
@@ -46,17 +48,18 @@ const SmallArticleCard = ({
   authImgCont_is_image,
   authImgCont_imageSrc,
   authImgCont_altImage,
-  ref,
+  // ref,
+  blog_id,
 }: SmallArticleCardProps) => {
   return (
     <div
       className={`SmallArticleCard relative flex group flex-row items-center sm:p-4 sm:rounded-3xl  border-neutral-200 h-full ${
         is_bg_border ? 'sm:bg-white sm:border' : ''
       }`}
-     ref={ref} 
+    //  ref={ref} 
     >
-      
-      <a className="absolute inset-0 z-0" href="#"></a>
+  
+      <Link className="absolute inset-0 z-11" href={`/blog/${blog_id}`}></Link>
       {/* tag heading auth date like comm cont */}
       <div className="flex flex-col flex-grow">
         {/* tag heading auth date cont */}

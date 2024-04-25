@@ -1,5 +1,5 @@
 import React from 'react'
-import CategoryOthers from '../components/singleCategoryTemplateComponents/CategoryOthers'
+import CategoryOthers from './CategoryOthers'
 import Wrapper from '@/components/Wrapper/Wrapper'
 
 function SingleCategoryTemplate() {

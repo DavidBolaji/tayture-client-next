@@ -1,17 +1,26 @@
 import React from 'react'
 import ImgNameDate from './ImgNameDate'
+import FetchBlogs from '../data/FetchBlogs';
+
+const blogs = FetchBlogs()
 
 interface TrendingTopicProps {
   topic_bg_color: string;
   category: string;
-  no_articles: string;
+}
+
+function getTotalArticleCategory(blogs,category:string) {
+  // Filter the blogs array to include only those with the category "admin"
+  const articleCategory = blogs.filter(blog => blog.category === category);
+
+  // Return the length of the filtered array
+  return articleCategory.length;
 }
 
 function TrendingTopic({
   topic_bg_color,
   category,
-  no_articles,
-}: TrendingTopicProps) {
+  }: TrendingTopicProps) {
   return (
     <a
       href="#"
@@ -22,7 +31,7 @@ function TrendingTopic({
         authImgCont_wi_hei="2.7rem"
         bg_color={topic_bg_color}
         authName={category}
-        date={no_articles}
+        date={`${getTotalArticleCategory(blogs,category)} Articles`}
         isColumn={true}
         enableDash={false}
         is_image = {false}

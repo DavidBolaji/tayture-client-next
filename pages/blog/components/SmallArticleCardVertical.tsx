@@ -2,6 +2,8 @@ import React from 'react'
 import { BlogTagStyle } from './BlogTagStyle.styles'
 import ImgNameDate from './ImgNameDate'
 import LikesCom from './LikesCom'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface SmallArticleCardVerticalProps {
   tag_text: string
@@ -20,6 +22,7 @@ interface SmallArticleCardVerticalProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
+  blog_id: number
 }
 
 const SmallArticleCardVertical = ({
@@ -39,24 +42,25 @@ const SmallArticleCardVertical = ({
   authImgCont_is_image,
   authImgCont_imageSrc,
   authImgCont_altImage,
+  blog_id,
 }: SmallArticleCardVerticalProps) => {
   return (
     <div className="SmallArticleCardVertical relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full">
+      <Link href={`/blog/${blog_id}`} className="absolute z-10 inset-0"></Link>
       {/* image */}
       <div className="block flex-shrink-0 relative w-full rounded-t-3xl overflow-hidden z-10 aspect-w-5 aspect-h-3">
         <div>
-        <a
-          href="#"
-          className="block relative rounded-2xl overflow-hidden z-0  w-full h-full"
-        >
-          <img
-            src={img_src}
-            alt={alt_img}
-            className="object-cover object-cover  inset-0 w-full h-full"
-            sizes="(max-width: 600px) 480px, 800px"
-          />
-        </a>
-      </div>
+          <div className="block relative rounded-2xl overflow-hidden z-0  w-full h-full">
+            <Image
+              src={img_src}
+              alt={alt_img}
+              width={400}
+              height={400}
+              className="object-cover object-cover  inset-0 w-full h-full z-1"
+              sizes="(max-width: 600px) 480px, 800px"
+            />
+          </div>
+        </div>
       </div>
       <a className="absolute inset-0 z-0" href="#"></a>
 
@@ -81,7 +85,7 @@ const SmallArticleCardVertical = ({
             enableDash={true}
             isColumn={false}
             bg_color={ImgNameDate_bg_color}
-            authImgCont_wi_hei= {authImgCont_wi_hei}
+            authImgCont_wi_hei={authImgCont_wi_hei}
             is_image={authImgCont_is_image}
             imageSrc={authImgCont_imageSrc}
             altImage={authImgCont_altImage}
@@ -90,9 +94,7 @@ const SmallArticleCardVertical = ({
         {/* tag heading auth date cont */}
 
         <h2 className="block text-base font-semibold text-neutral-900 ">
-          <a className="line-clamp-2" href="#">
-            {heading_text}
-          </a>
+          {heading_text}
         </h2>
         {/* likes and comment */}
         <div className="flex items-end justify-between mt-auto">

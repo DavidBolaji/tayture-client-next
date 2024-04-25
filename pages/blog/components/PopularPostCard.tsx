@@ -1,10 +1,12 @@
 import React from 'react'
 import ImgNameDate from './ImgNameDate'
 import HeadingDesc from './HeadingDesc'
+import Link from 'next/link'
+import Image from 'next/image'
 
 interface PopularPostCardProps {
   popular_post_heading: string
-  popular_post_tag: string
+  blog_id: number
   popular_post_image: string
   popular_post_image_alt: string
   authImgCont_is_image: boolean
@@ -14,7 +16,7 @@ interface PopularPostCardProps {
 
 function PopularPostCard({
   popular_post_heading,
-  popular_post_tag,
+  blog_id,
   popular_post_image,
   popular_post_image_alt,
   authImgCont_is_image,
@@ -23,8 +25,8 @@ function PopularPostCard({
 }: PopularPostCardProps) {
   return (
     <div className="relative flex flex-row justify-between items-center p-4 xl:px-5 xl:py-6 hover:bg-neutral-200 dark:hover:bg-neutral-700">
-      <a href={popular_post_tag} className="absolute inset-0"></a>
       <div className="relative space-y-2">
+      <Link href={`/blog/${blog_id}`} className="absolute inset-0 z-10"></Link>
         <ImgNameDate
           authImgCont_wi_hei="1.75rem"
           bg_color="black"
@@ -48,18 +50,20 @@ function PopularPostCard({
         </h2>
       </div>
 
-      <div className="w-20 flex-shrink-0 relative rounded-lg overflow-hidden z-0 ml-4 group">
-        <img
+      {/* Image */}
+      <div className="w-20 flex-shrink-0 relative rounded-lg overflow-hidden ml-4 group">
+        <Image
           sizes="100px"
+          height={400}
+          width={400}
           src={popular_post_image}
           title={popular_post_image_alt}
-          class="object-cover w-full h-full group-hover:scale-110 transform transition-transform duration-300"
+          className="object-cover w-full h-full group-hover:scale-110 transform transition-transform duration-300"
           alt={popular_post_image_alt}
         />
       </div>
     </div>
   )
-
 }
 
 export default PopularPostCard

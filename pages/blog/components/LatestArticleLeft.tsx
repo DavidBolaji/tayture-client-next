@@ -30,9 +30,10 @@ function LatestArticleLeft() {
       />
 
       <div className="latest_articles_cont grid gap-6 md:gap-8 ">
-        {blogs.map((blog: BlogPost, index: number) => (
+        {blogs.map((blog, index: number) => (
           <SmallArticleCard
             key={`${blog.id}`}
+            blog_id={blog.id}
             tag_text={blog.category}
             tag_text_color={blog.category_text_hoverBg_color}
             tag_bg_color={blog.category_bg_color}
@@ -45,7 +46,7 @@ function LatestArticleLeft() {
             likes_num={`${blog.likes}`}
             comments_num={`${blog.comments}`}
             likesCom_bg_color="rgba(249,250,251)"
-            img_src={blog.ver_image_src}
+            img_src={blog.hor_image_src}
             alt_img="Lorem ipsum"
             is_bg_border={false}
             is_description={true}

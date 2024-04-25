@@ -2,6 +2,8 @@ import React from 'react'
 import { BlogTagStyle } from './BlogTagStyle.styles'
 import ImgNameDate from './ImgNameDate'
 import LikesCom from './LikesCom'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface MainArticleCardProps {
   img_src: string
@@ -21,6 +23,7 @@ interface MainArticleCardProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
+  blog_id:number
 }
 
 const MainArticleCard = ({
@@ -41,15 +44,19 @@ const MainArticleCard = ({
   authImgCont_is_image,
   authImgCont_imageSrc,
   authImgCont_altImage,
+  blog_id,
 }: MainArticleCardProps) => {
   return (
     <div className="group relative flex flex-col h-full">
-      <div className="ImgCont block flex-shrink-0 flex-grow relative w-full h-0 pt-[75%] sm:pt-[55%] z-0">
-        <img
+      <Link href={`/blog/${blog_id}`} className='absolute inset-0 z-10'></Link>
+      <div className="ImgCont block flex-shrink-0 flex-grow relative w-full h-0 pt-[75%] sm:pt-[55%] z-1">
+        <Image
           sizes="(max-width: 600px) 480px, 800px"
+          width={400}
+          height={400}
           src={img_src}
-          className="object-cover rounded-3xl object-cover absolute inset-0 w-full h-full"
-          alt={alt_img}
+          className="object-cover rounded-3xl object-cover absolute inset-0 z-1 w-full h-full"
+          alt={alt_img!}
         />
         <BlogTagStyle
           text={tag_text}
@@ -84,7 +91,7 @@ const MainArticleCard = ({
             {article_heading}
           </a>
         </h2>
-        <span className="block text-neutral-500 text-[15px] leading-6  mt-4">
+        <span className=" text-neutral-500 text-[15px] leading-6  mt-4 line-clamp-5">
           {article_description}
         </span>
       </div>

@@ -40,6 +40,7 @@ function MustRead() {
           {leftRightPosts.slice(0, 2).map((leftBlog) => (
             <SmallArticleCardVertical
               key={`${leftBlog.id}`}
+              blog_id={leftBlog.id}
               tag_text={leftBlog.category}
               tag_text_color={leftBlog.category_text_hoverBg_color}
               tag_bg_color={leftBlog.category_bg_color}
@@ -62,6 +63,7 @@ function MustRead() {
           {centeredPost && (
             <MainArticleCard
               key={`${centeredPost.id}`}
+              blog_id={centeredPost.id}
               img_src={centeredPost.hor_image_src}
               alt_img="Lorem ipsum"
               tag_text={centeredPost.category}
@@ -85,6 +87,7 @@ function MustRead() {
         {leftRightPosts.slice(2, 4).map((leftBlog) => (
             <SmallArticleCardVertical
               key={`${leftBlog.id}`}
+              blog_id={leftBlog.id}
               tag_text={leftBlog.category}
               tag_text_color={leftBlog.category_text_hoverBg_color}
               tag_bg_color={leftBlog.category_bg_color}

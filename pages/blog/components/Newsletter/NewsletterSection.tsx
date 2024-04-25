@@ -2,6 +2,7 @@ import React from 'react'
 import HeadingDesc from '../HeadingDesc'
 import { IoMdArrowForward } from 'react-icons/io'
 import Wrapper from '@/components/Wrapper/Wrapper'
+import InputWithIcon from './InputWithIcon'
 
 function NewsletterSection() {
   return (
@@ -36,21 +37,7 @@ function NewsletterSection() {
           </ul>
 
           {/*Form */}
-          <form className="mt-10 relative max-w-sm">
-            <input
-              type="email"
-              className="block w-full border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200/50 bg-white rounded-full text-sm font-normal h-11 px-4 py-3 "
-              required
-              aria-required="true"
-              placeholder="Enter your email"
-            />
-            <button
-              className="ButtonCircle flex items-center justify-center rounded-full !leading-none bg-slate-900 hover:bg-orange text-slate-50 absolute transform top-1/2 -translate-y-1/2 right-1 w-9 h-9 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000"
-              type="submit"
-            >
-              <IoMdArrowForward />
-            </button>
-          </form>
+          <InputWithIcon Search_Arrow='Arrow' is_sm = {false}/>
         </div>
 
         {/* Right side */}

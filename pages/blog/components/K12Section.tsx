@@ -36,6 +36,7 @@ function K12Section() {
           blog.is_k12_centered && blog.is_main_article ? (
             <MainArticleCard
               key={`${blog.id}`}
+              blog_id={blog.id}
               img_src={blog.hor_image_src}
               alt_img="Lorem ipsum"
               tag_text={blog.category}
@@ -61,6 +62,7 @@ function K12Section() {
             blog.is_k12_centered && !blog.is_main_article ? (
               <SmallArticleCard
                 key={`${blog.id}`}
+                blog_id={blog.id}
                 tag_text={blog.category}
                 tag_text_color={blog.category_text_hoverBg_color}
                 tag_bg_color={blog.category_bg_color}
