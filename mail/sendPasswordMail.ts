@@ -1,4 +1,4 @@
-import { transporter2 } from './transporter'
+import transporter from './transporter'
 
 import path from 'path'
 import ejs from 'ejs'
@@ -46,7 +46,7 @@ const sendPasswordMail = async ({
   }
 
   try {
-    await transporter2.sendMail(mailOption)
+    await transporter.sendMail(mailOption)
     console.log('Password Mail sent succesfully')
   } catch (error) {
     console.error(error, 'Password Mail')

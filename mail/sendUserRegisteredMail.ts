@@ -30,7 +30,7 @@ const sendUserRegisteredMail = async ({ name }: { name: string }) => {
 
   try {
     await transporter.sendMail(mailOption)
-    console.log('Mail sent succesfully')
+    console.log('User Registered Mail sent succesfully')
   } catch (error) {
     console.log('Error sending mail', error)
   }

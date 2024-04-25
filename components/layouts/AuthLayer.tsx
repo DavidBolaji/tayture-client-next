@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getUser, getUser2 } from '@/lib/api/user'
+import { getUser2 } from '@/lib/api/user'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { PropsWithChildren } from 'react'
