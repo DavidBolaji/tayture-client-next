@@ -1,19 +1,14 @@
 import nodemailer from 'nodemailer'
 
 
-
 const transporter = nodemailer.createTransport({
-  service: "zoho",
-  host: 'smtpro.zoho.in',
   service: "zoho",
   host: 'smtpro.zoho.in',
   port: 465,
   secure: true,
   auth: {
     user: 'hello@tayture.com',
-    pass: '.g?Ov?}oty$0',
-    // pass: `${process.env.NEXT_PUBLIC_MAIL_AUTH_PASS_ONE}`,
-    // pass: `${process.env.NEXT_PUBLIC_MAIL_AUTH_PASS_ONE}`,
+    pass: '.g?Ov?}oty$0'
   },
 })
 
@@ -25,7 +20,6 @@ export const transporter2 = nodemailer.createTransport({
   auth: {
     user: 'hello@tayture.com',
     pass: '.g?Ov?}oty$0',
-    // pass: `${process.env.NEXT_PUBLIC_MAIL_AUTH_PASS_ONE}`,
   },
 })
 
