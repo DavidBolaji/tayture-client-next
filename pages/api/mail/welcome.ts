@@ -1,4 +1,4 @@
-import sendUserRegisteredMail from '@/mail/sendUserRegisteredMail'
+
 import sendWelcomeMail from '@/mail/sendWelcomeMail'
 import { NextApiRequest, NextApiResponse } from 'next'
 

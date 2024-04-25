@@ -1,14 +1,10 @@
 
 import Button from '@/components/Button/Button'
 import React from 'react'
-// import { useRouter } from 'next/navigation'
-import sendWelcomeMail from '@/mail/sendWelcomeMail'
-import { Axios } from '@/request/request'
+import { useRouter } from 'next/navigation'
 
 const NavigationButton = () => {
-  const send = async () => {
-    await Axios.post('/mail/welcome', {firstName: 'David', email: 'odavidbolaji14@gmail.com'})
-  }
+  const router = useRouter()
 
   return (
     <Button
@@ -17,8 +13,7 @@ const NavigationButton = () => {
       render="light"
       text="Start Now"
       hover
-      onClick={send}
-      // onClick={() => router.push('/auth/register')}
+      onClick={() => router.push('/auth/register')}
     />
   )
 }
