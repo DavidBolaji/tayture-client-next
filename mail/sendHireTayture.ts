@@ -34,7 +34,7 @@ const sendHireTayture = async ({
   })
 
   const mailOption: ImailOptions = {
-    from: 'Tayture <support@tayture.com>',
+    from: 'Tayture <hello@tayture.com>',
     to: 'hello@tayture.com',
     subject: `🌟 Hire complete 🌟 <${dateTime}>`,
     html: dat,

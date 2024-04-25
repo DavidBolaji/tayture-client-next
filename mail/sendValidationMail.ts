@@ -1,4 +1,4 @@
-import { transporter2 } from './transporter'
+import transporter from './transporter'
 import path from 'path'
 import ejs from 'ejs'
 
@@ -38,14 +38,14 @@ const sendValidationMail = async ({
   })
 
   const mailOption: ImailOptions = {
-    from: 'Tayture <support@tayture.com>',
+    from: 'Tayture <hello@tayture.com>',
     to: email,
     subject: `Verify Your Email Address for Tayture<${dateTime}>`,
     html: dat,
   }
 
   try {
-    await transporter2.sendMail(mailOption)
+    await transporter.sendMail(mailOption)
     console.log('Verification Mail sent succesfully')
   } catch (error) {
     console.error(error, 'Validation Mail')

@@ -1,4 +1,4 @@
-import { transporter2 } from './transporter'
+import transporter from './transporter'
 
 import path from 'path'
 import ejs from 'ejs'
@@ -39,14 +39,14 @@ const sendPasswordMail = async ({
   })
 
   const mailOption: ImailOptions = {
-    from: 'Tayture <support@tayture.com>',
+    from: 'Tayture <hello@tayture.com>',
     to: email,
     subject: `Important Information Regarding Your Account<${dateTime}>`,
     html: dat,
   }
 
   try {
-    await transporter2.sendMail(mailOption)
+    await transporter.sendMail(mailOption)
     console.log('Password Mail sent succesfully')
   } catch (error) {
     console.error(error, 'Password Mail')

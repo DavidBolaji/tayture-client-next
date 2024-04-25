@@ -1,3 +1,4 @@
+"use client"
 import { regularFont } from '@/assets/fonts/fonts'
 import SchoolAnalytics from '@/components/Dashboard/SchoolAnalytics/SchoolAnalytics'
 import SchoolCard from '@/components/Dashboard/SchoolCard/SchoolCard'

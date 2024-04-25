@@ -38,7 +38,7 @@ const sendWelcomeMail = async ({
   const mailOption: ImailOptions = {
     from: 'Tayture <hello@tayture.com>',
     to: email,
-    bcc: ['info@tayture.com'],
+    // bcc: ['info@tayture.com'],
     subject: `Welcome ${firstName}, this is a special moment in history <${dateTime}>`,
     html: dat,
   }

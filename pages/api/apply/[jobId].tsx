@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.query.jobId)
     return res.status(400).json({ message: 'job id is required' })
 
-  const jobs = await getJobById(req.query.jobId as string)
+  // const jobs = await getJobById(req.query.jobId as string)
 
   try {
     /** get applied */

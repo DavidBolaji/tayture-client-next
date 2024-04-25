@@ -32,12 +32,7 @@ const Hero = () => {
               className="lg:mt-6 mt-0 xl:pr-10 flex justify-center lg:translate-x-12
         xl:translate-x-12  sm:justify-start"
             >
-              {/* <Image
-                priority
-                src={Images.HeroImage}
-                alt="hero"
-                className="lg:object-center lg:object-contain scale-[0.75] lg:scale-[0.85] xl:scale-[0.95] -z-5"
-              /> */}
+
               <Image
                 priority
                 src={Images.HeroImage}
