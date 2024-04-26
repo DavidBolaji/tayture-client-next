@@ -83,7 +83,7 @@ export const valdateOTP = async ({
 }: {
   otp: string
   pinId: string
-  email: string
+  email: string,
 }) => {
   try {
     const result = await axios.post(
@@ -97,7 +97,7 @@ export const valdateOTP = async ({
 
     const user = await Axios.get(`/users/email/${email}`)
     if (result.data.verified) {
-      const nuser = await Axios.put(`/users/update/${user?.data.user.id}`, {
+      await Axios.put(`/users/update/${user?.data.user.id}`, {
         validated: 1,
       })
       return result
@@ -105,7 +105,8 @@ export const valdateOTP = async ({
       return result
     }
   } catch (error: any) {
-    return { message: 'Server error' }
+    console.log(error.response.data.verified)
+    return { message: error.response.data.verified }
   }
 }
 

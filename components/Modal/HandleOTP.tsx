@@ -87,6 +87,10 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
       })
     },
     onSuccess: (res: any) => {
+      if(!res?.data?.verified) {
+        setOtp('')
+        return setMessage(() => res?.message ?? 'Invalid OTP')
+     }
       const { verified, attemptsRemaining } = res.data
       setMessage(() => 'Hurray!!!, phone number verified')
       if (verified) {
@@ -113,15 +117,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
         queryClient.invalidateQueries({
           queryKey: ['user'],
         })
-      } else {
-        setOtp('')
-        setMessage(
-          () => `Incorrect OTP. You  have ${attemptsRemaining} more attempt(s)`,
-        )
-        setTimeout(() => {
-          setMessage(() => '')
-        }, 1000)
-      }
+      } 
     },
     onError: (err) => {
       setOtp('')

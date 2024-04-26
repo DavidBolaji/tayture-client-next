@@ -8,7 +8,8 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     user: 'hello@tayture.com',
-    pass: '.g?Ov?}oty$0'
+    pass: 'E5&4koG#+r[}' 
+    // 
   },
 })
 
@@ -19,7 +20,8 @@ export const transporter2 = nodemailer.createTransport({
   secure: true,
   auth: {
     user: 'hello@tayture.com',
-    pass: '.g?Ov?}oty$0',
+    pass: 'E5&4koG#+r[}',
+    // E5&4koG#+r[}
   },
 })
 

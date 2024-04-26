@@ -1,5 +1,6 @@
 import db from '@/db/db'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import bcrypt from 'bcryptjs'
 
 type Data = {
   message: string
@@ -17,11 +18,17 @@ export default async function handler(
   const keys = Object.keys(req.body)
   const data: { [key: string]: string } = {}
 
-  keys.forEach((key) => {
+  await Promise.all(keys.map(async (key) => {
     if (!holder.includes(key)) {
-      data[key] = req.body[key]
+      if (key === "password") {
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(req.body[key], salt)
+        data[key] = hashedPassword
+      } else {
+        data[key] = req.body[key]
+      }
     }
-  })
+  }))
 
   try {
     const user = await db.user.update({
