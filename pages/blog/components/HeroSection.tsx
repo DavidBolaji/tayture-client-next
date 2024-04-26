@@ -29,7 +29,6 @@ function HeroSection({}: HeroSectionProps) {
   }
 
   const currentBlog = EditorPickedBlogs[currentBlogIndex]
-  console.log(currentBlog)
 
   return (
     <div className="relative pt-10 md:py-12 lg:pb-10">
