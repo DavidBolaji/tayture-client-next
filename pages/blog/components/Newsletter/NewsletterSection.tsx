@@ -37,7 +37,7 @@ function NewsletterSection() {
           </ul>
 
           {/*Form */}
-          <InputWithIcon Search_Arrow='Arrow' is_sm = {false}/>
+          <InputWithIcon Search_Arrow='Arrow' is_sm = {false} placeholder='Email'/>
         </div>
 
         {/* Right side */}

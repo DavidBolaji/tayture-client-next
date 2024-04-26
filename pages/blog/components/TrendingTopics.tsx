@@ -5,7 +5,7 @@ import CategoriesSection2 from './CategoriesSection2'
 
 function TrendingTopics() {
   return (
-    <SectionCont bg_color="bg-[rgb(242,242,242)]" class_name="mt-12">
+    <SectionCont bg_color="bg-[rgb(242,242,242)]" class_name="mt-12 pb-16">
       {/* Header Section 2 */}
       <HeadingDesc
         heading="Top trending topics"

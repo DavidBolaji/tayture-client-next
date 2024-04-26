@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import FetchBlogs from '../data/FetchBlogs'
 import MainArticleCard from './MainArticleCard'
 import SmallArticleCard from './SmallArticleCard'
@@ -6,9 +6,28 @@ import SectionCont from './helpers/SectionCont'
 import HeadingDesc from './HeadingDesc'
 import NavItem from './NavItem'
 import { HiOutlineArrowRight } from 'react-icons/hi'
+import Pagination from './Pagination'
 
-function K12Section() {
-  const blogs = FetchBlogs()
+const PostsPerPage = 4;
+
+function Section2AllItems() {
+  const allBlogs = FetchBlogs()
+  const adminsBlogs = allBlogs.filter(blog => blog.category === 'Admins')
+  const educatorsBlogs = allBlogs.filter(blog => blog.category === 'Educators')
+  const pupilsBlogs = allBlogs.filter(blog => blog.category === 'Pupils')
+  const eventBlogs = allBlogs.filter(blog => blog.category === 'Events')
+  const [currentPage, setCurrentPage] = useState(1)
+
+  // Calculate the index range for the current page
+  const startIndex = (currentPage - 1) * PostsPerPage
+  const endIndex = startIndex + PostsPerPage
+  const blogs = allBlogs.slice(startIndex, endIndex)
+
+  const totalPages = Math.ceil(allBlogs.length / PostsPerPage)
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+  }
 
   return (
     //Section 3  K12_centered
@@ -16,7 +35,7 @@ function K12Section() {
       <div className="flex flex-col mb-8 relative">
         {/* Heading */}
         <HeadingDesc
-          heading="K-12 Education Centered Articles"
+          heading="Insightful Articles"
           description="Explore tailored solutions for administrators, teachers, students, and parents, empowering every stakeholder in the K-12 education journey."
         />
 
@@ -25,15 +44,12 @@ function K12Section() {
           <nav className="relative flex w-full overflow-x-auto text-sm md:text-base">
             <NavItem />
           </nav>
-          <button className="flex-shrink-0 relative h-12 inline-flex items-center justify-center rounded-full transition-colors border-transparent bg-black_200 hover:bg-orange text-white text-sm sm:text-base font-medium px-6 hidden md:!flex ">
-            <span>View all</span>
-            <HiOutlineArrowRight className="w-6 h-5 ml-3" />
-          </button>
         </div>
       </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         {blogs.map((blog) =>
-          blog.is_k12_centered && blog.is_main_article ? (
+          blog.id === endIndex ? (
             <MainArticleCard
               key={`${blog.id}`}
               blog_id={blog.id}
@@ -59,7 +75,7 @@ function K12Section() {
         )}
         <div className="grid gap-6 md:gap-8">
           {blogs.map((blog) =>
-            blog.is_k12_centered && !blog.is_main_article ? (
+            blog.id !== endIndex ? (
               <SmallArticleCard
                 key={`${blog.id}`}
                 blog_id={blog.id}
@@ -86,8 +102,12 @@ function K12Section() {
           )}
         </div>
       </div>
+
+      <div className="w-full flex justify-center items-center pt-16">
+        <Pagination total_pages={totalPages} currentPage={currentPage} onPageChange={handlePageChange}/>
+      </div>
     </SectionCont>
   )
 }
 
-export default K12Section
+export default Section2AllItems
