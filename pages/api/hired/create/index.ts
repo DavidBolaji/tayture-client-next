@@ -83,12 +83,12 @@ const handler = async (
       })
       await Promise.all([note, note2])
 
-      sendHireTayture({
+      await sendHireTayture({
         job_title: jobCreate.job.job_title,
         school: jobCreate.job.school.sch_name as string
       })
 
-      sendHireUser({
+      await sendHireUser({
         job_title: jobCreate.job.job_title,
         school: jobCreate.job.school.sch_name as string,
         firstName: jobCreate.job.school.user.fname,

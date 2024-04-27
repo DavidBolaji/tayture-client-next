@@ -71,7 +71,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     })
     
-    sendSchoolCreated({
+    await sendSchoolCreated({
       user: `${req.authUser.fname} ${req.authUser.lname}`,
       school: schoolCreate.sch_name
     })

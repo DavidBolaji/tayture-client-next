@@ -50,7 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     })
     const [, school] = await Promise.all([note, sch])
-    sendJobPosted({
+    await sendJobPosted({
       job_title: job.job_title,
       school: school?.sch_name as string
     })

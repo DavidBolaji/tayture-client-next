@@ -57,7 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
-    sendScheduleMail({
+    await sendScheduleMail({
       email: req.body['email'],
       firstName: req.body['fname'],
       company: req.body['sch_name']!,
