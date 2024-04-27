@@ -49,7 +49,7 @@ export default async function handler(
       },
     })
   }
-  sendAssesementResultMail({
+  await sendAssesementResultMail({
     email: formatBody?.email,
     firstName: formatBody?.firstName,
     data: req.body,
