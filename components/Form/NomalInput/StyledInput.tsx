@@ -4,6 +4,8 @@ import InputComponent, { InputProps } from './InputComponent'
 import React, { useState } from 'react'
 import FormError from '@/components/Form/FormError/FormError'
 import { isNotNumber, isNotText } from '@/utils/helpers'
+import { usePathname } from 'next/navigation'
+import ForgotDrawer from './ForgotDrawer'
 
 const StyledInput: React.FC<InputProps> = ({ name, ...rest }) => {
   const {
@@ -16,6 +18,14 @@ const StyledInput: React.FC<InputProps> = ({ name, ...rest }) => {
 
   const fieldProps = getFieldProps(name!)
   const { error, touched } = getFieldMeta(name!)
+  const pathname = usePathname()
+  const [open, setOpen] = useState(false)
+  const onClose = () => {
+    setOpen(false)
+  }
+  const showDrawer = () => {
+    setOpen(true)
+  }
 
   if (!fieldProps) {
     return null
@@ -49,9 +59,19 @@ const StyledInput: React.FC<InputProps> = ({ name, ...rest }) => {
         }}
         onBlur={handleBlur}
       />
+      <div className={`flex justify-between items-center ${name === 'password' ? 'flex-row-reverse' : ''} `}>
+      {name === 'password' && pathname !== '/auth/register' && (
+        <div className="text-xs text-orange flex justify-end mt-1 cursor-pointer"
+        onClick={showDrawer}
+        >
+          Forgot password ?
+        </div>
+      )}
       <ErrorMessage name={name!}>
         {(msg) => <FormError msg={msg} />}
       </ErrorMessage>
+      </div>
+      <ForgotDrawer open={open} onClose={onClose} />
     </div>
   )
 }
