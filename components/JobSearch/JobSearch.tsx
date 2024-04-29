@@ -49,9 +49,11 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
       Axios.get(`/job/${router.query.find}`)
         .then((res) => {
           setVal(res.data.job.job_title)
-        
-          queryClient.setQueryData(['activeJob'], res.data.job)
-          queryClient.setQueryData(['jobs'], [res.data.job])
+          const t = setTimeout(() => {
+            queryClient.setQueryData(['activeJob'], res.data.job)
+            queryClient.setQueryData(['jobs'], [res.data.job])
+            clearTimeout(t)
+          }, 4000)
           // mutate(res.data.job.job_title)
         })
         .catch((err) => {
