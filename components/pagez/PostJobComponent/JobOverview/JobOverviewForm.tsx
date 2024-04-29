@@ -140,7 +140,7 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
             </div>
             <div>
               <h3 className="mb-[10px] ml-1 text-black">
-                When is the earliest resumption date for this role
+                Application deadline
               </h3>
               <Field
                 name="job_resumption"

@@ -53,7 +53,7 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
             queryClient.setQueryData(['activeJob'], res.data.job)
             queryClient.setQueryData(['jobs'], [res.data.job])
             clearTimeout(t)
-          }, 4000)
+          }, 2500)
           // mutate(res.data.job.job_title)
         })
         .catch((err) => {

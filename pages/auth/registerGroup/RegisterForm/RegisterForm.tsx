@@ -73,7 +73,7 @@ const RegisterForm = ({
       } else {
         const t = setTimeout(() => {
           clearTimeout(t)
-          router.push('/dashboard')
+          router.push('/auth/login')
         }, 1000)
       }
     } else {
