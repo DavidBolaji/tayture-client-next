@@ -109,6 +109,9 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
             >
               Select Teacher or Administrator?
             </h3>
+            <div className='text-xs w-full text-center'>
+              Note: Posted jobs cannot be edited. Please review before posting.
+            </div>
             <Field
               name="job_role"
               as={JobRadioComponent}

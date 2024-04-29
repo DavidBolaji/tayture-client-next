@@ -91,7 +91,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
         setOtp('')
         return setMessage(() => res?.message ?? 'Invalid OTP')
      }
-      const { verified, attemptsRemaining } = res.data
+      const { verified } = res.data
       setMessage(() => 'Hurray!!!, phone number verified')
       if (verified) {
         if (closable) {
