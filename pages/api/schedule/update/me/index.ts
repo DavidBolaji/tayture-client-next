@@ -62,7 +62,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       firstName: req.body['fname'],
       company: req.body['sch_name']!,
       job_title: req.body['job_title'],
-      link: 'https://tayture.com/dashboard/jobs/all',
+      link: `${process.env.NEXT_PUBLIC_FRONTEND_API}dashboard/jobs/all`,
     })
     if (req.body['remainder']) {
       const targetDateTime = moment

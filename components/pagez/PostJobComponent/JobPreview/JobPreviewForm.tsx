@@ -60,7 +60,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
       router.push('/dashboard/school')
       return setMessage(() => 
         res.data.message === text ? 
-        res.data.message + ' link()' :
+        res.data.message + ' link ()' :
         res.data.message)
     },
     onError: (err) => {
