@@ -29,6 +29,7 @@ const pages = [
   'One',
   'Blog',
   'SingleBlogTemplate',
+  'Engage',
 ]
 
 export default function App({
