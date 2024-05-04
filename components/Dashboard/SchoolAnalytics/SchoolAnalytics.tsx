@@ -7,12 +7,14 @@ import { Empty } from 'antd'
 import Link from 'next/link'
 import { regularFont } from '@/assets/fonts/fonts'
 import { closingDate, datePosted } from '@/utils/helpers'
+import { useGlobalContext } from '@/Context/store'
 
 const SchoolAnalytics = () => {
+  const {defaultSchool, access } = useGlobalContext()
   const { data: schJobList, isLoading } = useQuery({
     queryKey: ['schoolJobs'],
     queryFn: async () => {
-      const req = await getSchoolJobs()
+      const req = await getSchoolJobs(defaultSchool)
       return req.data.job
     },
   })
@@ -35,7 +37,7 @@ const SchoolAnalytics = () => {
           </div>
           {schJobList &&
             schJobList.map((j: any) => (
-              <Link key={j.job_id} href={`/dashboard/school/manage/${j.job_id}?default=2`}>
+              <Link key={j.job_id} href={!access ? '#' : `/dashboard/school/manage/${j.job_id}?default=2`}>
               <div  className="grid grid-cols-7 mb-[20px]">
                 <div className="col-span-4">
                   <p>{j.job_title}</p>

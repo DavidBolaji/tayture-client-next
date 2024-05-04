@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
      if (isFunded) {
       const r = tx.wallet.update({
         where: {
-          walletUserId: req.authUser?.id
+          walletSchId: req.authUser?.school[+req.query.defaultSchool!].sch_id as string
         },
         data: {
           wallet_balance: {

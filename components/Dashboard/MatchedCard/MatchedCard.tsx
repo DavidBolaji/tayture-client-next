@@ -5,7 +5,7 @@ import { useGlobalContext } from '@/Context/store'
 import { MdOutlineError } from 'react-icons/md'
 import ListComponent from '@/components/ListComponent'
 import { FaCircleCheck, FaCircleInfo, FaCircleXmark } from 'react-icons/fa6'
-import Button from '@/components/Button/Button'
+
 import BlurComponent from '@/components/BlurComponent'
 import { regularFont } from '@/assets/fonts/fonts'
 import {
@@ -41,7 +41,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 }) => {
   const { jobId } = params
 
-  const { setMessage, setUI, ui } = useGlobalContext()
+  const { setMessage, setUI, ui, defaultSchool } = useGlobalContext()
 
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
@@ -80,29 +80,29 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
       await incWallet({
         wallet_balance: +amount,
         schoolId: school.sch_id
-      }),
-    onSuccess: async (res) => {
+      }, defaultSchool),
+    onSuccess: async () => {
       await decWallet({
         wallet_balance: Math.abs(amountFinal),
         schoolId: school.sch_id,
         role: matchedJob?.job.job_title
-      })
+      }, defaultSchool)
       queryClient.invalidateQueries({
         queryKey: ['school'],
       })
 
       setMessage(() => 'Wallet funded and Booking successful')
     },
-    onError: (err) => {
+    onError: (err: any) => {
       setMessage(() => (err as Error).message)
     },
   })
 
   const { mutate, isPending: transactionLoading } = useMutation({
     mutationFn: async (transaction: any) => {
-      return await createTransaction(transaction)
+      return await createTransaction(transaction, +defaultSchool)
     },
-    onSuccess: (res) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [`job/${jobId}`],
       })

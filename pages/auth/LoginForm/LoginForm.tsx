@@ -93,7 +93,7 @@ const LoginForm = ({ show = true }) => {
 
   const onSubmit = async (
     values: ILogin,
-    { resetForm, setSubmitting }: FormikHelpers<ILogin>,
+    { resetForm }: FormikHelpers<ILogin>,
   ) => {
     mutate({ ...values })
     resetForm({

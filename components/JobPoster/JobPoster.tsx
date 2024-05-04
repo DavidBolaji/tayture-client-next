@@ -68,7 +68,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress }) => {
       <Skeleton loading={true} active={true} />
     </div>
   ) : Object.keys(data).length > 0 ? (
-    <div className={`m-0 p-0 ${regularFont.className}`}>
+    <div className={`m-0 pb-[20px] bg-white rounded-[10px] border px-[32px] pt-[20px] ${regularFont.className}`}>
       <h2
         className={`text-[24px] ${regularFont.className} text-black mb-[16px]`}
       >

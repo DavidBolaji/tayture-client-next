@@ -10,6 +10,7 @@ import { formatNumber } from '@/utils/helpers'
 import { FaHandHolding } from 'react-icons/fa6'
 import { FaLockOpen } from 'react-icons/fa'
 import { GrLock, GrUnlock } from 'react-icons/gr'
+import { useGlobalContext } from '@/Context/store'
 
 const hashType = {
   CREDIT: 'success',
@@ -20,11 +21,12 @@ const hashType = {
 
 
 const useTransaction = () => {
-  const queryClient = useQueryClient()
+
+  const {defaultSchool} =useGlobalContext()
   const { data: transactions, isPending } = useQuery({
     queryKey: ['allTransactions'],
     queryFn: async () => {
-      const req = await Axios.get('/transaction/me')
+      const req = await Axios.get(`/transaction/me?defaultSchool=${defaultSchool}`)
 
       return req.data.transaction
     },

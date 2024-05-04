@@ -1,4 +1,5 @@
 'use client'
+import { useGlobalContext } from '@/Context/store'
 import { regularFont } from '@/assets/fonts/fonts'
 import AddSchool from '@/components/pagez/AddSchool'
 import EditSchool from '@/components/pagez/EditSchool'
@@ -23,12 +24,13 @@ const Heading: React.FC<{ sch: ISchDb; show: boolean }> = ({ sch, show }) => (
 )
 
 const AddSchoolPage = () => {
+  const { defaultSchool } = useGlobalContext();
   const router = useRouter()
   const { data: school } = useQuery({
     queryKey: ['school'],
     queryFn: async () => {
       const req = await getUserSchool()
-      return req.data.school
+      return req.data.school[defaultSchool]
     },
   })
 

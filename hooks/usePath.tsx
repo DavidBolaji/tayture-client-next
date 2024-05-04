@@ -38,6 +38,8 @@ const usePath = () => {
         ? '/dashboard/school'
         : pathname === '/dashboard/school/post'
         ? '/dashboard/school'
+        : pathname === '/dashboard/school/admin'
+        ? '/dashboard/school'
         : pathname === '/dashboard/school/transaction'
         ? '/dashboard/school'
         : pathname === '/dashboard/school/draft'

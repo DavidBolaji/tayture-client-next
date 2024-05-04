@@ -1,7 +1,7 @@
 import { regularFont } from '@/assets/fonts/fonts'
 import { AMOUNT_PER_HIRE, formatNumberToK, salaryOutput } from '@/utils/helpers'
 import { Hired, Job, School, Wallet } from '@prisma/client'
-import { Switch, Tag, message } from 'antd'
+import { Alert, Switch, Tag, message } from 'antd'
 import React, { useState } from 'react'
 import { FaClock, FaShareAlt } from 'react-icons/fa'
 import moment from 'moment'
@@ -22,7 +22,7 @@ interface IAllJobCard {
 
 const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
   const queryClient = useQueryClient()
-  const { setMessage, setUI, ui } = useGlobalContext()
+  const { setMessage, setUI, ui, defaultSchool, access } = useGlobalContext()
   const [mutateState, setMutate] = useState<any>(null)
   const [amt, setAmt] = useState<string>('')
   const school = queryClient.getQueryData(['school']) as School & {
@@ -66,7 +66,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
       await incWallet({
         wallet_balance: +amount,
         schoolId: school.sch_id
-      }),
+      }, defaultSchool),
     onSuccess: async (res) => {
       mutate(mutateState)
       queryClient.invalidateQueries({
@@ -187,7 +187,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
                 </div>
               </div>
             </div>
-            <Link href={`/dashboard/school/manage/${j.job_id}?default=2`}>
+            <Link href={!access ? '#' : `/dashboard/school/manage/${j.job_id}?default=2`}>
               View
             </Link>
           </div>
@@ -249,7 +249,8 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
             <div className={`space-x-1 ${regularFont.className} text-xs`}>
               {j.active && (
                 <Switch
-                  onClick={() => handleSwitch(false, j)}
+                  disabled={!access}
+                  onClick={() => !access ? {} :handleSwitch(false, j)}
                   defaultChecked
                   checkedChildren={
                     <span
@@ -270,7 +271,8 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
               )}
               {!j.active && (
                 <Switch
-                  onClick={() => handleSwitch(true, j)}
+                disabled={!access}
+                  onClick={() => !access ? {} :handleSwitch(true, j)}
                   checkedChildren={
                     <span
                       className={`${regularFont.className} text-[10px] block`}
@@ -294,7 +296,9 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
       ))
 
   return (
-    <div className="grid grid-cols-12 gap-3 pb-10 overflow-auto no-s">
+    <div>
+      {!access && <Alert className='mb-2'  type="info" message="Contact admin to grant you access to carry out actions on this page" showIcon/>}
+      <div className="grid grid-cols-12 gap-3 pb-10 overflow-auto no-s">
       {jobList}
       <HandlePayment
         onSuccess={onSuccess}
@@ -345,6 +349,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
             </Formik>
         </div>
       </HandlePayment>
+    </div>
     </div>
   )
 }

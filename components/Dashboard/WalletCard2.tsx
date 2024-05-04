@@ -18,13 +18,13 @@ import { formatNumber } from '@/utils/helpers'
 import { Axios } from '@/request/request'
 
 const WalletCard2 = () => {
-  const { setUI, setMessage } = useGlobalContext()
+  const { setUI, setMessage, defaultSchool, access } = useGlobalContext()
   const queryClient = useQueryClient()
   const { data: school, isLoading } = useQuery({
     queryKey: ['school'],
     queryFn: async () => {
       const req = await getUserSchool()
-      return req.data.school
+      return req.data.school[defaultSchool]
     },
   })
   const [amt, setAmt] = useState<string | number>('')
@@ -40,7 +40,7 @@ const WalletCard2 = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: async ({amount, schoolId}: {amount: string, schoolId: string}) =>
       {
-        await Axios.put('/wallet/update/me', {wallet_balance: +amount, schoolId})
+        await Axios.put(`/wallet/update/me?defaultSchool=${defaultSchool}`, {wallet_balance: +amount, schoolId})
       },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -143,6 +143,7 @@ const WalletCard2 = () => {
       </div>
         <div className='flex justify-end flex-col-reverse w-[120px] relative z-10'>
           <Button
+            disabled={!access}
             text="Topup"
             render="dark"
             hover={false}
