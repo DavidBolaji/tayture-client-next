@@ -11,7 +11,7 @@ import { Education, Profile, School, SchoolAdmin, Skills, Summary, User, WorkHis
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
-export const AMOUNT_PER_HIRE = 100
+export const AMOUNT_PER_HIRE = process.env.NEXT_PUBLIC_ENV === 'dev' ? 100 : 10000
 
 const matchQualHash: { [key: string]: number } = {
   SSCE: 1,
