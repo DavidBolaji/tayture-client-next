@@ -229,7 +229,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
           <div
             onClick={() => {
               navigator.clipboard.writeText(
-                `${process.env.NEXT_PUBLIC_FRONTEND_API}/find_job?find=${j.job_id}`,
+                `${process.env.NEXT_PUBLIC_FRONTEND_API}/jobs?find=${j.job_id}`,
               )
               message.success('Link copied to clipboard')
             }}

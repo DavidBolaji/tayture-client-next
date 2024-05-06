@@ -48,10 +48,10 @@ const SchoolSection = () => {
         )}
       </div>
       <Drawer open={drawer} onClose={() => setDrawer(false)} title={title}>
-        {drawerContent?.map((con) => (
+        {drawerContent?.map((con, idx) => (
           //@ts-ignore
           // <JobCard job={con.job} />
-          <h1>hi</h1>
+          <h1 key={idx}>hi</h1>
         ))}
         {drawerContent?.length === 0 && (
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />

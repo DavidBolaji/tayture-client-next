@@ -53,7 +53,7 @@ const items: MenuProps['items'] = [
   },
   {
     label: 'Find a Job',
-    key: '/find_job',
+    key: '/jobs',
   },
   {
     label: 'Post a Job',

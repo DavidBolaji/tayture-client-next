@@ -9,14 +9,14 @@ const data = [
     title: 'Explore Teaching Jobs',
     text: 'This section includes the following roles : primary school teachers , junior secondary school teachers and senior secondary school teachers',
     btn: 'Explore',
-    href: '/find_job/teacher',
+    href: '/jobs/teacher',
   },
   {
     id: 'ex2',
     title: 'Explore Administration Jobs',
     text: 'This section includes the following roles Vice Principals , School Assistants , School nurses',
     btn: 'Explore',
-    href: '/find_job/admin',
+    href: '/jobs/admin',
   },
 ]
 

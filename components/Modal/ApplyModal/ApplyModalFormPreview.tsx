@@ -42,7 +42,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
     },
     onSuccess: async (res) => {
       const applied = res.data.applied
-      if (pathname === '/find_job') {
+      if (pathname === '/jobs') {
         setUI((prev) => {
           return {
             ...prev,

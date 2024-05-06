@@ -43,9 +43,9 @@ const UserSection = () => {
           onClose={() => setDrawer(false)}
           title={title}
         >
-          {drawerContent?.map((con) => (
+          {drawerContent?.map((con, idx) => (
             //@ts-ignore
-            <JobCard job={con.job} />
+            <JobCard key={idx} job={con.job} />
           ))}
           {drawerContent?.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </Drawer>

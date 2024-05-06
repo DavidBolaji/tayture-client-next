@@ -37,7 +37,7 @@ const HandleApplyLanding = () => {
   }
 
   useEffect(() => {
-    if(pathname === '/find_job') {
+    if(pathname === '/jobs') {
       if(SW) {
         SW.setStep!(1)
       }
