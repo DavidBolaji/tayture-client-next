@@ -65,7 +65,7 @@ model User {
   validated              Int?     @default(0)
   first_time             Int?     @default(1)
   profile                Profile?
-  school                 School?
+  school                 School[]
   password_reset_token   String?
   password_reset_expires Int?     @default(0)
   validation_token       String?
@@ -79,7 +79,7 @@ model User {
   education Education[]
   skills    Skills[]
 
-  wallet       Wallet?
+  wallet       Wallet[]
   accounts     Account[]
   job          Job[]
   notification Notifcation[]
@@ -250,19 +250,19 @@ model Categories {
   id    String @id @default(uuid())
   title String
 
-  blog           Blog[]
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  blog      Blog[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model SchoolAdmin {
-  sch_admin_id    String @id @default(uuid())
-  sch_admin_name  String @db.VarChar(30)
-  sch_admin_email String @db.VarChar(30)
-  sch_admin_phone String @db.VarChar(20)
+  sch_admin_id     String  @id @default(uuid())
+  sch_admin_name   String  @db.VarChar(30)
+  sch_admin_email  String  @db.VarChar(30)
+  sch_admin_phone  String  @db.VarChar(20)
   sch_admin_active Boolean @default(false)
-  school          School @relation(fields: [schoolId], references: [sch_id], onDelete: Cascade)
-  schoolId        String
+  school           School  @relation(fields: [schoolId], references: [sch_id], onDelete: Cascade)
+  schoolId         String
 
   @@index([schoolId])
 }
@@ -283,8 +283,8 @@ model School {
   sch_state        String        @db.VarChar(80)
   sch_lga          String        @db.VarChar(100)
   pending_job_post Int           @default(0)
+  schUserId        String
   user             User          @relation(fields: [schUserId], references: [id])
-  schUserId        String        @unique
   wallet           Wallet?
   job              Job[]
   applied          Applied[]
@@ -292,29 +292,34 @@ model School {
   viewed           ViewedMatch[]
   transaction      Transaction[]
   schedule         Schedule[]
+
+  @@index([schUserId])
 }
 
 model Wallet {
-  wallet_id      String @id @default(uuid())
-  school         School @relation(fields: [walletSchId], references: [sch_id], onDelete: Cascade)
-  walletSchId    String @unique
-  user           User   @relation(fields: [walletUserId], references: [id])
-  walletUserId   String @unique
-  wallet_balance Int    @default(0)
-  wallet_locked_balance Int  @default(0)
+  wallet_id             String @id @default(uuid())
+  school                School @relation(fields: [walletSchId], references: [sch_id], onDelete: Cascade)
+  walletSchId           String @unique
+  user                  User   @relation(fields: [walletUserId], references: [id])
+  walletUserId          String
+  wallet_balance        Int    @default(0)
+  wallet_locked_balance Int    @default(0)
+
+  @@index([walletUserId])
+  @@index([walletSchId])
 }
 
 model Job {
-  job_id         String        @id @default(uuid())
-  job_title      String        @db.VarChar(100)
-  job_role       String        @db.VarChar(50)
-  job_active     String        @db.VarChar(50)
-  job_desc       String?       @db.VarChar(255)
-  job_min_sal    String        @db.VarChar(255)
-  job_max_sal    String        @db.VarChar(255)
-  job_exp        String        @db.VarChar(30)
-  job_qual       String        @db.VarChar(30)
-  active         Boolean      @default(true) // job visibility
+  job_id         String   @id @default(uuid())
+  job_title      String   @db.VarChar(100)
+  job_role       String   @db.VarChar(50)
+  job_active     String   @db.VarChar(50)
+  job_desc       String?  @db.VarChar(255)
+  job_min_sal    String   @db.VarChar(255)
+  job_max_sal    String   @db.VarChar(255)
+  job_exp        String   @db.VarChar(30)
+  job_qual       String   @db.VarChar(30)
+  active         Boolean  @default(true) // job visibility
   job_resumption DateTime
   job_no_hires   String
 
@@ -322,18 +327,18 @@ model Job {
   noScheduled Int      @default(0)
   deducted    Boolean? @default(false)
 
-  status         Boolean       @default(false)   // job payment
-  school         School        @relation(fields: [jobSchoolId], references: [sch_id])
-  jobSchoolId    String
-  user           User          @relation(fields: [jobUserzId], references: [id])
-  jobUserzId     String
-  applied        Applied[]
-  matched        Matched[]
-  hired          Hired[]
-  viewed         ViewedMatch[]
-  schedule       Schedule[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  status      Boolean       @default(false) // job payment
+  school      School        @relation(fields: [jobSchoolId], references: [sch_id])
+  jobSchoolId String
+  user        User          @relation(fields: [jobUserzId], references: [id])
+  jobUserzId  String
+  applied     Applied[]
+  matched     Matched[]
+  hired       Hired[]
+  viewed      ViewedMatch[]
+  schedule    Schedule[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   @@index([jobSchoolId])
   @@index([jobUserzId])
@@ -427,17 +432,17 @@ model Assesement {
 }
 
 model Transaction {
-  id          String   @id @default(uuid())
-  amount      Int
-  type        WalletState
-  message     String
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  schoolId    String
-  school      School   @relation(fields: [schoolId], references: [sch_id])
- 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id       String      @id @default(uuid())
+  amount   Int
+  type     WalletState
+  message  String
+  userId   String
+  user     User        @relation(fields: [userId], references: [id])
+  schoolId String
+  school   School      @relation(fields: [schoolId], references: [sch_id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([schoolId])

@@ -77,7 +77,7 @@ const verifyToken =
           },
         },
       })
-      //@ts-ignore
+     
       const allSchId = !user || !user?.school ? [] : user.school.map((s: School) => {
         return {
           sch_id: s.sch_id
