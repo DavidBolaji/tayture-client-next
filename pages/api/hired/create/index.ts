@@ -44,7 +44,7 @@ const handler = async (
 
        const r = tx.wallet.update({
          where: {
-           walletUserId: req.authUser?.id,
+          //  walletUserId: req.authUser?.id,
            walletSchId: req.authUser!.school[+req.body.defaultSchool] as unknown as string
          },
          data: {
