@@ -50,6 +50,7 @@ const AllJobCard: React.FC<IAllJobCard> = ({ job }) => {
         refund,
         amt,
         schoolId,
+        defaultSchool
       })
     },
     onSuccess: (res) => {

@@ -32,7 +32,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const job = await db.$transaction(async (tx) => {
           const req2 = tx.wallet.update({
             where: {
-              walletUserId: req.authUser!.id as string,
+              // walletUserId: req.authUser!.id as string,
+              walletSchId: req.authUser!.school[+req.body.defaultSchool] as unknown as string
             },
             data: {
               wallet_balance: {
@@ -90,7 +91,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const job = await db.$transaction(async (tx) => {
           const req2 = tx.wallet.update({
             where: {
-              walletUserId: req.authUser!.id as string,
+              // walletUserId: req.authUser!.id as string,
+              walletSchId: req.authUser!.school[+req.body.defaultSchool] as unknown as string
             },
             data: {
               wallet_balance: {
