@@ -27,7 +27,6 @@ const useMySchool = () => {
     queryKey: ['allMySchools'],
     queryFn: async () => {
       const sch = await Axios.get('/school/mine')
-
       return sch.data.school
     },
   })
