@@ -1,5 +1,5 @@
 import db from '@/db/db'
-import {  School, User } from '@prisma/client'
+import {  User, School } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
@@ -77,13 +77,13 @@ const verifyToken =
           },
         },
       })
-
-      const allSchId = user?.school.map((s) => {
+      //@ts-ignore
+      const allSchId = !user || !user?.school ? [] : user.school.map((s: School) => {
         return {
           sch_id: s.sch_id
         }
-      }) ?? []
-      const allSchId2 = school.map((s) => {
+      }) 
+      const allSchId2 = !school ? [] : school.map((s) => {
         return {
           sch_id: s.school.sch_id
         }
