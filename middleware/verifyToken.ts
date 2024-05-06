@@ -78,7 +78,7 @@ const verifyToken =
         },
       })
      
-      const allSchId = !user || !user?.school ? [] : user.school.map((s: School) => {
+      const allSchId = !user || !user?.school ? [] : user.school.map((s: Partial<School>) => {
         return {
           sch_id: s.sch_id
         }
