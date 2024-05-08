@@ -71,7 +71,7 @@ export default async function handler(
     setCookie({ res }, 'token', session.sessionToken, {
       expires: session.expires,
       path: '/', // Set the cookie path to '/'
-      sameSite: "none",
+      sameSite: "lax",
       secure: process.env.NEXT_PUBLIC_SECURE === "true",
       domain: process.env.NEXT_PUBLIC_DOMAIN
     })
