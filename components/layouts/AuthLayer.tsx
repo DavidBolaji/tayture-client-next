@@ -33,6 +33,7 @@ const AuthLayer = (props: PropsWithChildren) => {
         throw new Error('Failed to fetch user data')
       }
     },
+    refetchOnWindowFocus: false
   })
 
   useEffect(() => {
