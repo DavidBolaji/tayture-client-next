@@ -1,4 +1,5 @@
 "use client"
+import { useGlobalContext } from '@/Context/store'
 import { regularFont } from '@/assets/fonts/fonts'
 import SchoolAnalytics from '@/components/Dashboard/SchoolAnalytics/SchoolAnalytics'
 import SchoolCard from '@/components/Dashboard/SchoolCard/SchoolCard'
@@ -7,14 +8,15 @@ import WalletCard2 from '@/components/Dashboard/WalletCard2'
 import PricingCard from '@/components/PricingCard/PricingCard'
 import useTransaction from '@/hooks/useTransaction'
 import { getUser } from '@/lib/api/user'
-import { School } from '@prisma/client'
+import { School, SchoolAdmin } from '@prisma/client'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Grid, Table } from 'antd'
+import { Alert, Grid, Table } from 'antd'
 import Link from 'next/link'
 import React from 'react'
 const { useBreakpoint } = Grid
 
 const SchoolPage = () => {
+  const {access} = useGlobalContext();
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -22,8 +24,9 @@ const SchoolPage = () => {
       return req.data.user
     },
   })
+
   const queryClient = useQueryClient();
-  const school = queryClient.getQueryData(['school']) as School | undefined
+  const school = queryClient.getQueryData(['school']) as (School & {sch_admin: SchoolAdmin[]}) | undefined
 
   /**check if path is defined */
   const pathExist = user?.path ? true : false
@@ -47,6 +50,9 @@ const SchoolPage = () => {
     >
       {school?.sch_name}
     </h3>}
+    {!access && <div className='text-xs'>
+      <Alert className='mb-2'  type="info" message="Contact admin to grant you access to carry out actions on this page" showIcon/>
+    </div>}
       <div className="grid grid-cols-10 gap-4 mb-3">
         <div className="md:col-span-5 col-span-10">
           <WalletCard2 />

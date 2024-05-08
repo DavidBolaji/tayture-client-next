@@ -17,7 +17,7 @@ const dataNav = [
   // },
   {
     id: 'nav2',
-    path: '/find_job',
+    path: '/jobs',
     title: 'Find a Job',
   },
   {

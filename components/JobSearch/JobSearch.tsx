@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Empty, Input, message } from 'antd'
+import { Input, message } from 'antd'
 import { cn } from '@/utils/helpers'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
@@ -87,15 +87,20 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
 
   return (
     <div className="w-full relative group" ref={divRef}>
-      <div className={cn('w-full', className)}>
+      <div className={cn('w-full flex gap-2', className)}>
         <Input
           className="h-10 border-orange focus:border-orange focus:shadow-none"
           placeholder="Search for a job"
           value={val}
           onChange={(e) => handleSearch(e.target.value)}
           allowClear
-          
         />
+        <button
+        onClick={() => setVal('')}
+        disabled={val.trim().length < 1}
+        className={`text-xs whitespace-nowrap disabled:bg-[#f4c2a0] bg-orange p-2.5 rounded-lg transition-colors duration-300
+        ${val.trim().length < 1 ? 'cursor-not-allowed': ' hover:bg-black hover:text-white'}
+        `}>See All</button>
       </div>
       <div
         className={`w-full absolute ${

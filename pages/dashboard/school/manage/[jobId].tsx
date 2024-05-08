@@ -9,11 +9,13 @@ import { getAppliedJobUsers } from '@/lib/api/matched'
 import ScheduledCard from '@/components/Dashboard/ScheduledCard/ScheduledCard'
 import { getScheduledJobUsers } from '@/lib/api/schedule'
 import { regularFont } from '@/assets/fonts/fonts'
+import { useGlobalContext } from '@/Context/store'
 
 const ManageJobTable:React.FC = (props) => {
   const router = useRouter()
   const jobId = router.query.jobId
   const [key, setKey] = useState('2')
+  const { access } = useGlobalContext();
 
   const { data: mJob, isLoading } = useQuery({
     queryKey: [`job/${jobId}`],
@@ -40,8 +42,10 @@ const ManageJobTable:React.FC = (props) => {
     if(router.query.default) {
       setKey(router.query.default as string)
     }
-
-  }, [router])
+    if(!access) {
+      router.push('/dashboard/school')
+    }
+  }, [router, access])
 
 
 

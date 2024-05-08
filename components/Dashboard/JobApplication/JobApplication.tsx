@@ -49,7 +49,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
 
   return data && Object.keys(data).length > 0 ? (
     <div className="grid grid-cols-12 md:gap-10">
-      <div className={`md:col-span-6 max-h-[500px] pt-2 overflow-auto no-s col-span-12 pb-20`}>
+      <div className={`md:col-span-6 max-h-[500px] pt-2 overflow-auto no-s col-span-12 md:pb-20`}>
         {!data && isPending ? (
           <div className="space-y-3">
             {['1x', '2y', '3z'].map((loader) => (
@@ -67,7 +67,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
       </div>
       <div
         className={cn(
-          'bg-white w-full col-span-6 rounded-[10px] border px-[32px] pt-[40px] md:block hidden no-s',
+          'w-full col-span-6 md:block hidden no-s',
           className,
         )}
       >

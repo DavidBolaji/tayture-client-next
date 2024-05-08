@@ -81,7 +81,7 @@ const DashboardMenu: React.FC<{ collapsed: boolean }> = ({ collapsed }) => {
     },
   })
 
-  const isAdmin = !user ? false : user.role === 'ADMIN' ? true : false
+  const isAdmin = !user ? false : user.role === 'SUPER_ADMIN' ? true : false
 
   const router = useRouter()
   return (

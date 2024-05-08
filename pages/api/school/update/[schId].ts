@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const data: any = {}
 
   keys.forEach((key) => {
-    if (!holder.includes(key) || !(req.authUser!.role !== 'ADMIN')) {
+    if (!holder.includes(key) || !(req.authUser!.role !== 'SUPER_ADMIN')) {
       data[key] = req.body[key]
     }
   })

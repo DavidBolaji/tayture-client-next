@@ -14,13 +14,13 @@ import { getUserSchool } from '@/lib/api/school'
 import HandleCreateSchool from '../Modal/HandleCreateSchool'
 
 function WalletCard() {
-  const { setUI, setMessage } = useGlobalContext()
+  const { setUI, setMessage, defaultSchool } = useGlobalContext()
   const queryClient = useQueryClient()
   const { data: school, isLoading } = useQuery({
     queryKey: ['school'],
     queryFn: async () => {
       const req = await getUserSchool()
-      return req.data.school
+      return req.data.school[defaultSchool]
     },
   })
   const [amt, setAmt] = useState<string | number>('')
@@ -36,7 +36,7 @@ function WalletCard() {
     mutationFn: async (amount: string) =>
       await incWallet({
         wallet_balance: +amount,
-      }),
+      }, defaultSchool),
     onSuccess: (res) => {
       queryClient.invalidateQueries({
         queryKey: ['school'],

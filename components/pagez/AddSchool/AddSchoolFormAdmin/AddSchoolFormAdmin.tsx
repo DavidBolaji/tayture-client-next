@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useGlobalContext } from '@/Context/store'
 import { createSchool } from '@/lib/api/school'
 import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 type ISchAdmin = {
   [key: string]: {
     sch_admin_name: string
@@ -31,6 +32,7 @@ const initialValues: ISchAdmin = {
 
 const AddSchoolFormAdmin: React.FC = () => {
   const router = useRouter()
+  const path = usePathname()
   const { img, createSch, setMessage, setImg, setCreateSch } =
     useGlobalContext()
   const queryClient = useQueryClient()
@@ -41,13 +43,15 @@ const AddSchoolFormAdmin: React.FC = () => {
     onSuccess: async (res) => {
       const school = res.data.school
       queryClient.invalidateQueries({
-        queryKey: ['school'],
+        queryKey: ['school', 'allSchools'],
       })
       setMessage(() => res.data.message)
       if (router.query.redirect_post === '1') {
         router.push('/dashboard/school/post')
       } else {
-        router.push('/dashboard/school')
+        if(path !== '/dashboard/admin') {
+          router.push('/dashboard/school')
+        }
       }
 
       const t = setTimeout(() => {

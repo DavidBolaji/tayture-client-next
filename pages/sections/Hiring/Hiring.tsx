@@ -29,7 +29,7 @@ const Hiring = () => {
               text={'See Jobs'}
               bold={false}
               render={'dark'}
-              onClick={() => router.push('/find_job')}
+              onClick={() => router.push('/jobs')}
             />
           </div>
         </Wrapper>

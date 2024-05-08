@@ -59,7 +59,7 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
   matchedJob,
   loading,
 }) => {
-  const { setMessage, setUI } = useGlobalContext()
+  const { setMessage, setUI, defaultSchool } = useGlobalContext()
   const [status, setStatus] = useState<'create' | 'edit' | 'view'>('create')
   const [open, setOpen] = useState(false)
   const [id, setId] = useState('')
@@ -75,7 +75,8 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
       return await Axios.post('/hired/create', {
         userId: id,
         jobId: router.query.jobId,
-        role: matchedJob.job.job_title
+        role: matchedJob.job.job_title,
+        defaultSchool
       })
     },
     onSuccess: (res) => {

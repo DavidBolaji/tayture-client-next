@@ -20,7 +20,7 @@ export default async function handler(
 
   if (!xUser) return res.status(400).json({ message: 'Bad Request' })
 
-  if (!(xUser.role === 'ADMIN'))
+  if (!(xUser.role === 'SUPER_ADMIN'))
     return res
       .status(401)
       .json({ message: 'Unauthorized, only admin can change school status' })

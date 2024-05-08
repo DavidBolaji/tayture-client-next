@@ -1,5 +1,5 @@
 import db from '@/db/db'
-import { IUser } from '@/pages/api/users/types'
+import {  User, School } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
@@ -7,30 +7,31 @@ import { NextResponse } from 'next/server'
 
 declare module 'next' {
   interface NextApiRequest {
-    authUser: IUser | null
+    authUser: (User & { school: { sch_id: string }[] }) | null
     token: string
   }
 }
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 }
 
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders })
 }
 
-
 const verifyToken =
   (next: NextApiHandler) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
-
     try {
-      const token = req.cookies.token || req.headers.authorization?.split(' ')[1]
-    
+      const token =
+        req.cookies.token || req.headers.authorization?.split(' ')[1]
+
       if (!token) {
-        return res.status(403).json({ error: 'Unauthorized: Token is missing or expired' })
+        return res
+          .status(403)
+          .json({ error: 'Unauthorized: Token is missing or expired' })
       }
 
       let decodedUser
@@ -55,14 +56,59 @@ const verifyToken =
 
       const user = await db.user.findUnique({
         where: { id: (decodedUser as unknown as { id: string }).id },
+        include: {
+          school: {
+            select: {
+              sch_id: true,
+            },
+          },
+        },
       })
+
+      const school = await db.schoolAdmin.findMany({
+        where: {
+          sch_admin_email: user?.email,
+        },
+        include: {
+          school: {
+            select: {
+              sch_id: true,
+            },
+          },
+        },
+      })
+     
+      const allSchId = !user || !user?.school ? [] : user.school.map((s: Partial<School>) => {
+        return {
+          sch_id: s.sch_id
+        }
+      }) 
+      const allSchId2 = !school ? [] : school.map((s) => {
+        return {
+          sch_id: s.school.sch_id
+        }
+      })
+
+      // Merge both arrays
+      const mergedArray = [...allSchId, ...allSchId2];
+
+      // Create a set of unique sch_id objects
+      const uniqueSchIdSet = new Set(mergedArray.map((item) => JSON.stringify(item)));
+
+      // Convert back to array format
+      const uniqueSchIdArray = Array.from(uniqueSchIdSet).map((item) => JSON.parse(item));
 
       if (!user) {
         return res.status(401).json({ error: 'Unauthorized: User not found' })
       }
 
-      req.authUser! = user
-      req.token = token
+      
+        const newUser = {
+          ...user,
+          school: uniqueSchIdArray
+        } as User & { school: { sch_id: string }[] }
+        req.authUser! = newUser
+        req.token = token
       next(req, res)
     } catch (error) {
       console.error('Error during token verification:', error)

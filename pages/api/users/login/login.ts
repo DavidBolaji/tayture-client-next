@@ -58,7 +58,7 @@ export default async function handler(
   const sessionData = {
     userId: user.id,
     // expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    expires: new Date(Date.now() + 900000), // 15 min
+    expires: new Date(Date.now() + 60 * 60 * 1000), // 1hr,
     sessionToken: token,
   }
 
@@ -79,7 +79,7 @@ export default async function handler(
     // Set the cookie containing the token
     setCookie({ res }, 'refreshToken', rToken, {
      httpOnly: true,
-     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),// 6min
+     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),// 24hr
      path: '/', // Set the cookie path to '/'
      domain: process.env.NEXT_PUBLIC_DOMAIN
     })

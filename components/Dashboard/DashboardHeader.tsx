@@ -1,4 +1,3 @@
-// import '../index.css'
 import React from 'react'
 import { PiCaretDoubleRightBold, PiCaretDoubleLeftBold } from 'react-icons/pi'
 import { Button, Layout } from 'antd'
@@ -10,7 +9,7 @@ import { useGlobalContext } from '@/Context/store'
 import { useQuery } from '@tanstack/react-query'
 import { getUser } from '@/lib/api/user'
 import NotificationDropdown from './NotificationDropdown'
-import Whatsapp2 from '../Whatsapp/Whatsapp2'
+
 
 const { Header } = Layout
 

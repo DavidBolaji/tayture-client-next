@@ -65,7 +65,7 @@ export const sendTextMessageOTP = async (phone: string) => {
         pin_time_to_live: 10,
         pin_length: 4,
         pin_placeholder: '< 1234 >',
-        message_text: 'Your one time password is < 1234 >',
+        message_text: 'Your Tayture one time password is < 1234 >',
         pin_type: 'NUMERIC',
       },
     )

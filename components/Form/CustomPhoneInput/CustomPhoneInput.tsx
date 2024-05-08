@@ -8,6 +8,7 @@ import { MdOutlineError } from 'react-icons/md'
 import { HiCheckCircle } from 'react-icons/hi'
 import { AnimatePresence, motion } from 'framer-motion'
 import { regularFont } from '@/assets/fonts/fonts'
+import { E164Number } from 'libphonenumber-js'
 
 export const StyledInput = styled(PhoneInput)`
   input {
@@ -42,7 +43,7 @@ const CustomPhoneInput: React.FC<{ name: string; disabled?: boolean }> = ({
 
   const { value } = fieldProps
 
-  const handleChange = (value: string) => {
+  const handleChange = (value: E164Number | undefined) => {
     const stringValue =
       value === undefined || value === null ? '' : String(value)
     setFieldValue(name, stringValue || '')
@@ -94,7 +95,7 @@ const CustomPhoneInput: React.FC<{ name: string; disabled?: boolean }> = ({
         </div>
       </div>
       <ErrorMessage name={name!}>
-        {(msg) => <FormError msg={msg} />}
+        {(msg: string) => <FormError msg={msg} />}
       </ErrorMessage>
     </div>
   )

@@ -25,7 +25,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
   SW,
   move = true,
 }) => {
-  const { img, createSch, setMessage, setUI } = useGlobalContext()
+  const { img, createSch, setMessage, setUI, defaultSchool } = useGlobalContext()
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData(['user']) as User
 
@@ -57,7 +57,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
             },
           }
         })
-        queryClient.setQueryData(['school'], res.data.school)
+        queryClient.setQueryData(['school'], res.data.school[defaultSchool])
         queryClient.invalidateQueries({
           queryKey: ['school'],
         })

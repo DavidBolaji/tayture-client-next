@@ -7,9 +7,15 @@ import DropdownComponent from './DropdownComponent'
 import NotificationDropdown from './NotificationDropdown'
 import DashboardDrawer from './DashboardDrawer'
 import Whatsapp2 from '../Whatsapp/Whatsapp2'
+import { useQueryClient } from '@tanstack/react-query'
+import { User } from '@prisma/client'
 
 const DashboardNav: React.FC = () => {
   const [visible, setVisible] = useState(false)
+  const queryClient = useQueryClient()
+
+  const user = queryClient.getQueryData(['user']) as User
+  const isSuperAdmin = user.role === "SUPER_ADMIN"
   const toggle = () => {
     setVisible((prev) => !prev)
   }
@@ -43,7 +49,7 @@ const DashboardNav: React.FC = () => {
       <div className="">
         <DashboardDrawer
           visible={visible}
-          isAdmin={false}
+          isAdmin={isSuperAdmin}
           feedback={() => setVisible(false)}
         />
       </div>

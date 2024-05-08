@@ -30,7 +30,7 @@ const formatVal2 = (data: ISchData) => {
 }
 
 const EditSchoolFormAdmin: React.FC = () => {
-  const { img, createSch, setMessage, setImg, setCreateSch } =
+  const { img, createSch, setMessage, setImg, setCreateSch, defaultSchool } =
     useGlobalContext()
   const router = useRouter()
   const queryClient = useQueryClient()
@@ -38,7 +38,7 @@ const EditSchoolFormAdmin: React.FC = () => {
   const initialValues = formatVal2(sch)
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: any) => {
-      return await updateSchool(data)
+      return await updateSchool(data, defaultSchool)
     },
     onSuccess: async (res) => {
       const school = res.data.school
