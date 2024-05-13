@@ -11,8 +11,8 @@ import Section2AllItems from './components/Section2AllItems'
 const Blog = () => {
   return (
     <>
-      <div className="bg-blog_bg overflow-auto h-[99vh]">
-        <div className="bg-blog_bg">
+      <div className="bg-blog_bg h-[90vh] overflow-y-scroll no-s">
+        <div className="bg-blog_bg ">
           <Wrapper>
             {/* Search */}
             <InputWithIcon Search_Arrow="Search" is_sm={true} placeholder = 'Search Blog'/>
@@ -25,12 +25,6 @@ const Blog = () => {
 
             {/* Section 3  K12_centered*/}
             <Section2AllItems />
-
-            {/* Section 4 */}
-            {/* <MustRead /> */}
-
-            {/* Section 5 Latest Articels*/}
-            {/* <LatestArcticlesSection /> */}
 
             <NewsletterSection />
           </Wrapper>

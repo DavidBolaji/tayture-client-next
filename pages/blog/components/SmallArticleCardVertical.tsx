@@ -56,7 +56,7 @@ const SmallArticleCardVertical = ({
               alt={alt_img}
               width={400}
               height={400}
-              className="object-cover object-cover  inset-0 w-full h-full z-1"
+              className="object-cover  inset-0 w-full h-full z-1"
               sizes="(max-width: 600px) 480px, 800px"
             />
           </div>

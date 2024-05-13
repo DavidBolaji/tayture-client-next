@@ -20,7 +20,7 @@ interface BlogPost {
 }
 
 // Function to calculate category colors based on category name
-function getCategoryColors(
+export function getCategoryColors(
   category: string,
 ): [textColor: string, bgColor: string] {
   switch (category) {

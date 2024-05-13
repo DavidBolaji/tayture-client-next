@@ -117,7 +117,7 @@ const SmallArticleCard = ({
         <img
           src={img_src}
           alt={alt_img}
-          className="object-cover w-full h-full object-cover absolute inset-0 w-full h-full"
+          className="object-cover absolute inset-0 w-full h-full"
           sizes="(max-width: 600px) 180px, 400px"
         />
       </a>

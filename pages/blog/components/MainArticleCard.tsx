@@ -55,7 +55,7 @@ const MainArticleCard = ({
           width={400}
           height={400}
           src={img_src}
-          className="object-cover rounded-3xl object-cover absolute inset-0 z-1 w-full h-full"
+          className="object-cover rounded-3xl absolute inset-0 z-1 w-full h-full"
           alt={alt_img!}
         />
         <BlogTagStyle

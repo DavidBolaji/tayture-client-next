@@ -1,38 +1,36 @@
 import React from 'react'
-import FetchCategories from '../data/FetchCategories'
 import ArticlesCatCard from './ArticlesCatCard'
+import { useQuery } from '@tanstack/react-query'
+import { Axios } from '@/request/request'
+import { Blog, Categories } from '@prisma/client'
 
 function CategoriesSection2() {
-  const categories = FetchCategories()
+  const { data: blogs } = useQuery({
+    queryKey: ['trending'],
+    queryFn: async () => {
+      const req = await Axios.get('/blog/trending')
+      return req.data.blog as (Blog & {
+        categories: Partial<Categories> & { blog: Blog[] }
+      })[]
+    },
+  })
 
   return (
-    <div className="-mx-2 xl:-mx-4 relative whitespace-nowrap -mx-2 xl:-mx-4 overflow-hidden">
-      {categories.map((category) =>
-        category.rank !== 0 ? (
-          <ArticlesCatCard
-            key={`${category.id}`}
-            category={category.category}
-            totalCatArticles={`${category.tot_articles} Articles`}
-            categoryColor={category.category_color}
-            bg_image_url={category.image_src}
-            authImgCont_wi_hei="2.5rem"
-            authImgCont_is_image={false}
-            rank={`#${category.rank}`}
-            bg_color_rank={category.tag_bg_color}
-            text_color_rank={category.category_color}
-          />
-        ) : (
-          <ArticlesCatCard
-            key={`${category.id}`}
-            category={category.category}
-            totalCatArticles={`${category.tot_articles} Articles`}
-            categoryColor={category.category_color}
-            bg_image_url={category.image_src}
-            authImgCont_wi_hei="2.5rem"
-            authImgCont_is_image={false}
-          />
-        )
-      )}
+    <div className="relative whitespace-nowrap -mx-2 xl:-mx-4 overflow-hidden">
+      {!blogs
+        ? []
+        : blogs.map((blog, idx) => (
+            <ArticlesCatCard
+              key={`${blog.id}`}
+              category={blog.categories.title!}
+              totalCatArticles={`${blog.categories.blog.length} Articles`}
+              categoryColor={"red"}
+              rank={String(idx)}
+              bg_image_url={blog.banner}
+              authImgCont_wi_hei="2.5rem"
+              authImgCont_is_image={false}
+            />
+          ))}
     </div>
   )
 }

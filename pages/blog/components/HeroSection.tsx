@@ -1,39 +1,35 @@
 import React, { useState } from 'react'
 import FetchBlogs from '../data/FetchBlogs'
-import HeadingDesc from './HeadingDesc'
+
 import { BlogTagStyle } from './BlogTagStyle.styles'
 import ImgNameDate from './ImgNameDate'
 import LikesCom from './LikesCom'
-import { HiArrowLongLeft, HiArrowLongRight } from 'react-icons/hi2'
+
 import Link from 'next/link'
+import HeadingDescSB from './singleBlogComponents/HeadingDescSB'
+import { useQuery } from '@tanstack/react-query'
+import { Axios } from '@/request/request'
+import { Blog, Categories, Like } from '@prisma/client'
+import moment from 'moment'
 
-interface HeroSectionProps {}
 
-const blogs = FetchBlogs()
-const EditorPickedBlogs = blogs.filter((blogs) => blogs.is_editors_pick)
+function HeroSection() {
+  const {data: currentBlog} = useQuery({
+    queryKey: ['editorPick'],
+    queryFn: async () => {
+      const req = await Axios.get('/blog/editor')
+      return req.data.blog as Blog & {categories: Partial<Categories>, likes: Like[], comment: Comment[]}
+    }
+  })
 
-function HeroSection({}: HeroSectionProps) {
-  const [currentBlogIndex, setCurrentBlogIndex] = useState(0)
-  const [activate, updateActivate] = useState(true)
+  console.log(currentBlog)
+  if(!currentBlog) return null
 
-  const nextBlog = () => {
-    setCurrentBlogIndex(
-      (prevIndex) => (prevIndex + 1) % EditorPickedBlogs.length,
-    )
-  }
-
-  const prevBlog = () => {
-    setCurrentBlogIndex((prevIndex) =>
-      prevIndex === 0 ? EditorPickedBlogs.length - 1 : prevIndex - 1,
-    )
-  }
-
-  const currentBlog = EditorPickedBlogs[currentBlogIndex]
 
   return (
     <div className="relative pt-10 md:py-12 lg:pb-10">
       {/* Heading(Head and Paragraph) */}
-      <HeadingDesc
+      <HeadingDescSB
         heading="Editor's Pick"
         description="Discover outstanding articles, Insights and Inspiration"
       />
@@ -45,7 +41,7 @@ function HeroSection({}: HeroSectionProps) {
           style={{
             height: '450px',
             borderRadius: '20px',
-            background: `url(${currentBlog.hor_image_src})`,
+            background: `url(${currentBlog?.banner})`,
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
@@ -62,11 +58,8 @@ function HeroSection({}: HeroSectionProps) {
             }}
           >
             <BlogTagStyle
-              text={currentBlog.category}
+              text={currentBlog.categories.title!}
               tag_link="#"
-              bg_color={currentBlog.category_bg_color}
-              text_color={currentBlog.category_text_hoverBg_color}
-              hover_bg_color={currentBlog.category_text_hoverBg_color}
               hover_text_color="white"
             />
 
@@ -77,10 +70,8 @@ function HeroSection({}: HeroSectionProps) {
             </h2>
 
             <ImgNameDate
-              authName={currentBlog.author}
-              // altImage="tayture"
-              // image
-              date="April 10, 2024"
+              authName={'Tayture'}
+              date={moment(currentBlog.createdAt).format('MMMM DD, YYYY')}
               enableDash={false}
               isColumn={true}
               bg_color="black"
@@ -89,14 +80,14 @@ function HeroSection({}: HeroSectionProps) {
             />
 
             <LikesCom
-              likes_num={`${currentBlog.likes}`}
-              comments_num={`${currentBlog.comments}`}
+              likes_num={`${currentBlog.likes.length}`}
+              comments_num={`${currentBlog.comment.length}`}
               bg_color="rgba(249,250,251)"
             />
           </div>
 
           {/* Back and Next Btn Cont */}
-          <div className="p-4 sm:pt-8 sm:px-10 z-20">
+          {/* <div className="p-4 sm:pt-8 sm:px-10 z-20">
             <div className="NextPrev relative flex items-center text-slate-500">
               <button
                 className={`${
@@ -117,7 +108,7 @@ function HeroSection({}: HeroSectionProps) {
                 <HiArrowLongRight className="w-5 h-5" />
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
