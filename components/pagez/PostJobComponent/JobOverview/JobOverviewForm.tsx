@@ -13,6 +13,10 @@ import { jobValidationSchema } from '../Schema/JobValidationSchema'
 import Button from '@/components/Button/Button'
 import JobRadioComponent from '@/components/Form/JobRadioComponent/JobRadioComponent'
 import { useQueryClient } from '@tanstack/react-query'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
+dayjs().utcOffset('local')
 
 const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
   const queryClient = useQueryClient()
@@ -24,10 +28,14 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
     const time = setTimeout(() => {
       if (typeof document !== 'undefined') {
         const doc = document.querySelector('.ant-layout-content')
+        document.getElementById('jobPreview')?.scrollIntoView({
+          behavior: 'smooth',
+        })
         doc?.scrollTo({
           behavior: 'smooth',
           top: 0,
         })
+
       }
       clearTimeout(time)
     }, 1500)
@@ -53,12 +61,12 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
       key={0}
     >
       {({ values, isValid }) => (
-        <Form className="mt-[40px] pb-[100px]">
+        <Form className="mt-[20px] pb-[100px] w-full">
           <div>
             <h3
-              className={`mb-[24px] ml-1 text-[20px] text-black ${regularFont.className}`}
+              className={`mb-[14px] ml-1 text-[20px] text-center text-black ${regularFont.className}`}
             >
-              Role
+              Select Teacher or Administrator?
             </h3>
             <Field
               name="job_role"
@@ -66,109 +74,112 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
               name2={'job_active'}
             />
           </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">Job Title</h3>
-            <Field
-              name="job_title"
-              as={StyledInput}
-              placeholder="Subject"
-              type={'text'}
-              maxLength={30}
-            />
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              Minimum educational qualification
-            </h3>
-            <Field
-              name="job_qual"
-              as={SelectInput}
-              placeholder="Minimum educational qualification"
-              text="Minimum educational qualification"
-              option={degree}
-            />
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              Minimum years of experience
-            </h3>
-            <Field
-              name="job_exp"
-              as={SelectInput}
-              placeholder="Minimum years of experience"
-              text="Minimum years of experience"
-              option={expL}
-            />
-          </div>
-          <div className="mb-5">
-            <h3 className={`mb-[30px] ml-1 ${regularFont.className}`}>
-              Salary details
-            </h3>
-            <div
-              className={`grid md:grid-cols-12 grid-cols-6 md:gap-5 ${
-                values?.job_max_sal || values?.job_min_sal ? 'mt-8' : 'mt-0'
-              }`}
-            >
-              <div className="col-span-6">
-                <Field
-                  name="job_min_sal"
-                  as={StyledInput}
-                  placeholder="Minimum amount"
-                  type={'num'}
-                  text={'Minimum amount'}
-                />
-              </div>
-              <div className="col-span-6 mt-10 md:mt-0">
-                <Field
-                  name="job_max_sal"
-                  as={StyledInput}
-                  placeholder="Maximum amount"
-                  type={'num'}
-                  text={'Maximum amount'}
-                />
+          <div className='-space-y-4'>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">Job Title</h3>
+              <Field
+                name="job_title"
+                as={StyledInput}
+                placeholder="job title"
+                type={'text'}
+                maxLength={30}
+              />
+            </div>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                Minimum educational qualification
+              </h3>
+              <Field
+                name="job_qual"
+                as={SelectInput}
+                placeholder="Minimum educational qualification"
+                text="Minimum educational qualification"
+                option={degree}
+              />
+            </div>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                Minimum years of experience
+              </h3>
+              <Field
+                name="job_exp"
+                as={SelectInput}
+                placeholder="Minimum years of experience"
+                text="Minimum years of experience"
+                option={expL}
+              />
+            </div>
+            <div className="mb-5">
+              <h3 className={`mb-[30px] ml-1 ${regularFont.className}`}>
+                Salary details
+              </h3>
+              <div
+                className={`grid md:grid-cols-12 grid-cols-6 md:gap-5 ${
+                  values?.job_max_sal || values?.job_min_sal ? 'mt-8' : 'mt-0'
+                }`}
+              >
+                <div className="col-span-6">
+                  <Field
+                    name="job_min_sal"
+                    as={StyledInput}
+                    placeholder="Minimum amount"
+                    type={'num'}
+                    text={'Minimum amount'}
+                  />
+                </div>
+                <div className="col-span-6 md:mt-0">
+                  <Field
+                    name="job_max_sal"
+                    as={StyledInput}
+                    placeholder="Maximum amount"
+                    type={'num'}
+                    text={'Maximum amount'}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              When is the earliest resumption date for this role
-            </h3>
-            <Field
-              name="job_resumption"
-              as={DateInput}
-              picker="date"
-              placeholder="MM/DD/YYYY"
-            />
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              How many hires do you need for this role ?
-            </h3>
-            <Field
-              name="job_no_hires"
-              as={CounterInput}
-              type={'num'}
-              disabled
-            />
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              Other details (Optional)
-            </h3>
-            <Field
-              name="job_desc"
-              as={StyledTextarea}
-              placeholder="You may share any other relevant information about this role or your school"
-              rows={5}
-              spellCheck="false"
-            />
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                Application deadline
+              </h3>
+              <Field
+                name="job_resumption"
+                as={DateInput}
+                picker="date"
+                placeholder="MM/DD/YYYY"
+                minDate={dayjs(new Date(Date.now()).toISOString(), 'YYYY-MM-DD')}
+              />
+            </div>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                How many hires do you need for this role ?
+              </h3>
+              <Field
+                name="job_no_hires"
+                as={CounterInput}
+                type={'num'}
+                disabled
+              />
+            </div>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                Other details (Optional)
+              </h3>
+              <Field
+                name="job_desc"
+                as={StyledTextarea}
+                placeholder="What else would like applicants to know about this vacancy and/or your school?"
+                rows={5}
+                spellCheck="false"
+              />
+            </div>
           </div>
           <div className="text-center">
             <Button
               disabled={!isValid}
               bold={false}
               hover={isValid}
-              text={'Next'}
+              text={'Preview'}
               render="light"
               onClick={() => handleSubmit(values)}
               type="button"

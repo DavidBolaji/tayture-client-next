@@ -152,7 +152,7 @@ const JobRadioComponent: FC<{ name: string; name2: string; SW: any }> = ({
                                 ? (rest as any).disabled
                                 : false
                             }
-                            className="w-full mb-2"
+                            className={`w-full mb-2 ${regularFont.className}`}
                             onChange={onChange2.bind(null, admin.label)}
                             defaultChecked={defaultV.includes(admin.value)}
                           >
@@ -189,7 +189,7 @@ const JobRadioComponent: FC<{ name: string; name2: string; SW: any }> = ({
                   }}
                   animate={{
                     opacity: 1,
-                    height: 225,
+                    height: 290,
                     transition: { type: 'spring' },
                   }}
                   exit={{

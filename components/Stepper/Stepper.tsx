@@ -1,14 +1,15 @@
 'use client'
 import { useAnimate } from 'framer-motion'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode,  useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { cn } from '@/utils/helpers'
 
-const StyledStepper = styled.div`
+const StyledStepper = styled.div<{height: number}>`
   position: relative;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: hidden;
+  height: ${(prop) => prop.height};
   & > * {
     flex: 1 0 100%;
   }
@@ -21,29 +22,41 @@ export interface StepperChildProps {
   current: number
   next: () => void
   prev: () => void
-  totalSteps: number
+  totalSteps: number,
+  setStep?: (step: number) => void
 }
 
 interface StepperProps {
   children: ReactNode
   className?: string
-  init: ({ current, next, prev, totalSteps }: StepperChildProps) => void
+  init: ({ current, next, prev, totalSteps, setStep }: StepperChildProps) => void
 }
 
-const Stepper: FC<StepperProps> = ({ children, className, init }) => {
+const Stepper: FC<StepperProps> = ({ children, className, init,  }) => {
   const [scope, animate] = useAnimate()
+  const [activeChildHeight, setActiveChildHeight] = useState(0);
   const [cur, setCur] = useState(0)
   const total = React.Children.count(children)
   const nextBtn = useRef<HTMLButtonElement>(null)
   const prevBtn = useRef<HTMLButtonElement>(null)
   const [mount, setMount] = useState(false)
-  const [count, setCount] = useState(0)
+  
 
   const moveForward = () => {
     nextBtn.current?.click()
   }
   const moveBack = () => {
     prevBtn.current?.click()
+  }
+  const setStart = (step: number) => {
+    setCur(step)
+    init({
+      current: step,
+      next: moveForward,
+      prev: moveBack,
+      totalSteps: total,
+      setStep: (step) => setStart.bind(null, step)
+    })
   }
 
   const handleNext = async () => {
@@ -58,7 +71,7 @@ const Stepper: FC<StepperProps> = ({ children, className, init }) => {
       )
       animate(
         scope.current.childNodes[cur],
-        { x: '100%', opacity: 0 },
+        { x: '100%', opacity: 0, height: "0px" },
         { duration: 2 },
       )
       await animate(
@@ -73,6 +86,7 @@ const Stepper: FC<StepperProps> = ({ children, className, init }) => {
         next: moveForward,
         prev: moveBack,
         totalSteps: total,
+        setStep: (step) => setStart.bind(null, step)
       })
     }
   }
@@ -83,11 +97,6 @@ const Stepper: FC<StepperProps> = ({ children, className, init }) => {
     const fCur = `-${cur * 100}%`
 
     if (cur > 0) {
-      // await animate(
-      //   scope.current.childNodes[cur - 1],
-      //   { x: nextVal, opacity: 0, display: "none" },
-      //   { duration: 0 }
-      // );
       animate(
         scope.current.childNodes[cur],
         { x: sCur, opacity: 1, display: 'block' },
@@ -95,31 +104,16 @@ const Stepper: FC<StepperProps> = ({ children, className, init }) => {
       )
       animate(
         scope.current.childNodes[cur - 1],
-        { x: nextVal, opacity: 1, display: 'block' },
+        { x: nextVal, opacity: 1, display: 'block', height: "auto" },
         { duration: 2 },
       )
-      // await animate(
-      //   scope.current.childNodes[cur],
-      //   { x: fCur, display: "none" },
-      //   { duration: 1.5 }
-      // );
-      // await animate(
-      //   scope.current.childNodes[cur],
-      //   { x: sCur, opacity: 1, display: "block" },
-      //   { duration: 1 }
-      // );
-      // await animate(
-      //   scope.current.childNodes[cur - 1],
-      //   { x: nextVal, opacity: 1, display: "block" },
-      //   { duration: 1 }
-      // );
-
       setCur((prev) => prev - 1)
       init({
         current: cur - 1,
         next: moveForward,
         prev: moveBack,
         totalSteps: total,
+        setStep: (step) => setStart.bind(null, step)
       })
     }
   }
@@ -130,33 +124,35 @@ const Stepper: FC<StepperProps> = ({ children, className, init }) => {
       next: moveForward,
       prev: moveBack,
       totalSteps: total,
+      setStep: (step) => setStart.bind(null, step)
     })
   }, [])
+
 
   useEffect(() => {
     setMount(true)
   }, [])
 
+  useEffect(() => {
+    if(!mount) return
+   
+    setActiveChildHeight(scope.current.childNodes[cur]?.scrollHeight);
+  }, [cur, mount])
+
   if (!mount) {
     return null
   }
 
+
   return (
     <>
       <StyledStepper
+        height={activeChildHeight}
         ref={scope}
         className={cn('no-s bg-transparent', className)}
       >
         {children}
       </StyledStepper>
-      {/* <StyledStepper ref={scope} className={cn("no-s", className)}>
-        {React.Children.map(children, (child, index) =>
-          React.cloneElement(child as React.ReactElement, {
-            style: { display: index === cur && "block" },
-          })
-        )}
-      </StyledStepper> */}
-
       <button
         type="button"
         onClick={handlePrev}

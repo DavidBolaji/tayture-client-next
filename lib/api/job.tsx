@@ -1,7 +1,7 @@
 import { Axios } from '@/request/request'
 
-export const getSchoolJobs = async () => {
-  const result = await Axios.get('/job/me')
+export const getSchoolJobs = async (defaultSchool: number) => {
+  const result = await Axios.get(`/job/me?defaultSchool=${defaultSchool}`)
   return result
 }
 export const getJobById = async (jobId: string) => {

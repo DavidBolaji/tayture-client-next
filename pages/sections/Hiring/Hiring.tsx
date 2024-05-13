@@ -29,7 +29,7 @@ const Hiring = () => {
               text={'See Jobs'}
               bold={false}
               render={'dark'}
-              onClick={() => router.push('/find_job')}
+              onClick={() => router.push('/jobs')}
             />
           </div>
         </Wrapper>
@@ -46,7 +46,8 @@ const Hiring = () => {
           </h2>
           <p className="text-white max-w-[506px] mt-[16px]">
             {' '}
-            Hire the best hands to accomplish your school&apos;s vision.
+            Do you have a vacancy at your school? Tayture can help you find qualified candidates.
+            
           </p>
           <div className="w-2/4 mt-[65px]">
             <Button

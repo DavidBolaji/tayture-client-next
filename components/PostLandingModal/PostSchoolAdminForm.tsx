@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useGlobalContext } from '@/Context/store'
 import { createSchool } from '@/lib/api/school'
 import { validationSchema } from '../pagez/AddSchool/AddSchoolFormAdmin/Schema/AddSchoolAdminSchema'
+import { User } from '@prisma/client'
 type ISchAdmin = {
   [key: string]: {
     sch_admin_name: string
@@ -18,33 +19,35 @@ type ISchAdmin = {
     sch_admin_email: string
   }[]
 }
-const initialValues: ISchAdmin = {
-  participants: [
-    {
-      sch_admin_name: '',
-      sch_admin_email: '',
-      sch_admin_phone: '',
-    },
-  ],
-}
 
-const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move = true }) => {
-  const { img, createSch, setMessage, setUI } = useGlobalContext()
-  const queryClient = useQueryClient()
+
+const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
+  SW,
+  move = true,
+}) => {
+  const { img, createSch, setMessage, setUI, defaultSchool } = useGlobalContext()
+  const queryClient = useQueryClient();
+  const user = queryClient.getQueryData(['user']) as User
+
+  const initialValues: ISchAdmin = {
+    participants: [
+      {
+        sch_admin_name: typeof user !== "undefined" ? `${user?.fname} ${user?.lname}`: "",
+        sch_admin_email: typeof user !== "undefined" ? user?.email : "",
+        sch_admin_phone: typeof user !== "undefined" ? user?.phone : "",
+      },
+    ],
+  }
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: any) => {
       return await createSchool(data)
     },
     onSuccess: async (res) => {
       queryClient.setQueryData(['schId'], res.data.school.sch_id)
-      if(move) {
+      if (move) {
         SW.next()
       } else {
-        
-        queryClient.setQueryData(['school'], res.data.school)
-        queryClient.invalidateQueries({
-          queryKey: ['school']
-        })
         setUI((prev) => {
           return {
             ...prev,
@@ -54,16 +57,28 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
             },
           }
         })
+        queryClient.setQueryData(['school'], res.data.school[defaultSchool])
+        queryClient.invalidateQueries({
+          queryKey: ['school'],
+        })
 
-        setMessage(() => "Hurray!!!, school created succesfully, you can now fund wallet")
+        setMessage(
+          () =>
+            'Hurray!!!, school created succesfully, you can now fund wallet',
+        )
         const t = setTimeout(() => {
-          setMessage(() => "")
-          window.location.reload()
-        }, 2000)
-
-
+          setMessage(() => '')
+          setUI((prev) => {
+            return {
+              ...prev,
+              paymentModal: {
+                ...prev.paymentModal,
+                visibility: !prev.paymentModal?.visibility,
+              },
+            }
+          })
+        }, 3000)
       }
-
     },
     onError: (err) => {
       setUI((prev) => {
@@ -77,7 +92,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
       })
       setMessage(() => (err as Error).message)
       const t = setTimeout(() => {
-        setMessage(() => "")
+        setMessage(() => '')
       }, 2000)
     },
   })
@@ -90,11 +105,13 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
   }
 
   return (
-    <div className="mt-[25px]">
+    <div id="create" className="mt-[25px] w-full text-center">
       <div className={`${regularFont.className} mb-[32px]`}>
-        <h2 className="w-full font-br md:text-2xl mb-2">Admin information</h2>
-        <p className="text-ash_400 mb-12">
-          We recommend you add at least 2 admin details
+      <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
+          Add Account Admin
+        </h3>
+        <p className="text-ash_400 mb-12 text-center">
+          Administrators help manage your school&apos;s account on Tayture. Add now.
         </p>
       </div>
       <Formik
@@ -104,7 +121,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
         validationSchema={validationSchema}
       >
         {({ values, handleSubmit, isSubmitting, isValid }) => (
-          <Form className="w-full " onSubmit={handleSubmit}>
+          <Form className="w-full" onSubmit={handleSubmit}>
             <FieldArray name="participants">
               {({ push, remove }) => (
                 <>
@@ -142,7 +159,8 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
                     </div>
                   ))}
 
-                  <Button
+                 <div className='text-left'>
+                 <Button
                     render="light"
                     transparent
                     onClick={() =>
@@ -163,6 +181,7 @@ const PostSchoolAdminForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move =
                       </Space>
                     }
                   />
+                 </div>
                 </>
               )}
             </FieldArray>

@@ -30,7 +30,7 @@ const sendChatMail = async ({
   let dateTime = cDate + ' ' + cTime
 
   const mailOption: ImailOptions = {
-    from: 'complaint@tayture.com',
+    from: 'hello@tayture.com',
     to: 'hello@tayture.com',
     subject: `Challenge <${dateTime}>`,
     html: `<p>${html}</p>`,

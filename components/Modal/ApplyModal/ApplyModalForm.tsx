@@ -1,5 +1,5 @@
 'use client'
-import { Field, Form, Formik, useFormikContext } from 'formik'
+import { Field, Form, Formik } from 'formik'
 import React, { ChangeEvent, FC, useRef, useState } from 'react'
 import { SelectInput } from '../../Form/SelectInput/SelectInput'
 import { regularFont } from '@/assets/fonts/fonts'
@@ -41,7 +41,7 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
         )
 
       const isLt2M = files[0].size / 1024 / 1024 < 2
-      if (!isLt2M) return setMessage(() => 'Image must smaller than 2MB!')
+      if (!isLt2M) return setMessage(() => 'Image must be smaller than 2MB!')
       setLoading(true)
 
       const formData = new FormData()
@@ -69,7 +69,7 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
     SW.next()
   }
   return (
-    <div className={`w-full px-5 ${regularFont.className}`}>
+    <div className={`w-full ${regularFont.className}`}>
       <h2 className="text-center text-[24px] mb-[40px] text-black">
         Application
       </h2>
@@ -84,8 +84,8 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
         onSubmit={() => {}}
       >
         {({ values, setFieldValue, isValid }) => (
-          <Form>
-            <label className="mb-2 inline-block text-[20px] ml-1">
+          <Form className='w-full'>
+            <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
               Educational qualification
             </label>
             <Field
@@ -94,7 +94,7 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
               as={SelectInput}
               placeholder={'Your highest degree or certification'}
             />
-            <label className="mb-2 inline-block text-[20px] ml-1">
+            <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
               Work experience
             </label>
             <Field
@@ -103,7 +103,7 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
               as={SelectInput}
               placeholder={'How many years have you worked ?'}
             />
-            <label className="mb-2 inline-block text-[20px] ml-1">
+            <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
               Curriculum Vitae
             </label>
             {loading && (
@@ -128,7 +128,7 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
               {values.cv ? 'Replace' : 'Upload'}
             </button>
             <small className="text-ash_400 ml-2 mt-2 inline-block ">
-              DOC, PDF (5mb)
+              DOC, PDF (2mb)
             </small>
             <input
               type="file"

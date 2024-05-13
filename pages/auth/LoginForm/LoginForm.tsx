@@ -32,7 +32,7 @@ const loginSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
 })
 
-const LoginForm = ({ show = true }: { show?: boolean }) => {
+const LoginForm = ({ show = true }) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const { setMessage, colorList } = useGlobalContext()
@@ -80,17 +80,20 @@ const LoginForm = ({ show = true }: { show?: boolean }) => {
           window.location.assign('/dashboard?profile=1')
         }, 3000)
       } else {
-        router.push('/dashboard')
+        const t = setTimeout(() => {
+          clearTimeout(t)
+          router.push('/dashboard')
+        }, 1000)
       }
     },
     onError: (err) => {
-      setMessage(() => (err as AxiosError<{error: string}>).response?.data?.error ||(err as Error).message)
+      setMessage(() => (err as AxiosError<{error: string}>).response?.data?.error || (err as Error).message)
     },
   })
 
   const onSubmit = async (
     values: ILogin,
-    { resetForm, setSubmitting }: FormikHelpers<ILogin>,
+    { resetForm }: FormikHelpers<ILogin>,
   ) => {
     mutate({ ...values })
     resetForm({

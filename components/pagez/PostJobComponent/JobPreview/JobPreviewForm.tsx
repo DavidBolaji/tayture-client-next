@@ -22,6 +22,8 @@ import Spinner from '@/components/Spinner/Spinner'
 dayjs.extend(utc)
 dayjs().utcOffset('local')
 
+const text = `You have successfully posted a vacancy. All our users have been notified. You can also copy and share the link to the job on your social media handles`
+
 const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
   const queryClient = useQueryClient()
 
@@ -52,16 +54,19 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
       }
       // setMessage(() => res.data.message)
       queryClient.invalidateQueries({
-        queryKey: ['schoolJobs'],
+        queryKey: ['schoolJobs', 'notifications'],
       })
       queryClient.removeQueries({ queryKey: ['jobData'] })
-      return router.push('/dashboard/school')
-      // return school
+      router.push('/dashboard/school')
+      return setMessage(() => 
+        res.data.message === text ? 
+        res.data.message + ' link ()' :
+        res.data.message)
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
       const t = setTimeout(() => {
-        setMessage(() => "")
+        setMessage(() => '')
       }, 2000)
     },
   })
@@ -97,13 +102,16 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
       validationSchema={jobValidationSchema}
     >
       {({ values, isValid }) => (
-        <Form className="">
+        <Form className="w-full">
           <div>
             <h3
-              className={`mb-[24px] ml-1 text-[20px] text-black ${regularFont.className}`}
+               className={` ml-1 text-[20px] text-center text-black ${regularFont.className}`}
             >
-              Role
+              Select Teacher or Administrator?
             </h3>
+            <div className='text-xs w-full text-center mb-2 italic'>
+              Note: Posted jobs cannot be edited. Please review before posting.
+            </div>
             <Field
               name="job_role"
               as={JobRadioComponent}
@@ -113,118 +121,120 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
               disabled
             />
           </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">Job Title</h3>
-            <Field
-              name="job_title"
-              as={StyledInput}
-              placeholder="Subject"
-              type={'text'}
-              maxLength={30}
-              disabled
-            />
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              Minimum educational qualification
-            </h3>
-            <Field
-              name="job_qual"
-              as={SelectInput}
-              placeholder="Minimum educational qualification"
-              text="Minimum educational qualification"
-              option={degree}
-              disabled
-            />
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              Minimum years of experience
-            </h3>
-            <Field
-              name="job_exp"
-              as={SelectInput}
-              placeholder="Minimum years of experience"
-              text="Minimum years of experience"
-              option={expL}
-              disabled
-            />
-          </div>
-          <div className="mb-5">
-            <h3 className={`mb-[16px] ml-1 ${regularFont.className}`}>
-              Salary details
-            </h3>
-            <div
-              className={`grid md:grid-cols-12 grid-cols-6 md:gap-5 ${
-                values?.job_max_sal || values?.job_min_sal ? 'mt-8' : 'mt-0'
-              }`}
-            >
-              <div className="col-span-6">
-                <Field
-                  name="job_min_sal"
-                  as={StyledInput}
-                  placeholder="Minimum amount"
-                  type={'num'}
-                  text={'Minimum amount'}
-                  disabled
-                />
-              </div>
-              <div className="col-span-6 mt-10 md:mt-0">
-                <Field
-                  name="job_max_sal"
-                  as={StyledInput}
-                  placeholder="Maximum amount"
-                  type={'num'}
-                  text={'Maximum amount'}
-                  disabled
-                />
+          <div className='-space-y-4'>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">Job Title</h3>
+              <Field
+                name="job_title"
+                as={StyledInput}
+                placeholder="Job title"
+                type={'text'}
+                maxLength={30}
+                disabled
+              />
+            </div>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                Minimum educational qualification
+              </h3>
+              <Field
+                name="job_qual"
+                as={SelectInput}
+                placeholder="Minimum educational qualification"
+                text="Minimum educational qualification"
+                option={degree}
+                disabled
+              />
+            </div>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                Minimum years of experience
+              </h3>
+              <Field
+                name="job_exp"
+                as={SelectInput}
+                placeholder="Minimum years of experience"
+                text="Minimum years of experience"
+                option={expL}
+                disabled
+              />
+            </div>
+            <div className="mb-5">
+              <h3 className={`mb-[16px] ml-1 ${regularFont.className}`}>
+                Salary details
+              </h3>
+              <div
+                className={`grid md:grid-cols-12 grid-cols-6 md:gap-5 ${
+                  values?.job_max_sal || values?.job_min_sal ? 'mt-8' : 'mt-0'
+                }`}
+              >
+                <div className="col-span-6">
+                  <Field
+                    name="job_min_sal"
+                    as={StyledInput}
+                    placeholder="Minimum amount"
+                    type={'num'}
+                    text={'Minimum amount'}
+                    disabled
+                  />
+                </div>
+                <div className="col-span-6 md:mt-0">
+                  <Field
+                    name="job_max_sal"
+                    as={StyledInput}
+                    placeholder="Maximum amount"
+                    type={'num'}
+                    text={'Maximum amount'}
+                    disabled
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              When is the earliest resumption date for this role
-            </h3>
-            <Field
-              name="job_resumption"
-              as={DateInput}
-              picker="date"
-              placeholder="YYYY-MM-DD"
-              disabled={true}
-              defaultValue={dayjs(values.job_resumption, 'YYYY-MM-DD')}
-            />
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              How many hires do you need for this role ?
-            </h3>
-            <Field
-              name="job_no_hires"
-              as={CounterInput}
-              type={'num'}
-              preview={'true'}
-              disabled
-            />
-          </div>
-          <div>
-            <h3 className="mb-[10px] ml-1 text-black">
-              Other details (Optional)
-            </h3>
-            <Field
-              name="job_desc"
-              as={StyledTextarea}
-              placeholder="You may share any other relevant information about this role or your school"
-              rows={5}
-              spellCheck="false"
-              disabled
-            />
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                When is the earliest resumption date for this role
+              </h3>
+              <Field
+                name="job_resumption"
+                as={DateInput}
+                picker="date"
+                placeholder="YYYY-MM-DD"
+                disabled={true}
+                defaultValue={dayjs(values.job_resumption, 'YYYY-MM-DD')}
+              />
+            </div>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                How many hires do you need for this role ?
+              </h3>
+              <Field
+                name="job_no_hires"
+                as={CounterInput}
+                type={'num'}
+                preview={'true'}
+                disabled
+              />
+            </div>
+            <div>
+              <h3 className="mb-[10px] ml-1 text-black">
+                Other details (Optional)
+              </h3>
+              <Field
+                name="job_desc"
+                as={StyledTextarea}
+                placeholder="What else would like applicants to know about this vacancy and/or your school?"
+                rows={5}
+                spellCheck="false"
+                disabled
+              />
+            </div>
           </div>
           <div className="flex justify-between pb-[100px]">
             <Button
               disabled={isPending}
               bold={false}
               hover={true}
-              text={'Back'}
+              text={'Edit'}
               render="light"
               onClick={goBack}
               type="button"
@@ -233,7 +243,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
               disabled={isPending}
               bold={false}
               hover={true}
-              text={isPending ? <Spinner /> : 'Publish'}
+              text={isPending ? <Spinner /> : 'Post Job'}
               render="light"
               onClick={() => handleSubmit(values)}
               type="button"

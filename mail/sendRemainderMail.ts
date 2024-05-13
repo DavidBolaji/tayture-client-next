@@ -1,4 +1,5 @@
 import ejs from 'ejs'
+import path from 'path'
 import transporter from './transporter'
 
 interface ImailOptions {
@@ -31,7 +32,7 @@ const sendRemainderMail = async ({
   let cTime =
     current.getHours() + ':' + current.getMinutes() + ':' + current.getSeconds()
   let dateTime = cDate + ' ' + cTime
-  const templatePath = './views/remainder.ejs'
+  const templatePath = path.join(process.cwd(), 'views', 'reminder.ejs')
   const dat = await ejs.renderFile(templatePath, {
     firstName,
     user,
@@ -42,7 +43,7 @@ const sendRemainderMail = async ({
   const mailOption: ImailOptions = {
     from: 'Tayture <hello@tayture.com>',
     to: email,
-    bcc: ['info@tayture.com'],
+    // bcc: ['info@tayture.com'],
     subject: `🌟 Interview Reminder 🌟 <${dateTime}>`,
     html: dat,
   }

@@ -1,35 +1,46 @@
 'use client'
 import { regularFont } from '@/assets/fonts/fonts'
-import { IUser } from '@/pages/api/users/types'
 
-import { useQueryClient } from '@tanstack/react-query'
-import { Badge, ConfigProvider, Tabs, TabsProps } from 'antd'
+import { useQuery } from '@tanstack/react-query'
+import { Badge, ConfigProvider, Skeleton, Tabs, TabsProps } from 'antd'
 import { FC, useState } from 'react'
-import JobCardAll from './components/JobCardAll'
 import JobAppliedPage from './components/JobAppliedPage'
 import JobSchedulePage from './components/JobSchedulePage'
+import JobHiredPage from './components/JobHiredPage'
+import JobCardAll2 from './components/JobCardAll2'
+import JobCardAllApplied from './components/JobCardAllApplied'
+import JobCardAllScheduled from './components/JobCardAllScheduled'
+import JobCardAllHired from './components/JobCardAllHired'
+import { getUser2 } from '@/lib/api/user'
+import Spinner from '@/components/Spinner/Spinner'
 
-const UserJobPage: FC = () => {
-  const queryClient = useQueryClient()
-  const [type, setType] = useState<'applied' | 'scheduled' | 'hired'>('applied')
-  const user = queryClient.getQueryData(['user']) as unknown as IUser
+const UserJobPage: FC = (props) => {
+ const [type, setType] = useState<'applied' | 'scheduled' | 'hired'>('applied')
+ const {data: user, isPending} = useQuery({
+  queryKey: ['user'],
+  queryFn: async () => { const req = await getUser2();
+    const user = req.data.user
+    return user
+  }
+ })
+
   const items: TabsProps['items'] = [
     {
       key: 'applied',
       label: 'Applied',
       children: (
         <>
-          {user &&
-            user.applied!.length > 0 &&
-            user.applied!.map((applied: any) => (
+          {isPending ? <Skeleton loading={isPending} active />: user?.applied!.length > 0 ? (
+            user.applied!.map((applied: any, idx: number) => (
               <Badge.Ribbon
                 color="black"
                 text="Applied"
-                key={`${applied.job_id}_applied`}
+                key={`${applied.jobId}_applied`}
               >
-                <JobCardAll type={type} job={applied} />
+                <JobCardAllApplied job={applied} idx={idx} />
               </Badge.Ribbon>
-            ))}
+            ))
+          ):<JobCardAll2 type={type} />}
         </>
       ),
     },
@@ -38,23 +49,38 @@ const UserJobPage: FC = () => {
       label: 'Scheduled',
       children: (
         <>
-          {user &&
-            user.schedule!.length > 0 &&
-            user.schedule!.map((schedule: any) => (
+          {isPending ? <Skeleton loading={isPending} active /> : user?.schedule!.length > 0 ? (
+            user.schedule!.map((schedule: any, idx: number) => (
               <Badge.Ribbon
-                key={`${schedule.job.job_id}_scheduled`}
+                key={`${schedule.jobId}_scheduled`}
                 color="grey"
                 text="Scheduled"
               >
-                <JobCardAll type={type} job={schedule} />
+                <JobCardAllScheduled job={schedule} idx={idx} />
               </Badge.Ribbon>
-            ))} 
+            ))
+          ):<JobCardAll2 type={type} />}
         </>
       ),
     },
     {
       key: 'hired',
       label: 'Hired',
+      children: (
+        <>
+          {isPending ? <Spinner /> : user?.hired!.length > 0 ? (
+            user.hired!.map((hired: any, idx: number) => (
+              <Badge.Ribbon
+                key={`${hired.job.job_id}_hired`}
+                color="green"
+                text="Hired"
+              >
+                <JobCardAllHired job={hired} idx={idx} />
+              </Badge.Ribbon>
+            ))
+          ): <JobCardAll2 type={type} />}
+        </>
+      ),
     },
   ]
   const handleChange = (page: any) => {
@@ -72,12 +98,13 @@ const UserJobPage: FC = () => {
               },
             }}
           >
-            <Tabs type="card" items={items} onChange={handleChange} />
+            <Tabs  type="card" items={items} onChange={handleChange} />
           </ConfigProvider>
         </div>
-        <div className="md:block hidden col-span-6 mt-14 bg-white px-5 py-3 rounded-md w-full">
+        <div className="md:block hidden col-span-6 mt-14 rounded-md w-full">
           {type === 'applied' && <JobAppliedPage />}
           {type === 'scheduled' && <JobSchedulePage />}
+          {type === 'hired' && <JobHiredPage />}
         </div>
       </div>
     </div>

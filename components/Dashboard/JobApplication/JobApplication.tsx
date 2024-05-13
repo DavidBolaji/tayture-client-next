@@ -5,7 +5,7 @@ import JobPoster from '@/components/JobPoster/JobPoster'
 import { IJobSchDb } from '@/pages/api/job/types'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getClientJobs, getClientJobsByType } from '@/lib/api/job'
-import { Drawer, Empty, Skeleton } from 'antd'
+import { Empty, Skeleton } from 'antd'
 import { cn } from '@/utils/helpers'
 import { useRouter } from 'next/router'
 
@@ -22,7 +22,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
 }) => {
   const queryClient = useQueryClient()
   const router = useRouter()
-  const { isLoading, data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['jobs'],
     queryFn: async () => {
       let req
@@ -32,7 +32,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
         req = await getClientJobs()
       }
 
-      if (router.query.job === '1') {
+      if (router.query.jobz === '1') {
         const cur = queryClient.getQueryData(['activeJob'])
         queryClient.setQueryData(['activeJob'], cur)
       } else {
@@ -40,23 +40,24 @@ const JobApplication: React.FC<JobApplicationProps> = ({
           ['activeJob'],
           typeof req.data.job[0] === 'undefined' ? {} : req.data.job[0],
         )
-      }
+      } 
       return req.data.job
     },
+    // refetchInterval: 1000,
   })
 
 
   return data && Object.keys(data).length > 0 ? (
-    <div className="grid grid-cols-12 gap-10">
-      <div className="md:col-span-6 col-span-12 h-[500px] overflow-auto md:pr-5 no-s">
-        {!data && isLoading ? (
+    <div className="grid grid-cols-12 md:gap-10">
+      <div className={`md:col-span-6 max-h-[500px] pt-2 overflow-auto no-s col-span-12 md:pb-20`}>
+        {!data && isPending ? (
           <div className="space-y-3">
             {['1x', '2y', '3z'].map((loader) => (
               <Skeleton
                 key={loader}
                 className="border p-3 rounded-[10px]"
-                loading={isLoading}
-                active={isLoading}
+                loading={isPending}
+                active={isPending}
               />
             ))}
           </div>
@@ -66,7 +67,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
       </div>
       <div
         className={cn(
-          'bg-white w-full col-span-6 rounded-[10px] border px-[32px] pt-[40px] h-[500px] pb-20 overflow-auto md:block hidden no-s',
+          'w-full col-span-6 md:block hidden no-s',
           className,
         )}
       >

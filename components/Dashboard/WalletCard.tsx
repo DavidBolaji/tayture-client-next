@@ -14,13 +14,13 @@ import { getUserSchool } from '@/lib/api/school'
 import HandleCreateSchool from '../Modal/HandleCreateSchool'
 
 function WalletCard() {
-  const { setUI, setMessage } = useGlobalContext()
+  const { setUI, setMessage, defaultSchool } = useGlobalContext()
   const queryClient = useQueryClient()
   const { data: school, isLoading } = useQuery({
     queryKey: ['school'],
     queryFn: async () => {
       const req = await getUserSchool()
-      return req.data.school
+      return req.data.school[defaultSchool]
     },
   })
   const [amt, setAmt] = useState<string | number>('')
@@ -36,12 +36,12 @@ function WalletCard() {
     mutationFn: async (amount: string) =>
       await incWallet({
         wallet_balance: +amount,
-      }),
+      }, defaultSchool),
     onSuccess: (res) => {
       queryClient.invalidateQueries({
         queryKey: ['school'],
       })
-      handlePayment()
+      
       setMessage(() => 'Wallet successfully funded')
       const t = setTimeout(() => {
         setMessage(() => "")
@@ -49,7 +49,6 @@ function WalletCard() {
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
-      handlePayment()
     },
   })
 
@@ -103,10 +102,10 @@ function WalletCard() {
   }
 
   const onFailure = () => {
-    setMessage(() => 'Network Error!!!, please try again after a while')
+    setMessage(() => 'User aborted task')
   }
   return (
-    <div className="bg-[#FFC299;] h-[202px] overflow-hidden grid-cols-7 rounded-[18px] py-[28px] md:px-[40px] px-5 flex items-center justify-between mb-[32px] relative">
+    <div className="bg-[#FFC299] h-[202px] overflow-hidden grid-cols-7 rounded-[18px] py-[28px] md:px-[40px] px-5 flex items-center justify-between mb-[32px] relative">
       <div
         className={`font-[600] text-[24px] col-span-5 max-w-[425px] ${regularFont.className}`}
       >
@@ -142,21 +141,21 @@ function WalletCard() {
         amount={+amt}
         valid={String(amt).trim().length > 0}
       >
-        <div className={`my-5  ${regularFont.className}`}>
-          <div>
-            <span className="text-2xl">Wallet</span>
+        <div className={`w-full ${regularFont.className}`}>
+          <div className='w-full'>
+            <span className="text-2xl block text-center mb-2">Wallet</span>
           </div>
           <div className={`mb-2 text-[12px]`}>
-            <div className="flex justify-end bg-slate-200 w-48 ml-auto py-1 pr-2 rounded-l-md">
+            <div className="flex bg-slate-200 w-48 mx-auto py-1 pr-2 rounded-l-md">
               <div className="flex items-center justify-between w-full pl-3">
                 <p>Available Balance:</p>
                 <p>₦ {!isLoading && school?.wallet?.wallet_balance}</p>
               </div>
             </div>
-            <hr className="mt-1 mb-8" />
+            <hr className="mt-1 mb-2" />
           </div>
           <label className={`inline-block ml-1 mb-2 ${regularFont.className}`}>
-            Fund Wallet Amount
+            Amount
           </label>
 
           <Formik

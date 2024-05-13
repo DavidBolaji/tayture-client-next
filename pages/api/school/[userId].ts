@@ -1,5 +1,6 @@
 import db from '@/db/db'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { unknown } from 'zod'
 
 type Data = {
   message: string
@@ -15,7 +16,8 @@ export default async function handler(
 
   const school = await db.school.findUnique({
     where: {
-      schUserId: req.query.userId as string,
+      // schUserId: req.query.userId as string,
+      sch_id: undefined
     },
   })
 

@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useGlobalContext } from '@/Context/store'
 import { createSchool } from '@/lib/api/school'
 import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 type ISchAdmin = {
   [key: string]: {
     sch_admin_name: string
@@ -31,6 +32,7 @@ const initialValues: ISchAdmin = {
 
 const AddSchoolFormAdmin: React.FC = () => {
   const router = useRouter()
+  const path = usePathname()
   const { img, createSch, setMessage, setImg, setCreateSch } =
     useGlobalContext()
   const queryClient = useQueryClient()
@@ -41,13 +43,15 @@ const AddSchoolFormAdmin: React.FC = () => {
     onSuccess: async (res) => {
       const school = res.data.school
       queryClient.invalidateQueries({
-        queryKey: ['school'],
+        queryKey: ['school', 'allSchools'],
       })
       setMessage(() => res.data.message)
       if (router.query.redirect_post === '1') {
         router.push('/dashboard/school/post')
       } else {
-        router.push('/dashboard/school')
+        if(path !== '/dashboard/admin') {
+          router.push('/dashboard/school')
+        }
       }
 
       const t = setTimeout(() => {
@@ -78,9 +82,8 @@ const AddSchoolFormAdmin: React.FC = () => {
   return (
     <>
       <div className={`${regularFont.className}  mb-[32px]`}>
-        <h2 className="w-full font-br">Admin information</h2>
-        <p className="text-ash_400">
-          We recommend you add at least 2 admin details
+        <p className="text-ash_400 max-w-[300px] text-center mx-auto">
+        Administrators help manage your school&apos;s account on Tayture. Add now.
         </p>
       </div>
       <Formik

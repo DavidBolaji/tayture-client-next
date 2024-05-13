@@ -1,37 +1,59 @@
 import db from '@/db/db'
 import verifyToken from '@/middleware/verifyToken'
+import { formatNumber } from '@/utils/helpers'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST')
     return res.status(405).json({ message: 'Method not allowed' })
 
-  const { noPaid, amount, schoolId, jobId } = req.body
-  if (!noPaid || !amount || !schoolId || !jobId)
+  const { noPaid, schoolId, jobId, isFunded, amount, role, complete } = req.body
+  if (!noPaid || !schoolId || !jobId)
     return res
       .status(400)
       .json({ message: 'Validation error all fields are required' })
 
   try {
     await db.$transaction(async (tx) => {
-      const req1 = tx.transaction.create({
+     if (isFunded) {
+      const r = tx.wallet.update({
+        where: {
+          walletSchId: req.authUser?.school[+req.query.defaultSchool!].sch_id as string
+        },
         data: {
-          noPaid,
+          wallet_balance: {
+            decrement: amount
+          },
+          wallet_locked_balance: {
+            increment:  amount
+          }
+        }
+      })
+
+      const v = tx.transaction.create({
+        data: {
+          type: 'LOCKED',
           amount,
           userId: req.authUser!.id,
-          jobId,
+          message: `Interview Booking of ₦ ${formatNumber((amount), "NGN", {})} for role of ${role}`,
           schoolId,
-        },
+        }
+        
       })
+      await Promise.all([r, v])
+     }
       const req2 = await tx.job.update({
         where: {
           job_id: jobId,
         },
         data: {
+          noPaid: complete ? noPaid :  {
+            increment: noPaid
+          },
           status: true,
         },
       })
-      await Promise.all([req1, req2])
+     
     })
 
     return res.status(200).json({

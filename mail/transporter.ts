@@ -1,23 +1,35 @@
 import nodemailer from 'nodemailer'
-// import { env } from "../config";
+
 
 const transporter = nodemailer.createTransport({
-  host: 'tayture.com',
+  service: "zoho",
+  host: 'smtpro.zoho.in',
   port: 465,
-  secure: true,
+  secure: false,
   auth: {
     user: 'hello@tayture.com',
-    pass: '.g?Ov?}oty$0',
+    pass: 'E5&4koG#+r[}' 
+    // 
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false,
   },
 })
 
 export const transporter2 = nodemailer.createTransport({
-  host: 'tayture.com',
+  service: "zoho",
+  host: 'smtpro.zoho.in',
   port: 465,
-  secure: true,
+  secure: false,
   auth: {
-    user: 'support@tayture.com',
-    pass: process.env.NEXT_PUBLIC_MAIL_AUTH_PASS_TWO,
+    user: 'hello@tayture.com',
+    pass: 'E5&4koG#+r[}',
+    // E5&4koG#+r[}
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false,
   },
 })
 
@@ -30,14 +42,6 @@ export const startMailServer = () => {
     }
   })
 }
-export const startMailServer2 = () => {
-  transporter2.verify((error: any, success: any) => {
-    if (error) {
-      console.log(error)
-    } else {
-      console.log('Mail support server is running')
-    }
-  })
-}
+
 
 export default transporter

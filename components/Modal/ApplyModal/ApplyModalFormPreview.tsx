@@ -42,14 +42,23 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
     },
     onSuccess: async (res) => {
       const applied = res.data.applied
-      if (pathname === '/find_job') {
+      if (pathname === '/jobs') {
+        setUI((prev) => {
+          return {
+            ...prev,
+            applyLandingModal: {
+              ...prev.applyLandingModal,
+              visibility: false,
+            },
+          }
+        })
         setMessage(() => res.data.message)
         const t = setTimeout(() => {
-          setMessage(() => '')
-          window.location.assign('/dashboard')
+          router.push('/dashboard')
           clearTimeout(t)
         }, 3000)
       } else {
+
         setUI((prev) => {
           return {
             ...prev,
@@ -62,14 +71,14 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
         setMessage(() => res.data.message)
  
         const req = await getUser()
-        queryClient.setQueryData(['user'], req.data.user)
+        queryClient.setQueryData(['user'], () => req.data.user)
         queryClient.invalidateQueries({
           queryKey: ['user', 'jobs', 'school'],
         })
         
         const t = setTimeout(() => {
-          setMessage(() => '')
           clearTimeout(t)
+          SW.prev()
         }, 3000)
         
         if (router.query.job === '1') {
@@ -101,7 +110,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
   }
 
   return (
-    <div className={`w-full px-5 ${regularFont.className}`}>
+    <div className={`w-full ${regularFont.className}`}>
       <h2 className="text-center text-[24px] mb-[40px] text-black">
         Application
       </h2>
@@ -114,7 +123,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
       >
         {({ values, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>
-            <label className="mb-2 inline-block text-[20px] ml-1">
+            <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
               Educational qualification
             </label>
             <Field
@@ -124,7 +133,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
               disabled
               placeholder={'Your highest degree or certification'}
             />
-            <label className="mb-2 inline-block text-[20px] ml-1">
+             <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
               Work experience
             </label>
             <Field
@@ -137,9 +146,9 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
 
             {values?.cv && (
               <>
-                <label className="mb-2 inline-block text-[20px] ml-1">
-                  Curriculum Vitae
-                </label>
+               <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
+              Curriculum Vitae
+              </label>
 
                 <div className="mb-3">
                   <CVComponent

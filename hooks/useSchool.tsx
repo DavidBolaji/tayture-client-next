@@ -1,8 +1,12 @@
 'use client'
-import { Image, Switch } from 'antd'
+import { Image, Space, Switch } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
+import { FaEdit } from 'react-icons/fa'
+import { School } from '@prisma/client'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 interface DataType {
   sch_id?: string
@@ -17,6 +21,8 @@ interface DataType {
 
 const useSchool = () => {
   const queryClient = useQueryClient()
+  const [count, setCount] = useState(-1)
+  const router = useRouter()
   const { data: admin_schools } = useQuery({
     queryKey: ['allSchools'],
     queryFn: async () => {
@@ -42,12 +48,36 @@ const useSchool = () => {
     },
   })
 
+  const { mutate: updateSchool } = useMutation({
+    mutationFn: (data: School) => {
+      return data as any
+    },
+    onSuccess: (data: School) => {
+      queryClient.setQueryData(['school'], (oldData: School) => {
+        return data
+      })
+    },
+  
+  })
+
+  const setEdit = (id: string) => {
+    const allSchools = queryClient.getQueryData(['allSchools']) as School[]
+    const selectedSch = allSchools.find((sch: School) => sch.sch_id === id) as School
+    updateSchool(selectedSch)
+    setCount(1)
+  }
+
+  const setPost = (school: School) => {
+    queryClient.setQueryData(['school'], () => school) as School
+    router.push('/dashboard/school/post')
+  }
+
   const columns: ColumnsType<DataType> = [
     {
       title: 'School Logo',
       dataIndex: 'sch_logo',
       key: 'sch_logo',
-      render: (_, record) => <Image width={50} src={record.sch_logo} />,
+      render: (_, record) => <Image width={50} src={record.sch_logo} alt="school logo" />,
     },
     {
       title: 'School name',
@@ -93,8 +123,8 @@ const useSchool = () => {
     },
 
     {
-      title: 'Action',
-      key: 'action',
+      title: 'Verify',
+      key: 'verify',
       render: (_, record) =>
         record.sch_verified ? (
           <Switch
@@ -107,9 +137,27 @@ const useSchool = () => {
           />
         ),
     },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => <div className='flex gap-3'> 
+        <Space className='flex items-center cursor-pointer' align='center'
+          onClick={() => setEdit(record.sch_id!)}
+        >
+          <FaEdit />
+      </Space>
+        <button className='flex items-center whitespace-nowrap cursor-pointer bg-orange p-2 rounded-lg text-xs leading-loose'
+       
+        //@ts-ignore
+          onClick={() => setPost(record)}
+        >
+          Post Job
+      </button>
+      </div>
+    },
   ]
 
-  return { columns, admin_schools }
+  return { columns, admin_schools, count, setCount }
 }
 
 export default useSchool

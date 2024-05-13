@@ -1,8 +1,8 @@
 'use client'
 
 import { useGlobalContext } from '@/Context/store'
-import React, { useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import ApplyLandingModal from './ApplyLandingModal/ApplyLandingModal'
@@ -19,13 +19,10 @@ export const checkPath = (path: string | null) => {
 }
 
 const HandleApplyLanding = () => {
-  const queryClient = useQueryClient()
   const router = useRouter()
-
+  const pathname = usePathname()
   const { ui, setUI, user } = useGlobalContext()
   const [SW, setSW] = useState<StepperChildProps | null>(null)
-  const [SW2, setSW2] = useState<StepperChildProps | null>(null)
-  const [isValid, setIsValid] = useState(false)
 
   const handleClose = () => {
     setUI((prev) => {
@@ -39,6 +36,14 @@ const HandleApplyLanding = () => {
     })
   }
 
+  useEffect(() => {
+    if(pathname === '/jobs') {
+      if(SW) {
+        SW.setStep!(1)
+      }
+    }
+  }, [])
+
   const handleOk = () => {}
   return (
     <ApplyLandingModal
@@ -50,7 +55,7 @@ const HandleApplyLanding = () => {
       }
       close={handleClose}
     >
-      <Stepper init={setSW} className="overflow-hidden mx-10">
+      <Stepper init={setSW} className="overflow-hidden">
         <ApplyEmailForm SW={SW} />
 
         {user.fname ? (

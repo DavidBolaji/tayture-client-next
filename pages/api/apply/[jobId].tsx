@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.query.jobId)
     return res.status(400).json({ message: 'job id is required' })
 
-  const jobs = await getJobById(req.query.jobId as string)
+  // const jobs = await getJobById(req.query.jobId as string)
 
   try {
     /** get applied */
@@ -24,11 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         user: true,
         job: {
           include: {
-            transaction: {
-              where: {
-                jobId: req.query.jobId as string,
-              },
-            },
+           
             schedule: {
               where: {
                 jobId: req.query.jobId as string,
@@ -42,17 +38,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
-    const req2 = db.transaction.aggregate({
-      where: {
-        jobId: {
-          not: req.query.jobId as string,
-        },
-      },
-      _sum: {
-        amount: true,
-      },
-    })
-    const [applied, aggregate] = await Promise.all([req1, req2])
+  
+    const [applied] = await Promise.all([req1])
     return res.status(200).json({
       message: 'Applied fetched succesfully',
       applied: {
@@ -60,7 +47,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ...rest,
           user,
         })),
-        aggregate,
         job: applied[0].job,
       },
     })

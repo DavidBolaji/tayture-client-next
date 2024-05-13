@@ -30,7 +30,7 @@ const formatVal2 = (data: ISchData) => {
 }
 
 const EditSchoolFormAdmin: React.FC = () => {
-  const { img, createSch, setMessage, setImg, setCreateSch } =
+  const { img, createSch, setMessage, setImg, setCreateSch, defaultSchool } =
     useGlobalContext()
   const router = useRouter()
   const queryClient = useQueryClient()
@@ -38,7 +38,7 @@ const EditSchoolFormAdmin: React.FC = () => {
   const initialValues = formatVal2(sch)
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: any) => {
-      return await updateSchool(data)
+      return await updateSchool(data, defaultSchool)
     },
     onSuccess: async (res) => {
       const school = res.data.school
@@ -71,9 +71,9 @@ const EditSchoolFormAdmin: React.FC = () => {
   return (
     <>
       <div className={`${regularFont.className} mb-[32px]`}>
-        <h2 className="w-full font-br">Admin information</h2>
-        <p className="text-ash_400">
-          We recommend you add at least 2 admin details
+        
+        <p className="text-ash_400 text-center">
+        Administrators help manage your school&apos;s account on Tayture. Add now.
         </p>
       </div>
       <Formik

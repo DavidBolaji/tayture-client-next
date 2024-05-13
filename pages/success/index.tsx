@@ -1,13 +1,13 @@
 import { Icons } from '@/assets'
 import Button from '@/components/Button/Button'
 import HomeLayout from '@/components/layouts/HomeLayout'
-import { AnimatePresence, easeOut, motion } from 'framer-motion'
+import { easeOut, motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
 
-const Success = () => {
+const Success = ({}) => {
   const router = useRouter()
   const { width, height } = useWindowSize()
   const handleSubmit = () => {

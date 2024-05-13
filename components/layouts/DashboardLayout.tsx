@@ -15,6 +15,7 @@ import { getUser } from '@/lib/api/user'
 import NotificationDropdown from '../Dashboard/NotificationDropdown'
 import { Axios } from '@/request/request'
 import { calculateProgress } from '@/utils/helpers'
+import Whatsapp2 from '../Whatsapp/Whatsapp2'
 
 const { Header, Sider, Content } = Layout
 
@@ -35,14 +36,14 @@ const DashboardLayout = (props: PropsWithChildren) => {
       const req = await Axios.get('/users/me/detail')
       const result = calculateProgress(req.data.user)
       return result
-    }
+    },
   })
 
   const router = useRouter()
   const isSchAdmin = !user
     ? false
-    : user.path && typeof user.path === 'string' && user.path.trim() !== ''
-    ? JSON.parse(user.path.replace(/'/g, '"')).includes('school admin')
+    : user?.path && typeof user?.path === 'string' && user?.path?.trim() !== ""
+    ? JSON.parse( user?.path.replace(/'/g, '"')).includes('school admin')
     : false
 
   const handleClick = (link: string) => {
@@ -89,7 +90,7 @@ const DashboardLayout = (props: PropsWithChildren) => {
             className="shadow-lg"
             style={{
               paddingLeft: 0,
-              paddingRight: '40px',
+              paddingRight: '100px',
               background: '#fff',
             }}
             id="shadow"
@@ -135,10 +136,20 @@ const DashboardLayout = (props: PropsWithChildren) => {
                   >
                     Post a job
                   </div>
-                  <div className="mx-[20px] flex items-center">
+                  <div className="mx-[20px] -mt-4 flex items-center">
                     <NotificationDropdown mobile={false} />
                   </div>
                   <DropdownComponent isAdmin={isSchAdmin} />
+                  <div className="scale-75 mt-20 translate-x-24">
+                    <a
+                      href={'https://wa.me/+2347067799302'}
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      <Whatsapp2 />
+                    </a>
+                  </div>
+                  {/* <Whatsapp2 /> */}
                 </div>
               </div>
             </div>
@@ -146,7 +157,7 @@ const DashboardLayout = (props: PropsWithChildren) => {
 
           <Content
             style={{
-              padding: '0px 12px 100px 12px',
+              padding: '0px 12px 150px 12px',
               marginTop: 50,
               minHeight: '100vh',
               height: '100vh',

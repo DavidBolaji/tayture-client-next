@@ -58,7 +58,7 @@ const ShareCard: FC<SharedCardProp> = ({ picture, fname, lname }) => {
             <Alert
               type="error"
               showIcon
-              message="update profile picture to see your meme"
+              message="Update profile picture to see your meme"
               className="bg-transparent -translate-x-1 border-none text-[15px]"
               icon={
                 <span className="inline-block mt-2 -translate-y-1">

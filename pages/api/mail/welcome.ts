@@ -1,3 +1,4 @@
+
 import sendWelcomeMail from '@/mail/sendWelcomeMail'
 import { NextApiRequest, NextApiResponse } from 'next'
 

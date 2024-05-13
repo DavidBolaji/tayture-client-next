@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.query.jobId)
     return res.status(400).json({ message: 'job id is required' })
 
-  const jobs = await getJobById(req.query.jobId as string)
+  const jobs = getJobById(req.query.jobId as string)
 
   try {
     /** get applied */
@@ -28,31 +28,40 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 jobId: req.query.jobId as string,
               },
             },
+            hired: {
+              where: {
+                jobId: req.query.jobId as string,
+              }
+            }
           },
+         
         },
         job: {
           include: {
-            transaction: {
+            hired: {
               where: {
                 jobId: req.query.jobId as string,
-              },
-            },
+              }
+            }
           },
+          
         },
+       
         test: true,
         instruction: true,
       },
     })
 
-    const [scheduled] = await Promise.all([req1])
+    const [scheduled, job] = await Promise.all([req1, jobs])
+
     return res.status(200).json({
-      message: 'Applied fetched succesfully',
+      message: 'Scheduled fetched succesfully',
       scheduled: {
         scheduled: [...scheduled].map(({ job, user, ...rest }) => ({
           ...rest,
           user,
         })),
-        job: scheduled[0].job,
+        job: job.data.job,
       },
     })
   } catch (error) {

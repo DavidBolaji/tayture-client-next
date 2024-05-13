@@ -6,9 +6,11 @@ import {
   SetStateAction,
   useState,
   PropsWithChildren,
+  useEffect,
 } from 'react'
 import { IUser } from '@/pages/api/users/types'
 import { ques as quesData } from './data'
+import { useQueryClient } from '@tanstack/react-query'
 
 const INIT = {
   fname: '',
@@ -231,6 +233,10 @@ type ContextProps = {
       colorParagraph: string
     }>
   >
+  defaultSchool: number,
+  setDefaultSchool: Dispatch<SetStateAction<number>>
+  access: boolean,
+  setSchAccess: Dispatch<SetStateAction<boolean>>
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -260,10 +266,16 @@ const GlobalContext = createContext<ContextProps>({
     colorParagraph: '#000000',
   },
   setColors: () => {},
+  defaultSchool: 0,
+  setDefaultSchool: () => {},
+  access: false,
+  setSchAccess: (data) => data
 })
 
 export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
+  const queryClient = useQueryClient()
   const [user, setUser] = useState<Partial<IProfile>>(INIT)
+  const [defaultSchool, setDefaultSchool] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
   const [ui, setUI] = useState<UIState>({})
   const [img, setImg] = useState<string>('')
@@ -272,6 +284,7 @@ export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
   const [ques, setQues] = useState<IQGroup>(quesData)
   const [name, setName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
+  const [access, setSchAccess] = useState<boolean>(false)
   const [colorList, setColors] = useState<{
     background: string
     foreground: string
@@ -285,6 +298,17 @@ export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
     textTwo: '#102a73',
     colorParagraph: '#000000',
   })
+
+  useEffect(() => {
+    const idx = localStorage.getItem('schoolIdx')
+    if(!idx) return;
+    setDefaultSchool(+JSON.parse(idx))
+  }, [])
+
+  useEffect(() => {
+    // queryClient.refetchQueries
+    localStorage.setItem('schoolIdx', JSON.stringify(defaultSchool))
+  }, [defaultSchool])
 
   return (
     <GlobalContext.Provider
@@ -309,6 +333,10 @@ export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
         setEmail,
         colorList,
         setColors,
+        defaultSchool,
+        setDefaultSchool,
+        access,
+        setSchAccess
       }}
     >
       {children}

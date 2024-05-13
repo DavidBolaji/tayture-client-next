@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { getUser, getUser2 } from '@/lib/api/user'
+import { getUser2 } from '@/lib/api/user'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { PropsWithChildren } from 'react'
 import HandleOTP from '../Modal/HandleOTP'
 import { useGlobalContext } from '@/Context/store'
+import Spinner from '../Spinner/Spinner'
 
 const AuthLayer = (props: PropsWithChildren) => {
   const router = useRouter()
@@ -24,7 +25,7 @@ const AuthLayer = (props: PropsWithChildren) => {
     queryFn: async () => {
       try {
         const req = await getUser2()
-        queryClient.setQueryData(['pinId'], req.data.user.pinId)
+        queryClient.setQueryData(['pinId'], () => req.data.user.pinId)
         const userData = req.data.user
         return userData
       } catch (error: any) {
@@ -32,6 +33,7 @@ const AuthLayer = (props: PropsWithChildren) => {
         throw new Error('Failed to fetch user data')
       }
     },
+    refetchOnWindowFocus: false
   })
 
   useEffect(() => {
@@ -48,12 +50,14 @@ const AuthLayer = (props: PropsWithChildren) => {
         }))
       }
 
-      
-      localStorage.setItem('pinId', data.pinId)
+
+      if (typeof data.pinId !== "undefined" && data.pinId.trim().length > 0) {
+        localStorage.setItem('pinId', data.pinId)
+      }
       localStorage.setItem('email', data.email)
 
       if (job === '1') {
-        router.push('/dashboard/jobs?job=1')
+        router.push('/dashboard/jobs?jobz=1')
       }
       if (profile === '1') {
         router.push('/dashboard/profile?profile=2')
@@ -67,10 +71,10 @@ const AuthLayer = (props: PropsWithChildren) => {
         router.push('/dashboard/school/new?post_job=1')
       }
     }
-  }, [mounted, data, job, school, setUI, router])
+  }, [mounted, data, job, school, setUI, router, profile])
 
   if (!mounted || isLoading) {
-    return <div>loading...</div>
+    return <div className='flex h-screen w-full justify-center items-center'><Spinner color="orange" /></div>
   }
 
   if (isError) {

@@ -6,7 +6,6 @@ import { setCookie } from 'nookies'
 import { NextApiRequest, NextApiResponse } from 'next'
 import {
   getUserByEmail,
-  sendTextMessageOTP,
   sendWelcome,
 } from '@/lib/services/user'
 import db from '@/db/db'
@@ -51,9 +50,15 @@ export default async function handler(
     process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!,
   )
 
+  const rToken = jwt.sign(
+    { id: user.id },
+    process.env.NEXT_PUBLIC_NEXTAUTH_SECRET_TWO!,
+  )
+
   const sessionData = {
     userId: user.id,
-    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    // expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + 60 * 60 * 1000), // 1hr,
     sessionToken: token,
   }
 
@@ -61,14 +66,22 @@ export default async function handler(
     const session = await db.session.create({
       data: sessionData,
     })
-
+    
     // Set the cookie containing the token
     setCookie({ res }, 'token', session.sessionToken, {
-      maxAge: 30 * 24 * 60 * 60, // 30 days
+      expires: session.expires,
       path: '/', // Set the cookie path to '/'
-      sameSite: "none",
-      secure: true,
-      domain: "tayture-client-next.vercel.app"
+      sameSite: "lax",
+      secure: process.env.NEXT_PUBLIC_SECURE === "true",
+      domain: process.env.NEXT_PUBLIC_DOMAIN
+    })
+
+    // Set the cookie containing the token
+    setCookie({ res }, 'refreshToken', rToken, {
+     httpOnly: true,
+     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),// 24hr
+     path: '/', // Set the cookie path to '/'
+     domain: process.env.NEXT_PUBLIC_DOMAIN
     })
 
     if (user?.first_time) {
@@ -79,13 +92,6 @@ export default async function handler(
     }
 
     let pinId
-
-    if (!user?.validated) {
-      const reqOTP = await sendTextMessageOTP(user?.phone as string)
-      if (reqOTP.data.pinId) {
-        pinId = reqOTP.data.pinId
-      }
-    }
 
     return res
       .status(200)

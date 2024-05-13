@@ -33,6 +33,7 @@ import CV from './images/cvv.png'
 import CV2 from './images/cvv2.png'
 import CV3 from './images/cvv3.png'
 import CV4 from './images/cvv4.png'
+import Prolife from './images/prolife.png'
 
 export const Images = {
   HeroImage,
@@ -69,5 +70,6 @@ export const Images = {
   CV,
   CV2,
   CV3,
-  CV4
+  CV4,
+  Prolife
 };

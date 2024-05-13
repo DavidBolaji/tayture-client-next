@@ -45,7 +45,7 @@ const Calculator = () => {
 
   const renderPath = path.map((p: any) =>
     ques[p].map((q: Iques, ind: number) => (
-      <div key={q.id} className="flex flex-col items-center ">
+      <div key={q.id} className="flex flex-col items-center h-[280px]">
         <p className="text-ash_400  w-full text-sm sm:text-md md:text-md mb-1 mt-3">
           Question {ind + 1} of {ques[p].length}
         </p>
@@ -164,10 +164,12 @@ const Calculator = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-            <Stepper init={(data) => setSW(data)} className="overflow-hidden">
-              <AssesementOne SW={SW} setPath={fn.handlePath} path={path} />
-              {renderPath}
-            </Stepper>
+
+              <Stepper init={(data) => setSW(data)} className="overflow-hidden">
+                <AssesementOne SW={SW} setPath={fn.handlePath} path={path} />
+                {renderPath}
+              </Stepper>
+            
             <AnimatePresence mode="wait">
               {SW?.current > 0 && (
                 <motion.div

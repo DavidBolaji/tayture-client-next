@@ -10,14 +10,14 @@ const dataNav = [
     path: '/',
     title: 'Home',
   },
-  {
-    id: 'nav5',
-    path: '/calculator',
-    title: 'Calculator',
-  },
+  // {
+  //   id: 'nav5',
+  //   path: '/calculator',
+  //   title: 'Calculator',
+  // },
   {
     id: 'nav2',
-    path: '/find_job',
+    path: '/jobs',
     title: 'Find a Job',
   },
   {

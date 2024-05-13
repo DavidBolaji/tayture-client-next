@@ -1,61 +1,143 @@
-import { ConfigProvider, Input } from 'antd'
-import React, { useState } from 'react'
-import Button from '../Button/Button'
+import React, { useEffect, useRef, useState } from 'react'
+import { Input, message } from 'antd'
 import { cn } from '@/utils/helpers'
-import { useMutation,  useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { useGlobalContext } from '@/Context/store'
+import { useRouter } from 'next/router'
+import debounce from 'lodash/debounce'
+import { Job } from '@prisma/client'
+import Spinner from '../Spinner/Spinner'
+
 
 interface JobSearchProps {
   className?: string
 }
 
 const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
-  const [val, setVal] = useState('');
-  const queryClient = useQueryClient();
-  const {count, setCount} = useGlobalContext()
+  const [val, setVal] = useState('')
+  const [names, setNames] = useState<string[]>([])
+  const queryClient = useQueryClient()
+  const { setCount } = useGlobalContext()
+  const router = useRouter()
 
-  const {mutate, isPending} = useMutation({
-   mutationFn: async (title: string) => {
-    const req = await Axios.get(`/job?title=${title}`)
-    return req.data
-   },
-   onSuccess: (res) => {
-    queryClient.setQueryData(['activeJob'], res.job[0])
-    queryClient.setQueryData(['jobs'], res.job)
-    setCount(prev => prev - 1)
-   }
+  const { mutate: select } = useMutation({
+    mutationFn: async (title: string) => {
+      const req = await Axios.get(`/job?title=${title}`)
+      return req.data
+    },
+    onSuccess: (res) => {
+      queryClient.setQueryData(['activeJob'], res.job[0])
+      queryClient.setQueryData(['jobs'], res.job)
+      setCount((prev: number) => prev - 1)
+    },
   })
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (title: string) => {
+      const req = await Axios.get(`/job?title=${title}`)
+      return req.data
+    },
+    onSuccess: (res) => {
+      const jName = res.job.map((j: Job) => j.job_title)
+      setNames(jName)
+    },
+  })
+
+  useEffect(() => {
+    if (router.query.find) {
+      Axios.get(`/job/${router.query.find}`)
+        .then((res) => {
+          setVal(res.data.job.job_title)
+          const t = setTimeout(() => {
+            queryClient.setQueryData(['activeJob'], res.data.job)
+            queryClient.setQueryData(['jobs'], [res.data.job])
+            clearTimeout(t)
+          }, 2500)
+          // mutate(res.data.job.job_title)
+        })
+        .catch((err) => {
+          message.error((err as Error).message)
+        })
+    }
+  }, [router.query, queryClient])
+
+  useEffect(() => {
+    if (val.length === 0) {
+      Axios.get(`/job`)
+        .then((res) => {
+          queryClient.setQueryData(['activeJob'], res.data.job[0])
+          queryClient.setQueryData(['jobs'], res.data.job)
+        })
+        .catch((err) => {
+          message.error((err as Error).message)
+        })
+    }
+  }, [val, queryClient, router.query.find])
+
+  const debouncedSearch = useRef(
+    debounce((value: string) => mutate(value), 500),
+  ).current
+
+  const handleSearch = (value: string) => {
+    setVal(value)
+    debouncedSearch(value)
+  }
+  const divRef = useRef<HTMLDivElement | null>(null)
+
   return (
-    <div className="w-full ">
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: '#da7431db',
-            colorFillAlter: '#FF7517',
-            colorIcon: 'black',
-            colorInfoBorderHover: 'red',
-          },
-        }}
+    <div className="w-full relative group" ref={divRef}>
+      <div className={cn('w-full flex gap-2', className)}>
+        <Input
+          className="h-10 border-orange focus:border-orange focus:shadow-none"
+          placeholder="Search for a job"
+          value={val}
+          onChange={(e) => handleSearch(e.target.value)}
+          allowClear
+        />
+        <button
+        onClick={() => setVal('')}
+        disabled={val.trim().length < 1}
+        className={`text-xs whitespace-nowrap disabled:bg-[#f4c2a0] bg-orange p-2.5 rounded-lg transition-colors duration-300
+        ${val.trim().length < 1 ? 'cursor-not-allowed': ' hover:bg-black hover:text-white'}
+        `}>See All</button>
+      </div>
+      <div
+        className={`w-full absolute ${
+          !names.length && !isPending ? 'top-10' : 'top-10'
+        } text-xs mt-1 bg-white hidden group-focus-within:block py-2 rounded-md space-y-1 max-h-[100px] overflow-auto no-s ${
+          val && 'group-hover:block'
+        } shadow-md`}
       >
-        <div className={cn('flex gap-2 left-0 sm:top-2 h-3 md:h-24 md:top-2 ml-2 sm:relative w-full sm:w-auto', className)}>
-          <div className="w-full">
-            <Input className="h-10" placeholder="Search for a job" value={val} onChange={(e) => setVal(e.target.value)} />
+        {isPending ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <Spinner color="orange" />
           </div>
-          <div className="whitespace-nowrap mr-5">
-            <Button
-              render="light"
-              onClick={() => mutate(val)}
-              text={
-                <span className="md:text-[16px] text-[12px]">Find jobs</span>
-              }
-              hover={false}
-              bold={false}
-            />
-          </div>
-        </div>
-      </ConfigProvider>
+        ) : !names.length ? (
+          null
+        ) : val ? (
+          names.map((name) => (
+            <>
+            <p
+              key={name}
+              className="cursor-pointer transition-colors duration-300 mx-2 p-2 hover:bg-[#fdfdfd] border-b"
+              onClick={() => {
+               
+                setVal(name)
+                select(name)
+                divRef.current?.focus()
+
+              }}
+            >
+              {name}
+            </p>
+           
+            </>
+          ))
+        ) : (
+          null
+        )}
+      </div>
     </div>
   )
 }

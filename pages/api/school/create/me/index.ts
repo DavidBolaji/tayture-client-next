@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { v4 as uuid } from 'uuid'
 import { ISchDb } from '../../types'
+import sendSchoolCreated from '@/mail/sendSchoolCreated'
 type Data = {
   message: string
   school?: ISchDb
@@ -62,6 +63,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     await Promise.all([schAdmin, schWallet])
+    await db.notifcation.create({
+      data: {
+        msg: `Hurray!!! you have succesfully created a school`,
+        notificationUser: req.authUser?.id as string,
+        caption: "School created"
+      }
+    })
+    
+    await sendSchoolCreated({
+      user: `${req.authUser.fname} ${req.authUser.lname}`,
+      school: schoolCreate.sch_name
+    })
 
     return res.status(200).json({
       message: 'School Created',

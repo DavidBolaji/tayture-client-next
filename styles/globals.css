@@ -81,31 +81,6 @@ body {
   background-color: #ff7517;
 }
 
-/* #nprogress {pointer-events: none;} */
-
-/* #nprogress .bar {
-  background: #FF7517;
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-} */
-
-/* #nprogress .peg {
-  display: block;
-  position: absolute;
-  right: 0px;
-  width: 100px;
-  height: 100%;
-  box-shadow: 0 0 10px #FF7517, 0 0 5px #FF7517;
-  opacity: 1;
-  -webkit-transform: rotate(3deg) translate(0px, -4px);
-  -ms-transform: rotate(3deg) translate(0px, -4px);
-  transform: rotate(3deg) translate(0px, -4px);
-} */
-
 #nprogress .spinner {
   display: block;
   position: fixed;
@@ -152,9 +127,39 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* BR Firma Regular */
+@font-face {
+  font-family: 'BR Firma Regular';
+  src: url('/fonts/BR_Firma_Regular.otf') format('opentype');
+}
+
+input::placeholder {
+  font-family: 'BR Firma Regular'; /* Replace "Arial" with your preferred font family */
+  opacity:   var(--tw-text-opacity);
+  color: rgb(112 100 92 / var(--tw-text-opacity));
+}
+
+h1, h2, h3, div, span{
+  font-family: 'BR Firma Regular';
+}
+
+label {
+  font-family: 'BR Firma Regular';
+  font-weight: 700;
+}
+
+
 /* 
 .ant-picker-focused.ant-picker {
   border-color: #FFA466 !important;
   box-shadow: 0 0 0 2px #FFA466;
   outline: 0;
 } */
+
+
+@media (max-width: 573px){
+  .ant-modal {
+    width: 320px !important;
+  }
+}

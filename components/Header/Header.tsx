@@ -15,21 +15,29 @@ import { regularFont } from '@/assets/fonts/fonts'
 
 const StyledMenu = styled(Menu)`
   font-size: 14px;
-
+  
   && {
     background-color: black;
-    color: #d9d2d2;
+    color: #d9d2d2 !important;
     transition: 500ms linear all;
     .ant-menu-item.ant-menu-item-active {
       background-color: transparent;
       color: #ff7517 !important;
     }
+   
 
     & > *.ant-menu-item.ant-menu-item-active::after {
       border-bottom: 0px solid transparent;
     }
-    .ant-menu-item.ant-menu-item-selected > * {
-      color: #ff7517;
+    
+    .ant-menu-item.ant-menu-item-selected > .ant-menu-title-content {
+      color:  #ff7517 !important;
+    }
+    .ant-menu-item > .ant-menu-title-content {
+      color: #fff !important;
+      &:hover {
+        color:  #ff7517 !important;
+      }
     }
     & > .ant-menu-item.ant-menu-item-selected::after {
       border-bottom: 0px solid transparent;
@@ -45,12 +53,16 @@ const items: MenuProps['items'] = [
   },
   {
     label: 'Find a Job',
-    key: '/find_job',
+    key: '/jobs',
   },
   {
     label: 'Post a Job',
     key: '/post_landing',
   },
+  // {
+  //   label: 'Blog',
+  //   key: '/blog',
+  // },
   // {
   //   label: 'Build CV',
   //   key: '/buildcv',
@@ -87,12 +99,14 @@ const Header = () => {
               <StyledMenu
                 mode="horizontal"
                 className={`font-semibold ${regularFont.className}`}
-                // style={{ width: 350 }}
+                style={{ width: 500, justifyContent: "center", display: "flex", alignItems: "center" }}
                 defaultSelectedKeys={[locationCurrent]}
                 selectedKeys={[locationCurrent]}
                 onClick={(menuInfo) => router.push(menuInfo?.key)}
                 theme="dark"
+                
                 items={items}
+                
               />
             </div>
             <div className="md:flex gap-3 hidden">

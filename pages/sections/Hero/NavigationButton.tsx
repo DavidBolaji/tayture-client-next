@@ -1,4 +1,4 @@
-'use client'
+
 import Button from '@/components/Button/Button'
 import React from 'react'
 import { useRouter } from 'next/navigation'

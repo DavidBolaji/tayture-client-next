@@ -12,8 +12,9 @@ import { ISchData, useGlobalContext } from '@/Context/store'
 
 import UploadComponent from '@/components/UploadComponent/UploadComponent'
 import { useQueryClient } from '@tanstack/react-query'
+import { School } from '@prisma/client'
 
-const formatVal = (data: ISchData) => {
+const formatVal = (data: School) => {
   return {
     sch_no_emp: data.sch_no_emp,
     sch_address: data.sch_address,
@@ -29,13 +30,27 @@ const formatVal = (data: ISchData) => {
 const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
   const { img, setCreateSch } = useGlobalContext()
   const queryClient = useQueryClient()
-  const sch = queryClient.getQueryData(['school']) as ISchData
+  const sch = queryClient.getQueryData(['school']) as School
   const initialValues = formatVal(sch)
 
-  const noImage = img.trim().length < 1 && sch.sch_logo.trim().length < 1
-  const handleSubmit = (data: Partial<ISchData>) => {
+  const noImage = img.trim().length < 1 && sch.sch_logo!.trim().length < 1
+  const handleSubmit = (data: Partial<School>) => {
+    //@ts-ignore
     setCreateSch(() => data)
-    SW.next()
+    const t = setTimeout(() => {
+      if (typeof document !== 'undefined') {
+        const doc = document.querySelector('.ant-layout-content')
+        doc?.scrollTo({
+          behavior: 'smooth',
+          top: 0,
+        })
+      }
+      const b = setTimeout(() => {
+        SW?.next()
+        clearTimeout(b)
+      }, 600)
+      clearTimeout(t)
+    }, 400)
   }
   return (
     <Formik
@@ -43,12 +58,14 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
       onSubmit={() => console.log('object')}
       initialValues={initialValues}
       validationSchema={EditSchoolSchema}
+      enableReinitialize
+      key={sch.sch_id ?? 0}
     >
       {({ isValid, values }) => (
         <>
-          <h2 className="w-full font-br">Update information</h2>
-          <div className="pt-[32px] flex justify-center">
-            <UploadComponent image={sch.sch_logo} />
+          {/* <h2 className="w-full font-br">Update information</h2> */}
+          <div className="pt-[32px] flex justify-center pb-10">
+            <UploadComponent image={sch.sch_logo!} />
           </div>
           <Form className="mt-[40px]">
             <Field
@@ -59,10 +76,11 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               text={'School name'}
               disabled={true}
             />
+            <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>No of employees</h3>
             <Field
               name="sch_no_emp"
               as={SelectInput}
-              placeholder="Select No of Employees"
+              placeholder="No of Employees"
               text={'No of Employees'}
               option={employes}
             />
@@ -100,7 +118,7 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
                 disabled={true}
               />
             </div>
-            <div className="text-center">
+            <div className="text-center pb-20">
               <Button
                 disabled={!isValid || noImage}
                 bold={false}

@@ -3,8 +3,10 @@ import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import Spinner from '../Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
 import axios from 'axios'
+import { FaAsterisk } from 'react-icons/fa'
+import Image from 'next/image'
 
-const UploadComponent: FC<{ image?: string }> = ({ image }) => {
+const UploadComponent: FC<{ image?: string, blog?:boolean }> = ({ image, blog = false }) => {
   const uploadRef = useRef<HTMLImageElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [loading, setLoading] = useState(false)
@@ -52,7 +54,7 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
         setImg(() => image)
       }
     }
-  }, [image])
+  }, [image, setImg])
   return (
     <div>
       <div className="relative bg-[#D9D9D9] cursor-pointer mb-[24px] text-center w-[120px]  overflow-hidden h-[120px] rounded-full">
@@ -71,6 +73,7 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
             alt=""
             className="object-cover w-full h-full"
           />
+               
           <input
             ref={inputRef}
             id="upload"
@@ -84,9 +87,15 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
               <Spinner color="#FF7517" />{' '}
             </div>
           )}
+           
         </label>
       </div>
-      <div className="flex justify-between -ml-16 max-w-[200px]">
+      <p className='-mt-5 mb-5 whitespace-nowrap w-full -ml-2 flex items-center justify-center gap-1'>
+        <FaAsterisk color="red" size={12} />
+        <span className='text-xs italic'>{blog ? 'Blog banner' : 'Logo'} is required</span>
+      </p>
+      <div className="sm:flex relative justify-between -ml-16 max-w-[200px] hidden">
+
         <button
           onClick={() => inputRef.current?.click()}
           className="mr-3 px-[20px] text-[12px] py-[8px] bg-black text-white rounded-full whitespace-nowrap"
@@ -96,6 +105,21 @@ const UploadComponent: FC<{ image?: string }> = ({ image }) => {
         <button
           onClick={() => (uploadRef.current!.src = ' ')}
           className="ml-3 px-[20px] text-[12px] py-[8px] border border-black rounded-full whitespace-nowrap"
+        >
+          Remove photo
+        </button>
+      </div>
+      <div className="sm:hidden flex flex-col space-y-2">
+
+        <button
+          onClick={() => inputRef.current?.click()}
+          className="px-[20px] text-[12px] py-[8px] bg-black text-white rounded-full whitespace-nowrap"
+        >
+          Change photo
+        </button>
+        <button
+          onClick={() => (uploadRef.current!.src = ' ')}
+          className="px-[20px] text-[12px] py-[8px] border border-black rounded-full whitespace-nowrap"
         >
           Remove photo
         </button>

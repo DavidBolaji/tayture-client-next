@@ -71,8 +71,11 @@ const RegisterForm = ({
       if (!show) {
         if (cb) return cb()
       } else {
-      //  return window.location.assign('/dashboard')
-      router.push('/dashboard')
+        setMessage(() => "Account created Successfully, Login to dashboard to continue")
+        const t = setTimeout(() => {
+          clearTimeout(t)
+          router.push('/auth/login')
+        }, 3000)
       }
     } else {
       setMessage(() => res.data.message)

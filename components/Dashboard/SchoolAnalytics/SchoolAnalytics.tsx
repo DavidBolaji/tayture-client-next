@@ -7,12 +7,14 @@ import { Empty } from 'antd'
 import Link from 'next/link'
 import { regularFont } from '@/assets/fonts/fonts'
 import { closingDate, datePosted } from '@/utils/helpers'
+import { useGlobalContext } from '@/Context/store'
 
 const SchoolAnalytics = () => {
+  const {defaultSchool, access } = useGlobalContext()
   const { data: schJobList, isLoading } = useQuery({
     queryKey: ['schoolJobs'],
     queryFn: async () => {
-      const req = await getSchoolJobs()
+      const req = await getSchoolJobs(defaultSchool)
       return req.data.job
     },
   })
@@ -29,18 +31,19 @@ const SchoolAnalytics = () => {
         <div className={`${regularFont.className}`}>
           <div className="grid grid-cols-7 mb-[20px]">
             <div className="col-span-4 ">Job Details</div>
-            <div className="col-span-1 text-center">Applied</div>
+            <div className="md:col-span-1 col-span-2 text-center text-xs md:text-md">Applied</div>
        
-            <div className="col-span-1 text-center">Selected</div>
+            <div className="col-span-1 text-center text-xs md:text-md">Hired</div>
           </div>
           {schJobList &&
             schJobList.map((j: any) => (
-              <div key={j.job_id} className="grid grid-cols-7 mb-[20px]">
+              <Link key={j.job_id} href={!access ? '#' : `/dashboard/school/manage/${j.job_id}?default=2`}>
+              <div  className="grid grid-cols-7 mb-[20px]">
                 <div className="col-span-4">
                   <p>{j.job_title}</p>
                   <div className="flex md:flex-row flex-col md:gap-5 items-start md:items-center">
                     <p className="text-ash_400 mb-[8px]">
-                      posted:&nbsp;
+                      Posted:&nbsp;
                       {datePosted(j.createdAt!)}
                     </p>
                     <p className="text-ash_400 -translate-y-1">
@@ -49,20 +52,23 @@ const SchoolAnalytics = () => {
                     </p>
                   </div>
                 </div>
-                <div className="col-span-1 items-center text-center">
-                  <Link href={`/dashboard/school/manage/${j.job_id}?default=2`}>
+                <div className="md:col-span-1 col-span-2 items-center text-center">
+                  {/* <Link href={`/dashboard/school/manage/${j.job_id}?default=2`}> */}
                     {j?.applied && j?.applied.length > 0
                       ? j?.applied.length
                       : 0}
-                  </Link>
+                  {/* </Link> */}
                 </div>
 
                 <div className="col-span-1 text-center">
-                  <Link href={`/dashboard/school/manage/${j.job_id}?default=3`}>
-                    0
-                  </Link>
+                  {/* <Link href={`/dashboard/school/manage/${j.job_id}?default=3`}> */}
+                  {j?.hired && j?.hired.length > 0
+                      ? j?.hired.length
+                      : 0}
+                  {/* </Link> */}
                 </div>
               </div>
+              </Link>
             ))}
         </div>
        
