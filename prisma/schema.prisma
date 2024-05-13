@@ -195,14 +195,17 @@ model Session {
 }
 
 model Blog {
-  id     String @id @default(uuid())
-  banner String
-  title  String
-  except String
-  text   String
+  id              String   @id @default(uuid())
+  banner          String
+  title           String
+  except          String
+  text            String
+  isEditor        Boolean  @default(false)
+  updatedIsEditor DateTime
 
   blogCategoryId String
   categories     Categories @relation(fields: [blogCategoryId], references: [id])
+  clicks         Int        @default(0)
 
   likes      Like[]
   blogUserId String
