@@ -32,7 +32,7 @@ const loginSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
 })
 
-const LoginForm = ({ show = true }) => {
+const LoginForm = ({ show = true, redirect = true, close }: {show?: boolean, redirect?: boolean, close?: () => void}) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const { setMessage, colorList } = useGlobalContext()
@@ -80,10 +80,19 @@ const LoginForm = ({ show = true }) => {
           window.location.assign('/dashboard?profile=1')
         }, 3000)
       } else {
-        const t = setTimeout(() => {
-          clearTimeout(t)
-          router.push('/dashboard')
-        }, 1000)
+        if(redirect) {
+          const t = setTimeout(() => {
+            clearTimeout(t)
+            router.push('/dashboard')
+          }, 1000)
+        } else {
+          queryClient.setQueryData(['user'], res.data.user)
+          if(close) {
+            close()
+          }
+          setMessage(() => res.data.message)
+        }
+
       }
     },
     onError: (err) => {

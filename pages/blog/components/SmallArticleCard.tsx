@@ -3,6 +3,8 @@ import { BlogTagStyle } from './BlogTagStyle.styles'
 import ImgNameDate from './ImgNameDate'
 import LikesCom from './LikesCom'
 import Link from 'next/link'
+import { Axios } from '@/request/request'
+import { useRouter } from 'next/router'
 
 interface SmallArticleCardProps {
   tag_text: string
@@ -24,8 +26,8 @@ interface SmallArticleCardProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
-  // ref?: React.RefObject<HTMLDivElement>
-  blog_id:number,
+  blog_id: string
+  date: string
 }
 
 const SmallArticleCard = ({
@@ -48,18 +50,20 @@ const SmallArticleCard = ({
   authImgCont_is_image,
   authImgCont_imageSrc,
   authImgCont_altImage,
-  // ref,
+  date,
   blog_id,
 }: SmallArticleCardProps) => {
+  const router = useRouter()
   return (
     <div
       className={`SmallArticleCard relative flex group flex-row items-center sm:p-4 sm:rounded-3xl  border-neutral-200 h-full ${
         is_bg_border ? 'sm:bg-white sm:border' : ''
       }`}
-    //  ref={ref} 
     >
-  
-      <Link className="absolute inset-0 z-11" href={`/blog/${blog_id}`}></Link>
+      <div onClick={async () => {
+        // await Axios.put(`/blog/click/${blog_id}`)
+        router.push(`/blog/${blog_id}`)
+        }}   className="absolute inset-0 z-11"></div>
       {/* tag heading auth date like comm cont */}
       <div className="flex flex-col flex-grow">
         {/* tag heading auth date cont */}
@@ -79,19 +83,14 @@ const SmallArticleCard = ({
               <span className="line-clamp-2">{heading_text}</span>
             </h2>
             {is_description && (
-              // <div className='hidden sm:block sm:mt-2'>
-              //   <span className="text-neutral-500 text-sm hidden sm:block sm:mt-2 leading-relaxed line-clamp-2">
-              //     {description}
-              //   </span>
-              // </div>
-              <h2 className="block text-neutral-500 text-sm  sm:block sm:mt-2 hidden leading-relaxed">
+              <h2 className="block text-neutral-500 text-sm sm:block sm:mt-2 leading-relaxed">
                 <span className="line-clamp-2">{description}</span>
               </h2>
             )}
           </a>
           <ImgNameDate
             authName="Tayture"
-            date="April 12, 2024"
+            date={date}
             enableDash={false}
             isColumn={true}
             bg_color={ImgNameDate_bg_color}

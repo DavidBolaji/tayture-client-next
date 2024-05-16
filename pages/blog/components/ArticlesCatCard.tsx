@@ -69,14 +69,22 @@ const ArticlesCatCard = ({
       <a className="flex flex-col">
         {/* Image and Rank Cont */}
         <div className="flex-shrink-0 relative w-full  aspect-w-7 aspect-h-5 rounded-3xl overflow-hidden group">
+          
           <ImgCont
             bg_image_url={bg_image_url}
-            className="bg-cover object-cover rounded-2xl w-full p-[0.75rem] "
+            className="bg-cover object-cover rounded-2xl w-full p-[0.75rem]  relative"
           >
+            <Image
+            layout='fill'
+            src={bg_image_url}
+            alt={category}
+            className=''
+            />
             <BlogTagStyle
               text={rank}
               bg_color={bg_color_rank}
               text_color={text_color_rank}
+              className='absolute'
             />
           </ImgCont>
         </div>

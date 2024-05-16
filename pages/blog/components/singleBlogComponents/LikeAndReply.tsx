@@ -4,9 +4,10 @@ import { VscReply } from 'react-icons/vsc'
 
 interface LikeAndReplyProps{
     like_num:string|number
+    showReply: () => void
 }
 
-function LikeAndReply({like_num}:LikeAndReplyProps) {
+function LikeAndReply({like_num, showReply}:LikeAndReplyProps) {
   return (
     <div className="flex items-center space-x-2 ">
       
@@ -17,7 +18,7 @@ function LikeAndReply({like_num}:LikeAndReplyProps) {
       </button>
 
       {/* Reply button */}
-      <button className="flex items-center min-w-[68px] rounded-full text-neutral-6000 bg-neutral-100 px-3 h-8 hover:bg-teal-50 hover:text-teal-600 focus:outline-none ">
+      <button type='button' onClick={showReply}  className="flex items-center min-w-[68px] rounded-full text-neutral-6000 bg-neutral-100 px-3 h-8 hover:bg-teal-50 hover:text-teal-600 focus:outline-none ">
         <VscReply className="h-[18px] w-[18px] mr-2" />
         <span className="text-xs leading-none text-neutral-900 dark:text-neutral-200">
           Reply

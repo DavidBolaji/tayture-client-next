@@ -26,7 +26,7 @@ const Editor = dynamic(
 
 const exceptSchema = Yup.object().shape({
   except: Yup.string()
-    .max(30, 'Except cannot be more than 30 characters')
+    .max(50, 'Except cannot be more than 30 characters')
     .required('Except title is required'),
 })
 

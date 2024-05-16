@@ -1,9 +1,13 @@
+"use client"
 import React from 'react'
 import { BlogTagStyle } from './BlogTagStyle.styles'
-import ImgNameDate from './ImgNameDate'
+
 import LikesCom from './LikesCom'
 import Image from 'next/image'
-import Link from 'next/link'
+//@ts-ignore
+import ImgNameDate from './ImgNameDate'
+import { useRouter } from 'next/router'
+import { Axios } from '@/request/request'
 
 interface SmallArticleCardVerticalProps {
   tag_text: string
@@ -22,7 +26,8 @@ interface SmallArticleCardVerticalProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
-  blog_id: number
+  blog_id: string
+  date: string
 }
 
 const SmallArticleCardVertical = ({
@@ -43,20 +48,30 @@ const SmallArticleCardVertical = ({
   authImgCont_imageSrc,
   authImgCont_altImage,
   blog_id,
+  date
 }: SmallArticleCardVerticalProps) => {
+  const router = useRouter()
   return (
-    <div className="SmallArticleCardVertical relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full">
-      <Link href={`/blog/${blog_id}`} className="absolute z-10 inset-0"></Link>
+    <div className="SmallArticleCardVertical relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full cursor-pointer">
+      <div onClick={async () => {
+        const h = document.getElementById('sb')
+        h!.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        })
+        // await Axios.put(`/blog/click/${blog_id}`)
+        router.push(`/blog/${blog_id}`)
+        }}   className="absolute z-10 inset-0"></div>
       {/* image */}
       <div className="block flex-shrink-0 relative w-full rounded-t-3xl overflow-hidden z-10 aspect-w-5 aspect-h-3">
         <div>
-          <div className="block relative rounded-2xl overflow-hidden z-0  w-full h-full">
+          <div className="block relative rounded-2xl overflow-hidden z-0  w-[300px] h-[200px]">
             <Image
               src={img_src}
               alt={alt_img}
-              width={400}
-              height={400}
-              className="object-cover  inset-0 w-full h-full z-1"
+              priority
+              layout='fill'
+              className="object-cover w-full h-full z-1"
               sizes="(max-width: 600px) 480px, 800px"
             />
           </div>
@@ -81,7 +96,7 @@ const SmallArticleCardVertical = ({
         <div className="inline-flex items-center flex-wrap text-neutral-800 dark:text-neutral-200 leading-none text-xs">
           <ImgNameDate
             authName="Tayture"
-            date="April 12, 2024"
+            date={date}
             enableDash={true}
             isColumn={false}
             bg_color={ImgNameDate_bg_color}

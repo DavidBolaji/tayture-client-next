@@ -4,6 +4,8 @@ import ImgNameDate from './ImgNameDate'
 import LikesCom from './LikesCom'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Axios } from '@/request/request'
+import { useRouter } from 'next/router'
 
 interface MainArticleCardProps {
   img_src: string
@@ -23,7 +25,8 @@ interface MainArticleCardProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
-  blog_id:number
+  blog_id:string
+  date: string
 }
 
 const MainArticleCard = ({
@@ -45,10 +48,16 @@ const MainArticleCard = ({
   authImgCont_imageSrc,
   authImgCont_altImage,
   blog_id,
+  date
 }: MainArticleCardProps) => {
+  const router = useRouter()
   return (
     <div className="group relative flex flex-col h-full">
-      <Link href={`/blog/${blog_id}`} className='absolute inset-0 z-10'></Link>
+       <div onClick={async () => {
+        await Axios.put(`/blog/click/${blog_id}`)
+        router.push(`/blog/${blog_id}`)
+        }}   className="absolute inset-0 z-11"></div>
+      {/* <Link href={`/blog/${blog_id}`} className='absolute inset-0 z-10'></Link> */}
       <div className="ImgCont block flex-shrink-0 flex-grow relative w-full h-0 pt-[75%] sm:pt-[55%] z-1">
         <Image
           sizes="(max-width: 600px) 480px, 800px"
@@ -72,7 +81,7 @@ const MainArticleCard = ({
       <div className="mt-5 px-4 flex flex-col">
         <ImgNameDate
           authName="Tayture"
-          date="April 12, 2024"
+          date={date}
           enableDash= {true}
           isColumn= {false}
           bg_color={ImgNameDate_bg_color}

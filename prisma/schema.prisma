@@ -198,8 +198,8 @@ model Blog {
   id              String   @id @default(uuid())
   banner          String
   title           String
-  except          String
-  text            String
+  except          String    @db.VarChar(50)
+  text            String   @db.LongText()
   isEditor        Boolean  @default(false)
   updatedIsEditor DateTime
 
@@ -235,6 +235,7 @@ model Comment {
   id      String  @id @default(uuid())
   comment String
   active  Boolean @default(true)
+  parentId String? 
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

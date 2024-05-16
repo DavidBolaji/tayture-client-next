@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Images } from '../../../assets/images'
 
 interface ImgNameDateProps {
   authName: string
@@ -15,7 +14,7 @@ interface ImgNameDateProps {
   is_mt?:boolean
 }
 
-const ImgNameDateCont = styled.div<ImgNameDateProps>`
+const ImgNameDateCont = styled.div<Partial<ImgNameDateProps>>`
   & {
     display: flex;
     align-items: center;

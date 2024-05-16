@@ -29,7 +29,8 @@ export default async function handler(
     },
     orderBy: {
         clicks: 'desc'
-    }
+    },
+    take: 6
   })
 
   res.status(200).json({ message: 'Succesful', blog })

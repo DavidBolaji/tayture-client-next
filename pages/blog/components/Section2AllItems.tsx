@@ -1,38 +1,61 @@
-import React, { useState } from 'react'
-import FetchBlogs from '../data/FetchBlogs'
+import React, { useRef, useState } from 'react'
 import MainArticleCard from './MainArticleCard'
 import SmallArticleCard from './SmallArticleCard'
 import SectionCont from './helpers/SectionCont'
 import HeadingDesc from './HeadingDesc'
 import NavItem from './NavItem'
-import { HiOutlineArrowRight } from 'react-icons/hi'
 import Pagination from './Pagination'
+import { useQuery } from '@tanstack/react-query'
+import { Axios } from '@/request/request'
+import { Blog, Categories, Comment, Like } from '@prisma/client'
+import { getRandomColor2 } from '@/utils/helpers'
+import moment from 'moment'
 
-const PostsPerPage = 4;
+const PostsPerPage = 4
 
 function Section2AllItems() {
-  const allBlogs = FetchBlogs()
-  const adminsBlogs = allBlogs.filter(blog => blog.category === 'Admins')
-  const educatorsBlogs = allBlogs.filter(blog => blog.category === 'Educators')
-  const pupilsBlogs = allBlogs.filter(blog => blog.category === 'Pupils')
-  const eventBlogs = allBlogs.filter(blog => blog.category === 'Events')
   const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const cList = [
+    '#FF5733',
+    '#33FF57',
+    '#5733FF',
+    '#FF33E9',
+    '#33E9FF',
+    '#E9FF33',
+    '#333333',
+    '#000000',
+  ]
+  const txt = '#fff'
+  const divRef = useRef<null | HTMLDivElement>(null)
 
-  // Calculate the index range for the current page
-  const startIndex = (currentPage - 1) * PostsPerPage
-  const endIndex = startIndex + PostsPerPage
-  const blogs = allBlogs.slice(startIndex, endIndex)
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['insightBlog', currentPage],
+    queryFn: async () => {
+      const response = await Axios.get(`/blog/all?page=${currentPage}`)
+      setTotalPages(response.data.totalPages)
+      return response.data
+    },
+  })
 
-  const totalPages = Math.ceil(allBlogs.length / PostsPerPage)
-
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = (pageNumber: number) => {
+    divRef.current?.scrollIntoView({
+      behavior: 'smooth'
+    })
     setCurrentPage(pageNumber)
   }
 
+  if (isLoading) return <div>Loading...</div>
+  if (isError) return <div>Error fetching data</div>
+
+  const startIndex = (currentPage - 1) * 4
+  const endIndex = startIndex + PostsPerPage
+
+  const blogs = data?.blogs ?? []
+
   return (
-    //Section 3  K12_centered
     <SectionCont bg_color="none">
-      <div className="flex flex-col mb-8 relative">
+      <div className="flex flex-col mb-8 relative" ref={divRef}>
         {/* Heading */}
         <HeadingDesc
           heading="Insightful Articles"
@@ -47,64 +70,78 @@ function Section2AllItems() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-        {blogs.map((blog) =>
-          blog.id === endIndex ? (
-            <MainArticleCard
-              key={`${blog.id}`}
-              blog_id={blog.id}
-              img_src={blog.hor_image_src}
-              alt_img="Lorem ipsum"
-              tag_text={blog.category}
-              tag_text_color={blog.category_text_hoverBg_color}
-              tag_bg_color={blog.category_bg_color}
-              tag_hover_text_color="white"
-              tag_hover_bg_color={blog.category_text_hoverBg_color}
-              authImgCont_wi_hei="2.7rem"
-              ImgNameDate_bg_color={blog.category_text_hoverBg_color}
-              article_heading={blog.title}
-              article_description={blog.content}
-              likes_num={`${blog.likes}`}
-              comments_num={`${blog.comments}`}
-              likesCom_bg_color="rgba(249,250,251)"
-              authImgCont_is_image={false}
-            />
-          ) : (
-            ''
-          ),
-        )}
-        <div className="grid gap-6 md:gap-8">
-          {blogs.map((blog) =>
-            blog.id !== endIndex ? (
-              <SmallArticleCard
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 md:min-h-44">
+        {blogs.map(
+          (
+            blog: Blog & { categories: Categories } & { likes: Like[] } & {
+              comment: Comment[]
+            },
+            idx: number,
+          ) =>
+            idx === endIndex - 1 && (
+              <MainArticleCard
                 key={`${blog.id}`}
                 blog_id={blog.id}
-                tag_text={blog.category}
-                tag_text_color={blog.category_text_hoverBg_color}
-                tag_bg_color={blog.category_bg_color}
+                img_src={blog.banner}
+                alt_img={blog.title}
+                tag_text={blog.categories.title}
+                tag_text_color={txt}
+                tag_bg_color={getRandomColor2(cList)}
                 tag_hover_text_color="white"
-                tag_hover_bg_color={blog.category_text_hoverBg_color}
-                heading_text={blog.title}
-                ImgNameDate_bg_color={blog.category_text_hoverBg_color}
-                authImgCont_wi_hei="1.75rem"
-                likes_num={`${blog.likes}`}
-                comments_num={`${blog.comments}`}
+                tag_hover_bg_color={getRandomColor2(cList)}
+                authImgCont_wi_hei="2.7rem"
+                ImgNameDate_bg_color={getRandomColor2(cList)}
+                article_heading={blog.title}
+                article_description={blog.except}
+                likes_num={`${blog?.likes?.length ?? 0}`}
+                comments_num={`${blog?.comment?.length ?? 0}`}
                 likesCom_bg_color="rgba(249,250,251)"
-                img_src={blog.ver_image_src}
-                alt_img="Lorem ipsum"
-                is_bg_border={true}
-                is_description={false}
                 authImgCont_is_image={false}
+                date={moment(blog.createdAt).format('MMM DD YYYY')}
               />
-            ) : (
-              ''
             ),
+        )}
+        <div className="grid gap-6 md:gap-8">
+          {blogs.map(
+            (
+              blog: Blog & { categories: Categories } & { like: Like[] } & {
+                comment: Comment[]
+              },
+              idx: number,
+            ) =>
+              idx !== endIndex - 1 && (
+                <SmallArticleCard
+                  key={`${blog.id}`}
+                  blog_id={blog.id}
+                  tag_text={blog.categories.title}
+                  tag_text_color={txt}
+                  tag_bg_color={getRandomColor2(cList)}
+                  tag_hover_text_color="white"
+                  tag_hover_bg_color={getRandomColor2(cList)}
+                  heading_text={blog.title}
+                  ImgNameDate_bg_color={getRandomColor2(cList)}
+                  authImgCont_wi_hei="1.75rem"
+                  likes_num={`${blog?.like?.length ?? 0}`}
+                  comments_num={`${blog?.comment?.length ?? 0}`}
+                  likesCom_bg_color="rgba(249,250,251)"
+                  img_src={blog.banner}
+                  alt_img={blog.title}
+                  is_bg_border={true}
+                  is_description={false}
+                  authImgCont_is_image={false}
+                  date={moment(blog.createdAt).format('MMM DD YYYY')}
+                />
+              ),
           )}
         </div>
       </div>
 
       <div className="w-full flex justify-center items-center pt-16">
-        <Pagination total_pages={totalPages} currentPage={currentPage} onPageChange={handlePageChange}/>
+        <Pagination
+          total_pages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </SectionCont>
   )

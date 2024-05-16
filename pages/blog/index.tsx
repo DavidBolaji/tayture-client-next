@@ -26,7 +26,7 @@ const Blog = () => {
             {/* Section 3  K12_centered*/}
             <Section2AllItems />
 
-            <NewsletterSection />
+            {/* <NewsletterSection /> */}
           </Wrapper>
 
           <Footer />

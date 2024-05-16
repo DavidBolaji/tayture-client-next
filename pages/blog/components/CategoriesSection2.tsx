@@ -3,6 +3,7 @@ import ArticlesCatCard from './ArticlesCatCard'
 import { useQuery } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { Blog, Categories } from '@prisma/client'
+import { getRandomColor } from '@/utils/helpers'
 
 function CategoriesSection2() {
   const { data: blogs } = useQuery({
@@ -24,8 +25,8 @@ function CategoriesSection2() {
               key={`${blog.id}`}
               category={blog.categories.title!}
               totalCatArticles={`${blog.categories.blog.length} Articles`}
-              categoryColor={"red"}
-              rank={String(idx)}
+              categoryColor={getRandomColor()}
+              rank={String(idx + 1)}
               bg_image_url={blog.banner}
               authImgCont_wi_hei="2.5rem"
               authImgCont_is_image={false}

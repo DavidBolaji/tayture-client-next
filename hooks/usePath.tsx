@@ -8,6 +8,7 @@ const usePath = () => {
   const router = useRouter()
   const jobId = router.query.jobId
   const scheduleId = router.query.scheduleId
+  const blogId = router.query.blogId
   const [locationCurrent, setLoc] = useState('')
 
   useEffect(() => {
@@ -24,6 +25,10 @@ const usePath = () => {
         ? '/buildcv'
         : pathname === '/buildcv/template'
         ? '/buildcv'
+        : pathname === '/blog'
+        ? '/blog'
+        : pathname === `/blog/${blogId}`
+        ? '/blog'
         : pathname === '/dashboard/jobs/all'
         ? '/dashboard/jobs'
         : pathname === '/dashboard/profile'

@@ -1,11 +1,21 @@
+import { Axios } from '@/request/request'
+import { Categories } from '@prisma/client'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 interface NavItemProps {}
 
 const NavItem = ({}: NavItemProps) => {
-  const [activeButton, setActiveButton] = useState(0)
+  const [activeButton, setActiveButton] = useState('all')
+  const { data: categories } = useQuery({
+    queryKey: ['allCategory'],
+    queryFn: async () => {
+      const req = await Axios.get('/categories')
+      return req.data.category as Categories[]
+    },
+  })
 
-  const handleButtonClick = (buttonNumber:any) => {
+  const handleButtonClick = (buttonNumber: any) => {
     setActiveButton(buttonNumber)
   }
 
@@ -13,36 +23,31 @@ const NavItem = ({}: NavItemProps) => {
     <ul className="flex  sm:space-x-2 pb-6">
       <li className="relative flex-shrink-0">
         <button
-          className={`text-neutral-500 flex items-center justify-center font-[600] px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full ${activeButton === 0 ? 'bg-black text-white' : 'hover:bg-neutral-100 hover:text-neutral-900'}`}
-          onClick={() => handleButtonClick(0)}
+          className={`text-neutral-500 flex items-center justify-center font-[600] px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full ${
+            activeButton === 'all'
+              ? 'bg-black text-white'
+              : 'hover:bg-neutral-100 hover:text-neutral-900'
+          }`}
+          onClick={() => handleButtonClick('all')}
         >
           All Items
         </button>
       </li>
-      <li className="relative flex-shrink-0">
-        <button
-          className={`text-neutral-500 flex items-center justify-center font-[600] px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full ${activeButton === 1 ? 'bg-black text-white' : 'hover:bg-neutral-100 hover:text-neutral-900'}`}
-          onClick={() => handleButtonClick(1)}
-        >
-          Administration
-        </button>
-      </li>
-      <li className="relative flex-shrink-0">
-        <button
-          className={`text-neutral-500 flex items-center justify-center font-[600] px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full ${activeButton === 2 ? 'bg-black text-white' : 'hover:bg-neutral-100 hover:text-neutral-900'}`}
-          onClick={() => handleButtonClick(2)}
-        >
-          Teachers
-        </button>
-      </li>
-      <li className="relative flex-shrink-0">
-        <button
-          className={`text-neutral-500 flex items-center justify-center font-[600] px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full ${activeButton === 3 ? 'bg-black text-white' : 'hover:bg-neutral-100 hover:text-neutral-900'}`}
-          onClick={() => handleButtonClick(3)}
-        >
-          Students
-        </button>
-      </li>
+      {categories &&
+        categories.map((category) => (
+          <li className="relative flex-shrink-0">
+            <button
+              className={`text-neutral-500 flex items-center justify-center font-[600] px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full ${
+                activeButton === category.id
+                  ? 'bg-black text-white'
+                  : 'hover:bg-neutral-100 hover:text-neutral-900'
+              }`}
+              onClick={() => handleButtonClick(category.id)}
+            >
+              {category.title}
+            </button>
+          </li>
+        ))}
     </ul>
   )
 }

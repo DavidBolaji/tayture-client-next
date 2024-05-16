@@ -15,14 +15,16 @@ import { getUser2 } from '@/lib/api/user'
 import Spinner from '@/components/Spinner/Spinner'
 
 const UserJobPage: FC = (props) => {
- const [type, setType] = useState<'applied' | 'scheduled' | 'hired'>('applied')
- const {data: user, isPending} = useQuery({
-  queryKey: ['user'],
-  queryFn: async () => { const req = await getUser2();
-    const user = req.data.user
-    return user
-  }
- })
+  const [type, setType] = useState<'applied' | 'scheduled' | 'hired'>('applied')
+  const { data: user, isPending } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const req = await getUser2()
+      const user = req.data.user
+      return user
+    },
+    refetchOnWindowFocus: false
+  })
 
   const items: TabsProps['items'] = [
     {
@@ -30,7 +32,9 @@ const UserJobPage: FC = (props) => {
       label: 'Applied',
       children: (
         <>
-          {isPending ? <Skeleton loading={isPending} active />: user?.applied!.length > 0 ? (
+          {isPending ? (
+            <Skeleton loading={isPending} active />
+          ) : user?.applied!.length > 0 ? (
             user.applied!.map((applied: any, idx: number) => (
               <Badge.Ribbon
                 color="black"
@@ -40,7 +44,9 @@ const UserJobPage: FC = (props) => {
                 <JobCardAllApplied job={applied} idx={idx} />
               </Badge.Ribbon>
             ))
-          ):<JobCardAll2 type={type} />}
+          ) : (
+            <JobCardAll2 type={type} />
+          )}
         </>
       ),
     },
@@ -49,7 +55,9 @@ const UserJobPage: FC = (props) => {
       label: 'Scheduled',
       children: (
         <>
-          {isPending ? <Skeleton loading={isPending} active /> : user?.schedule!.length > 0 ? (
+          {isPending ? (
+            <Skeleton loading={isPending} active />
+          ) : user?.schedule!.length > 0 ? (
             user.schedule!.map((schedule: any, idx: number) => (
               <Badge.Ribbon
                 key={`${schedule.jobId}_scheduled`}
@@ -59,7 +67,9 @@ const UserJobPage: FC = (props) => {
                 <JobCardAllScheduled job={schedule} idx={idx} />
               </Badge.Ribbon>
             ))
-          ):<JobCardAll2 type={type} />}
+          ) : (
+            <JobCardAll2 type={type} />
+          )}
         </>
       ),
     },
@@ -68,7 +78,9 @@ const UserJobPage: FC = (props) => {
       label: 'Hired',
       children: (
         <>
-          {isPending ? <Spinner /> : user?.hired!.length > 0 ? (
+          {isPending ? (
+            <Spinner />
+          ) : user?.hired!.length > 0 ? (
             user.hired!.map((hired: any, idx: number) => (
               <Badge.Ribbon
                 key={`${hired.job.job_id}_hired`}
@@ -78,7 +90,9 @@ const UserJobPage: FC = (props) => {
                 <JobCardAllHired job={hired} idx={idx} />
               </Badge.Ribbon>
             ))
-          ): <JobCardAll2 type={type} />}
+          ) : (
+            <JobCardAll2 type={type} />
+          )}
         </>
       ),
     },
@@ -98,7 +112,7 @@ const UserJobPage: FC = (props) => {
               },
             }}
           >
-            <Tabs  type="card" items={items} onChange={handleChange} />
+            <Tabs type="card" items={items} onChange={handleChange} />
           </ConfigProvider>
         </div>
         <div className="md:block hidden col-span-6 mt-14 rounded-md w-full">

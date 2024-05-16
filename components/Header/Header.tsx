@@ -59,10 +59,10 @@ const items: MenuProps['items'] = [
     label: 'Post a Job',
     key: '/post_landing',
   },
-  // {
-  //   label: 'Blog',
-  //   key: '/blog',
-  // },
+  {
+    label: 'Blog',
+    key: '/blog',
+  },
   // {
   //   label: 'Build CV',
   //   key: '/buildcv',

@@ -4,10 +4,12 @@
 
 html {
   box-sizing: border-box;
+  /* scroll-behavior: smooth; */
 }
 
 body {
   overflow: hidden;
+  scroll-behavior: smooth;
 }
 
 .blinker {

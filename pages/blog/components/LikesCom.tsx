@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react'
 import { CiHeart } from 'react-icons/ci'
 import styled from 'styled-components'
@@ -5,15 +6,28 @@ import { BsChatSquareDots } from 'react-icons/bs'
 import { IoShareSocialOutline } from 'react-icons/io5'
 import { FaFacebook, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
 import { FaLink, FaXTwitter } from 'react-icons/fa6'
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+} from 'react-share'
+import { useRouter } from 'next/router'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { User } from '@prisma/client'
+import { Axios } from '@/request/request'
+import { AxiosResponse } from 'axios'
+import { Modal } from 'antd'
+import LoginForm from '@/pages/auth/LoginForm/LoginForm'
 
 interface LikesComProps {
   likes_num: string
   comments_num: string
   bg_color: string
   is_share?: boolean
+  update?: (like: number) => void
 }
 
-const LikesComCont = styled.div<LikesComProps>`
+const LikesComCont = styled.div<Partial<LikesComProps>>`
   & {
     display: flex;
     z-index: 11;
@@ -68,24 +82,65 @@ const LikesCom = ({
   comments_num,
   bg_color,
   is_share,
-  is_sharebtn_clicked,
+  update
 }: LikesComProps) => {
-
+  const router = useRouter()
   const [sharebtnClicked, updateSharebtnClicked] = useState(false)
+ 
+  const [modal, setModal] = useState(false)
+  const queryClient = useQueryClient()
 
-  function handleShareBtnClicked (){
+  const { mutate } = useMutation({
+    mutationFn: async (blogId: string) => {
+      return await Axios.put(`/blog/me/like/${blogId}`)
+    },
+    onSuccess: (res: AxiosResponse) => {
+      const more = +likes_num + 1;
+      const less = +likes_num > 0 ? +likes_num - 1 : +likes_num
+      if (res.data.message === 'Liked') {
+        update && update(more)
+        console.log(more)
+        return
+      }
+      update && update(less)
+    },
+  })
+
+
+  function handleShareBtnClicked() {
     updateSharebtnClicked(!sharebtnClicked)
+  }
+
+  const handleLike = () => {
+    const user = queryClient.getQueryData(['user']) as User
+    if (!user) {
+      return setModal(true)
+    }
+    mutate(router.query.blogId as string)
   }
   return (
     <LikesComCont bg_color={bg_color}>
       <div className="cont likesCont">
-        <button className="likeBtn text-[rgba(55,65,81)]">
+        <button
+          onClick={handleLike}
+          type="button"
+          className="likeBtn text-[rgba(55,65,81)]"
+        >
           <CiHeart />
           <p>{likes_num}</p>
         </button>
       </div>
       <div className="cont comCont">
-        <a href="#" className="comBtn text-[rgba(55,65,81)]">
+        <a
+          onClick={() => {
+            const comment = document.getElementById('comment')
+            comment?.scrollIntoView({
+              behavior: 'smooth',
+            })
+          }}
+          href="#"
+          className="comBtn text-[rgba(55,65,81)]"
+        >
           <BsChatSquareDots />
           <p>{comments_num}</p>
         </a>
@@ -102,42 +157,82 @@ const LikesCom = ({
           </a>
 
           {/* SubMenu */}
-          {sharebtnClicked && <div className="absolute origin-top-right right-0 w-56 mt-2 bg-white rounded-2xl divide-y divide-neutral-100 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-30 transform opacity-100 scale-100">
-            <div className="px-1 py-3 text-xs text-neutral-6000 w-full">
-              <div className="w-full">
-                <button className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none">
-                  <FaLink className="text-[1rem]" />
-                  <span className="ml-3">Copy Link</span>
-                </button>
-              </div>
-              <div className="w-full">
-                <button className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none">
-                  <FaFacebook className="text-[1rem]" />
-                  <span className="ml-3">Facebook</span>
-                </button>
-              </div>
-              <div className="w-full">
-                <button className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none">
-                  <FaInstagram className="text-[1rem]" />
-                  <span className="ml-3">Instagram</span>
-                </button>
-              </div>
-              <div className="w-full">
-                <button className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none">
-                  <FaXTwitter className="text-[1rem]" />
-                  <span className="ml-3">X (Twitter)</span>
-                </button>
-              </div>
-              <div className="w-full">
-                <button className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none">
-                  <FaLinkedinIn className="text-[1rem]" />
-                  <span className="ml-3">LinkedIn</span>
-                </button>
+          {sharebtnClicked && (
+            <div className="absolute origin-top-right right-0 w-56 mt-2 bg-white rounded-2xl divide-y divide-neutral-100 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-30 transform opacity-100 scale-100">
+              <div className="px-1 py-3 text-xs text-neutral-6000 w-full">
+                <div className="w-full">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        `${process.env.NEXT_PUBLIC_FRONTEND_API}/blog/${router.query.blogId}`,
+                      )
+                    }
+                    className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none"
+                  >
+                    <FaLink className="text-[1rem]" />
+                    <span className="ml-3">Copy Link</span>
+                  </button>
+                </div>
+                <div className="w-full">
+                  <FacebookShareButton
+                    url={`${process.env.NEXT_PUBLIC_FRONTEND_API}/blog/${router.query.blogId}`}
+                    quote="Tayture offers me access to multiple opportunities as an educator to learn more"
+                    hashtag="#tayture"
+                  >
+                    <button className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none">
+                      <FaFacebook className="text-[1rem]" />
+                      <span className="ml-3">Facebook</span>
+                    </button>
+                  </FacebookShareButton>
+                </div>
+                {/* <div className="w-full">
+                  <button className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none">
+                    <FaInstagram className="text-[1rem]" />
+                    <span className="ml-3">Instagram</span>
+                  </button>
+                </div> */}
+                <div className="w-full">
+                  <TwitterShareButton
+                    url={`${process.env.NEXT_PUBLIC_FRONTEND_API}/blog/${router.query.blogId}`}
+                    title={`Tayture offers me access to multiple opportunities as an educator to learn more.
+              `}
+                  >
+                    <button className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none">
+                      <FaXTwitter className="text-[1rem]" />
+                      <span className="ml-3">X (Twitter)</span>
+                    </button>
+                  </TwitterShareButton>
+                </div>
+                <div className="w-full">
+                  <LinkedinShareButton
+                    url={`${process.env.NEXT_PUBLIC_FRONTEND_API}/blog/${router.query.blogId}`}
+                    title="Tayture offers me access to multiple opportunities as an educator to learn more"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none"
+                    >
+                      <FaLinkedinIn className="text-[1rem]" />
+                      <span className="ml-3">LinkedIn</span>
+                    </button>
+                  </LinkedinShareButton>
+                </div>
               </div>
             </div>
-          </div>}
+          )}
         </div>
       )}
+      <Modal
+        open={modal}
+        closable
+        onCancel={() => setModal(false)}
+        footer={null}
+      >
+        <h2 className='md:text-xl text-lg text-center font-bold'>Login Form</h2>
+        <p className='italic w-full text-center text-sm'>Login to proceed with following action</p>
+        <LoginForm redirect={false} close={() => setModal(false)} />
+      </Modal>
     </LikesComCont>
   )
 }
