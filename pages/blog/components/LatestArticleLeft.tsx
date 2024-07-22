@@ -17,7 +17,7 @@ function LatestArticleLeft() {
 
   const totalPages = Math.ceil(allBlogs.length / PostsPerPage);
 
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top when changing page
   };
@@ -33,7 +33,7 @@ function LatestArticleLeft() {
         {blogs.map((blog, index: number) => (
           <SmallArticleCard
             key={`${blog.id}`}
-            blog_id={blog.id}
+            blog_id={blog.id as unknown as string}
             tag_text={blog.category}
             tag_text_color={blog.category_text_hoverBg_color}
             tag_bg_color={blog.category_bg_color}

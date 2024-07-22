@@ -27,7 +27,7 @@ interface SmallArticleCardProps {
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
   blog_id: string
-  date: string
+  date?: string
 }
 
 const SmallArticleCard = ({
