@@ -50,6 +50,7 @@ const UserSection = () => {
           {drawerContent?.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         </Drawer>
       </div>
+
     </section>
   )
 }
