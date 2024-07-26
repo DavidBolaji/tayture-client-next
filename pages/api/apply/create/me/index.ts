@@ -116,7 +116,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     //'*/2 * * * *' 2 minutes
 
     scheduledTasks[req.authUser!.id][jobId] = cron.schedule(
-      '*/2 * * * *',
+      '0 0 */14 * *',
       async () => {
         await checkApplicationStatus(
           req.authUser!.id,
