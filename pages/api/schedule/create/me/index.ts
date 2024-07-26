@@ -7,12 +7,16 @@ import moment from 'moment-timezone'
 import sendRemainderMail from '@/mail/sendRemainderMail'
 import nodeCron from 'node-cron'
 
+// Object to store scheduled tasks by userId
 const scheduledTasks: { [userId: string]: nodeCron.ScheduledTask } = {}
 
+// Handler for scheduling tasks
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // Check if the request method is POST
   if (req.method !== 'POST')
     return res.status(405).json({ message: 'Method not allowed' })
 
+  // Define required fields for validation
   const holder = [
     'instruction',
     'email',
@@ -24,24 +28,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     'scheduleId',
   ]
 
+  // Extract the fields from the request body
   const keys = Object.keys(req.body)
   const data: any = {}
-
   keys.forEach((key) => {
     if (!holder.includes(key)) {
       data[key] = req.body[key]
     }
   })
 
+  // Parse the target date and time
   const targetDateTime = moment.tz(
     `${req.body['time']} ${req.body['date']}`,
     'Africa/Lagos',
   )
-
-  console.log(req.body['scheduleId'])
-
   const date = targetDateTime.toDate()
+
   try {
+    // Upsert the schedule in the database
     const result = await db.schedule.upsert({
       where: {
         id: req.body['scheduleId'],
@@ -58,25 +62,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
-   await db.job.update({
+    // Increment the number of scheduled jobs
+    await db.job.update({
       where: {
-        job_id: req.body['jobId'] 
+        job_id: req.body['jobId'],
       },
       data: {
         noScheduled: {
-          increment: 1
-        }
-      }
+          increment: 1,
+        },
+      },
     })
 
     const scheduleId = result.id
 
+    // Delete previous instructions for the schedule
     await db.instruction.deleteMany({
       where: {
         scheduleId: req.body['scheduleId'],
       },
     })
 
+    // Create new instructions if they exist
     if (req.body['instruction'][0]?.text?.trim()?.length > 1) {
       await db.instruction.createMany({
         data: req.body['instruction'].map((instruction: any) => ({
@@ -87,22 +94,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
-    const note = db.notifcation.create({
+    // Create notifications
+    const notificationUser = req.authUser?.id as string
+    const note1 = db.notifcation.create({
       data: {
-        msg: `Hurray!!! you have succesfully created a schedule`,
-        notificationUser: req.authUser?.id as string,
-        caption: "Schedule created"
-      }
+        msg: 'Hurray!!! you have successfully created a schedule',
+        notificationUser,
+        caption: 'Schedule created',
+      },
     })
-    const note3 = db.notifcation.create({
+    const note2 = db.notifcation.create({
       data: {
-        msg: `Hurray!!! you have succesfully been scheduled for a job`,
+        msg: 'Hurray!!! you have successfully been scheduled for a job',
         notificationUser: req.body['userId'] as string,
-        caption: "Job Schedule"
-      }
+        caption: 'Job Schedule',
+      },
     })
 
-    await Promise.all([note, note3])
+    await Promise.all([note1, note2])
+
+    // Send schedule mail to the user
     await sendScheduleMail({
       email: req.body['email'],
       firstName: req.body['fname'],
@@ -111,6 +122,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       link: `${process.env.NEXT_PUBLIC_FRONTEND_API}dashboard/jobs/all`,
     })
 
+    // Schedule a reminder email if required
     if (req.body['remainder']) {
       const targetDateTime = moment
         .tz(`${req.body['time']} ${req.body['date']}`, 'Africa/Lagos')
@@ -121,6 +133,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         scheduledTasks[req.authUser!.id].stop()
       }
 
+      // Schedule a new task to send a reminder email
       scheduledTasks[req.authUser!.id] = nodeCron.schedule(
         targetDateTime.format('m H D M d'),
         async () => {
@@ -141,13 +154,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       schedule: result,
     })
   } catch (error) {
-    if ((error as Error).name === 'PrismaClientKnownRequestError') {
-      return res.status(400).json({
-        message: `An error occured: ${(error as Error).message}`,
-      })
-    }
-    res.status(400).json({
-      message: `An error occured: ${(error as Error).message}`,
+    console.error('[SCHEDULE_CREATE_ERROR]', (error as Error).message)
+    return res.status(400).json({
+      message: `An error occurred: ${(error as Error).message}`,
     })
   }
 }
