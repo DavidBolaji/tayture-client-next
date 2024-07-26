@@ -6,11 +6,16 @@ import { Axios } from '@/request/request'
 import { Blog, Categories } from '@prisma/client'
 import { AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
-
+import moment from 'moment'
+import { useState } from 'react'
+import { useGlobalContext } from '@/Context/store'
 
 const useBlog = () => {
   const queryClient = useQueryClient()
   const router = useRouter()
+  const {setImg, setMessage} = useGlobalContext()
+  const [drawer, setDrawer] = useState(false)
+  const [editBlog, setEditBlog] = useState<Blog | null>(null)
   const { data: blog, isPending } = useQuery({
     queryKey: ['allBlog'],
     queryFn: async () => {
@@ -24,36 +29,51 @@ const useBlog = () => {
       return await Axios.delete(`/blog/delete/${blogId}`)
     },
     onSuccess: (res: AxiosResponse) => {
-      queryClient.setQueryData(['allBlog'], (oldData: Categories[]) => {
+      setMessage(() => res.data.message)
+      queryClient.setQueryData(['allBlog'], (oldData: Blog[]) => {
         const newData = oldData.filter((oD) => oD.id !== res.data.blog.id)
         return newData
       })
     },
   })
 
+  const close = () => setDrawer(false)
+
   const { mutate: updateBlog } = useMutation({
-    mutationFn: (data: Categories) => {
-      return data as any
+    mutationFn: (data: Blog) => {
+      return Axios.put(`/blog/update/${data.id}`, { ...data })
     },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['editblog'], (oldData: Blog[]) => {
-        return data
+    onSuccess: (res: AxiosResponse) => {
+      close()
+      setImg(() => '')
+      queryClient.setQueryData(['allBlog'], (oldData: Blog[]) => {
+        const newData = oldData.map((data) => {
+          if (data.id === res.data.blog.id) {
+            return {
+              ...res.data.blog,
+            }
+          } else {
+            return {
+              ...data,
+            }
+          }
+        })
+        return newData
       })
     },
-  
   })
 
   const handleDelete = (id: string) => {
     deleteBlog(id)
   }
 
-  const handleEdit = (data: Categories) => {
-    const options = {
-      retry: true
-    }
-    updateBlog(data)
-    
-  
+  //@ts-ignore
+  const handleUpdate = (data: Partial<Blog>) => updateBlog(data)
+
+  const handleEdit = (data: Blog) => {
+    setImg(() => data.banner)
+    setDrawer(true)
+    setEditBlog(data)
   }
 
   const columns: ColumnsType<Blog> = [
@@ -61,13 +81,21 @@ const useBlog = () => {
       title: 'S/n',
       key: 'S/n',
       render: (_, record, index) => index + 1,
-      width: 50
+      width: 50,
     },
     {
       title: 'Picture',
       dataIndex: 'banner',
       key: 'banner',
-      render: (_, record) => <Image width={200} height={200} src={record.banner} alt={'blog_picture'} />,
+      render: (_, record) => (
+        <Image
+          width={50}
+          height={50}
+          src={record.banner}
+          alt={'blog_picture'}
+          className="object-cover rounded-full"
+        />
+      ),
     },
     {
       title: 'Title',
@@ -83,22 +111,37 @@ const useBlog = () => {
       title: 'Date',
       dataIndex: 'createdAt',
       key: 'createdAt',
-
+      render: (_, record) => (
+        <span>{moment(record.createdAt).format('Do MMM YYYY | hh:mm')}</span>
+      ),
     },
     {
       title: 'Action',
       key: 'action',
-      render: (_, record) =>
+      render: (_, record) => (
         <Space size="middle">
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-             <a>Delete</a>
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record.id)}
+          >
+            <a>Delete</a>
           </Popconfirm>
-        <a onClick={() => handleEdit(record)}>Edit</a>
-      </Space>
+          <a onClick={() => handleEdit(record)}>Edit</a>
+        </Space>
+      ),
     },
   ]
 
-  return { columns, blog, isPending, isDeleting }
+  return {
+    columns,
+    blog,
+    isPending,
+    isDeleting,
+    drawer,
+    close,
+    handleUpdate,
+    editBlog,
+  }
 }
 
 export default useBlog

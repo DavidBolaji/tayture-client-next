@@ -115,7 +115,7 @@ const JobSchedulePage = () => {
             <p className="text-black md:text-[20px] text-[16px] mb-[16px]">
               Interview Details
             </p>
-            <div className="grid grid-cols-8 mb-[38px] ">
+            <div className="grid grid-cols-8 mb-[38px]">
               <div className="col-span-2">
                 <p className="md:text-[16px] text-[14px] font-[500] text-black_400 mb-[16px]">
                   Date
@@ -129,7 +129,7 @@ const JobSchedulePage = () => {
               </div>
               {data.mode === 'in-person' ? (
                 <div className="col-span-6">
-                  <p className="md:text-[16px] text-[12px] md:ml-0 ml-10 font-[500] text-ash_400 mb-[16px]">
+                  <p className="md:text-[16px] text-[14px] md:ml-0 ml-10 font-[500] text-ash_400 mb-[16px]">
                     {scheduledDate(data.date)}
                   </p>
                   <p className="md:text-[16px] text-[12px] md:ml-0 ml-10 font-[500] text-ash_400 mb-[16px]">
@@ -140,14 +140,14 @@ const JobSchedulePage = () => {
                   </p>
                 </div>
               ) : (
-                <div className="col-span-6">
-                  <div className="text-[16px] font-[500] text-ash_400 mb-[16px]">
+                <div className="col-span-6 md:mt-1">
+                  <div className="text-[14px] font-[500] text-ash_400 mb-[16px]">
                     {scheduledDate(data.date)}
                   </div>
-                  <p className="text-[16px] font-[500] text-ash_400 mb-[16px]">
+                  <p className="text-[14px] -translate-y-0.5 font-[500] text-ash_400 mb-[16px] md:mt-5">
                     {formatTo12HourTime(data.time)}
                   </p>
-                  <div className="text-[14px] font-[500] text-ash_400 mb-[16px]">
+                  <div className="-mt-0.5 text-[14px] font-[500] text-ash_400 mb-[16px]">
                     <div>Virtual</div>
                     <div className="max-w-[381px]">
                       join the meeting using this link <br />

@@ -36,6 +36,11 @@ const nextConfig = {
       },
     })
 
+    if (isServer) {
+      // Import the cron job setup
+      require('./cron-job');
+    }
+
     return config
   },
 }

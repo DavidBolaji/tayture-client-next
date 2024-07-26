@@ -1,4 +1,5 @@
 import db from '@/db/db'
+import { sendTextMessage } from '@/lib/services/user'
 import sendHireTayture from '@/mail/sendHireTayture'
 import sendHireUser from '@/mail/sendHireUser'
 import verifyToken from '@/middleware/verifyToken'
@@ -32,7 +33,8 @@ const handler = async (
                   user: {
                     select: {
                       fname: true,
-                      email: true
+                      email: true,
+                      phone: true
                     }
                   }
                 }
@@ -95,6 +97,12 @@ const handler = async (
         firstName: jobCreate.job.school.user.fname,
         email: jobCreate.job.school.user.email
       })
+
+
+      sendTextMessage(
+        jobCreate.job.school.user.phone as string,
+        `Hello ${jobCreate.job.school.user.fname}, This message is to inform you that you have succesfully been hired for the role of ${jobCreate.job.job_title} at ${jobCreate.job.school.sch_name }.`,
+      )
 
     res.status(201).json({
       message: 'Job status updated',
