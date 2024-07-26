@@ -1,3 +1,4 @@
+import React from 'react';
 import { useMutation } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { saveAs } from 'file-saver'
@@ -8,7 +9,7 @@ interface ICSV {
     end: string
 }
 
-export const useDownloadCSV = () => {
+const useDownloadCSV = () => {
   const { isPending, mutate } = useMutation({
     mutationKey: ['applied csv'],
     mutationFn: async (arg:ICSV ) => {
@@ -31,3 +32,5 @@ export const useDownloadCSV = () => {
 
   return { isPending, handleSubmit }
 }
+
+export default useDownloadCSV
