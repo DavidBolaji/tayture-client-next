@@ -1,27 +1,26 @@
-import Button from '@/components/Button/Button'
-import StyledInput from '@/components/Form/NomalInput/StyledInput'
-import { Blog, Categories } from '@prisma/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { Field, Form, Formik, FormikHelpers } from 'formik'
-import React, { useEffect, useState } from 'react'
-import * as Yup from 'yup'
-import BlogBanner from './BlogBanner'
-import { useGlobalContext } from '@/Context/store'
-import { SelectInput } from '@/components/Form/SelectInput/SelectInput'
-import dynamic from 'next/dynamic'
-import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
-import htmlToDraft from 'html-to-draftjs'
-import { ContentState, EditorState, convertToRaw } from 'draft-js'
-import draftToHtml from 'draftjs-to-html'
-import Spinner from '@/components/Spinner/Spinner'
-import { message } from 'antd'
+import Button from '@/components/Button/Button';
+import StyledInput from '@/components/Form/NomalInput/StyledInput';
+import { Blog, Categories } from '@prisma/client';
+import { useQueryClient } from '@tanstack/react-query';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
+import React, { useEffect, useState } from 'react';
+import * as Yup from 'yup';
+import BlogBanner from './BlogBanner';
+import { useGlobalContext } from '@/Context/store';
+import { SelectInput } from '@/components/Form/SelectInput/SelectInput';
+import dynamic from 'next/dynamic';
+import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea';
+import { ContentState, EditorState, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import Spinner from '@/components/Spinner/Spinner';
+import { message } from 'antd';
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
   {
     ssr: false,
-  },
-)
+  }
+);
 
 export const blogSchema = Yup.object().shape({
   title: Yup.string()
@@ -31,63 +30,65 @@ export const blogSchema = Yup.object().shape({
   except: Yup.string()
     .max(30, 'Except cannot be more than 30 characters')
     .required('Except title is required'),
-})
+});
 
 const EditBlogForm: React.FC<{
-  blog: Blog | null
-  updateBlog: (data: Partial<Blog>) => void
+  blog: Blog | null;
+  updateBlog: (data: Partial<Blog>) => void;
 }> = ({ blog, updateBlog }) => {
-  const queryClient = useQueryClient()
-  const { setImg } = useGlobalContext()
-  const categories = queryClient.getQueryData(['allCategory']) as Categories[]
-  const [content, setContent] = useState<string>('')
+  const queryClient = useQueryClient();
+  const { setImg } = useGlobalContext();
+  const categories = queryClient.getQueryData(['allCategory']) as Categories[];
+  const [content, setContent] = useState<string>('');
   const [editorState, setEditorState] = useState<EditorState>(
-    EditorState.createEmpty(),
-  )
-  const { img } = useGlobalContext()
-  const noImage = img.trim().length < 1
+    EditorState.createEmpty()
+  );
+  const { img } = useGlobalContext();
+  const noImage = img.trim().length < 1;
 
   const convertBlogContent = (content: string) => {
-    const cBlock = htmlToDraft(content)
-    const cState = ContentState.createFromBlockArray(cBlock.contentBlocks)
-    const eState = EditorState.createWithContent(cState)
-    setEditorState(eState)
-  }
+    if (typeof window !== 'undefined') {
+      const htmlToDraft = require('html-to-draftjs').default;
+      const cBlock = htmlToDraft(content);
+      const cState = ContentState.createFromBlockArray(cBlock.contentBlocks);
+      const eState = EditorState.createWithContent(cState);
+      setEditorState(eState);
+    }
+  };
 
   useEffect(() => {
     if (blog) {
-      console.log(blog)
-      // setImg(() => blog!.banner)
-      convertBlogContent(blog!.text)
+      console.log(blog);
+      convertBlogContent(blog!.text);
     }
-  }, [blog])
+  }, [blog]);
 
   const onSubmit = (
     values: Partial<Blog>,
-    { resetForm, setSubmitting }: FormikHelpers<Partial<Blog>>,
+    { resetForm, setSubmitting }: FormikHelpers<Partial<Blog>>
   ) => {
-    const editorContent = convertToRaw(editorState.getCurrentContent())
+    const editorContent = convertToRaw(editorState.getCurrentContent());
 
-    const isEmpty = editorContent.blocks.every((b) => b.text === '')
+    const isEmpty = editorContent.blocks.every((b) => b.text === '');
     if (
       !editorContent ||
       !editorContent.blocks ||
       editorContent.blocks.length === 0 ||
       isEmpty
     ) {
-      message.error('Text cannot be empty')
-      setSubmitting(false)
-      return
+      message.error('Text cannot be empty');
+      setSubmitting(false);
+      return;
     }
-    updateBlog({ id: blog?.id, ...values, text: content, banner: img })
+    updateBlog({ id: blog?.id, ...values, text: content, banner: img });
     resetForm({
       values: {
         title: '',
         blogCategoryId: '',
         except: '',
       },
-    })
-  }
+    });
+  };
 
   return (
     <div className="w-full">
@@ -109,7 +110,7 @@ const EditBlogForm: React.FC<{
               <div className="flex justify-center mt-8 mb-2">
                 <BlogBanner />
               </div>
-              <div className='-mb-4'>
+              <div className="-mb-4">
                 <label htmlFor="title" className="ml-1 text-xs">
                   Blog Title
                 </label>
@@ -133,8 +134,8 @@ const EditBlogForm: React.FC<{
                   as={SelectInput}
                   placeholder={'Select Category'}
                   onChange={(e: any) => {
-                    console.log(e)
-                    handleChange(e)
+                    console.log(e);
+                    handleChange(e);
                   }}
                   onBlur={handleBlur}
                 />
@@ -151,20 +152,19 @@ const EditBlogForm: React.FC<{
                   spellCheck="false"
                 />
               </div>
-              <div className=''>
+              <div className="">
                 <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>Text</h3>
                 <div className="border p-2 bg-white mb-10">
-
                   <Editor
                     editorState={editorState}
                     toolbarClassName="toolbarClassName"
                     wrapperClassName="wrapperClassName"
                     editorClassName="editorClassName"
                     onEditorStateChange={(newState) => {
-                      setEditorState(newState)
+                      setEditorState(newState);
                       setContent(
-                        draftToHtml(convertToRaw(newState.getCurrentContent())),
-                      )
+                        draftToHtml(convertToRaw(newState.getCurrentContent()))
+                      );
                     }}
                     toolbar={{
                       options: [
@@ -190,7 +190,6 @@ const EditBlogForm: React.FC<{
             <Button
               disabled={!isValid || noImage || isSubmitting}
               hover={isValid}
-
               render="light"
               bold={false}
               text={isSubmitting ? <Spinner /> : 'Update'}
@@ -201,7 +200,7 @@ const EditBlogForm: React.FC<{
         )}
       </Formik>
     </div>
-  )
-}
+  );
+};
 
-export default EditBlogForm
+export default EditBlogForm;
