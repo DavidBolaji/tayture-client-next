@@ -32,13 +32,16 @@ const JobApplication: React.FC<JobApplicationProps> = ({
         req = await getClientJobs()
       }
 
+      const cur = queryClient.getQueryData(['activeJob'])
+      const cur2 = queryClient.getQueryData(['relatedJob'])
+      const isRelated = queryClient.getQueryData(['isRelated'])
+      const selected = isRelated ? cur2 : cur
       if (router.query.jobz === '1') {
-        const cur = queryClient.getQueryData(['activeJob'])
-        queryClient.setQueryData(['activeJob'], cur)
+        queryClient.setQueryData(['activeJob'], () => selected)
       } else {
         queryClient.setQueryData(
           ['activeJob'],
-          typeof req.data.job[0] === 'undefined' ? {} : req.data.job[0],
+          () => typeof req.data.job[0] === 'undefined' ? {} : selected ?? req.data.job[0],
         )
       } 
       return req.data.job

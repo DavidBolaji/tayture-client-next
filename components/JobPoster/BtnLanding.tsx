@@ -44,7 +44,7 @@ const BtnLanding:React.FC<{related?: boolean}> = ({related = false}) => {
     <div className="my-[24px] ml-1">
       {user ? (
         user?.applied &&
-        user?.applied.map((item) => item.jobId).includes(curId) ? (
+        user?.applied.some((item) => item.jobId === curId) ? (
           <Button
             disabled
             render="dark"
