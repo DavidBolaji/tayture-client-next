@@ -8,6 +8,7 @@ import { getClientJobs, getClientJobsByType } from '@/lib/api/job'
 import { Empty, Skeleton } from 'antd'
 import { cn } from '@/utils/helpers'
 import { useRouter } from 'next/router'
+import { AxiosResponse } from 'axios'
 
 interface JobApplicationProps {
   className?: string
@@ -25,7 +26,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
   const { data, isPending } = useQuery({
     queryKey: ['jobs'],
     queryFn: async () => {
-      let req
+      let req: AxiosResponse<{job: IJobSchDb[]}>
       if (type) {
         req = await getClientJobsByType(type!)
       } else {
