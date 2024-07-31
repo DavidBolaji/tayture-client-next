@@ -27,6 +27,7 @@ const pages = [
   'BuildPage',
   'One',
   'Blog',
+  'Privacy'
 ]
 
 export default function App({

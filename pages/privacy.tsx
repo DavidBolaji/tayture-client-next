@@ -1,9 +1,14 @@
+import { Footer } from '@/components/Footer'
+import HomeLayout from '@/components/layouts/HomeLayout'
+import Wrapper from '@/components/Wrapper/Wrapper'
 import React from 'react'
 
-const PrivacyPage = () => {
+const Privacy = () => {
   return (
+    <div className="bg-ash_200 pt-[50px] h-[90vh] overflow-y-scroll no-s">
+    <Wrapper>
     <div className="">
-      <div className="bg-[#fafafa] p-5 w-[500px] mx-auto shadow-lg">
+      <div className="bg-[#fafafa] px-5 pt-5 pb-20 mb-3 min-w-[280px] mx-auto shadow-lg">
         <h2>Privacy Policy</h2>
         <hr className="my-2" />
         <p className="mb-5">
@@ -287,7 +292,15 @@ const PrivacyPage = () => {
         </p>
       </div>
     </div>
+    </Wrapper>
+    <Footer />
+  </div>
+   
   )
 }
 
-export default PrivacyPage
+Privacy.getLayout = function getLayout(page: React.ReactNode) {
+  return <HomeLayout>{page}</HomeLayout>
+}
+
+export default Privacy
