@@ -43,7 +43,7 @@ const JobRelated: React.FC<JobRelatedProps> = ({
       {data && data.length ? (
         <>
           <h2 className={`mb-3 text-[14px] md:text-2xl ${boldFont.className}`}>
-            Related Job
+            Related Job(s)
           </h2>
           <div className="grid grid-cols-12 md:gap-10">
             <div
