@@ -5,6 +5,8 @@ import JobApplication from '@/components/Dashboard/JobApplication/JobApplication
 import Wrapper from '@/components/Wrapper/Wrapper'
 import Career from './components/Career'
 import { Footer } from '@/components/Footer'
+import JobRelated from '@/components/Dashboard/JobRelated/JobRelated'
+import { boldFont } from '@/assets/fonts/fonts'
 
 const FindJob = () => {
   return (
@@ -15,6 +17,7 @@ const FindJob = () => {
           <div className="mt-20 h-full scale-90">
             <JobApplication progress={false} />
           </div>
+          <JobRelated progress={false} />
           <div className="mb-20">
             <Career />
           </div>

@@ -11,7 +11,7 @@ import JobPoster from '../JobPoster/JobPoster'
 import { usePathname } from 'next/navigation'
 const {useBreakpoint} = Grid
 
-const JobCard: React.FC<{ job: IJobSchDb, copy?: boolean }> = ({ job, copy = false }) => {
+const JobCard: React.FC<{ job: IJobSchDb, copy?: boolean, related?: boolean }> = ({ job, copy = false, related = false }) => {
   const {
     job_title: title,
     school: { sch_lga: lga, sch_city: city, sch_state: state },
@@ -26,10 +26,17 @@ const JobCard: React.FC<{ job: IJobSchDb, copy?: boolean }> = ({ job, copy = fal
   const queryClient = useQueryClient()
   const { count, setCount } = useGlobalContext()
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
+  const data2 = queryClient.getQueryData(['relatedJob']) as IJobSchDb
+  const curId = related ? data2?.job_id : data.job_id
   const path = usePathname()
   const isDashboard = path === '/dashboard/jobs'
   const handleClick = () => {
-    queryClient.setQueryData(['activeJob'], job)
+    if(related) {
+      queryClient.setQueryData(['relatedJob'], job)
+    } else {
+      queryClient.setQueryData(['activeJob'], job)
+    }
+
     setCount((prev) => prev + 1)
     if (screens.xs || (screens.sm && !screens.md)) {
       if(!open) {
@@ -55,7 +62,7 @@ const JobCard: React.FC<{ job: IJobSchDb, copy?: boolean }> = ({ job, copy = fal
       onClick={handleClick}
       key={id}
       className={`transition-all rounded-md cursor-pointer hover:shadow-md p-[24px] border mb-5 ${
-        data?.job_id === id ? 'border-orange' : 'border-ash_400 '
+        curId === id ? 'border-orange' : 'border-ash_400 '
       } ${regularFont.className}`}
     >
       <h2 className={`mb-3 text-[14px] ${boldFont.className}`}>{title}</h2>
