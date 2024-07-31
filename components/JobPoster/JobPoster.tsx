@@ -87,7 +87,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress, related = false }) => {
         </span>
         <span className="text-ash_400">{data2.applied.length} Applicant(s)</span>
       </Space>
-      {isDashboard ? <BtnDashboard /> : <BtnLanding />}
+      {isDashboard ? <BtnDashboard /> : <BtnLanding related />}
       {/* <p className="mb-[32px]">Your profile matches 8 out of 10 of the skill</p> */}
       <h3 className="text-[20px] mb-2 -ml-1">Job Details</h3>
       <div className='space-y-2 mb-4'>
