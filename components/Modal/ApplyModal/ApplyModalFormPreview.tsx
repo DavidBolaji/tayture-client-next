@@ -31,13 +31,15 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
     'jobApplication',
   ]) as UserApply
   const activeJob = queryClient.getQueryData(['activeJob']) as IJobSchDb
+  const isRelated = queryClient.getQueryData(['isRelated'])
+  const relatedJob = queryClient.getQueryData(['relatedJob']) as IJobSchDb
   
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: UserApply) => {
       return await createApplication({
         ...data,
         schoolId: activeJob.school.sch_id,
-        jobId: activeJob.job_id,
+        jobId: isRelated ? relatedJob.job_id : activeJob.job_id,
       })
     },
     onSuccess: async (res) => {

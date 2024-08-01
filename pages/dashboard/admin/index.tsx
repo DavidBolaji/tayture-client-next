@@ -5,6 +5,7 @@ import CategoriesSection from './sections/categories/CategoriesSection'
 import BlogsSection from './sections/blogs/BlogsSection'
 import { Segmented } from 'antd'
 import { AppstoreOutlined, BarsOutlined, UserOutlined } from '@ant-design/icons'
+import AppliedSection from './sections/applied/AppliedSection'
 
 const AdminPage = () => {
   const [path, setPath] = useState('School')
@@ -27,6 +28,7 @@ const AdminPage = () => {
               icon: <AppstoreOutlined />,
             },
             { label: 'Blog', value: 'Blog', icon: <AppstoreOutlined /> },
+            { label: 'Applied', value: 'Applied', icon: <AppstoreOutlined /> },
           ]}
         />
       </div>
@@ -35,6 +37,7 @@ const AdminPage = () => {
         {path === 'Blog' && <BlogsSection />}
         {path === 'User' && <UserSection />}
         {path === 'Category' && <CategoriesSection />}
+        {path === 'Applied' && <AppliedSection />}
       </div>
     </div>
   )

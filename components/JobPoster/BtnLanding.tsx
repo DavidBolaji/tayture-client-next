@@ -6,14 +6,17 @@ import React from 'react'
 import Button from '../Button/Button'
 import { FaCheck } from 'react-icons/fa'
 
-const BtnLanding = () => {
+const BtnLanding:React.FC<{related?: boolean}> = ({related = false}) => {
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData(['user']) as IUser
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
+  const data2 = queryClient.getQueryData(['relatedJob']) as IJobSchDb
+  const curId = related ? data2?.job_id : data?.job_id
 
   const { setUI } = useGlobalContext()
 
   const handleShow = () => {
+    queryClient.setQueryData(['isRelated'], () => related)
     setUI((prev) => {
       return {
         ...prev,
@@ -25,6 +28,7 @@ const BtnLanding = () => {
     })
   }
   const handleShow2 = () => {
+    queryClient.setQueryData(['isRelated'], () => related)
     setUI((prev) => {
       return {
         ...prev,
@@ -40,7 +44,7 @@ const BtnLanding = () => {
     <div className="my-[24px] ml-1">
       {user ? (
         user?.applied &&
-        user?.applied.map((item) => item.jobId).includes(data.job_id) ? (
+        user?.applied.some((item) => item.jobId === curId) ? (
           <Button
             disabled
             render="dark"

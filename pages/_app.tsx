@@ -15,6 +15,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import NextNProgress from 'nextjs-progressbar'
 import HandleUpload from '@/components/Modal/HandleUpload'
 import Whatsapp from '@/components/Whatsapp/Whatsapp'
+import Head from 'next/head'
+import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/react'
 
 const pages = [
   'Home',
@@ -27,6 +30,7 @@ const pages = [
   'BuildPage',
   'One',
   'Blog',
+  'Privacy',
   'SingleBlogTemplate',
 ]
 
@@ -65,6 +69,23 @@ export default function App({
 
   return (
     <TanStackProvider>
+      <Head>
+        {/* <!-- Google tag (gtag.js) --> */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-4PXXQ3NN30"
+        ></script>
+      
+      </Head>
+      <Script id="google-analytics">
+          {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+      
+        gtag('config', 'G-4PXXQ3NN30');
+      `}
+        </Script>
       <GlobalContextProvider>
         <AnimatePresence mode="wait">
           <motion.div
@@ -81,7 +102,8 @@ export default function App({
           >
             <ScrollToTop />
             <NextNProgress color="#FF7517" />
-              {layout}
+            {layout}
+            <Analytics />
             <Whatsapp />
             <HandleError />
             <HandleAttention />

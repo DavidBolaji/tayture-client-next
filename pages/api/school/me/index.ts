@@ -63,8 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const uniqueSchoolArray = Array.from(uniqueSchoolSet).map((school) =>
       JSON.parse(school),
     )
-    console.log(uniqueSchoolArray)
-
+    
     return res.status(200).json({
       message: `Successful`,
       school: uniqueSchoolArray,

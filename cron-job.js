@@ -23,7 +23,6 @@ const sendTextMessage = async (phone, msg) => {
         channel: 'generic',
       },
     )
-
     console.log('SMS sent successfully')
     return result.data
   } catch (error) {
@@ -33,19 +32,21 @@ const sendTextMessage = async (phone, msg) => {
 
 const monitor = new cronitor.Monitor('job-application-message')
 // '*/2 * * * *'
+// '0 20 * * 5'
 
 cron.schedule('0 20 * * 5', async () => {
  if (process.env.NEXT_PUBLIC_RUN_CRONITOR === "true") {
   monitor.ping({ state: 'run' })
   const { subDays, startOfDay, endOfDay } = dat
 
-  const oneWeekAgo = startOfDay(subDays(new Date(), 7))
+  const oneWeekAgo = startOfDay(subDays(new Date(), 8))
   const today = endOfDay(new Date())
 
   try {
     const reqJob = axios.post(`${url}/mail-job/mail`, { oneWeekAgo, today })
     const reqUser = axios.get(`${url}/users/all`)
     const [jobs, users] = await Promise.all([reqJob, reqUser])
+
 
     if (jobs.data.jobs.length > 0) {
       await Promise.all(
@@ -66,4 +67,3 @@ cron.schedule('0 20 * * 5', async () => {
 })
 
 console.log('Cron job setup to run every Friday at 8:00 PM')
-
