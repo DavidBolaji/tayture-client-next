@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import FetchBlogs from '../data/FetchBlogs'
 
 import { BlogTagStyle } from './BlogTagStyle.styles'
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './imgNameDate'
 import LikesCom from './LikesCom'
 
 import Link from 'next/link'

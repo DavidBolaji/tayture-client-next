@@ -136,7 +136,7 @@ function Section2AllItems() {
         </div>
       </div>
 
-      <div className="w-full flex justify-center items-center pt-16">
+      <div className="w-full flex justify-center items-center pt-16 mb-3">
         <Pagination
           total_pages={totalPages}
           currentPage={currentPage}

@@ -15,7 +15,11 @@ const Blog = () => {
         <div className="bg-blog_bg ">
           <Wrapper>
             {/* Search */}
-            <InputWithIcon Search_Arrow="Search" is_sm={true} placeholder = 'Search Blog'/>
+            <InputWithIcon
+              Search_Arrow="Search"
+              is_sm={true}
+              placeholder="Search Blog"
+            />
 
             {/* Hero */}
             <HeroSection />

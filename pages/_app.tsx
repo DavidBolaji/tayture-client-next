@@ -69,15 +69,15 @@ export default function App({
 
   return (
     <TanStackProvider>
-      <Head>
-        {/* <!-- Google tag (gtag.js) --> */}
+      {/* <Head>
+        <!-- Google tag (gtag.js) -->
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-4PXXQ3NN30"
         ></script>
       
-      </Head>
-      <Script id="google-analytics">
+      </Head> */}
+      {/* <Script id="google-analytics">
           {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -85,7 +85,7 @@ export default function App({
       
         gtag('config', 'G-4PXXQ3NN30');
       `}
-        </Script>
+        </Script> */}
       <GlobalContextProvider>
         <AnimatePresence mode="wait">
           <motion.div

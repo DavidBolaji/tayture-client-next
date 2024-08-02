@@ -69,22 +69,47 @@ const checkApplicationStatus = async (
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // check route
   if (req.method !== 'POST')
     return res.status(405).json({ message: 'Method not allowed' })
 
+  // validate field
   const { qual, exp, schoolId, cv, jobId } = req.body
   if (!qual || !exp || !schoolId || !jobId)
     return res
       .status(400)
       .json({ message: 'Validation error all fields are required' })
 
-  try {
-    const jobs = await db.job.findUnique({
-      where: {
-        job_id: jobId,
-      },
-    })
 
+  try {
+     // check if already applied
+  const isAppliedReq = db.applied.findMany({
+    where: {
+      AND: [
+        {
+          jobId: jobId,
+        },
+        {
+          userId: req.authUser?.id,
+        },
+      ],
+    },
+  })
+
+  const jobsReq = db.job.findUnique({
+    where: {
+      job_id: jobId,
+    },
+  })
+
+  const [isApplied, jobs] = await Promise.all([isAppliedReq, jobsReq])
+
+  if (isApplied.length) {
+    return res.status(200).json({
+      message: 'User Applied Already',
+      applied: isApplied[0],
+    })
+  }
     const applied = await db.applied.create({
       data: {
         exp,

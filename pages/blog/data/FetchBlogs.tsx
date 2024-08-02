@@ -65,25 +65,25 @@ function generateUniqueRandomNumbers(
   return randomNumbers
 }
 
-function updateMainArticleForCategory(
-  mockBlogs: BlogPost[],
-  category: string,
-): void {
-  // Filter blog posts with the specified category set to true
-  const categoryBlogs = mockBlogs.filter((blog) => blog[category])
+// function updateMainArticleForCategory(
+//   mockBlogs: BlogPost[],
+//   category: string,
+// ): void {
+//   // Filter blog posts with the specified category set to true
+//   const categoryBlogs = mockBlogs.filter((blog) => blog[category])
 
-  // Find the blog post with the highest number of likes among the categoryBlogs
-  const highestLikesBlog = categoryBlogs.reduce((prevBlog, currentBlog) => {
-    return prevBlog.likes > currentBlog.likes ? prevBlog : currentBlog
-  })
+//   // Find the blog post with the highest number of likes among the categoryBlogs
+//   const highestLikesBlog = categoryBlogs.reduce((prevBlog, currentBlog) => {
+//     return prevBlog.likes > currentBlog.likes ? prevBlog : currentBlog
+//   })
 
-  // Update the is_main_article property of the blog with the highest likes to true in the original mockBlogs array
-  mockBlogs.forEach((blog) => {
-    if (blog.id === highestLikesBlog.id) {
-      blog.is_main_article = true
-    }
-  })
-}
+//   // Update the is_main_article property of the blog with the highest likes to true in the original mockBlogs array
+//   mockBlogs.forEach((blog) => {
+//     if (blog.id === highestLikesBlog.id) {
+//       blog.is_main_article = true
+//     }
+//   })
+// }
 
 const mockBlogs: BlogPost[] = [
   {
@@ -336,8 +336,8 @@ mockBlogs.forEach((blog, index) => {
 })
 
 
-updateMainArticleForCategory(mockBlogs, 'is_k12_centered')
-updateMainArticleForCategory(mockBlogs, 'is_must_read')
+// updateMainArticleForCategory(mockBlogs, 'is_k12_centered')
+// updateMainArticleForCategory(mockBlogs, 'is_must_read')
 
 
 // Function to fetch blogs from the mock database

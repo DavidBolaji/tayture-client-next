@@ -10,10 +10,9 @@ type Props = {
 }
 
 export const BlogTagStyle = styled(BlogTag)<Props>`
-
   & {
-    background-color: ${({bg_color}) => bg_color ? bg_color : '#EAB308' };
-    color: ${({ text_color }) => text_color ? text_color : '#FEF9C3'};
+    background-color: ${({bg_color}) => '#000' };
+    color: ${({ text_color }) => '#FFF'};
     z-index: 11;
     border-radius: 10px;
     font-size: 0.75rem;
