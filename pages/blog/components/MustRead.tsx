@@ -25,9 +25,13 @@ function MustRead() {
         />
         <div className="flex justify-between">
           <nav className="relative flex w-full overflow-x-auto text-sm md:text-base">
-            <NavItem />
+            <NavItem
+              activeButton={''}
+              handleClick={() => {}}
+              categories={[]!}
+            />
           </nav>
-          <button className="flex-shrink-0 relative h-12 inline-flex items-center justify-center rounded-full transition-colors border-transparentbg-black_200 hover:bg-orange bg-black_200 hover:bg-orange text-white text-sm sm:text-base font-medium px-6 hidden md:!flex ">
+          <button className="flex-shrink-0 relative h-12 items-center justify-center rounded-full transition-colors border-transparentbg-black_200  bg-black_200 hover:bg-orange text-white text-sm sm:text-base font-medium px-6 hidden md:!flex ">
             <span>View all</span>
             <HiOutlineArrowRight className="w-6 h-5 ml-3" />
           </button>
@@ -49,12 +53,13 @@ function MustRead() {
               heading_text={leftBlog.title}
               ImgNameDate_bg_color={leftBlog.category_text_hoverBg_color}
               authImgCont_wi_hei="1.75rem"
-              likes_num={`${leftBlog.likes}`}
+              likes_num={leftBlog.likes}
               comments_num={`${leftBlog.comments}`}
               likesCom_bg_color="rgba(249,250,251)"
               img_src={leftBlog.hor_image_src}
               alt_img="Lorem ipsum"
               authImgCont_is_image={false}
+              date={new Date().toISOString()}
             />
           ))}
         </div>
@@ -75,16 +80,17 @@ function MustRead() {
               ImgNameDate_bg_color={centeredPost.category_text_hoverBg_color}
               article_heading={centeredPost.title}
               article_description={centeredPost.content}
-              likes_num={`${centeredPost.likes}`}
+              likes_num={centeredPost.likes}
               comments_num={`${centeredPost.comments}`}
               likesCom_bg_color="rgba(249,250,251)"
               authImgCont_is_image={false}
+              date={new Date().toISOString()}
             />
           )}
         </div>
         {/* right */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-1 md:col-span-3 xl:col-span-1">
-        {leftRightPosts.slice(2, 4).map((leftBlog) => (
+          {leftRightPosts.slice(2, 4).map((leftBlog) => (
             <SmallArticleCardVertical
               key={`${leftBlog.id}`}
               blog_id={leftBlog.id}
@@ -96,12 +102,13 @@ function MustRead() {
               heading_text={leftBlog.title}
               ImgNameDate_bg_color={leftBlog.category_text_hoverBg_color}
               authImgCont_wi_hei="1.75rem"
-              likes_num={`${leftBlog.likes}`}
+              likes_num={leftBlog.likes}
               comments_num={`${leftBlog.comments}`}
               likesCom_bg_color="rgba(249,250,251)"
               img_src={leftBlog.hor_image_src}
               alt_img="Lorem ipsum"
               authImgCont_is_image={false}
+              date={new Date().toISOString()}
             />
           ))}
         </div>

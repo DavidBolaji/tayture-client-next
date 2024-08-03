@@ -30,13 +30,19 @@ const CommentSection = () => {
           `/comment/${router.query.blogId}?page=${pageParam}&limit=${2}`,
         )
         return req.data as {
-          comment: (CommentSchema & { user: User } & { commentLikes: CommentLike[] } & { subcomments: (CommentSchema & { user: User } & { subcomments: any[]})[]})[]
+          comment: (CommentSchema & { user: User } & {
+            commentLikes: CommentLike[]
+          } & {
+            subcomments: (CommentSchema & { user: User } & {
+              subcomments: any[]
+            })[]
+          })[]
           total: number
           nextCursor: any
         }
       },
       initialPageParam: 1,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      getNextPageParam: (lastPage, pages) => lastPage.nextCursor ?? undefined,
       enabled: typeof router.query.blogId !== 'undefined',
     })
 
@@ -64,7 +70,6 @@ const CommentSection = () => {
     const text = formData.get('comment') as string
     mutate({ comment: text, blogId: router.query.blogId as string })
   }
-
 
   return (
     <>
@@ -100,13 +105,13 @@ const CommentSection = () => {
             data?.pages.map((page) =>
               page.comment.map((comment) => (
                 <Comment
-                  parentId={comment.id}
-                  date={comment.createdAt as any}
-                  text={comment.comment}
-                  user={comment.user}
-                  key={comment.id}
-                  subcomments={(comment.subcomments) as any}
-                  likes={comment.commentLikes.length}
+                  parentId={comment?.id}
+                  date={comment?.createdAt as any}
+                  text={comment?.comment}
+                  user={comment?.user}
+                  key={comment?.id}
+                  subcomments={comment?.subcomments as any}
+                  likes={comment?.commentLikes?.length ?? 0}
                 />
               )),
             )}
@@ -120,7 +125,8 @@ const CommentSection = () => {
                 ? 'Loading...'
                 : `See more (${
                     data
-                      ? data?.pages[0]?.total - data?.pages[0]?.comment?.length
+                      ? data?.pages[data.pages.length - 1]?.total -
+                        data.pages.flatMap((page) => page.comment).length
                       : 0
                   } comment(s))`}
             </button>

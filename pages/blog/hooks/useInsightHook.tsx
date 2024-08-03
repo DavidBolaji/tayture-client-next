@@ -17,15 +17,8 @@ const useInsightHook = () => {
     setActiveButton(buttonNumber)
   }
 
-  const reload = () => {
 
-  }
-
-  useEffect(() => {
-    reload()
-  }, [activeButton])
-
-  return { handleButtonClick, categories, activeButton, reload }
+  return { handleButtonClick, categories, activeButton }
 }
 
 export default useInsightHook
