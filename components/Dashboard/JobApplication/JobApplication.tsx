@@ -8,6 +8,7 @@ import { getClientJobs, getClientJobsByType } from '@/lib/api/job'
 import { Empty, Skeleton } from 'antd'
 import { cn } from '@/utils/helpers'
 import { useRouter } from 'next/router'
+import { AxiosResponse } from 'axios'
 
 interface JobApplicationProps {
   className?: string
@@ -25,20 +26,23 @@ const JobApplication: React.FC<JobApplicationProps> = ({
   const { data, isPending } = useQuery({
     queryKey: ['jobs'],
     queryFn: async () => {
-      let req
+      let req: AxiosResponse<{job: IJobSchDb[]}>
       if (type) {
         req = await getClientJobsByType(type!)
       } else {
         req = await getClientJobs()
       }
 
+      const cur = queryClient.getQueryData(['activeJob'])
+      const cur2 = queryClient.getQueryData(['relatedJob'])
+      const isRelated = queryClient.getQueryData(['isRelated'])
+      const selected = isRelated ? cur2 : cur
       if (router.query.jobz === '1') {
-        const cur = queryClient.getQueryData(['activeJob'])
-        queryClient.setQueryData(['activeJob'], cur)
+        queryClient.setQueryData(['activeJob'], () => selected)
       } else {
         queryClient.setQueryData(
           ['activeJob'],
-          typeof req.data.job[0] === 'undefined' ? {} : req.data.job[0],
+          () => typeof req.data.job[0] === 'undefined' ? {} : selected ?? req.data.job[0],
         )
       } 
       return req.data.job

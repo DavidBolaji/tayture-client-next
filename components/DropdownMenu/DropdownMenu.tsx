@@ -1,6 +1,5 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import Link from 'next/link'
 import { regularFont } from '@/assets/fonts/fonts'
 import { useRouter } from 'next/router'
 
@@ -10,11 +9,11 @@ const dataNav = [
     path: '/',
     title: 'Home',
   },
-  // {
-  //   id: 'nav5',
-  //   path: '/calculator',
-  //   title: 'Calculator',
-  // },
+  {
+    id: 'nav5',
+    path: '/blog',
+    title: 'Blog',
+  },
   {
     id: 'nav2',
     path: '/jobs',

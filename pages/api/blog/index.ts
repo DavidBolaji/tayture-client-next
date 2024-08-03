@@ -14,8 +14,6 @@ export default async function handler(
   if (req.method !== 'GET')
     return res.status(405).json({ message: 'Method not allowed' })
 
-  const blog = await db.blog.findMany({
-    
-  })
+  const blog = await db.blog.findMany({})
   res.status(200).json({ message: 'Succesful', blog })
 }

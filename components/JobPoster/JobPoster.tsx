@@ -28,8 +28,10 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress, related = false }) => {
 
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
   const data2 = queryClient.getQueryData(['relatedJob']) as IJobSchDb
+  const isRelated = queryClient.getQueryData(['isRelated']) as boolean
   const user = queryClient.getQueryData(['user']) as IUser
   const prog = queryClient.getQueryData(['profileDetails'])
+  const curId = isRelated ? data2?.job_id : data?.job_id
   const { count, setUI } = useGlobalContext()
   const [reset, setReset] = useState(0)
 
@@ -51,8 +53,8 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress, related = false }) => {
 
   useEffect(() => {
     if (router.query.jobz === '1') {
-      const appliedJobIds = typeof user !== "undefined" ? user?.applied!.flatMap(applied => applied.jobId): [];
-      const isJobApplied = appliedJobIds.some((id: string) => id === data.job_id);
+      const appliedJobIds = typeof user !== "undefined" ? user?.applied?.flatMap(applied => applied.jobId): [];
+      const isJobApplied = appliedJobIds?.some((id: string) => id === curId);
       if (user.validated) {
         if(!isJobApplied) {
           handleShow()
@@ -87,7 +89,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress, related = false }) => {
         </span>
         <span className="text-ash_400">{data2.applied.length} Applicant(s)</span>
       </Space>
-      {isDashboard ? <BtnDashboard /> : <BtnLanding />}
+      {isDashboard ? <BtnDashboard /> : <BtnLanding related />}
       {/* <p className="mb-[32px]">Your profile matches 8 out of 10 of the skill</p> */}
       <h3 className="text-[20px] mb-2 -ml-1">Job Details</h3>
       <div className='space-y-2 mb-4'>

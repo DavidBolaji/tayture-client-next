@@ -2,25 +2,11 @@ import React from 'react'
 import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs'
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 import type { DocumentContext } from 'next/document'
-import Script from 'next/script'
 
 const MyDocument = () => (
   <Html lang="en">
     <Head />
-    {/* <!-- Google tag (gtag.js) --> */}
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-4PXXQ3NN30"
-    ></script>
-    <Script id="google-analytics">
-      {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-      
-        gtag('config', 'G-4PXXQ3NN30');
-      `}
-    </Script>
+
     <body>
       <Main />
       <NextScript />

@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { parseCookies } from 'nookies'
 
@@ -35,7 +36,8 @@ Axios.interceptors.response.use(
     const prevRequest = error?.config;
     if (error?.response?.status === 401) {
       if(window) {
-        window.location.assign('/auth/login'); // Redirect to login page
+        localStorage.clear()
+        window.location.replace('/auth/login'); 
       }
     
     } else if (error?.response?.status === 403 && !prevRequest?.sent) {

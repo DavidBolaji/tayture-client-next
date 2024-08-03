@@ -21,7 +21,7 @@ const CreateBlogForm: React.FC<{ SW: any }> = ({ SW }) => {
   const queryClient = useQueryClient()
   const categories = queryClient.getQueryData(['allCategory']) as Categories[]
   const { img } = useGlobalContext()
-  const noImage = img.trim().length < 1
+  const noImage = img?.trim().length < 1
 
   const onSubmit = (values: Partial<Blog>,
     { resetForm }: FormikHelpers<Partial<Blog>>,
@@ -74,7 +74,7 @@ const CreateBlogForm: React.FC<{ SW: any }> = ({ SW }) => {
                 </label>
                 <Field
                   name={'blogCategoryId'}
-                  option={categories.map((cat) => ({
+                  option={categories?.map((cat) => ({
                     key: cat.id,
                     value: cat.title,
                   }))}

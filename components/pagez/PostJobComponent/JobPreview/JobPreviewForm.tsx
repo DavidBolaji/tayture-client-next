@@ -192,7 +192,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
             </div>
             <div>
               <h3 className="mb-[10px] ml-1 text-black">
-                When is the earliest resumption date for this role
+                When is the application deadline for this role
               </h3>
               <Field
                 name="job_resumption"

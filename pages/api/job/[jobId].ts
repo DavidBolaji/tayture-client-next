@@ -44,9 +44,7 @@ export default async function handler(
     return res.status(405).json({ message: 'Method not allowed' })
 
   if (!req.query.jobId) {
-    return res
-    .status(200)
-    .json({
+    return res.status(200).json({
       message: 'Succesful',
     })
   }
@@ -58,16 +56,16 @@ export default async function handler(
     select: selected,
   })
 
-
-
   const related = await db.job.findMany({
     where: {
+      active: true,
       job_id: {
         not: {
           equals: req.query.jobId as string,
         },
       },
       school: {
+        sch_verified: 1,
         OR: [
           {
             sch_city: job?.school.sch_city,
@@ -81,11 +79,9 @@ export default async function handler(
     select: selected,
   })
 
-  res
-    .status(200)
-    .json({
-      message: 'Succesful',
-      job: job as unknown as IJobSchDb,
-      relatedJob: related?.length ? related : [],
-    })
+  res.status(200).json({
+    message: 'Succesful',
+    job: job as unknown as IJobSchDb,
+    relatedJob: related?.length ? related : [],
+  })
 }

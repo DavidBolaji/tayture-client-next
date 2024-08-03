@@ -93,7 +93,7 @@ const DropdownComponent: React.FC<{
     onSuccess: () => {
       queryClient.clear()
       localStorage.clear()
-      window.location.assign('/auth/login')
+      window.location.replace('/auth/login'); 
     },
   })
 

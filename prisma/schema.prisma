@@ -70,9 +70,10 @@ model User {
   password_reset_expires Int?     @default(0)
   validation_token       String?
 
-  blogs     Blog[]
-  blogLikes Like[]
-  comment   Comment[]
+  blogs       Blog[]
+  blogLikes   Like[]
+  comment     Comment[]
+  commentLike CommentLike[]
 
   summary   Summary?
   work      WorkHistory[]
@@ -198,8 +199,8 @@ model Blog {
   id              String   @id @default(uuid())
   banner          String
   title           String
-  except          String
-  text            String
+  except          String   @db.VarChar(50)
+  text            String   @db.LongText()
   isEditor        Boolean  @default(false)
   updatedIsEditor DateTime
 
@@ -231,16 +232,30 @@ model Like {
   @@index([blogId])
 }
 
+model CommentLike {
+  id        String  @id @default(uuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  commentId String
+  comment   Comment @relation(fields: [commentId], references: [id])
+
+  @@index([userId])
+  @@index([commentId])
+}
+
 model Comment {
-  id      String  @id @default(uuid())
-  comment String
-  active  Boolean @default(true)
+  id       String  @id @default(uuid())
+  comment  String
+  active   Boolean @default(true)
+  parentId String?
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
   blogId String
   blog   Blog   @relation(fields: [blogId], references: [id])
+
+  commentLikes CommentLike[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

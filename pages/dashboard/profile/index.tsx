@@ -10,7 +10,6 @@ import {
 } from '@prisma/client'
 import React from 'react'
 import { parseCookies } from 'nookies'
-import jwt from 'jsonwebtoken'
 import UserCard from './components/card/UserCard'
 import ShareCard from './components/card/ShareCard'
 import PersonalInformationCard from './components/card/PersonalInformationCard'

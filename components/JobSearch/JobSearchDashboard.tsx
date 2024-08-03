@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import debounce from 'lodash/debounce'
 import { Job } from '@prisma/client'
 import Spinner from '../Spinner/Spinner'
+import { CloseOutlined } from '@ant-design/icons'
 
 interface JobSearchProps {
   className?: string
@@ -43,31 +44,15 @@ const JobSearchDashboard: React.FC<JobSearchProps> = ({ className }) => {
     },
   })
 
-  useEffect(() => {
-    if (router.query.find) {
-      Axios.get(`/job/${router.query.find}`)
-        .then((res) => {
-          setVal(res.data.job.job_title)
-          mutate(res.data.job.job_title)
-        })
-        .catch((err) => {
-          message.error((err as Error).message)
-        })
+  const hanleClear = async () => {
+    try {
+      const res = await Axios.get(`/job`)
+      queryClient.setQueryData(['activeJob'], res.data.job[0])
+      queryClient.setQueryData(['jobs'], res.data.job)
+    } catch (err) { 
+      message.error((err as Error).message)
     }
-  }, [router.query, mutate])
-
-  useEffect(() => {
-    if (val.length === 0) {
-      Axios.get(`/job`)
-        .then((res) => {
-          queryClient.setQueryData(['activeJob'], res.data.job[0])
-          queryClient.setQueryData(['jobs'], res.data.job)
-        })
-        .catch((err) => {
-          message.error((err as Error).message)
-        })
-    }
-  }, [val, queryClient, router.query.find])
+  }
 
   const debouncedSearch = useRef(
     debounce((value: string) => mutate(value), 500),
@@ -88,7 +73,7 @@ const JobSearchDashboard: React.FC<JobSearchProps> = ({ className }) => {
           placeholder="Search for a job"
           value={val}
           onChange={(e) => handleSearch(e.target.value)}
-          allowClear
+          allowClear={{ clearIcon: <CloseOutlined onClick={ hanleClear } /> }}
         />
       </div>
       <div

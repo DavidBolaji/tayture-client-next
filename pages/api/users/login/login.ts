@@ -95,7 +95,7 @@ export default async function handler(
 
     return res
       .status(200)
-      .json({ message: 'Signed In!', user: { ...user, pinId } })
+      .json({ message: 'Login Succesfull', user: { ...user, pinId } })
   } catch (error: any) {
     return res.json({ error: error.message })
   }

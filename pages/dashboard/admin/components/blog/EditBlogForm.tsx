@@ -28,7 +28,7 @@ export const blogSchema = Yup.object().shape({
     .required('Blog title is required'),
   blogCategoryId: Yup.string().required('Blog Category is required'),
   except: Yup.string()
-    .max(30, 'Except cannot be more than 30 characters')
+    .max(50, 'Except cannot be more than 50 characters')
     .required('Except title is required'),
 });
 

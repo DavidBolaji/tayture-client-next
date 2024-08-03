@@ -283,3 +283,14 @@ export function userFilterChart(users: User[]) {
     labels,
   };
 }
+
+export const getRandomColor = () => {
+  const colors = ['#FF5733', '#33FF57', '#5733FF', '#FF33E9', '#33E9FF', '#E9FF33', '#333333', '#000000']; // Add your list of colors here
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+};
+
+export const getRandomColor2 = (colors: string[]) => {
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+}

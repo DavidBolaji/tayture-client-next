@@ -25,6 +25,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       // Transform results to the desired structure
       const data = results.map((result) => ({
         fname: result.user.fname,
+        lname: result.user.lname,
         sch_name: result.school.sch_name,
         job_title: result.job.job_title,
         cv: result.cv,
