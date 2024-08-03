@@ -226,7 +226,7 @@ export const getStaticProps = async (ctx: any) => {
 
     return {
       props: { blog, blogs, categories, total_pages, currentPage },
-      revalidate: 10,
+      // revalidate: 10,
     };
   } catch (error) {
     console.error('Error fetching data:', error);
