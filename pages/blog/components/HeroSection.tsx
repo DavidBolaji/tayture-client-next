@@ -1,31 +1,19 @@
-import React, { useState } from 'react'
-import FetchBlogs from '../data/FetchBlogs'
-
+import React from 'react'
 import { BlogTagStyle } from './BlogTagStyle.styles'
-import ImgNameDate from './imgNameDate'
+import ImgNameDate from './ImgNameDate'
 import LikesCom from './LikesCom'
-
 import Link from 'next/link'
 import HeadingDescSB from './singleBlogComponents/HeadingDescSB'
-import { useQuery } from '@tanstack/react-query'
-import { Axios } from '@/request/request'
 import { Blog, Categories, Like } from '@prisma/client'
 import moment from 'moment'
 
-
-function HeroSection() {
-  const {data: currentBlog} = useQuery({
-    queryKey: ['editorPick'],
-    queryFn: async () => {
-      const req = await Axios.get('/blog/editor')
-      return req.data.blog as Blog & {categories: Partial<Categories>, likes: Like[], comment: Comment[]}
-    }
-  })
-
-  console.log(currentBlog)
-  if(!currentBlog) return null
-
-
+const HeroSection: React.FC<{
+  editor: Blog & {
+    categories: Partial<Categories>
+    likes: Like[]
+    comment: Comment[]
+  }
+}> = ({ editor }) => {
   return (
     <div className="relative pt-10 md:py-12 lg:pb-10">
       {/* Heading(Head and Paragraph) */}
@@ -41,10 +29,11 @@ function HeroSection() {
           style={{
             height: '450px',
             borderRadius: '20px',
-            background: `url(${currentBlog?.banner})`,
+            background: `url(${editor?.banner})`,
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
+            backgroundColor: 'grey'
           }}
         ></div>
 
@@ -58,20 +47,20 @@ function HeroSection() {
             }}
           >
             <BlogTagStyle
-              text={currentBlog.categories.title!}
+              text={editor.categories.title!}
               tag_link="#"
               hover_text_color="white"
             />
 
             <h2 className="text-base sm:text-xl lg:text-2xl font-semibold ">
-              <Link href={`blog/${currentBlog.id}`} className="z-2 ">
-                {currentBlog.title}
+              <Link href={`blog/${editor.id}`} className="z-2 ">
+                {editor.title}
               </Link>
             </h2>
 
             <ImgNameDate
               authName={'Tayture'}
-              date={moment(currentBlog.createdAt).format('MMMM DD, YYYY')}
+              date={moment(editor.createdAt).format('MMMM DD, YYYY')}
               enableDash={false}
               isColumn={true}
               bg_color="black"
@@ -80,35 +69,12 @@ function HeroSection() {
             />
 
             <LikesCom
-              likes_num={`${currentBlog.likes.length}`}
-              comments_num={`${currentBlog.comment.length}`}
+              likes_num={`${editor.likes.length}`}
+              comments_num={`${editor.comment.length}`}
               bg_color="rgba(249,250,251)"
+              hover={false}
             />
           </div>
-
-          {/* Back and Next Btn Cont */}
-          {/* <div className="p-4 sm:pt-8 sm:px-10 z-20">
-            <div className="NextPrev relative flex items-center text-slate-500">
-              <button
-                className={`${
-                  activate ? 'border-2' : ''
-                } w-11 h-11 text-xl mr-2 border-orange rounded-full flex items-center justify-center text-neutral-500 transition-all`}
-                onMouseOver={() => updateActivate(true)}
-                onClick={prevBlog}
-              >
-                <HiArrowLongLeft className="w-5 h-5" />
-              </button>
-              <button
-                className={`${
-                  activate ? '' : 'border-2'
-                } w-11 h-11 text-xl  border-orange rounded-full flex items-center justify-center text-neutral-500 transition-all`}
-                onMouseOver={() => updateActivate(false)}
-                onClick={nextBlog}
-              >
-                <HiArrowLongRight className="w-5 h-5" />
-              </button>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>

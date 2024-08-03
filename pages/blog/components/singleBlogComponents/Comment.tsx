@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import NameDate from './NameDate'
 import SubMenuComment from './SubMenuComment'
 import LikeAndReply from './LikeAndReply'
-import { Comment as CommentSchema, User } from '@prisma/client'
+import { CommentLike, Comment as CommentSchema, User } from '@prisma/client'
 import moment from 'moment'
 import Button from '@/components/Button/Button'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -13,7 +13,7 @@ import Spinner from '@/components/Spinner/Spinner'
 import LoginForm from '@/pages/auth/LoginForm/LoginForm'
 import { Modal } from 'antd'
 
-type SubComments = (CommentSchema & { user: User } & { subcomments: any })[]
+type SubComments = (CommentSchema & { user: User } & { commentLikes: CommentLike[] } & { subcomments: any })[]
 
 const Comment: React.FC<{
   user: User
@@ -21,7 +21,9 @@ const Comment: React.FC<{
   text: string
   parentId: string
   subcomments: SubComments
-}> = ({ user: { fname, lname }, date, text, parentId, subcomments }) => {
+  likes:number
+}> = ({ user: { fname, lname }, date, text, parentId, subcomments, likes }) => {
+  const [like, setLikes] = useState(likes);
   const queryClient = useQueryClient()
   const router = useRouter()
   const [replying, setReplying] = useState(false) // State to manage reply mode
@@ -47,7 +49,7 @@ const Comment: React.FC<{
 
   const handleReply = () => {
     const user = queryClient.getQueryData(['user']) as User
-    if(!user.id) {
+    if(!user?.id) {
       return setModal(true)
     }
     mutate({
@@ -76,7 +78,7 @@ const Comment: React.FC<{
           {text}
         </span>
         {/* like and reply */}
-        <LikeAndReply like_num={14} showReply={toggleReply} />
+        <LikeAndReply like_num={like} showReply={toggleReply} commentId={parentId} update={(val) => setLikes(val)} />
 
         {subcomments &&
           subcomments.map((subcomment) => (
@@ -87,6 +89,7 @@ const Comment: React.FC<{
               user={subcomment.user}
               key={subcomment.id}
               subcomments={subcomment.subcomments}
+              likes={subcomment.commentLikes.length}
             />
           ))}
 

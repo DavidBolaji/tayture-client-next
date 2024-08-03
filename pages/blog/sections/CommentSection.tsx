@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { Axios } from '@/request/request'
-import { Comment as CommentSchema, User } from '@prisma/client'
+import { CommentLike, Comment as CommentSchema, User } from '@prisma/client'
 import { AxiosResponse } from 'axios'
 import { useGlobalContext } from '@/Context/store'
 import Spinner from '@/components/Spinner/Spinner'
@@ -22,7 +22,7 @@ const CommentSection = () => {
   const { setMessage } = useGlobalContext()
   const [text, setText] = useState('')
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
       queryKey: ['allComments', router.query.blogId],
       queryFn: async ({ pageParam }) => {
@@ -30,11 +30,7 @@ const CommentSection = () => {
           `/comment/${router.query.blogId}?page=${pageParam}&limit=${2}`,
         )
         return req.data as {
-          comment: (CommentSchema & { user: User } & {
-            subcomments: (CommentSchema & { user: User } & {
-              subcomments: any[]
-            })[]
-          })[]
+          comment: (CommentSchema & { user: User } & { commentLikes: CommentLike[] } & { subcomments: (CommentSchema & { user: User } & { subcomments: any[]})[]})[]
           total: number
           nextCursor: any
         }
@@ -54,19 +50,21 @@ const CommentSection = () => {
         queryKey: ['allComments', router.query.blogId],
       })
       setMessage(() => res.data.message)
+      router.replace(router.asPath)
     },
   })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const user = queryClient.getQueryData(['user']) as User
-    if (!user.id) {
+    if (!user?.id) {
       return setModal(true)
     }
     const formData = new FormData(e.currentTarget)
     const text = formData.get('comment') as string
     mutate({ comment: text, blogId: router.query.blogId as string })
   }
+
 
   return (
     <>
@@ -107,7 +105,8 @@ const CommentSection = () => {
                   text={comment.comment}
                   user={comment.user}
                   key={comment.id}
-                  subcomments={comment.subcomments}
+                  subcomments={(comment.subcomments) as any}
+                  likes={comment.commentLikes.length}
                 />
               )),
             )}

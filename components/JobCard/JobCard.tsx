@@ -31,7 +31,7 @@ const JobCard: React.FC<{
   const { count, setCount } = useGlobalContext()
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
   const data2 = queryClient.getQueryData(['relatedJob']) as IJobSchDb
-  const curId = related ? data2?.job_id : data.job_id
+  const curId = related ? data2?.job_id : data?.job_id
   const path = usePathname()
   const isDashboard = path === '/dashboard/jobs'
   const handleClick = () => {

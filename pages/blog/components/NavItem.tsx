@@ -1,24 +1,14 @@
-import { Axios } from '@/request/request'
-import { Categories } from '@prisma/client'
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { Categories } from '@prisma/client';
+import useInsightHook from '../hooks/useInsightHook'
 
-interface NavItemProps {}
+interface NavItemProps {
+  activeButton: string;
+  handleClick: (arg: string) => void;
+  categories: Categories[]
+}
 
-const NavItem = ({}: NavItemProps) => {
-  const [activeButton, setActiveButton] = useState('all')
-  const { data: categories } = useQuery({
-    queryKey: ['allCategory'],
-    queryFn: async () => {
-      const req = await Axios.get('/categories')
-      return req.data.category as Categories[]
-    },
-  })
-
-  const handleButtonClick = (buttonNumber: any) => {
-    setActiveButton(buttonNumber)
-  }
-
+const NavItem:React.FC<NavItemProps> = ({activeButton, handleClick, categories}) => {
+ 
   return (
     <ul className="flex  sm:space-x-2 pb-6">
       <li className="relative flex-shrink-0">
@@ -28,7 +18,7 @@ const NavItem = ({}: NavItemProps) => {
               ? 'bg-black text-white'
               : 'hover:bg-neutral-100 hover:text-neutral-900'
           }`}
-          onClick={() => handleButtonClick('all')}
+          onClick={() => handleClick('all')}
         >
           All Items
         </button>
@@ -42,7 +32,7 @@ const NavItem = ({}: NavItemProps) => {
                   ? 'bg-black text-white'
                   : 'hover:bg-neutral-100 hover:text-neutral-900'
               }`}
-              onClick={() => handleButtonClick(category.id)}
+              onClick={() => handleClick(category.id)}
             >
               {category.title}
             </button>

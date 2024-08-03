@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { AxiosResponse } from 'axios'
 import Spinner from '@/components/Spinner/Spinner'
+import { useParams, usePathname } from 'next/navigation'
 
 const AllBlogSection: React.FC<{
   blogs: (Blog & { categories: Categories } & {
@@ -21,16 +22,18 @@ const AllBlogSection: React.FC<{
   total_pages: number
   currentPage: number
 }> = ({ blogs, total_pages, currentPage }) => {
-  const [allBlogs, setAllBlogs] = useState(blogs)
   const [allPage, setAllPage] = useState(currentPage)
   const divRef = useRef<null | HTMLDivElement>(null)
+  const params = useParams()
+
 
   const { isPending, mutate } = useMutation({
     mutationFn: async (page: number) => {
-      return await Axios.get(`/blog/all?page=${page}`)
+      const res = await Axios.get(`/blog/all?page=${page}&except=${params?.blogId}`)
+      return res.data.blogs
+
     },
     onSuccess: (res: AxiosResponse) => {
-      setAllBlogs(res.data.blogs)
       divRef.current?.scrollIntoView({
         behavior: 'smooth'
       })
@@ -53,7 +56,8 @@ const AllBlogSection: React.FC<{
           {isPending ? (
             <Spinner />
           ) : (
-            allBlogs.map(
+            //@ts-ignore
+             (blogs)?.map(
               (
                 blog: Blog & { categories: Categories } & {
                   likes: Like[]
@@ -72,7 +76,7 @@ const AllBlogSection: React.FC<{
                   heading_text={blog.title}
                   ImgNameDate_bg_color={getRandomColor()}
                   authImgCont_wi_hei="1.75rem"
-                  likes_num={`${blog.likes.length}`}
+                  likes_num={blog.likes.length}
                   comments_num={`${blog.comment.length}`}
                   likesCom_bg_color="rgba(249,250,251)"
                   img_src={blog.banner}

@@ -16,7 +16,7 @@ interface SmallArticleCardProps {
   description?: string
   ImgNameDate_bg_color: string
   authImgCont_wi_hei: string
-  likes_num: string
+  likes_num: number
   comments_num: string
   likesCom_bg_color: string
   img_src: string
@@ -106,6 +106,7 @@ const SmallArticleCard = ({
             likes_num={likes_num}
             comments_num={comments_num}
             bg_color={likesCom_bg_color}
+            hover={false}
           />
         </div>
       </div>

@@ -1,8 +1,10 @@
+"use client"
 import React from 'react'
 import styled from '@emotion/styled'
 import Image from 'next/image'
 import { BlogTagStyle } from './BlogTagStyle.styles'
 import ImgNameDate from './ImgNameDate'
+import { useRouter } from 'next/router'
 
 interface ArticlesCatCardProps {
   rank?: string
@@ -16,6 +18,7 @@ interface ArticlesCatCardProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
+  id?: string
 }
 
 const ArticlesCatCardCont = styled.div`
@@ -63,28 +66,31 @@ const ArticlesCatCard = ({
   authImgCont_is_image,
   authImgCont_imageSrc,
   authImgCont_altImage,
+  id
 }: ArticlesCatCardProps) => {
+  const router = useRouter()
   return (
     <ArticlesCatCardCont className="relative inline-block px-2 xl:px-4 whitespace-normal">
-      <a className="flex flex-col">
+      <div className="flex flex-col hover:cursor-pointer"
+      onClick={() => router.push(`blog/${id}`)}
+      >
         {/* Image and Rank Cont */}
         <div className="flex-shrink-0 relative w-full  aspect-w-7 aspect-h-5 rounded-3xl overflow-hidden group">
-          
           <ImgCont
             bg_image_url={bg_image_url}
             className="bg-cover object-cover rounded-2xl w-full p-[0.75rem]  relative"
           >
             <Image
-            layout='fill'
-            src={bg_image_url}
-            alt={category}
-            className=''
+              layout="fill"
+              src={bg_image_url}
+              alt={category}
+              className=""
             />
             <BlogTagStyle
               text={rank}
               bg_color={bg_color_rank}
               text_color={text_color_rank}
-              className='absolute'
+              className="absolute"
             />
           </ImgCont>
         </div>
@@ -103,7 +109,7 @@ const ArticlesCatCard = ({
             altImage={authImgCont_altImage}
           />
         </div>
-      </a>
+      </div>
     </ArticlesCatCardCont>
   )
 }

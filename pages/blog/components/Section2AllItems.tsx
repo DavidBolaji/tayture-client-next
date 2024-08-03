@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import MainArticleCard from './MainArticleCard'
 import SmallArticleCard from './SmallArticleCard'
 import SectionCont from './helpers/SectionCont'
@@ -10,29 +10,32 @@ import { Axios } from '@/request/request'
 import { Blog, Categories, Comment, Like } from '@prisma/client'
 import { getRandomColor2 } from '@/utils/helpers'
 import moment from 'moment'
+import useInsightHook from '../hooks/useInsightHook'
 
 const PostsPerPage = 4
+const cList = [
+  '#FF5733',
+  '#33FF57',
+  '#5733FF',
+  '#FF33E9',
+  '#33E9FF',
+  '#E9FF33',
+  '#333333',
+  '#000000',
+]
+const txt = '#fff'
 
 function Section2AllItems() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const cList = [
-    '#FF5733',
-    '#33FF57',
-    '#5733FF',
-    '#FF33E9',
-    '#33E9FF',
-    '#E9FF33',
-    '#333333',
-    '#000000',
-  ]
-  const txt = '#fff'
+  const { handleButtonClick, categories, activeButton } = useInsightHook()
+ 
   const divRef = useRef<null | HTMLDivElement>(null)
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['insightBlog', currentPage],
+    queryKey: ['insightBlog', currentPage, activeButton],
     queryFn: async () => {
-      const response = await Axios.get(`/blog/all?page=${currentPage}`)
+      const response = await Axios.get(`/blog/all?page=${currentPage}&categoryId=${activeButton}`)
       setTotalPages(response.data.totalPages)
       return response.data
     },
@@ -53,6 +56,7 @@ function Section2AllItems() {
 
   const blogs = data?.blogs ?? []
 
+
   return (
     <SectionCont bg_color="none">
       <div className="flex flex-col mb-8 relative" ref={divRef}>
@@ -65,7 +69,11 @@ function Section2AllItems() {
         {/* Buttons for Categories */}
         <div className="flex justify-between">
           <nav className="relative flex w-full overflow-x-auto text-sm md:text-base">
-            <NavItem />
+            <NavItem
+            activeButton={activeButton}
+            handleClick={handleButtonClick}
+            categories={categories!}
+            />
           </nav>
         </div>
       </div>
@@ -93,7 +101,7 @@ function Section2AllItems() {
                 ImgNameDate_bg_color={getRandomColor2(cList)}
                 article_heading={blog.title}
                 article_description={blog.except}
-                likes_num={`${blog?.likes?.length ?? 0}`}
+                likes_num={blog.likes.length}
                 comments_num={`${blog?.comment?.length ?? 0}`}
                 likesCom_bg_color="rgba(249,250,251)"
                 authImgCont_is_image={false}
@@ -104,7 +112,7 @@ function Section2AllItems() {
         <div className="grid gap-6 md:gap-8">
           {blogs.map(
             (
-              blog: Blog & { categories: Categories } & { like: Like[] } & {
+              blog: Blog & { categories: Categories } & { likes: Like[] } & {
                 comment: Comment[]
               },
               idx: number,
@@ -121,7 +129,7 @@ function Section2AllItems() {
                   heading_text={blog.title}
                   ImgNameDate_bg_color={getRandomColor2(cList)}
                   authImgCont_wi_hei="1.75rem"
-                  likes_num={`${blog?.like?.length ?? 0}`}
+                  likes_num={blog.likes?.length ?? 0}
                   comments_num={`${blog?.comment?.length ?? 0}`}
                   likesCom_bg_color="rgba(249,250,251)"
                   img_src={blog.banner}

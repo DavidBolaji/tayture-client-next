@@ -17,7 +17,7 @@ interface MainArticleCardProps {
   tag_hover_text_color: string
   article_heading: string
   article_description: string
-  likes_num: string 
+  likes_num: number
   comments_num: string  
   likesCom_bg_color: string
   authImgCont_wi_hei: string
@@ -109,7 +109,7 @@ const MainArticleCard = ({
       <div className="my-5 border-t border-neutral-200 dark:border-neutral-700"></div>
 
       {/* Likes and Comment */}
-      <LikesCom likes_num={likes_num} comments_num={comments_num} bg_color={likesCom_bg_color}/>
+      <LikesCom likes_num={likes_num} comments_num={comments_num} bg_color={likesCom_bg_color} hover={false} />
     </div>
   )
 }

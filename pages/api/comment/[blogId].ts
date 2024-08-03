@@ -25,6 +25,7 @@ async function fetchSubcomments(db: any, parentId: string): Promise<CommentWithS
           lname: true,
         },
       },
+      commentLikes: true
     },
     orderBy: { createdAt: 'asc' },
   });
@@ -66,6 +67,7 @@ export default async function handler(
                 lname: true,
               },
             },
+            commentLikes: true
           },
           take: pageSize,
           skip: (page - 1) * pageSize, // Calculate skipping based on page and page size

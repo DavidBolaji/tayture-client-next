@@ -20,11 +20,12 @@ import { Modal } from 'antd'
 import LoginForm from '@/pages/auth/LoginForm/LoginForm'
 
 interface LikesComProps {
-  likes_num: string
+  likes_num: number
   comments_num: string
   bg_color: string
   is_share?: boolean
   update?: (like: number) => void
+  hover?: boolean
 }
 
 const LikesComCont = styled.div<Partial<LikesComProps>>`
@@ -57,8 +58,8 @@ const LikesComCont = styled.div<Partial<LikesComProps>>`
 
   & button.likeBtn:hover,
   & button p:hover {
-    color: rgb(225, 29, 72);
-    background-color: rgb(255, 241, 242);
+    color:  ${({ hover }) => hover ? "rgb(225, 29, 72)" : ""};
+    background-color:  ${({ hover }) => hover ? "rgb(255, 241, 242)" : ""};
   }
 
   & .comBtn {
@@ -67,8 +68,8 @@ const LikesComCont = styled.div<Partial<LikesComProps>>`
   }
 
   & .comBtn:hover {
-    color: rgb(13, 148, 136);
-    background-color: rgb(240, 253, 250);
+    color:  ${({ hover }) => hover ? "rgb(13, 148, 136)" : ""};
+    background-color: ${({ hover }) => hover ? "rgb(240, 253, 250)" : ""};
   }
 
   & p {
@@ -82,6 +83,7 @@ const LikesCom = ({
   comments_num,
   bg_color,
   is_share,
+  hover = true,
   update
 }: LikesComProps) => {
   const router = useRouter()
@@ -89,6 +91,7 @@ const LikesCom = ({
  
   const [modal, setModal] = useState(false)
   const queryClient = useQueryClient()
+
 
   const { mutate } = useMutation({
     mutationFn: async (blogId: string) => {
@@ -98,13 +101,23 @@ const LikesCom = ({
       const more = +likes_num + 1;
       const less = +likes_num > 0 ? +likes_num - 1 : +likes_num
       if (res.data.message === 'Liked') {
+        console.log('[ENTERED]')
         update && update(more)
-        console.log(more)
         return
       }
       update && update(less)
     },
+    onError: (error) => {
+      console.log(error.message)
+    }
   })
+
+  const scrollToComment = () => {
+    const comment = document.getElementById('comment')
+    comment?.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
 
 
   function handleShareBtnClicked() {
@@ -119,10 +132,10 @@ const LikesCom = ({
     mutate(router.query.blogId as string)
   }
   return (
-    <LikesComCont bg_color={bg_color}>
+    <LikesComCont bg_color={bg_color} hover={hover}>
       <div className="cont likesCont">
         <button
-          onClick={handleLike}
+          onClick={() => hover ? handleLike() : {}}
           type="button"
           className="likeBtn text-[rgba(55,65,81)]"
         >
@@ -132,12 +145,7 @@ const LikesCom = ({
       </div>
       <div className="cont comCont">
         <a
-          onClick={() => {
-            const comment = document.getElementById('comment')
-            comment?.scrollIntoView({
-              behavior: 'smooth',
-            })
-          }}
+          onClick={scrollToComment}
           href="#"
           className="comBtn text-[rgba(55,65,81)]"
         >

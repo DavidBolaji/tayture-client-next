@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React from 'react'
 import { BlogTagStyle } from './BlogTagStyle.styles'
 
@@ -18,7 +18,7 @@ interface SmallArticleCardVerticalProps {
   heading_text: string
   ImgNameDate_bg_color: string
   authImgCont_wi_hei: string
-  likes_num: string
+  likes_num: number
   comments_num: string
   likesCom_bg_color: string
   img_src: string
@@ -48,20 +48,23 @@ const SmallArticleCardVertical = ({
   authImgCont_imageSrc,
   authImgCont_altImage,
   blog_id,
-  date
+  date,
 }: SmallArticleCardVerticalProps) => {
   const router = useRouter()
   return (
     <div className="SmallArticleCardVertical relative flex flex-col group rounded-3xl overflow-hidden bg-white dark:bg-neutral-900 h-full cursor-pointer">
-      <div onClick={async () => {
-        const h = document.getElementById('sb')
-        h!.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        })
-        // await Axios.put(`/blog/click/${blog_id}`)
-        router.push(`/blog/${blog_id}`)
-        }}   className="absolute z-10 inset-0"></div>
+      <div
+        onClick={async () => {
+          const h = document.getElementById('sb')
+          h!.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          })
+          // await Axios.put(`/blog/click/${blog_id}`)
+          router.push(`/blog/${blog_id}`)
+        }}
+        className="absolute z-10 inset-0"
+      />
       {/* image */}
       <div className="block flex-shrink-0 relative w-full rounded-t-3xl overflow-hidden z-10 aspect-w-5 aspect-h-3">
         <div>
@@ -70,7 +73,7 @@ const SmallArticleCardVertical = ({
               src={img_src}
               alt={alt_img}
               priority
-              layout='fill'
+              layout="fill"
               className="object-cover w-full h-full z-1"
               sizes="(max-width: 600px) 480px, 800px"
             />
@@ -117,6 +120,7 @@ const SmallArticleCardVertical = ({
             likes_num={likes_num}
             comments_num={comments_num}
             bg_color={likesCom_bg_color}
+            hover={false}
           />
         </div>
       </div>
