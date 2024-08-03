@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './NameDate'
 import LikesCom from './LikesCom'
 import Image from 'next/image'
 import Link from 'next/link'

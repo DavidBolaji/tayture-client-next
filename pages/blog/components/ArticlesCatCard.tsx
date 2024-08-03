@@ -3,7 +3,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import Image from 'next/image'
 
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './NameDate'
 import { useRouter } from 'next/router'
 import BlogTag from './BlogTag'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './NameDate'
 import FetchBlogs from '../data/FetchBlogs';
 
 const blogs = FetchBlogs()

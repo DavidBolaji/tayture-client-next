@@ -4,7 +4,7 @@ import React from 'react'
 import LikesCom from './LikesCom'
 import Image from 'next/image'
 //@ts-ignore
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './NameDate'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import BlogTag from './BlogTag'

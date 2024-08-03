@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './NameDate'
 import LikesCom from './LikesCom'
 import Link from 'next/link'
 import HeadingDescSB from './singleBlogComponents/HeadingDescSB'

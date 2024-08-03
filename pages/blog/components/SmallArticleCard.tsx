@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './NameDate'
 import LikesCom from './LikesCom'
 import { useRouter } from 'next/router'
 

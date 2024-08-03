@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import HeadingDescSB from './components/singleBlogComponents/HeadingDescSB';
 import Wrapper from '@/components/Wrapper/Wrapper';
 import HomeLayout from '@/components/layouts/HomeLayout';
-import NewsletterSection from './components/Newsletter/NewsletterSection';
+// import NewsletterSection from './components/Newsletter/NewsletterSection';
 import { Footer } from '@/components/Footer';
 import Image from 'next/image';
 import { Axios } from '@/request/request';
 import { Blog, Categories, Like } from '@prisma/client';
 import { getRandomColor } from '@/utils/helpers';
-import ImgNameDate from './components/ImgNameDate';
+import ImgNameDate from './components/NameDate';
 import moment from 'moment';
 import RenderText from './components/RenderText';
 import CategoriesSection from './sections/CategoriesSection';
@@ -20,7 +20,7 @@ import BlogLikeComponent from './sections/BlogLikeComponent';
 
 import styled from '@emotion/styled'
 import BlogTag from './components/BlogTag';
-
+// ./components/ImgNameDate
 
 type Props = {
   bg_color?: string
