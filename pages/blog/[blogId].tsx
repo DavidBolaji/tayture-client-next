@@ -53,10 +53,7 @@ export const BlogTagStyle = styled(BlogTag)<Props>`
 
 function SingleBlogTemplate({
   blog,
-  blogs,
   categories,
-  total_pages,
-  currentPage,
 }: {
   blog: Blog & { categories: Categories } & { likes: Like[] } & {
     comment: Comment[]
@@ -68,12 +65,12 @@ function SingleBlogTemplate({
   total_pages: number
   currentPage: number
 }) {
-  const [likes, setLikes] = useState(blog.likes.length);
-  const [comments, setComments] = useState(blog.comment.length);
+  const [likes, setLikes] = useState(blog?.likes?.length ?? 0);
+  const [comments, setComments] = useState(blog?.comment?.length ?? 0);
 
   return (
     <>
-      <Meta imageUrl={blog.banner} title={blog.title} desc={blog.except} />
+      <Meta imageUrl={blog?.banner} title={blog?.title} desc={blog?.except} />
       <div className="bg-blog_bg h-[90vh] overflow-y-scroll no-s" id="sb">
         <div className="bg-blog_bg">
           <Wrapper>
@@ -98,7 +95,7 @@ function SingleBlogTemplate({
 
                    
                       <HeadingDescSB
-                        heading={blog.title}
+                        heading={blog?.title}
                         description={blog?.except}
                       />
 
@@ -110,7 +107,7 @@ function SingleBlogTemplate({
                        
                         <ImgNameDate
                           authName="Tayture"
-                          date={moment(blog.createdAt).format('MMM DD YYYY')}
+                          date={moment(blog?.createdAt).format('MMM DD YYYY')}
                           enableDash={false}
                           isColumn={true}
                           bg_color="#EAB308"
@@ -138,7 +135,7 @@ function SingleBlogTemplate({
               <div className="container my-10 sm:my-12">
                 <Image
                   priority
-                  src={blog.banner}
+                  src={blog?.banner}
                   width="1060"
                   height="750"
                   alt="single"
@@ -154,7 +151,7 @@ function SingleBlogTemplate({
             <div className="relative">
               <div className="prose lg:prose-lg !max-w-screen-md mx-auto text-base font-thin leading-loose">
                 <p className="py-5">
-                  <RenderText text={blog.text} />
+                  <RenderText text={blog?.text} />
                 </p>
               </div>
 
@@ -162,7 +159,7 @@ function SingleBlogTemplate({
                 
                 <ImgNameDate
                   authName="Tayture"
-                  date={moment(blog.createdAt).format('MMM DD YYYY')}
+                  date={moment(blog?.createdAt).format('MMM DD YYYY')}
                   enableDash={false}
                   isColumn={true}
                   bg_color="#EAB308"
@@ -192,11 +189,7 @@ function SingleBlogTemplate({
               <CommentSection />
             </div>
 
-            <AllBlogSection
-              blogs={blogs}
-              total_pages={total_pages}
-              currentPage={currentPage}
-            />
+            <AllBlogSection />
 
             {/* <NewsletterSection /> */}
           </Wrapper>
@@ -219,13 +212,10 @@ export const getStaticProps = async (ctx: any) => {
     ]);
 
     const blog = res.data.blog;
-    const blogs = res.data.blogs;
-    const total_pages = res.data.total_pages;
-    const currentPage = res.data.currentPage;
     const categories = res2.data.category;
 
     return {
-      props: { blog, blogs, categories, total_pages, currentPage },
+      props: { blog, categories },
       // revalidate: 10,
     };
   } catch (error) {
