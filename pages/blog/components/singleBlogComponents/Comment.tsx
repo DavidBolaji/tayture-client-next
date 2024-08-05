@@ -1,6 +1,6 @@
+"use client"
 import React, { useState } from 'react'
 import NameDate from './NameDate'
-import SubMenuComment from './SubMenuComment'
 import LikeAndReply from './LikeAndReply'
 import { CommentLike, Comment as CommentSchema, User } from '@prisma/client'
 import moment from 'moment'

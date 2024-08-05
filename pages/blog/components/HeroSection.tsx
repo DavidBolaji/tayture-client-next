@@ -82,20 +82,20 @@ const HeroSection: React.FC<{
               }}
             >
               <BlogTagStyle
-                text={editor.categories.title!}
+                text={editor?.categories?.title!}
                 tag_link="#"
                 hover_text_color="white"
               />
 
               <h2 className="text-base sm:text-xl lg:text-2xl font-semibold ">
-                <Link href={`blog/${editor.id}`} className="z-2 ">
-                  {editor.title}
+                <Link href={`blog/${editor?.id}`} className="z-2 ">
+                  {editor?.title}
                 </Link>
               </h2>
 
               <ImgNameDate
                 authName={'Tayture'}
-                date={moment(editor.createdAt).format('MMMM DD, YYYY')}
+                date={moment(editor?.createdAt).format('MMMM DD, YYYY')}
                 enableDash={false}
                 isColumn={true}
                 bg_color="black"
@@ -104,8 +104,8 @@ const HeroSection: React.FC<{
               />
 
               <LikesCom
-                likes_num={editor.likes.length}
-                comments_num={`${editor.comment.length}`}
+                likes_num={editor?.likes?.length}
+                comments_num={`${editor?.comment?.length}`}
                 bg_color="rgba(249,250,251)"
                 hover={false}
               />

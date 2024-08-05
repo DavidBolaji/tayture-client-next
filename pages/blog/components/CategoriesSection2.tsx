@@ -2,7 +2,7 @@ import React from 'react'
 import ArticlesCatCard from './ArticlesCatCard'
 import { getRandomColor } from '@/utils/helpers'
 import { Blog, Categories } from '@prisma/client'
-import Link from 'next/link'
+
 
 const CategoriesSection2: React.FC<{
   trending: (Blog & {
