@@ -27,7 +27,7 @@ async function fetchSubcomments(db: any, parentId: string): Promise<CommentWithS
       },
       commentLikes: true
     },
-    orderBy: { createdAt: 'asc' },
+    orderBy: { createdAt: 'desc' },
   });
 
   const subcommentsWithSubcomments: CommentWithSubcomments[] = [];
@@ -71,7 +71,7 @@ export default async function handler(
           },
           take: pageSize,
           skip: (page - 1) * pageSize, // Calculate skipping based on page and page size
-          orderBy: { createdAt: 'asc' }, // Order by creation time to ensure consistency
+          orderBy: { createdAt: 'desc' }, // Order by creation time to ensure consistency
         })
 
         const total = await db.comment.count({
@@ -91,13 +91,12 @@ export default async function handler(
           commentsWithSubcomments.push(commentWithSubcomments);
         }
 
-        let nextCursor: number | null = null; // Initialize nextCursor
+        let nextCursor: number | null = null;
 
-        if (commentsWithSubcomments.length === pageSize) {
-          // If number of comments fetched equals page size, there might be more comments
-          nextCursor = page + 1; // Set next cursor to the timestamp of last comment
+        if ((page - 1) * pageSize + commentsWithSubcomments.length < total) {
+          nextCursor = page + 1;
         }
-
+      
         return { comment: commentsWithSubcomments, total, nextCursor }
       },
     )
@@ -113,3 +112,13 @@ export default async function handler(
     res.status(500).json({ message: 'Internal Server Error' })
   }
 }
+
+
+
+// if (page * pageSize < total) {
+//   nextCursor = page + 1;
+// }
+// if (commentsWithSubcomments.length === pageSize) {
+//   // If number of comments fetched equals page size, there might be more comments
+//   nextCursor = page + 1; // Set next cursor to the timestamp of last comment
+// }

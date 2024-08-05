@@ -1,5 +1,4 @@
 import { Categories } from '@prisma/client';
-import useInsightHook from '../hooks/useInsightHook'
 
 interface NavItemProps {
   activeButton: string;

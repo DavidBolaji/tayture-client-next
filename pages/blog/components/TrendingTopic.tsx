@@ -10,6 +10,7 @@ interface TrendingTopicProps {
 }
 
 function getTotalArticleCategory(blogs: any, category:string) {
+
   // Filter the blogs array to include only those with the category "admin"
   const articleCategory = blogs.filter((blog: any) => blog.category === category);
 

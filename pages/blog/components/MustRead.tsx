@@ -90,7 +90,7 @@ function MustRead() {
         </div>
         {/* right */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-1 md:col-span-3 xl:col-span-1">
-        {leftRightPosts.slice(2, 4).map((leftBlog) => (
+          {leftRightPosts.slice(2, 4).map((leftBlog) => (
             <SmallArticleCardVertical
               key={`${leftBlog.id}`}
               blog_id={leftBlog.id}

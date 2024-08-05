@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import  BlogTagStyle from './components/BlogTagStyle.styles';
+
 import HeadingDescSB from './components/singleBlogComponents/HeadingDescSB';
 import Wrapper from '@/components/Wrapper/Wrapper';
 import HomeLayout from '@/components/layouts/HomeLayout';
-import NewsletterSection from './components/Newsletter/NewsletterSection';
+// import NewsletterSection from './components/Newsletter/NewsletterSection';
 import { Footer } from '@/components/Footer';
 import Image from 'next/image';
 import { Axios } from '@/request/request';
@@ -18,12 +19,42 @@ import Meta from '../dashboard/profile/components/Meta';
 import CommentSection from './sections/CommentSection';
 import BlogLikeComponent from './sections/BlogLikeComponent';
 
+import styled from '@emotion/styled'
+import BlogTag from './components/BlogTag';
+// ./components/ImgNameDate
+
+type Props = {
+  bg_color?: string
+  text_color?: string
+  hover_bg_color?: string
+  hover_text_color?: string
+}
+
+export const BlogTagStyle = styled(BlogTag)<Props>`
+  & {
+    background-color: ${({bg_color}) => '#000' };
+    color: ${({ text_color }) => '#FFF'};
+    z-index: 11;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+    padding-block: 0.25rem;
+    padding-inline: 0.625rem;
+    transition-duration: 0.3s;
+    transition-property: color background-color border-color
+      text-decoration-color fill stroke;
+  }
+
+  &:hover {
+    background-color: ${({ hover_bg_color }) => hover_bg_color ? hover_bg_color : '#EAB308'};
+    color: ${({ hover_text_color }) => hover_text_color ? hover_text_color : '#FEF9C3'};
+  }
+`
+
 function SingleBlogTemplate({
   blog,
-  blogs,
   categories,
-  total_pages,
-  currentPage,
 }: {
   blog: Blog & { categories: Categories } & { likes: Like[] } & {
     comment: Comment[]
@@ -35,12 +66,12 @@ function SingleBlogTemplate({
   total_pages: number
   currentPage: number
 }) {
-  const [likes, setLikes] = useState(blog.likes.length);
-  const [comments, setComments] = useState(blog.comment.length);
+  const [likes, setLikes] = useState(blog?.likes?.length ?? 0);
+  const [comments, setComments] = useState(blog?.comment?.length ?? 0);
 
   return (
     <>
-      <Meta imageUrl={blog.banner} title={blog.title} desc={blog.except} />
+      <Meta imageUrl={blog?.banner} title={blog?.title} desc={blog?.except} />
       <div className="bg-blog_bg h-[90vh] overflow-y-scroll no-s" id="sb">
         <div className="bg-blog_bg">
           <Wrapper>
@@ -65,7 +96,7 @@ function SingleBlogTemplate({
 
                    
                       <HeadingDescSB
-                        heading={blog.title}
+                        heading={blog?.title}
                         description={blog?.except}
                       />
 
@@ -77,7 +108,7 @@ function SingleBlogTemplate({
                        
                         <ImgNameDate
                           authName="Tayture"
-                          date={moment(blog.createdAt).format('MMM DD YYYY')}
+                          date={moment(blog?.createdAt).format('MMM DD YYYY')}
                           enableDash={false}
                           isColumn={true}
                           bg_color="#EAB308"
@@ -105,7 +136,7 @@ function SingleBlogTemplate({
               <div className="container my-10 sm:my-12">
                 <Image
                   priority
-                  src={blog.banner}
+                  src={blog?.banner}
                   width="1060"
                   height="750"
                   alt="single"
@@ -121,7 +152,7 @@ function SingleBlogTemplate({
             <div className="relative">
               <div className="prose lg:prose-lg !max-w-screen-md mx-auto text-base font-thin leading-loose">
                 <p className="py-5">
-                  <RenderText text={blog.text} />
+                  <RenderText text={blog?.text} />
                 </p>
               </div>
 
@@ -129,7 +160,7 @@ function SingleBlogTemplate({
                 
                 <ImgNameDate
                   authName="Tayture"
-                  date={moment(blog.createdAt).format('MMM DD YYYY')}
+                  date={moment(blog?.createdAt).format('MMM DD YYYY')}
                   enableDash={false}
                   isColumn={true}
                   bg_color="#EAB308"
@@ -159,11 +190,7 @@ function SingleBlogTemplate({
               <CommentSection />
             </div>
 
-            <AllBlogSection
-              blogs={blogs}
-              total_pages={total_pages}
-              currentPage={currentPage}
-            />
+            <AllBlogSection />
 
             {/* <NewsletterSection /> */}
           </Wrapper>
@@ -186,13 +213,12 @@ export const getStaticProps = async (ctx: any) => {
     ]);
 
     const blog = res.data.blog;
-    const blogs = res.data.blogs;
-    const total_pages = res.data.total_pages;
-    const currentPage = res.data.currentPage;
     const categories = res2.data.category;
 
     return {
+
       props: { blog, blogs, categories, total_pages, currentPage },
+
       // revalidate: 10,
     };
   } catch (error) {

@@ -10,22 +10,33 @@ import Question from './sections/Question/Question'
 import Risk from './sections/Risk/Risk'
 import Transform from './sections/Transform/Transform'
 import HomeLayout from '@/components/layouts/HomeLayout'
+import Meta from './dashboard/profile/components/Meta'
+import { Images } from '@/assets'
 
 const Home = () => {
   return (
-    <div className="h-[90vh] overflow-y-scroll no-s">
-      <Hero />
-      <Learnig />
-      <Hiring />
-      <Question />
-      <Transform />
-      <Empower />
-      <Engage />
-      <Need />
-      <Risk />
-      <Faq />
-      <Footer />
-    </div>
+    <>
+      <Meta
+        imageUrl={Images.Logo as unknown as string}
+        title={'Tayture'}
+        desc={
+          'Hiring, Training and Community for K-12 schools, teachers and parents'
+        }
+      />
+      <div className="h-[90vh] overflow-y-scroll no-s">
+        <Hero />
+        <Learnig />
+        <Hiring />
+        <Question />
+        <Transform />
+        <Empower />
+        <Engage />
+        <Need />
+        <Risk />
+        <Faq />
+        <Footer />
+      </div>
+    </>
   )
 }
 
