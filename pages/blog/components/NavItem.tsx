@@ -25,7 +25,7 @@ const NavItem:React.FC<NavItemProps> = ({activeButton, handleClick, categories})
       </li>
       {categories &&
         categories.map((category) => (
-          <li className="relative flex-shrink-0">
+          <li key={category.id} className="relative flex-shrink-0">
             <button
               className={`text-neutral-500 flex items-center justify-center font-[600] px-5 py-2.5 text-sm sm:text-base sm:px-6 sm:py-3 capitalize rounded-full ${
                 activeButton === category.id
