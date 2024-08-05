@@ -61,7 +61,7 @@ export const getServerSideProps = async (ctx: any) => {
     return {
       props: {
         editor: null,
-        trending: null,
+        trending: [],
       },
     };
   }
