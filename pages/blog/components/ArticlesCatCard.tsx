@@ -2,8 +2,8 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import Image from 'next/image'
-import { BlogTagStyle } from './BlogTagStyle.styles'
-import ImgNameDate from './ImgNameDate'
+import  BlogTagStyle from './BlogTagStyle.styles'
+import ImgNameDate from './NameDate'
 import { useRouter } from 'next/router'
 
 interface ArticlesCatCardProps {

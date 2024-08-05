@@ -43,7 +43,7 @@ function LatestArticleLeft() {
 
             ImgNameDate_bg_color={blog.category_text_hoverBg_color}
             authImgCont_wi_hei="1.75rem"
-            likes_num={`${blog.likes}`}
+            likes_num={blog.likes}
             comments_num={`${blog.comments}`}
             likesCom_bg_color="rgba(249,250,251)"
             img_src={blog.hor_image_src}

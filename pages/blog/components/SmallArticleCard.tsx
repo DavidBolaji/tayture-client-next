@@ -1,6 +1,6 @@
 import React from 'react'
-import { BlogTagStyle } from './BlogTagStyle.styles'
-import ImgNameDate from './ImgNameDate'
+import  BlogTagStyle from './BlogTagStyle.styles'
+import ImgNameDate from './NameDate'
 import LikesCom from './LikesCom'
 import Link from 'next/link'
 import { Axios } from '@/request/request'

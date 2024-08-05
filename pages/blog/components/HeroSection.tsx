@@ -1,6 +1,6 @@
 import React from 'react'
-import { BlogTagStyle } from './BlogTagStyle.styles'
-import ImgNameDate from './ImgNameDate'
+import  BlogTagStyle from './BlogTagStyle.styles'
+import ImgNameDate from './NameDate'
 import LikesCom from './LikesCom'
 import Link from 'next/link'
 import HeadingDescSB from './singleBlogComponents/HeadingDescSB'
@@ -69,7 +69,7 @@ const HeroSection: React.FC<{
             />
 
             <LikesCom
-              likes_num={`${editor.likes.length}`}
+              likes_num={editor.likes.length}
               comments_num={`${editor.comment.length}`}
               bg_color="rgba(249,250,251)"
               hover={false}

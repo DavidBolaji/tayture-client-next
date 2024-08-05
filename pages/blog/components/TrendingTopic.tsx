@@ -1,5 +1,5 @@
 import React from 'react'
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './NameDate'
 import FetchBlogs from '../data/FetchBlogs';
 
 const blogs = FetchBlogs()
@@ -9,9 +9,9 @@ interface TrendingTopicProps {
   category: string;
 }
 
-function getTotalArticleCategory(blogs,category:string) {
+function getTotalArticleCategory(blogs: any, category:string) {
   // Filter the blogs array to include only those with the category "admin"
-  const articleCategory = blogs.filter(blog => blog.category === category);
+  const articleCategory = blogs.filter((blog: any) => blog.category === category);
 
   // Return the length of the filtered array
   return articleCategory.length;

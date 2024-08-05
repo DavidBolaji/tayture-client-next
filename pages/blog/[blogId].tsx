@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BlogTagStyle } from './components/BlogTagStyle.styles';
+import  BlogTagStyle from './components/BlogTagStyle.styles';
 import HeadingDescSB from './components/singleBlogComponents/HeadingDescSB';
 import Wrapper from '@/components/Wrapper/Wrapper';
 import HomeLayout from '@/components/layouts/HomeLayout';
@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { Axios } from '@/request/request';
 import { Blog, Categories, Like } from '@prisma/client';
 import { getRandomColor } from '@/utils/helpers';
-import ImgNameDate from './components/ImgNameDate';
+import ImgNameDate from './components/NameDate';
 import moment from 'moment';
 import RenderText from './components/RenderText';
 import CategoriesSection from './sections/CategoriesSection';
@@ -193,7 +193,7 @@ export const getStaticProps = async (ctx: any) => {
 
     return {
       props: { blog, blogs, categories, total_pages, currentPage },
-      revalidate: 10,
+      // revalidate: 10,
     };
   } catch (error) {
     console.error('Error fetching data:', error);

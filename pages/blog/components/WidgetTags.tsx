@@ -8,9 +8,9 @@ interface WidgetTagsProps {
 
 const blog = FetchBlogs()
 
-function getTotalArticleCategory(blog,category:string) {
+function getTotalArticleCategory(blog: any, category:string) {
   // Filter the blogs array to include only those with the category "admin"
-  const articleCategory = blog.filter(blog => blog.category === category);
+  const articleCategory = blog.filter((blog: any) => blog.category === category);
 
   // Return the length of the filtered array
   return articleCategory.length;

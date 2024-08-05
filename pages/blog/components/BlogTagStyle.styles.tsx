@@ -1,4 +1,3 @@
-"use client"
 import styled from '@emotion/styled'
 import BlogTag from './BlogTag'
 
@@ -9,7 +8,7 @@ type Props = {
   hover_text_color?: string
 }
 
-export const BlogTagStyle = styled(BlogTag)<Props>`
+const BlogTagStyle = styled(BlogTag)<Props>`
   & {
     background-color: ${({bg_color}) => '#000' };
     color: ${({ text_color }) => '#FFF'};
@@ -30,3 +29,5 @@ export const BlogTagStyle = styled(BlogTag)<Props>`
     color: ${({ hover_text_color }) => hover_text_color ? hover_text_color : '#FEF9C3'};
   }
 `
+
+export default BlogTagStyle

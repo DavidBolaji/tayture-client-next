@@ -1,11 +1,11 @@
 'use client'
 import React from 'react'
-import { BlogTagStyle } from './BlogTagStyle.styles'
+import  BlogTagStyle from './BlogTagStyle.styles'
 
 import LikesCom from './LikesCom'
 import Image from 'next/image'
 //@ts-ignore
-import ImgNameDate from './ImgNameDate'
+import ImgNameDate from './NameDate'
 import { useRouter } from 'next/router'
 import { Axios } from '@/request/request'
 
@@ -26,7 +26,7 @@ interface SmallArticleCardVerticalProps {
   authImgCont_is_image: boolean
   authImgCont_imageSrc?: string
   authImgCont_altImage?: string
-  blog_id: string
+  blog_id: string | number
   date: string
 }
 
