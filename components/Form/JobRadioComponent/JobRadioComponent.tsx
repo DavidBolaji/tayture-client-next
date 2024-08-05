@@ -99,6 +99,7 @@ const JobRadioComponent: FC<{ name: string; name2: string; SW: any }> = ({
         <Group
           onChange={onChange}
           disabled={(rest as any).disabled ? (rest as any).disabled : false}
+          className='w-full'
         >
           <div className="flex flex-col gap-5">
             <Button
@@ -186,6 +187,7 @@ const JobRadioComponent: FC<{ name: string; name2: string; SW: any }> = ({
                   initial={{
                     opacity: 0,
                     height: 0,
+                    overflowY: "scroll"
                   }}
                   animate={{
                     opacity: 1,
@@ -196,7 +198,7 @@ const JobRadioComponent: FC<{ name: string; name2: string; SW: any }> = ({
                     opacity: 0,
                     height: 0,
                   }}
-                  className="ml-3 -mt-3"
+                  className="ml-3 -mt-3 no-s"
                 >
                   <ConfigProvider
                     theme={{

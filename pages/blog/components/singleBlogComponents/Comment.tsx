@@ -71,7 +71,7 @@ const Comment: React.FC<{
             commentorName={`${fname} ${lname}`}
             commentDate={moment(date).format('MMMM DD YYYY')}
           />
-          <SubMenuComment />
+          {/* <SubMenuComment /> */}
         </div>
         {/* paragraph */}
         <span className="block text-neutral-700 mt-2 mb-3 sm:mt-3 sm:mb-4 dark:text-neutral-300">

@@ -13,6 +13,7 @@ import { ISchData, useGlobalContext } from '@/Context/store'
 import UploadComponent from '@/components/UploadComponent/UploadComponent'
 import { useQueryClient } from '@tanstack/react-query'
 import { School } from '@prisma/client'
+import { IUser } from '@/pages/api/users/types'
 
 const formatVal = (data: School) => {
   return {
@@ -32,6 +33,7 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
   const queryClient = useQueryClient()
   const sch = queryClient.getQueryData(['school']) as School
   const initialValues = formatVal(sch)
+  const user = queryClient.getQueryData(['user']) as IUser
 
   const noImage = img.trim().length < 1 && sch.sch_logo!.trim().length < 1
   const handleSubmit = (data: Partial<School>) => {
@@ -74,7 +76,7 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               placeholder="School name"
               type={'text'}
               text={'School name'}
-              disabled={true}
+              disabled={user.role !== "SUPER_ADMIN"}
             />
             <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>No of employees</h3>
             <Field
@@ -89,7 +91,7 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               city="sch_city"
               state="sch_state"
               lga="sch_lga"
-              disabled={true}
+              disabled={user.role !== "SUPER_ADMIN"}
             />
 
             <Field
@@ -99,7 +101,7 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               text={'School Address'}
               rows={5}
               spellCheck="false"
-              disabled
+              disabled={user.role !== "SUPER_ADMIN"}
             />
             <Field
               name="sch_url"
@@ -115,7 +117,7 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
                 type={'text'}
                 placeholder={'phone'}
                 text={'Phone No'}
-                disabled={true}
+                disabled={user.role !== "SUPER_ADMIN"}
               />
             </div>
             <div className="text-center pb-20">

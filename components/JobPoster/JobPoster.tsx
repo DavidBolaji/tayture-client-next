@@ -208,7 +208,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress, related = false }) => {
           <h3 className="mb-2 text-[20px]">Role</h3>
           <h4 className="mb-2">{data.job_title}</h4>
           <Space>
-            {(JSON.parse(data.job_active.replace("'", '')) as string[]).map(
+            {(JSON.parse(data?.job_active.replace("'", '')) as string[]).map(
               (e: string) => {
                 return (
                   <span

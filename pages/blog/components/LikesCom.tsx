@@ -173,7 +173,7 @@ const LikesCom = ({
                     type="button"
                     onClick={() =>
                       navigator.clipboard.writeText(
-                        `${process.env.NEXT_PUBLIC_FRONTEND_API}/blog/${router.query.blogId}`,
+                        `${process.env.NEXT_PUBLIC_FRONTEND_API}blog/${router.query.blogId}`,
                       )
                     }
                     className="flex items-center rounded-xl w-full px-3 py-2 hover:bg-neutral-100 hover:text-neutral-900 truncate focus:outline-none"

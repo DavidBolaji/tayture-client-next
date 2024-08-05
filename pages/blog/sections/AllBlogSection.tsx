@@ -7,46 +7,46 @@ import SmallArticleCardVertical from '../components/SmallArticleCardVertical'
 import { getRandomColor } from '@/utils/helpers'
 import moment from 'moment'
 import Pagination from '../components/Pagination'
-import { useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { AxiosResponse } from 'axios'
 import Spinner from '@/components/Spinner/Spinner'
-import { useParams, usePathname } from 'next/navigation'
+import { useParams } from 'next/navigation'
 
-const AllBlogSection: React.FC<{
-  blogs: (Blog & { categories: Categories } & {
-    likes: Like[]
-  } & {
-    comment: Comment[]
-  })[]
-  total_pages: number
-  currentPage: number
-}> = ({ blogs, total_pages, currentPage }) => {
-  const [allPage, setAllPage] = useState(currentPage)
-  const divRef = useRef<null | HTMLDivElement>(null)
+const AllBlogSection = ({}) => {
   const params = useParams()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
-
-  const { isPending, mutate } = useMutation({
-    mutationFn: async (page: number) => {
-      const res = await Axios.get(`/blog/all?page=${page}&except=${params?.blogId}`)
-      return res.data.blogs
-
-    },
-    onSuccess: (res: AxiosResponse) => {
-      divRef.current?.scrollIntoView({
-        behavior: 'smooth'
-      })
+  const divRef = useRef<null | HTMLDivElement>(null)
+  const { data, isLoading, isError, isPending } = useQuery({
+    queryKey: ['moreBlog', currentPage],
+    queryFn: async () => {
+      const response = await Axios.get(
+        `/blog/all?page=${currentPage}&except=${params?.blogId}`,
+      )
+      setTotalPages(response.data.totalPages)
+      return response.data
     },
   })
 
-  const handlePageChange = async (page: number) => {
-    mutate(page)
-    setAllPage(page)
+  const handlePageChange = (pageNumber: number) => {
+    divRef.current?.scrollIntoView({
+      behavior: 'smooth',
+    })
+    setCurrentPage(pageNumber)
   }
 
+  if (isLoading) return <div>Loading...</div>
+  if (isError) return <div>Error fetching data</div>
+
+  const blogs = data?.blogs ?? []
+
   return (
-    <div className="relative bg-neutral-100 py-16 lg:py-28 mt-16 lg:mt-28 rounded-[50px]" ref={divRef}>
+    <div
+      className="relative bg-neutral-100 py-16 lg:py-28 mt-16 lg:mt-28 rounded-[50px]"
+      ref={divRef}
+    >
       <Wrapper>
         <div className="relative flex flex-col sm:flex-row sm:items-end justify-between text-neutral-900">
           <HeadingDesc heading="More Posts" description="" />
@@ -57,7 +57,7 @@ const AllBlogSection: React.FC<{
             <Spinner />
           ) : (
             //@ts-ignore
-             (blogs)?.map(
+            blogs?.map(
               (
                 blog: Blog & { categories: Categories } & {
                   likes: Like[]
@@ -91,8 +91,8 @@ const AllBlogSection: React.FC<{
 
         <div className="w-full flex items-center justify-center mt-20">
           <Pagination
-            total_pages={total_pages}
-            currentPage={allPage}
+            total_pages={totalPages}
+            currentPage={currentPage}
             onPageChange={(page) => handlePageChange(page)}
           />
         </div>
