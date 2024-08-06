@@ -56,6 +56,7 @@ function SingleBlogTemplate({
   blog: Blog & { categories: Categories; likes: Like[]; comment: Comment[] };
   categories: Categories[];
 }) {
+
   const [likes, setLikes] = useState(blog?.likes?.length);
   const [comments, setComments] = useState(blog?.comment?.length);
 
@@ -121,6 +122,7 @@ function SingleBlogTemplate({
                   src={blog?.banner}
                   width={1060}
                   height={750}
+
                   alt="single"
                   sizes="(max-width: 1024px) 100vw, 1280px"
                   className="w-full rounded-xl"
@@ -191,6 +193,7 @@ export const getStaticProps = async (ctx: any) => {
       Axios.get(`/blog/${blogId}?page=${page}`),
       Axios.get(`/categories`),
     ]);
+
 
     const blog = res?.data?.blog;
     const categories = res2?.data?.category;
