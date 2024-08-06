@@ -13,9 +13,9 @@ import ImgNameDate from './components/NameDate';
 import moment from 'moment';
 import RenderText from './components/RenderText';
 import CategoriesSection from './sections/CategoriesSection';
-// import AllBlogSection from './sections/AllBlogSection';
+import AllBlogSection from './sections/AllBlogSection';
 import Meta from '../dashboard/profile/components/Meta';
-// import CommentSection from './sections/CommentSection';
+import CommentSection from './sections/CommentSection';
 import BlogLikeComponent from './sections/BlogLikeComponent';
 import styled from '@emotion/styled';
 import BlogTag from './components/BlogTag';
@@ -167,10 +167,10 @@ function SingleBlogTemplate({
               {/* HR */}
               <div className="max-w-screen-md mx-auto border-b border-t border-neutral-200 my-10"></div>
 
-              {/* <CommentSection /> */}
+              <CommentSection />
             </div>
 
-            {/* <AllBlogSection /> */}
+            <AllBlogSection />
 
             {/* <NewsletterSection /> */}
           </Wrapper>

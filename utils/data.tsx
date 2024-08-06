@@ -1748,6 +1748,10 @@ export const AdministratorHire = [
     key: 'Cleaner',
     value: 'Cleaner',
   },
+  {
+    key: 'Bus Driver',
+    value: 'Bus Driver',
+  }
 ]
 
 export const teacherHire = [
