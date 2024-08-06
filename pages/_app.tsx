@@ -18,7 +18,7 @@ import Whatsapp from '@/components/Whatsapp/Whatsapp'
 // import Head from 'next/head'
 // import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/react'
-import { usePathname } from 'next/navigation'
+
 
 const pages = [
   'Home',
@@ -41,7 +41,6 @@ export default function App({
 }: AppProps) {
   const pageName = Component.name || ''
   let layout
-  const path = usePathname()
 
   if (pageName === 'Login' || pageName === 'Register') {
     layout = (
@@ -55,14 +54,18 @@ export default function App({
         <Component {...pageProps} />
       </HomeLayout>
     )
-  } else if (pageName === 'Dashboard' || path?.startsWith('/dashboard')) {
+  } else if (pageName === 'Dashboard') {
     layout = (
       <DashboardLayout>
         <Component {...pageProps} />
       </DashboardLayout>
     )
   } else {
-    layout = <Component {...pageProps} />
+    layout = (
+      <DashboardLayout>
+        <Component {...pageProps} />
+      </DashboardLayout>
+    )
     
   }
 
