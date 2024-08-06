@@ -9,7 +9,7 @@ import moment from 'moment'
 import Pagination from '../components/Pagination'
 import { useQuery } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
-import { AxiosResponse } from 'axios'
+
 import Spinner from '@/components/Spinner/Spinner'
 import { useParams } from 'next/navigation'
 
@@ -25,6 +25,7 @@ const AllBlogSection = ({}) => {
       const response = await Axios.get(
         `/blog/all?page=${currentPage}&except=${params?.blogId}`,
       )
+
       setTotalPages(response.data.totalPages)
       return response.data
     },
