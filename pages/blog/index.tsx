@@ -12,13 +12,13 @@ import { Blog as BlogProp, Categories, Like } from '@prisma/client'
 
 const Blog = ({
   editor,
-  trending
+  trending,
 }: {
   editor: BlogProp & {
     categories: Partial<Categories>
     likes: Like[]
     comment: Comment[]
-  },
+  }
   trending: (BlogProp & {
     categories: Partial<Categories> & { blog: BlogProp[] }
   })[]
@@ -51,11 +51,20 @@ export const getServerSideProps = async (ctx: any) => {
   const req = Axios.get('/blog/editor')
   const req2 = Axios.get('/blog/trending')
 
-  const [edit, trend] = await Promise.all([req, req2])
-  const editor = edit.data.blog
-  const trending = trend.data.blog
+  try {
+    const [edit, trend] = await Promise.all([req, req2])
+    const editor = edit.data.blog
+    const trending = trend.data.blog
 
-  return { props: { editor, trending } }
+    return { props: { editor, trending } }
+  } catch (error) {
+    return {
+      props: {
+        editor: null,
+        trending: [],
+      },
+    };
+  }
 }
 
 Blog.getLayout = function getLayout(page: React.ReactNode) {

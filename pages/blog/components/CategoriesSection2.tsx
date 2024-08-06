@@ -2,7 +2,7 @@ import React from 'react'
 import ArticlesCatCard from './ArticlesCatCard'
 import { getRandomColor } from '@/utils/helpers'
 import { Blog, Categories } from '@prisma/client'
-import Link from 'next/link'
+
 
 const CategoriesSection2: React.FC<{
   trending: (Blog & {
@@ -11,7 +11,7 @@ const CategoriesSection2: React.FC<{
 }> = ({ trending }) => {
   return (
     <div className="relative whitespace-nowrap -mx-2 xl:-mx-4 overflow-hidden">
-      {trending.map((blog, idx) => (
+      {trending?.map((blog, idx) => (
           <ArticlesCatCard
             id={blog.id}
             key={blog.id}

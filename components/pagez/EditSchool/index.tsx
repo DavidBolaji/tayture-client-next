@@ -15,7 +15,7 @@ const EditSchool = () => {
           <EditSchoolForm SW={SW} />
         </div>
         <div className='w-full'>
-          <EditSchoolFormAdmin />
+          <EditSchoolFormAdmin update />
         </div>
       </Stepper>
     </div>

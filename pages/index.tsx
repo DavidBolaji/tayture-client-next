@@ -16,26 +16,26 @@ import { Images } from '@/assets'
 const Home = () => {
   return (
     <>
-      <Meta
-        imageUrl={Images.Logo as unknown as string}
-        title={'Tayture'}
-        desc={
-          'Hiring, Training and Community for K-12 schools, teachers and parents'
-        }
-      />
-      <div className="h-[90vh] overflow-y-scroll no-s">
-        <Hero />
-        <Learnig />
-        <Hiring />
-        <Question />
-        <Transform />
-        <Empower />
-        <Engage />
-        <Need />
-        <Risk />
-        <Faq />
-        <Footer />
-      </div>
+    <Meta
+       imageUrl={Images.Logo as unknown as string}
+       title={'Tayture'}
+       desc={
+         'Hiring, Training and Community for K-12 schools, teachers and parents'
+       }
+     />
+    <div className="h-[90vh] overflow-y-scroll no-s">
+      <Hero />
+      <Learnig />
+      <Hiring />
+      <Question />
+      <Transform />
+      <Empower />
+      <Engage />
+      <Need />
+      <Risk />
+      <Faq />
+      <Footer />
+    </div>
     </>
   )
 }

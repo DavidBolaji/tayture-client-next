@@ -1,6 +1,6 @@
+"use client"
 import React, { useState } from 'react'
 import NameDate from './NameDate'
-import SubMenuComment from './SubMenuComment'
 import LikeAndReply from './LikeAndReply'
 import { CommentLike, Comment as CommentSchema, User } from '@prisma/client'
 import moment from 'moment'
@@ -71,7 +71,7 @@ const Comment: React.FC<{
             commentorName={`${fname} ${lname}`}
             commentDate={moment(date).format('MMMM DD YYYY')}
           />
-          <SubMenuComment />
+          {/* <SubMenuComment /> */}
         </div>
         {/* paragraph */}
         <span className="block text-neutral-700 mt-2 mb-3 sm:mt-3 sm:mb-4 dark:text-neutral-300">

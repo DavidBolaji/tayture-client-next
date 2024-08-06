@@ -1736,6 +1736,22 @@ export const AdministratorHire = [
     key: 'Security Personnel',
     value: 'Security Personnel',
   },
+  {
+    key: 'Accountant',
+    value: 'Accountant',
+  },
+  {
+    key: 'Care giver / Minder',
+    value: 'Care giver / Minder',
+  },
+  {
+    key: 'Cleaner',
+    value: 'Cleaner',
+  },
+  {
+    key: 'Bus Driver',
+    value: 'Bus Driver',
+  }
 ]
 
 export const teacherHire = [

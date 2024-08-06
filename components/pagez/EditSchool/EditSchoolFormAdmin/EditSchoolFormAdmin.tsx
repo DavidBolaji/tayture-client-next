@@ -29,7 +29,7 @@ const formatVal2 = (data: ISchData) => {
   }
 }
 
-const EditSchoolFormAdmin: React.FC = () => {
+const EditSchoolFormAdmin: React.FC<{update?: boolean}> = ({update = false}) => {
   const { img, createSch, setMessage, setImg, setCreateSch, defaultSchool } =
     useGlobalContext()
   const router = useRouter()
@@ -150,7 +150,7 @@ const EditSchoolFormAdmin: React.FC = () => {
                 disabled={isSubmitting || !isValid || isPending}
                 bold={false}
                 hover={!(isSubmitting || !isValid)}
-                text={isSubmitting || isPending ? <Spinner /> : 'Create'}
+                text={isSubmitting || isPending ? <Spinner /> : update ? 'Update' : 'Create'}
                 render="light"
                 full={false}
                 type="submit"

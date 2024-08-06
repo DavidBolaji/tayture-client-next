@@ -13,20 +13,19 @@ import { Axios } from '@/request/request'
 import Spinner from '@/components/Spinner/Spinner'
 import { useParams } from 'next/navigation'
 
-
-const AllBlogSection = ({ }) => {
-
+const AllBlogSection = ({}) => {
   const params = useParams()
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
- 
   const divRef = useRef<null | HTMLDivElement>(null)
-
   const { data, isLoading, isError, isPending } = useQuery({
     queryKey: ['moreBlog', currentPage],
     queryFn: async () => {
-      const response = await Axios.get(`/blog/all?page=${currentPage}&except=${params?.blogId}`)
+      const response = await Axios.get(
+        `/blog/all?page=${currentPage}&except=${params?.blogId}`,
+      )
+
       setTotalPages(response.data.totalPages)
       return response.data
     },
@@ -34,7 +33,7 @@ const AllBlogSection = ({ }) => {
 
   const handlePageChange = (pageNumber: number) => {
     divRef.current?.scrollIntoView({
-      behavior: 'smooth'
+      behavior: 'smooth',
     })
     setCurrentPage(pageNumber)
   }
@@ -42,11 +41,13 @@ const AllBlogSection = ({ }) => {
   if (isLoading) return <div>Loading...</div>
   if (isError) return <div>Error fetching data</div>
 
-
   const blogs = data?.blogs ?? []
 
   return (
-    <div className="relative bg-neutral-100 py-16 lg:py-28 mt-16 lg:mt-28 rounded-[50px]" ref={divRef}>
+    <div
+      className="relative bg-neutral-100 py-16 lg:py-28 mt-16 lg:mt-28 rounded-[50px]"
+      ref={divRef}
+    >
       <Wrapper>
         <div className="relative flex flex-col sm:flex-row sm:items-end justify-between text-neutral-900">
           <HeadingDesc heading="More Posts" description="" />
@@ -57,7 +58,7 @@ const AllBlogSection = ({ }) => {
             <Spinner />
           ) : (
             //@ts-ignore
-             (blogs)?.map(
+            blogs?.map(
               (
                 blog: Blog & { categories: Categories } & {
                   likes: Like[]

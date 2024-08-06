@@ -14,16 +14,20 @@ interface ImgNameDateProps {
   is_mt?:boolean
 }
 
-const ImgNameDateCont = styled.div<Partial<ImgNameDateProps>>`
+const ImgNameDateCont = styled.div<{
+  $bg_color?: string;
+  $authImgCont_wi_hei: string;
+  $isColumn: boolean;
+}>`
   & {
     display: flex;
     align-items: center;
   }
 
   & .authImgCont {
-    background-color: ${({ bg_color }) => bg_color};
-    width: ${({ authImgCont_wi_hei }) => authImgCont_wi_hei};
-    height: ${({ authImgCont_wi_hei }) => authImgCont_wi_hei};
+    background-color: ${({ $bg_color }) => $bg_color};
+    width: ${({ $authImgCont_wi_hei }) => $authImgCont_wi_hei};
+    height: ${({ $authImgCont_wi_hei }) => $authImgCont_wi_hei};
     border-radius: 50%;
     margin-right: 0.75rem;
     display: flex;
@@ -47,12 +51,8 @@ const ImgNameDateCont = styled.div<Partial<ImgNameDateProps>>`
 
   & .nameDateCont {
     display: flex;
-    gap: ${({ isColumn }) => {
-      return isColumn ? '0' : '10px'
-    }};
-    flex-direction: ${({ isColumn }) => {
-      return isColumn ? 'column' : 'row'
-    }};
+    gap: ${({ $isColumn }) => ($isColumn ? '0' : '10px')};
+    flex-direction: ${({ $isColumn }) => ($isColumn ? 'column' : 'row')};
   }
 `
 
@@ -69,15 +69,15 @@ const ImgNameDate = ({
 }: ImgNameDateProps) => {
   return (
     <ImgNameDateCont
-      isColumn={isColumn}
-      bg_color={bg_color}
-      authImgCont_wi_hei={authImgCont_wi_hei}
+      $isColumn={isColumn}
+      $bg_color={bg_color}
+      $authImgCont_wi_hei={authImgCont_wi_hei}
     >
       <div className="authImgCont">
         {
           is_image && <img
             src={imageSrc} 
-            alt= {altImage}
+            alt={altImage}
             className="absolute inset-0 w-full h-full"
           />
         }

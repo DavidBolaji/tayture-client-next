@@ -1,3 +1,4 @@
+"use client"
 import { Axios } from '@/request/request'
 import { Categories } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
