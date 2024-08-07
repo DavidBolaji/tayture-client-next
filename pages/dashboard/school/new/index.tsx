@@ -3,9 +3,9 @@ import { useGlobalContext } from '@/Context/store'
 import { regularFont } from '@/assets/fonts/fonts'
 import AddSchool from '@/components/pagez/AddSchool'
 import EditSchool from '@/components/pagez/EditSchool'
-import { getUserSchool } from '@/lib/api/school'
+import { getUserSchool, getUserSchoolAdmin } from '@/lib/api/school'
 import { ISchDb } from '@/pages/api/school/types'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 
@@ -26,11 +26,19 @@ const Heading: React.FC<{ sch: ISchDb; show: boolean }> = ({ sch, show }) => (
 const AddSchoolPage = () => {
   const { defaultSchool } = useGlobalContext();
   const router = useRouter()
+  const queryClient = useQueryClient();
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== 'limited'
   const { data: school } = useQuery({
     queryKey: ['school'],
     queryFn: async () => {
-      const req = await getUserSchool()
-      return req.data.school[defaultSchool]
+      if(permissionGranted) {
+        const req = await getUserSchool()
+        return req.data.school[defaultSchool]
+      } else {
+        const req = await getUserSchoolAdmin()
+        return req.data.school[defaultSchool]
+      }
     },
   })
 

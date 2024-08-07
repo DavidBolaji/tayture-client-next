@@ -10,7 +10,7 @@ import { regularFont } from '@/assets/fonts/fonts'
 import { useGlobalContext } from '@/Context/store'
 import { useRouter } from 'next/router'
 import AuthLayer from './AuthLayer'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUser } from '@/lib/api/user'
 import NotificationDropdown from '../Dashboard/NotificationDropdown'
 import { Axios } from '@/request/request'
@@ -22,12 +22,19 @@ const { Header, Sider, Content } = Layout
 const DashboardLayout = (props: PropsWithChildren) => {
   const [collapsed, setCollapsed] = useState(false)
   const { setUI } = useGlobalContext()
+  const queryClient = useQueryClient()
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== 'limited'
+
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const req = await getUser()
-      return req.data.user
-    },
+      if (permissionGranted) {
+        const req = await getUser()
+        return req.data.user
+      }
+      return queryClient.getQueryData(['user'])
+    },  
   })
 
   useQuery({
@@ -37,13 +44,14 @@ const DashboardLayout = (props: PropsWithChildren) => {
       const result = calculateProgress(req.data.user)
       return result
     },
+    enabled: !permission
   })
 
   const router = useRouter()
   const isSchAdmin = !user
     ? false
-    : user?.path && typeof user?.path === 'string' && user?.path?.trim() !== ""
-    ? JSON.parse( user?.path.replace(/'/g, '"')).includes('school admin')
+    : user?.path && typeof user?.path === 'string' && user?.path?.trim() !== ''
+    ? JSON.parse(user?.path.replace(/'/g, '"')).includes('school admin')
     : false
 
   const handleClick = (link: string) => {
@@ -114,31 +122,35 @@ const DashboardLayout = (props: PropsWithChildren) => {
                 <div
                   className={`flex ${regularFont.className} transition-color `}
                 >
-                  <div
-                    className="hover:text-orange cursor-pointer text-black"
-                    onClick={() => handleClick('/dashboard/school/new')}
-                  >
-                    Add School
-                  </div>
-                  <div className="ml-[24px]">
-                    <Link
-                      className="hover:text-orange text-black"
-                      href="/dashboard/jobs"
-                    >
-                      Find a job
-                    </Link>
-                  </div>
-                  <div
-                    className="ml-[24px] hover:text-orange text-black cursor-pointer"
-                    onClick={() =>
-                      handleClick('/dashboard/school/new?post_job=1')
-                    }
-                  >
-                    Post a job
-                  </div>
-                  <div className="mx-[20px] -mt-4 flex items-center">
-                    <NotificationDropdown mobile={false} />
-                  </div>
+                  {permissionGranted && (
+                    <>
+                      <div
+                        className="hover:text-orange cursor-pointer text-black"
+                        onClick={() => handleClick('/dashboard/school/new')}
+                      >
+                        Add School
+                      </div>
+                      <div className="ml-[24px]">
+                        <Link
+                          className="hover:text-orange text-black"
+                          href="/dashboard/jobs"
+                        >
+                          Find a job
+                        </Link>
+                      </div>
+                      <div
+                        className="ml-[24px] hover:text-orange text-black cursor-pointer"
+                        onClick={() =>
+                          handleClick('/dashboard/school/new?post_job=1')
+                        }
+                      >
+                        Post a job
+                      </div>
+                      <div className="mx-[20px] -mt-4 flex items-center">
+                        <NotificationDropdown mobile={false} />
+                      </div>
+                    </>
+                  )}
                   <DropdownComponent isAdmin={isSchAdmin} />
                   <div className="scale-75 mt-20 translate-x-24">
                     <a

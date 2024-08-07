@@ -187,7 +187,7 @@ model Skills {
 
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique
+  sessionToken String   @unique @db.VarChar(300)
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -208,7 +208,7 @@ model Blog {
   categories     Categories @relation(fields: [blogCategoryId], references: [id])
   clicks         Int        @default(0)
 
-  likes      Like[]
+  likes      Like[] 
   blogUserId String
   user       User   @relation(fields: [blogUserId], references: [id])
 
@@ -219,6 +219,7 @@ model Blog {
 
   @@index([blogUserId])
   @@index([blogCategoryId])
+
 }
 
 model Like {
@@ -226,7 +227,7 @@ model Like {
   userId String
   user   User   @relation(fields: [userId], references: [id])
   blogId String
-  blog   Blog   @relation(fields: [blogId], references: [id])
+  blog   Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([blogId])

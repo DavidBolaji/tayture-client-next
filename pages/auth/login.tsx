@@ -2,8 +2,10 @@ import React from 'react'
 import { boldFont, regularFont } from '@/assets/fonts/fonts'
 import AuthLayout from '@/components/layouts/AuthLayout'
 import LoginForm from './LoginForm/LoginForm'
+import useSessionSchool from '@/hooks/useSessionSchool'
 
 const Login = () => {
+  useSessionSchool()
   return (
     <div
       className={`col-span-6 text-center lg:px-10 mt-20 ${regularFont.className}`}

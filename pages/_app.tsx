@@ -42,7 +42,7 @@ export default function App({
   const pageName = Component.name || ''
   let layout
 
-  if (pageName === 'Login' || pageName === 'Register') {
+  if (pageName === 'Login' || pageName === 'Register' || pageName === "Session") {
     layout = (
       <AuthLayout>
         <Component {...pageProps} />

@@ -10,7 +10,7 @@ import { useState } from 'react'
 import { Field, Form, Formik } from 'formik'
 import StyledInput from '../Form/NomalInput/StyledInput'
 import { incWallet } from '@/lib/api/wallet'
-import { getUserSchool } from '@/lib/api/school'
+import { getUserSchool, getUserSchoolAdmin } from '@/lib/api/school'
 import HandleCreateSchool from '../Modal/HandleCreateSchool'
 import { FaCaretRight, FaLock } from 'react-icons/fa'
 import Link from 'next/link'
@@ -20,19 +20,30 @@ import { Axios } from '@/request/request'
 const WalletCard2 = () => {
   const { setUI, setMessage, defaultSchool, access } = useGlobalContext()
   const queryClient = useQueryClient()
+   const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== 'limited'
+  
   const { data: school, isLoading } = useQuery({
     queryKey: ['school'],
     queryFn: async () => {
-      const req = await getUserSchool()
-      return req.data.school[defaultSchool]
+      if(permissionGranted) {
+        const req = await getUserSchool()
+        return req.data.school[defaultSchool]
+      } else {
+        const req = await getUserSchoolAdmin()
+        return req.data.school[defaultSchool]
+      }
     },
   })
   const [amt, setAmt] = useState<string | number>('')
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const req = await getUser()
-      return req.data.user
+      if (permissionGranted) {
+        const req = await getUser()
+        return req.data.user
+      }
+      return queryClient.getQueryData(['user'])
     },
   })
 
@@ -40,7 +51,10 @@ const WalletCard2 = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: async ({amount, schoolId}: {amount: string, schoolId: string}) =>
       {
-        await Axios.put(`/wallet/update/me?defaultSchool=${defaultSchool}`, {wallet_balance: +amount, schoolId})
+        if (permissionGranted) {
+          await Axios.put(`/wallet/update/me?defaultSchool=${defaultSchool}`, {wallet_balance: +amount, schoolId}) 
+        }
+        await Axios.put(`/wallet/update/me/limit?defaultSchool=${defaultSchool}`, {wallet_balance: +amount, schoolId})
       },
     onSuccess: () => {
       queryClient.invalidateQueries({
