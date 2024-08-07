@@ -50,7 +50,7 @@ const verifyToken2 =
             where: { sessionToken: token },
           })
           return res
-            .status(403)
+            .status(401)
             .json({ error: 'Unauthorized: Token has expired' })
         } else {
           return res.status(401).json({ error: 'Unauthorized: Invalid token' })

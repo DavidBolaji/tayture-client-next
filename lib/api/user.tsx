@@ -50,6 +50,11 @@ export const userSignout = async () => {
   return user
 }
 
+export const userSignoutLimited = async () => {
+  const user = await Axios.get('/users/signout/limited')
+  return user
+}
+
 export const updateUser = async (data: string[]) => {
   const user = await Axios.put('/users/update/me', {
     path: JSON.stringify(data),

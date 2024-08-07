@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getUserSchool, getUserSchoolAdmin } from '@/lib/api/school';
 import { regularFont } from '@/assets/fonts/fonts';
-import { userSignout } from '@/lib/api/user';
+import { userSignout, userSignoutLimited } from '@/lib/api/user';
 import { Profile, School, SchoolAdmin, User } from '@prisma/client';
 import { useGlobalContext } from '@/Context/store';
 import { canManageSchool } from '@/utils/helpers';
@@ -80,12 +80,12 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   }});
 
   const { mutate: signout } = useMutation({ 
-    mutationFn: userSignout,
+    mutationFn: permissionGranted ? userSignout : userSignoutLimited,
     mutationKey: ['signout'],
     onSuccess: () => {
+      // window.location.replace('/auth/login');
       queryClient.clear();
       localStorage.clear();
-      window.location.replace('/auth/login');
     },
 
   });
@@ -233,7 +233,12 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     {
       key: 'signout',
       label: (
-        <span className={regularFont.className} onClick={() => signout()}>
+        <span className={regularFont.className} onClick={() => {
+          if(window) {
+            window.location.replace('/auth/login');
+          }
+          signout()
+          }}>
           Signout
         </span>
       ),
