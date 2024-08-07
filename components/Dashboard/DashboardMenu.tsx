@@ -11,7 +11,7 @@ import type { MenuProps } from 'antd'
 import usePath from '@/hooks/usePath'
 import styled from '@emotion/styled'
 import { regularFont } from '@/assets/fonts/fonts'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUser } from '@/lib/api/user'
 
 const MenuStyled = styled(Menu)`
@@ -73,11 +73,19 @@ const items: MenuItem[] = [
 
 const DashboardMenu: React.FC<{ collapsed: boolean }> = ({ collapsed }) => {
   const { locationCurrent } = usePath()
+  const queryClient = useQueryClient();
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== "limited"
+
+
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const req = await getUser()
-      return req.data.user
+      if (permissionGranted) {
+        const req = await getUser()
+        return req.data.user
+      }
+      return queryClient.getQueryData(['user'])
     },
   })
 
@@ -106,7 +114,14 @@ const DashboardMenu: React.FC<{ collapsed: boolean }> = ({ collapsed }) => {
         onClick={(menuInfo) => router.push(menuInfo?.key)}
         items={items.filter((item) => {
           if (item!.key === '/dashboard/admin') {
-            return isAdmin
+            return permission !== "limited" && isAdmin
+          }
+          if (item!.key === '/dashboard') {
+            return permission !== "limited"
+          }
+          
+          if (item!.key === '/dashboard/jobs') {
+            return permission !== "limited"
           }
           return true
         })}

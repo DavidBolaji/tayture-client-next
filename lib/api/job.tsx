@@ -4,6 +4,12 @@ export const getSchoolJobs = async (defaultSchool: number) => {
   const result = await Axios.get(`/job/me?defaultSchool=${defaultSchool}`)
   return result
 }
+
+export const getSchoolLimitedJobs = async (defaultSchool: number) => {
+  const result = await Axios.get(`/job/me/limited?defaultSchool=${defaultSchool}`)
+  return result
+}
+
 export const getJobById = async (jobId: string) => {
   const result = await Axios.get(`/job/${jobId}`)
   return result

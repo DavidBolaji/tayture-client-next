@@ -23,12 +23,18 @@ const hashType = {
 const useTransaction = () => {
 
   const {defaultSchool} =useGlobalContext()
+  const queryClient = useQueryClient()
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== 'limited'
   const { data: transactions, isPending } = useQuery({
     queryKey: ['allTransactions'],
     queryFn: async () => {
-      const req = await Axios.get(`/transaction/me?defaultSchool=${defaultSchool}`)
-
-      return req.data.transaction
+      if (permissionGranted) {
+        const req = await Axios.get(`/transaction/me?defaultSchool=${defaultSchool}`)
+        return req.data.transaction
+      }
+      const req = await Axios.get(`/transaction/me/limit?defaultSchool=${defaultSchool}`)
+        return req.data.transaction
     },
   })
 

@@ -12,9 +12,10 @@ const AuthLayer = (props: PropsWithChildren) => {
   const [mounted, setMounted] = useState(false)
   const queryClient = useQueryClient()
   const { setUI } = useGlobalContext()
-  const job = router.query.job
-  const profile = router.query.profile
-  const school = router.query.school
+  const permission = queryClient.getQueryData(['permission'])
+  const job = router.query?.job
+  const profile = router.query?.profile
+  const school = router.query?.school
 
   useEffect(() => {
     setMounted(true)
@@ -23,17 +24,20 @@ const AuthLayer = (props: PropsWithChildren) => {
   const { isError, isLoading, data } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      try {
-        const req = await getUser2()
-        queryClient.setQueryData(['pinId'], () => req.data.user.pinId)
-        const userData = req.data.user
-        return userData
-      } catch (error: any) {
-        console.log('[ERROR]', error.message)
-        throw new Error('Failed to fetch user data')
+      if (permission !== 'limited') {
+        try {
+          const req = await getUser2()
+          queryClient.setQueryData(['pinId'], () => req.data.user.pinId)
+          const userData = req.data.user
+          return userData
+        } catch (error: any) {
+          console.log('[ERROR]', error.message)
+          throw new Error('Failed to fetch user data')
+        }
       }
+      return queryClient.getQueryData(['user']);
     },
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   })
 
   useEffect(() => {
@@ -50,31 +54,35 @@ const AuthLayer = (props: PropsWithChildren) => {
         }))
       }
 
+      if (permission !== 'limited') {
+        if (typeof data.pinId !== 'undefined' && data.pinId.trim().length > 0) {
+          localStorage.setItem('pinId', data.pinId)
+        }
+        localStorage.setItem('email', data.email)
 
-      if (typeof data.pinId !== "undefined" && data.pinId.trim().length > 0) {
-        localStorage.setItem('pinId', data.pinId)
-      }
-      localStorage.setItem('email', data.email)
+        if (job === '1') {
+          router.push('/dashboard/jobs?jobz=1')
+        }
+        if (profile === '1') {
+          router.push('/dashboard/profile?profile=2')
+        }
 
-      if (job === '1') {
-        router.push('/dashboard/jobs?jobz=1')
-      }
-      if (profile === '1') {
-        router.push('/dashboard/profile?profile=2')
-      }
-
-      if (school === '1' && !data.school?.sch_name) {
-        router.push('/dashboard/school/new?redirect_post=1')
-      }
-
-      if (school === '1' && data?.school?.sch_name) {
-        router.push('/dashboard/school/new?post_job=1')
+        if (school === '1' && !data.school?.sch_name) {
+          router.push('/dashboard/school/new?redirect_post=1')
+        }
+        if (school === '1' && data?.school?.sch_name) {
+          router.push('/dashboard/school/new?post_job=1')
+        }
       }
     }
-  }, [mounted, data, job, school, setUI, router, profile])
+  }, [mounted, data, job, school, setUI, router, profile, permission])
 
   if (!mounted || isLoading) {
-    return <div className='flex h-screen w-full justify-center items-center'><Spinner color="orange" /></div>
+    return (
+      <div className="flex h-screen w-full justify-center items-center">
+        <Spinner color="orange" />
+      </div>
+    )
   }
 
   if (isError) {

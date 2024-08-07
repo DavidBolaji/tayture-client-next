@@ -3,7 +3,7 @@ import axios from 'axios'
 import { parseCookies } from 'nookies'
 
 
-let url =
+export let url =
   process.env.NEXT_PUBLIC_ENV === 'prod'
     ? process.env.NEXT_PUBLIC_PROD
     : process.env.NEXT_PUBLIC_DEV

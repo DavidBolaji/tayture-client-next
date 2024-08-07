@@ -118,7 +118,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { add } = req.query;
 
   if (add === '1') {
-
     if (!user?.validated) {
       const reqOTP = await sendTextMessageOTP(user?.phone as string)
       if (reqOTP.data.pinId) {

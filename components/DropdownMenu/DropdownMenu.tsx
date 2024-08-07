@@ -9,11 +9,11 @@ const dataNav = [
     path: '/',
     title: 'Home',
   },
-  {
-    id: 'nav5',
-    path: '/blog',
-    title: 'Blog',
-  },
+  // {
+  //   id: 'nav5',
+  //   path: '/blog',
+  //   title: 'Blog',
+  // },
   {
     id: 'nav2',
     path: '/jobs',

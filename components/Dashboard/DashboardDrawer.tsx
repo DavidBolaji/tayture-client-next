@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -27,12 +28,16 @@ const dataNav = [
 function DashboardDrawer({
   visible,
   isAdmin,
-  feedback
+  feedback,
 }: {
   visible: boolean
   isAdmin: boolean
   feedback: () => void
 }) {
+  const queryClient = useQueryClient()
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== 'limited'
+
   return (
     <AnimatePresence mode="wait">
       {visible && (
@@ -56,18 +61,31 @@ function DashboardDrawer({
           <div className="w-full text-center bg-black pb-5 text-white">
             {dataNav.map((nav) =>
               nav.path !== '/dashboard/admin' ? (
-                <p key={nav.path} className="text-[20px]">
-                  <Link
-                    onClick={feedback}
-                    href={nav?.path}
-                    className="hover:text-orange text-white"
-                    
-                  >
-                    {nav?.title}
-                  </Link>
-                </p>
+                nav.path !== '/dashboard/school' ? (
+                  permissionGranted && (
+                    <p key={nav.path} className="text-[20px]">
+                      <Link
+                        onClick={feedback}
+                        href={nav?.path}
+                        className="hover:text-orange text-white"
+                      >
+                        {nav?.title}
+                      </Link>
+                    </p>
+                  )
+                ) : (
+                  <p key={nav.path} className="text-[20px]">
+                    <Link
+                      onClick={feedback}
+                      href={nav?.path}
+                      className="hover:text-orange text-white"
+                    >
+                      {nav?.title}
+                    </Link>
+                  </p>
+                )
               ) : (
-                isAdmin && (
+                (isAdmin && permissionGranted) && (
                   <p key={nav.path} className="text-[20px] text-white">
                     <Link
                       onClick={feedback}

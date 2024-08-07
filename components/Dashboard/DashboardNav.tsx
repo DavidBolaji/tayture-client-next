@@ -13,6 +13,8 @@ import { User } from '@prisma/client'
 const DashboardNav: React.FC = () => {
   const [visible, setVisible] = useState(false)
   const queryClient = useQueryClient()
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== 'limited'
 
   const user = queryClient.getQueryData(['user']) as User
   const isSuperAdmin = user.role === "SUPER_ADMIN"
@@ -33,7 +35,7 @@ const DashboardNav: React.FC = () => {
             <Whatsapp2 />
           </a>
         </div>
-          <NotificationDropdown mobile />
+          {permissionGranted && <NotificationDropdown mobile />}
           <div
             onClick={toggle}
             className="block cursor-pointer hover:scale-[1.05] duration-300 transition-transform"
