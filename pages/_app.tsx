@@ -71,23 +71,23 @@ export default function App({
 
   return (
     <TanStackProvider>
-      <Head>
+      {/* <Head> */}
         {/* <!-- Google tag (gtag.js) --> */}
-        <script
+        {/* <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-4PXXQ3NN30"
-        ></script>
+        ></script> */}
       
-      </Head>
-      <Script id="google-analytics">
-          {`
+      {/* </Head> */}
+      {/* <Script id="google-analytics"> */}
+          {/* {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
       
         gtag('config', 'G-4PXXQ3NN30');
-      `}
-        </Script>
+      `} */}
+        {/* </Script> */}
       <GlobalContextProvider>
         <AnimatePresence mode="wait">
           <motion.div
