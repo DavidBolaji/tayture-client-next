@@ -16,17 +16,23 @@ import {
 import { FaClock, FaMoneyBill } from 'react-icons/fa'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ISchDb } from '@/pages/api/school/types'
-import { createTransaction } from '@/lib/api/transaction'
+import {
+  createTransaction,
+  createTransactionLimit,
+} from '@/lib/api/transaction'
 import HandlePayment from '@/components/Modal/HandlePayment'
-import { decWallet, incWallet } from '@/lib/api/wallet'
+import {
+  decWallet,
+  decWalletLimit,
+  incWallet,
+  incWalletLimit,
+} from '@/lib/api/wallet'
 import { useEffect, useState } from 'react'
-import {  Field, Form, Formik } from 'formik'
+import { Field, Form, Formik } from 'formik'
 import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import Spinner from '@/components/Spinner/Spinner'
 import HandleSchedule from '@/components/HandleSchedule'
 import { useRouter } from 'next/router'
-
-
 
 interface MatchedCardProps {
   params: { jobId: string }
@@ -45,7 +51,8 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
- 
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== 'limited'
 
   /**
    * wallet balance,
@@ -66,27 +73,52 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
   const amountFinal = complete
     ? AMOUNT_PER_HIRE * noOfHires
     : AMOUNT_PER_HIRE * curAppCount
+
   const [amt, setAmt] = useState<string | number>('')
 
   useEffect(() => {
-    if(typeof wb === "number" && typeof amountFinal === "number") {
+    if (typeof wb === 'number' && typeof amountFinal === 'number') {
       setAmt(Math.abs(wb - amountFinal))
     }
-  
   }, [amountFinal, wb])
 
   const { mutate: fundWallet, isPending } = useMutation({
     mutationFn: async (amount: string) =>
-      await incWallet({
-        wallet_balance: +amount,
-        schoolId: school.sch_id
-      }, defaultSchool),
+      permissionGranted
+        ? await incWallet(
+            {
+              wallet_balance: +amount,
+              schoolId: school.sch_id,
+            },
+            defaultSchool,
+          )
+        : incWalletLimit(
+            {
+              wallet_balance: +amount,
+              schoolId: school.sch_id,
+            },
+            defaultSchool,
+          ),
     onSuccess: async () => {
-      await decWallet({
-        wallet_balance: Math.abs(amountFinal),
-        schoolId: school.sch_id,
-        role: matchedJob?.job.job_title
-      }, defaultSchool)
+      if (permissionGranted) {
+        await decWallet(
+          {
+            wallet_balance: Math.abs(amountFinal),
+            schoolId: school.sch_id,
+            role: matchedJob?.job.job_title,
+          },
+          defaultSchool,
+        )
+      } else {
+        await decWalletLimit(
+          {
+            wallet_balance: Math.abs(amountFinal),
+            schoolId: school.sch_id,
+            role: matchedJob?.job.job_title,
+          },
+          defaultSchool,
+        )
+      }
       queryClient.invalidateQueries({
         queryKey: ['school'],
       })
@@ -100,7 +132,10 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 
   const { mutate, isPending: transactionLoading } = useMutation({
     mutationFn: async (transaction: any) => {
-      return await createTransaction(transaction, +defaultSchool)
+      if (permissionGranted) {
+        return await createTransaction(transaction, +defaultSchool)
+      }
+      return await createTransactionLimit(transaction, +defaultSchool)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -138,7 +173,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         schoolId: school.sch_id,
         jobId: jobId,
         isFunded: true,
-        role: matchedJob.job.job_title
+        role: matchedJob.job.job_title,
       })
     } else {
       /** Display modal  */
@@ -150,20 +185,20 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         },
       }))
     }
-  } 
+  }
 
   const handlePayment2 = () => {
-    setAmt(Math.abs(wb - amountFinal + (AMOUNT_PER_HIRE * hasBeenPaidfor)))
-      /** Display modal  */
-      setUI((prev) => ({
-        ...prev,
-        paymentModal: {
-          ...prev.paymentModal,
-          visibility: true,
-        },
-      }))
+    setAmt(Math.abs(wb - amountFinal + AMOUNT_PER_HIRE * hasBeenPaidfor))
+    /** Display modal  */
+    setUI((prev) => ({
+      ...prev,
+      paymentModal: {
+        ...prev.paymentModal,
+        visibility: true,
+      },
+    }))
   }
-  
+
   const onFailure = () => {
     setMessage(() => 'User aborted task')
   }
@@ -177,8 +212,8 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
     fname: string
     email: string
   }) => {
-  // 3(paidfor) > //schedule
-    if((hasBeenPaidfor >  isScheduled) || (isLeft === 0)) {
+    // 3(paidfor) > //schedule
+    if (hasBeenPaidfor > isScheduled || isLeft === 0) {
       setUI((prev) => {
         return {
           ...prev,
@@ -194,7 +229,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         }
       })
     } else {
-      setAmt(Math.abs(wb - amountFinal + (AMOUNT_PER_HIRE * hasBeenPaidfor)))
+      setAmt(Math.abs(wb - amountFinal + AMOUNT_PER_HIRE * hasBeenPaidfor))
       /** Display modal  */
       setUI((prev) => ({
         ...prev,
@@ -204,73 +239,80 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         },
       }))
     }
-
   }
 
   const router = useRouter()
 
-  const handleClick = matchedJob?.job?.status ? () => console.log('object') : String(amt).trim().length > 0 ? () => handlePayment(): () => handlePayment2()
-  const redirect = () => router.push(`/dashboard/school/manage/${jobId}?default=3`)
+  const handleClick = matchedJob?.job?.status
+    ? () => console.log('object')
+    : String(amt).trim().length > 0
+    ? () => handlePayment()
+    : () => handlePayment2()
+  const redirect = () =>
+    router.push(`/dashboard/school/manage/${jobId}?default=3`)
   const [valid1, setValid] = useState(+String(amt).trim().length < 1)
 
-
   const valid = (values: any) => {
-    const errors:  {amount?: string} = {};
-  
-    const { amount } = values;
-    const isValidAmount =  +String(amount) >= Math.abs(wb - amountFinal);
+    const errors: { amount?: string } = {}
+
+    const { amount } = values
+    const isValidAmount = +String(amount) >= Math.abs(wb - amountFinal)
     setValid(isValidAmount)
     if (!isValidAmount) {
-      errors.amount = `Amount cannot be less than ${Math.abs(wb- amountFinal)}`;
+      errors.amount = `Amount cannot be less than ${Math.abs(wb - amountFinal)}`
     }
-  
-    return errors;
-  } 
+
+    return errors
+  }
 
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
-      
       <div className="min-w-[900px] ">
-        {matchedJob?.job?.status ? <Alert
-          type="success"
-          showIcon
-          message={
-            <p className={`text-[12px] ${regularFont.className}`}>
-              You have already paid for this job. Click the schedule button to invite candidate for interview and view invited candidate on interview tab
-            </p>
-          }
-          className="bg-transparent -translate-x-1 -translate-y-3 border-none text-[15px] -mb-2"
-        />:<Alert
-          type="error"
-          showIcon
-          message={
-            <p className={`text-[12px] ${regularFont.className}`}>
-              Click the pay button and make payment in order to gain access to
-              scheduling applicants for interview.
-            </p>
-          }
-          className="bg-transparent -translate-x-1 -translate-y-3 border-none text-[15px] -mb-2"
-          icon={
-            <span className="inline-block mt-2 -translate-y-1">
-              <MdOutlineError color="#B3261E" />
-            </span>
-          }
-        />}
-         <button
-            disabled={matchedJob?.job?.status}
-            onClick={handleClick}
-            className="sticky top-0 gap-2 bg-green-600 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center mb-3"
-          >
-            {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}
-            <span>{matchedJob?.job?.status ? 'Paid' : 'Pay'}</span>
-          </button>
-        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky top-10 ">  
+        {matchedJob?.job?.status ? (
+          <Alert
+            type="success"
+            showIcon
+            message={
+              <p className={`text-[12px] ${regularFont.className}`}>
+                You have already paid for this job. Click the schedule button to
+                invite candidate for interview and view invited candidate on
+                interview tab
+              </p>
+            }
+            className="bg-transparent -translate-x-1 -translate-y-3 border-none text-[15px] -mb-2"
+          />
+        ) : (
+          <Alert
+            type="error"
+            showIcon
+            message={
+              <p className={`text-[12px] ${regularFont.className}`}>
+                Click the pay button and make payment in order to gain access to
+                scheduling applicants for interview.
+              </p>
+            }
+            className="bg-transparent -translate-x-1 -translate-y-3 border-none text-[15px] -mb-2"
+            icon={
+              <span className="inline-block mt-2 -translate-y-1">
+                <MdOutlineError color="#B3261E" />
+              </span>
+            }
+          />
+        )}
+        <button
+          disabled={matchedJob?.job?.status}
+          onClick={handleClick}
+          className="sticky top-0 gap-2 bg-green-600 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center mb-3"
+        >
+          {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}
+          <span>{matchedJob?.job?.status ? 'Paid' : 'Pay'}</span>
+        </button>
+        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky top-10 ">
           <div className="col-span-1">Name</div>
           <div className="col-span-4">Details</div>
           <div className="col-span-2 text-center">Experience</div>
           <div className="col-span-2 text-center">Qualification</div>
           <div className="col-span-2">Status</div>
-         
         </div>
         <div className="border bord border-b-0 mb-32">
           {!loading &&
@@ -294,7 +336,11 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
                     title="Qualification"
                     text={match.qual}
                   />
-                  <BlurComponent redirect={redirect} pay={handleClick} status={matchedJob?.job?.status} />
+                  <BlurComponent
+                    redirect={redirect}
+                    pay={handleClick}
+                    status={matchedJob?.job?.status}
+                  />
                 </div>
 
                 <div className="col-span-2">
@@ -326,37 +372,35 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
                   )}
                 </div>
                 <div className="col-span-2 text-center justify-end">
-                
                   {matchedJob.job && (
                     <button
-                    disabled={
-                      !matchedJob?.job?.status ||
-                      (matchedJob?.job?.schedule &&
-                        matchedJob?.job?.schedule
-                          .map((e: any) => e.user.id)
-                          .includes(match.user.id))
-                    }
-                    onClick={() =>
-                      handleSchedule({
-                        id: match.user.id,
-                        fname: match.user.fname,
-                        email: match.user.email,
-                      })
-                    }
-                    className="gap-2 disabled:bg-[#FFA466] bg-orange text-black px-5 py-1 rounded-md cursor-pointer  flex items-center justify-center mb-3"
-                  >
-                   
-                    <div className="flex items-center gap-2">
-                                    <FaClock color="#000" size={16} />
-                                    <span>
-                                      {matchedJob.job.schedule
-                                        .map((e: any) => e.user.id)
-                                        .includes(match.user.id)
-                                        ? 'Scheduled'
-                                        : 'Schedule'}
-                                    </span>
-                                  </div>
-                  </button>
+                      disabled={
+                        !matchedJob?.job?.status ||
+                        (matchedJob?.job?.schedule &&
+                          matchedJob?.job?.schedule
+                            .map((e: any) => e.user.id)
+                            .includes(match.user.id))
+                      }
+                      onClick={() =>
+                        handleSchedule({
+                          id: match.user.id,
+                          fname: match.user.fname,
+                          email: match.user.email,
+                        })
+                      }
+                      className="gap-2 disabled:bg-[#FFA466] bg-orange text-black px-5 py-1 rounded-md cursor-pointer  flex items-center justify-center mb-3"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaClock color="#000" size={16} />
+                        <span>
+                          {matchedJob.job.schedule
+                            .map((e: any) => e.user.id)
+                            .includes(match.user.id)
+                            ? 'Scheduled'
+                            : 'Schedule'}
+                        </span>
+                      </div>
+                    </button>
                   )}
                 </div>
               </div>
@@ -385,7 +429,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
             <div className="flex gap-2 items-center bg-slate-400 px-2 py-1">
               <FaCircleInfo />
               <small>
-              Fund wallet with the amount below or more to complete process
+                Fund wallet with the amount below or more to complete process
               </small>
             </div>
           </div>
@@ -394,28 +438,29 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
           </label>
 
           {/* {String(amt).trim().length > 0 && ( */}
-            <Formik
-              onSubmit={(data: any) => {
-                setAmt(data.amount)
-              }}
-              initialValues={{
-                amount: amt,
-              }}
-              enableReinitialize
-              key={String(ui.postLandingModal?.visibility)}
-              // validationSchema={validationSchema}
-              validateOnChange
-              validate={valid}
-            >
-              {({ handleSubmit, handleChange }) => (
-                <Form onSubmit={handleSubmit}>
-                  <Field onChange={handleSubmit} name="amount" as={StyledInput} type="num" />
-                  {/* <ErrorMessage name={"amount"}>
-                    {(msg) => <FormError msg={msg} />}
-                  </ErrorMessage> */}
-                </Form>
-              )}
-            </Formik>
+          <Formik
+            onSubmit={(data: any) => {
+              setAmt(data.amount)
+            }}
+            initialValues={{
+              amount: amt,
+            }}
+            enableReinitialize
+            key={String(ui.postLandingModal?.visibility)}
+            validateOnChange
+            validate={valid}
+          >
+            {({ handleSubmit, handleChange }) => (
+              <Form onSubmit={handleSubmit}>
+                <Field
+                  onChange={handleSubmit}
+                  name="amount"
+                  as={StyledInput}
+                  type="num"
+                />
+              </Form>
+            )}
+          </Formik>
           {/* )} */}
         </div>
       </HandlePayment>

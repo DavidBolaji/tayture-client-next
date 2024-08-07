@@ -4,8 +4,13 @@ import Wrapper from '../Wrapper/Wrapper'
 import Image from 'next/image'
 import { Images } from '@/assets'
 import HandleOTP from '../Modal/HandleOTP'
+import useSessionSchool from '@/hooks/useSessionSchool'
+import { useRouter } from 'next/router'
+
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
+
+//  useSessionSchool();
   return (
     <div>
       <div className="flex flex-col overflow-hidden">

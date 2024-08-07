@@ -6,7 +6,7 @@ import DropdownComponent from './DropdownComponent'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useGlobalContext } from '@/Context/store'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUser } from '@/lib/api/user'
 import NotificationDropdown from './NotificationDropdown'
 
@@ -19,12 +19,20 @@ const DashboardHeader: React.FC<{
 }> = ({ collapsed, trigger }) => {
   const router = useRouter()
   const { setUI } = useGlobalContext()
+  const queryClient = useQueryClient()
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== "limited"
+
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const req = await getUser()
-      return req.data.user
+      if (permissionGranted) {
+        const req = await getUser()
+        return req.data.user
+      }
+      return queryClient.getQueryData(['user'])
     },
+  
   })
 
   const isSchAdmin =
@@ -32,6 +40,8 @@ const DashboardHeader: React.FC<{
     JSON.parse(user.role).includes('school admin')
       ? true
       : false
+  
+
 
   const handleClick = (link: string) => {
     if (!isSchAdmin) {
@@ -81,26 +91,26 @@ const DashboardHeader: React.FC<{
           }}
         />
         <div className={`flex justify-end items-center w-full `}>
-          <div
+          {permissionGranted && <div
             className="hover:text-orange cursor-pointer text-black"
             onClick={() => handleClick('/dashboard/school/new')}
           >
             Add School
-          </div>
-          <div className="ml-[24px]">
+          </div>}
+          {permissionGranted && <div className="ml-[24px]">
             <Link
               className="hover:text-orange text-black"
               href="/dashboard/jobs"
             >
               Find job
             </Link>
-          </div>
-          <div
+          </div>}
+          {permissionGranted && <div
             className="ml-[24px] hover:text-orange text-black cursor-pointer"
             onClick={() => handleClick('/dashboard/school/post')}
           >
             Post a job
-          </div>
+          </div>}
 
           {/* <div className="mx-[20px]"> */}
           {/* <Whatsapp2 /> */}

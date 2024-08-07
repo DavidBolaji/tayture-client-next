@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { useGlobalContext } from '@/Context/store'
 import { regularFont } from '@/assets/fonts/fonts'
 import SchoolAnalytics from '@/components/Dashboard/SchoolAnalytics/SchoolAnalytics'
@@ -16,17 +16,25 @@ import React from 'react'
 const { useBreakpoint } = Grid
 
 const SchoolPage = () => {
-  const {access} = useGlobalContext();
+  const { access } = useGlobalContext()
+  const queryClient = useQueryClient()
+  const permission = queryClient.getQueryData(['permission'])
+  const permissionGranted = permission !== 'limited'
+
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const req = await getUser()
-      return req.data.user
+      if (permissionGranted) {
+        const req = await getUser()
+        return req.data.user
+      }
+      return queryClient.getQueryData(['user'])
     },
   })
 
-  const queryClient = useQueryClient();
-  const school = queryClient.getQueryData(['school']) as (School & {sch_admin: SchoolAdmin[]}) | undefined
+  const school = queryClient.getQueryData(['school']) as
+    | (School & { sch_admin: SchoolAdmin[] })
+    | undefined
 
   /**check if path is defined */
   const pathExist = user?.path ? true : false
@@ -41,18 +49,27 @@ const SchoolPage = () => {
     (JSON.parse(user!.path?.replace("'", '')!) as unknown as string[]).includes(
       'school admin',
     )
-   const {limitTransaction, columns2, isPending} = useTransaction()
+  const { limitTransaction, columns2, isPending } = useTransaction()
   const screen = useBreakpoint()
   return (
     <div>
-       {typeof school !== "undefined" &&<h3
-      className={`${regularFont.className} text-black md:text-[32px] font-[600] text-[20px] mb-2`}
-    >
-      {school?.sch_name}
-    </h3>}
-    {!access && <div className='text-xs'>
-      <Alert className='mb-2'  type="info" message="Contact admin to grant you access to carry out actions on this page" showIcon/>
-    </div>}
+      {typeof school !== 'undefined' && (
+        <h3
+          className={`${regularFont.className} text-black md:text-[32px] font-[600] text-[20px] mb-2`}
+        >
+          {school?.sch_name}
+        </h3>
+      )}
+      {!access && (
+        <div className="text-xs">
+          <Alert
+            className="mb-2"
+            type="info"
+            message="Contact admin to grant you access to carry out actions on this page"
+            showIcon
+          />
+        </div>
+      )}
       <div className="grid grid-cols-10 gap-4 mb-3">
         <div className="md:col-span-5 col-span-10">
           <WalletCard2 />
@@ -65,18 +82,17 @@ const SchoolPage = () => {
             columns={columns2}
             loading={isPending}
             pagination={false}
-            size='small'
+            size="small"
           />
-          <div className='w-full pr-2 flex justify-end mt-1'>
-          <Link href={'/dashboard/school/transaction'}>
-            View all
-          </Link>
-
+          <div className="w-full pr-2 flex justify-end mt-1">
+            <Link href={'/dashboard/school/transaction'}>View all</Link>
           </div>
         </div>
       </div>
       <PricingCard />
-      <SchoolCard isSchAdmin={isSchAdmin} screen={screen} />
+      {permissionGranted && (
+        <SchoolCard isSchAdmin={isSchAdmin} screen={screen} />
+      )}
       <SchoolAnalytics />
     </div>
   )
