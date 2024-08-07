@@ -193,7 +193,12 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       label: (
         <div
           className={regularFont.className}
-          onClick={() => router.push('/dashboard/school/new')}
+          onClick={
+            isAdmin
+              ? () => router.push('/dashboard/school/new')
+              : () => router.push('/dashboard/school/new')
+          }
+
         >
           View School
         </div>
@@ -204,7 +209,12 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       label: (
         <div
           className={regularFont.className}
-          onClick={() => router.push('/dashboard/school/manage/all')}
+          onClick={
+            isAdmin
+              ? () => router.push('/dashboard/school/manage/all')
+              : () => router.push('/dashboard/school/manage/all')
+          }
+
         >
           Manage jobs
         </div>
@@ -215,10 +225,11 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
 
   const allSchoolAdmin = permissionGranted ? schoolAdminItems : []
 
+  const hasSchool = !school ? [] : [...schoolList, ...allSchoolAdmin]
+
   const items: MenuProps['items'] = [
     ...allUsers,
-    ...schoolList,
-    ...allSchoolAdmin,
+    ...hasSchool,
     {
       key: 'signout',
       label: (
