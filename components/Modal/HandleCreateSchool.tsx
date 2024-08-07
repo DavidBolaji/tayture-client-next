@@ -3,8 +3,6 @@
 import { useGlobalContext } from '@/Context/store'
 import React, { useState } from 'react'
 
-import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
 import Stepper, { StepperChildProps } from '../Stepper/Stepper'
 import PostLandingModal from '../PostLandingModal/PostLandingModal'
 import PostSchoolCreateForm from '../PostLandingModal/PostSchoolCreateForm'
