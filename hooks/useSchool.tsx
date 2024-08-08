@@ -69,7 +69,7 @@ const useSchool = () => {
     generateLogin.mutate(schEmail, {
       onSuccess: (res: AxiosResponse) => {
         if (window) {
-          window?.navigator?.clipboard?.writeText(
+          navigator?.clipboard?.writeText(
             `${url?.replace("/api", "")}/auth/session?session=${res.data.session.session}`,
           )
           message.success('Link copied to clipboard')
