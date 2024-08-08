@@ -267,7 +267,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
 
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
-      <div className="min-w-[900px] ">
+      <div className="min-w-[900px]">
         {matchedJob?.job?.status ? (
           <Alert
             type="success"
@@ -291,7 +291,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
                 scheduling applicants for interview.
               </p>
             }
-            className="bg-transparent -translate-x-1 -translate-y-3 border-none text-[15px] -mb-2"
+            className="-translate-x-1 -translate-y-3 border-none text-[15px] -mb-2"
             icon={
               <span className="inline-block mt-2 -translate-y-1">
                 <MdOutlineError color="#B3261E" />
@@ -299,22 +299,26 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
             }
           />
         )}
+        <div className="sticky top-0 w-full z-20 bg-[#faf9f9] bottom-0 py-2 mb-2">
         <button
           disabled={matchedJob?.job?.status}
           onClick={handleClick}
-          className="sticky top-0 gap-2 bg-green-600 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center mb-3"
+          className=' bg-green-600 gap-x-2 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center'
         >
           {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}
           <span>{matchedJob?.job?.status ? 'Paid' : 'Pay'}</span>
         </button>
-        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky top-10 ">
+
+        </div>
+        <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky top-10 z-20 ">
           <div className="col-span-1">Name</div>
           <div className="col-span-4">Details</div>
           <div className="col-span-2 text-center">Experience</div>
           <div className="col-span-2 text-center">Qualification</div>
           <div className="col-span-2">Status</div>
         </div>
-        <div className="border bord border-b-0 mb-32">
+        <div className=' pb-32'>
+        <div className="border bord border-b-0">
           {!loading &&
             matchedJob?.applied.length > 0 &&
             matchedJob?.applied.map((match: any, ind: number) => (
@@ -405,6 +409,8 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
                 </div>
               </div>
             ))}
+        </div>
+
         </div>
       </div>
       <HandlePayment

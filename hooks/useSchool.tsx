@@ -1,4 +1,3 @@
-'use client'
 import { Image, message, Space, Switch } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -28,7 +27,6 @@ const useSchool = () => {
     queryKey: ['allSchools'],
     queryFn: async () => {
       const sch = await Axios.get('/school')
-
       return sch.data.school
     },
   })
@@ -60,20 +58,25 @@ const useSchool = () => {
     },
   })
 
-  const { mutate: generateLogin } = useMutation({
+  const generateLogin = useMutation({
     mutationFn: async (schEmail: string) => {
       const result = await Axios.post('/users/login/generate', { schEmail })
       return result
     },
-    onSuccess: (res: AxiosResponse) => {
-      if (window) {
-        window.navigator.clipboard.writeText(
-          `${url?.replace("/api", "")}/auth/session?session=${res.data.session.session}`,
-        )
-        message.success('Link copied to clipboard')
-      }
-    },
   })
+
+  const handleGenerateLogin = (schEmail: string) => {
+    generateLogin.mutate(schEmail, {
+      onSuccess: (res: AxiosResponse) => {
+        if (window) {
+          window?.navigator?.clipboard?.writeText(
+            `${url?.replace("/api", "")}/auth/session?session=${res.data.session.session}`,
+          )
+          message.success('Link copied to clipboard')
+        }
+      },
+    })
+  }
 
   const setEdit = (id: string) => {
     const allSchools = queryClient.getQueryData(['allSchools']) as School[]
@@ -119,34 +122,20 @@ const useSchool = () => {
               <div key={ind}>
                 <div>
                   <div className="flex items-center justify-between">
-                    <p className="underline font-[600]">
-                      {' '}
-                      Admin
-                      {ind + 1}
-                    </p>
-                    <div className='mt-1' onClick={() => generateLogin(d.sch_admin_email)}>
+                    <p className="underline font-[600]"> Admin {ind + 1}</p>
+                    <div className='mt-1' onClick={() => handleGenerateLogin(d.sch_admin_email)}>
                       <FaCopy />
                     </div>
                   </div>
                 </div>
-                <p className="text-[12px]">
-                  Name:
-                  {d.sch_admin_name}
-                </p>
-                <p className="text-[12px]">
-                  Email:
-                  {d.sch_admin_email}
-                </p>
-                <p className="text-[12px]">
-                  Phone:
-                  {d.sch_admin_phone}
-                </p>
+                <p className="text-[12px]">Name: {d.sch_admin_name}</p>
+                <p className="text-[12px]">Email: {d.sch_admin_email}</p>
+                <p className="text-[12px]">Phone: {d.sch_admin_phone}</p>
               </div>
             ))}
         </div>
       ),
     },
-
     {
       title: 'Verify',
       key: 'verify',
