@@ -67,7 +67,6 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const fetchSchool = async () => {
     if (permissionGranted) {
       const req = await getUserSchool()
-      console.log(JSON.stringify(req.data.school, null, 2))
       return req.data.school[defaultSchool]
     } else {
       const req = await getUserSchoolAdmin()
@@ -149,7 +148,7 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
                 <AntAvatar src={profilePicture} shape="circle" size="large" />
               )
             ) : !permissionGranted ? (
-              <StyledAvatar name="Guest" />
+              <StyledAvatar name="Admin" />
             ) : (
               <StyledAvatar name={auth?.fname ?? ''} />
             )}
@@ -282,7 +281,9 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
           <Badge size="default">
             <Space>
               {profilePicture ? (
-                <AntAvatar src={profilePicture} shape="square" size="large" />
+                permissionGranted ?
+                <AntAvatar src={profilePicture} shape="square" size="large" /> :
+                <StyledAvatar name={'Admin'} />
               ) : permissionGranted ? (
                 <StyledAvatar name={auth?.fname ?? ''} />
               ) : (
