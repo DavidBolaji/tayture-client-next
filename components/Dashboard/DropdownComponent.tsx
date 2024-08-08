@@ -5,7 +5,7 @@ import { MenuProps } from 'antd'
 import { Avatar as AntAvatar, Badge, Dropdown, Space, Tooltip } from 'antd'
 import Avatar from 'react-avatar'
 import styled from '@emotion/styled'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUserSchool, getUserSchoolAdmin } from '@/lib/api/school'
@@ -109,7 +109,11 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
               className="max-w-48"
               onClick={() => {
                 setDefaultSchool(+idx)
-                window.location.assign('/dashboard')
+                if (permissionGranted) {
+                  window.location.assign('/dashboard')
+                } else {
+                  router.replace(router.asPath)
+                }
               }}
             >
               <Badge size="default">

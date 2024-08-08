@@ -29,8 +29,6 @@ const verifyToken2 =
       const token =
         req.cookies.token || req.headers.authorization?.split(' ')[1]
 
-        console.log('[TOKEN]', token)
-
       if (!token) {
         return res
           .status(403)
@@ -56,8 +54,6 @@ const verifyToken2 =
           return res.status(401).json({ error: 'Unauthorized: Invalid token' })
         }
       }
-      console.log('[DECODED_USER]', decodedUser)
-
 
       const user = await db.user.findUnique({
         where: { id: (decodedUser as unknown as { id: string }).id },
@@ -76,8 +72,6 @@ const verifyToken2 =
           },
         },
       })
-      
-      console.log('[SCHOOL]', school)
      
       const allSchId2 = !school ? [] : school.map((s) => {
         return {
@@ -102,8 +96,6 @@ const verifyToken2 =
           ...user,
           school: uniqueSchIdArray
         } as User & { school: { sch_id: string }[] }
-        
-        console.log('[NEW_USER]', newUser)
 
         req.authUser! = newUser
         req.token = token
