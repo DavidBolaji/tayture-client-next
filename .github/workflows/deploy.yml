@@ -15,10 +15,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
+
+      - name: Set up Bun
+        run: |
+          npm i -g bun
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: bun install
 
       - name: Update Version
         run: bash scripts/update-version.sh
