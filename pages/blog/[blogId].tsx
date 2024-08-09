@@ -203,7 +203,7 @@ export const getStaticProps = async (ctx: any) => {
       // revalidate: 10,
     };
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error fetching data:', (error as any).message);
 
     return {
       props: {
@@ -225,7 +225,7 @@ export async function getStaticPaths() {
 
     return { paths, fallback: 'blocking' };
   } catch (error) {
-    console.error('Error fetching blogs:', error);
+    console.error('Error fetching blogs:', (error as any).message);
     return { paths: [], fallback: 'blocking' };
   }
 }

@@ -1,12 +1,10 @@
 "use client"
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { AxiosError, AxiosResponse } from 'axios'
 import { useGlobalContext } from '@/Context/store'
-import { useSearchParam } from 'react-use'
-import { useParams, usePathname } from 'next/navigation'
 
 const useSessionSchool = () => {
   const router = useRouter()
@@ -34,7 +32,7 @@ const useSessionSchool = () => {
         queryClient.setQueryData(['user'], () => res.data.user)
       const t = setTimeout(() => {
         clearTimeout(t)
-        window.location.assign('/dashboard/school')
+        router.push('/dashboard/school')
       }, 1000)
     },
     onError: (err) => {

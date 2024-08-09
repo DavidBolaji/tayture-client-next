@@ -17,7 +17,7 @@ const DashboardNav: React.FC = () => {
   const permissionGranted = permission !== 'limited'
 
   const user = queryClient.getQueryData(['user']) as User
-  const isSuperAdmin = user.role === "SUPER_ADMIN"
+  const isSuperAdmin = user?.role === "SUPER_ADMIN" || false
   const toggle = () => {
     setVisible((prev) => !prev)
   }

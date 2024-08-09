@@ -3,7 +3,7 @@ import React from 'react'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import Button from '@/components/Button/Button'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import Spinner from '@/components/Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
 import { loginUser } from '@/lib/api/user'
@@ -83,7 +83,8 @@ const LoginForm = ({ show = true, redirect = true, close }: {show?: boolean, red
         if(redirect) {
           const t = setTimeout(() => {
             clearTimeout(t)
-            router.push('/dashboard')
+            // window.location.assign('/dashboard')
+            router.replace('/dashboard')
           }, 1000)
         } else {
           queryClient.setQueryData(['user'], res.data.user)
