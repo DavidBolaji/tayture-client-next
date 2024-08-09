@@ -21,6 +21,12 @@ jobs:
         run: |
           npm i -g bun
 
+      - name: Load Environment Variables
+        run: |
+          if [ -f .env ]; then
+            export $(cat .env | grep -v '^#' | xargs)
+          fi
+
       - name: Install dependencies
         run: bun install
 
