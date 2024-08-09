@@ -3,7 +3,7 @@ name: Build, Push to Staging, and Deploy
 on:
   push:
     branches:
-      - main
+      - '**'
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git checkout staging
-          git merge main --no-ff
+          git merge ${{ github.ref_name }} --no-ff
           git push origin staging
 
       - name: Deploy to Vercel
