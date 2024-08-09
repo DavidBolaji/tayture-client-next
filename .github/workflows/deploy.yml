@@ -3,7 +3,7 @@ name: Build, Push to Staging, and Deploy
 on:
   push:
     branches:
-      - '**'
+      - main
 
 jobs:
   build:
@@ -12,20 +12,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Bun
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          echo "BUN_INSTALL=$HOME/.bun" >> $GITHUB_ENV
-          echo "PATH=$BUN_INSTALL/bin:$PATH" >> $GITHUB_ENV
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
       - name: Install dependencies
-        run: bun install
+        run: npm install --legacy-peer-deps
 
       - name: Update Version
         run: bash scripts/update-version.sh
 
       - name: Build Next.js app
-        run: bun run build
+        run: npm run build
 
       - name: Push to Staging Branch
         if: success()
@@ -33,7 +32,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git checkout staging
-          git merge ${{ github.ref_name }} --no-ff
+          git merge main --no-ff
           git push origin staging
 
       - name: Deploy to Vercel
