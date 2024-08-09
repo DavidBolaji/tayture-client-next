@@ -36,6 +36,10 @@ jobs:
 
       - name: Push to Staging Branch
         if: success()
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GIT_COMMITTER_NAME: "david"
+          GIT_COMMITTER_EMAIL: "odavidbolaji14@gmail.com"
         run: |
           git fetch origin
           if git show-ref --verify --quiet refs/heads/staging; then
@@ -46,7 +50,7 @@ jobs:
           fi
           git merge ${{ github.ref_name }} --no-ff
           git push origin staging
-
+          
       - name: Deploy to Vercel
         if: success()
         run: vercel --prod
