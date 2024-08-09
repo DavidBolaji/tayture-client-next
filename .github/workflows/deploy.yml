@@ -23,18 +23,16 @@ jobs:
 
       - name: Install dependencies
         run: bun install
-      
-      - name: Install dotenv-cli
-        run: bun add dotenv-cli
-
-      - name: Load Environment Variables
-        run: dotenv -e .env -- bun run build
 
       - name: Update Version
         run: bash scripts/update-version.sh
 
       - name: Build Next.js app
         run: npm run build
+        env:
+          NEXT_PUBLIC_ENV: ${{ secrets.NEXT_PUBLIC_ENV }}
+          NEXT_PUBLIC_PROD: ${{ secrets.NEXT_PUBLIC_PROD }}
+          NEXT_PUBLIC_DEV: ${{ secrets.NEXT_PUBLIC_DEV }}
 
       - name: Push to Staging Branch
         if: success()
