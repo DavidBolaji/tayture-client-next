@@ -33,24 +33,7 @@ jobs:
           NEXT_PUBLIC_ENV: ${{ secrets.NEXT_PUBLIC_ENV }}
           NEXT_PUBLIC_PROD: ${{ secrets.NEXT_PUBLIC_PROD }}
           NEXT_PUBLIC_DEV: ${{ secrets.NEXT_PUBLIC_DEV }}
-
-      - name: Push to Staging Branch
-        if: success()
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-          GIT_COMMITTER_NAME: "david"
-          GIT_COMMITTER_EMAIL: "odavidbolaji14@gmail.com"
-        run: |
-          git fetch origin
-          if git show-ref --verify --quiet refs/heads/staging; then
-            git checkout staging
-          else
-            git checkout -b staging
-            git push origin staging
-          fi
-          git merge ${{ github.ref_name }} --no-ff
-          git push origin staging
-          
+                    
       - name: Deploy to Vercel
         if: success()
         run: vercel --prod
