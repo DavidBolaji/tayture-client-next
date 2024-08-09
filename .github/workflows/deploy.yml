@@ -37,7 +37,13 @@ jobs:
       - name: Push to Staging Branch
         if: success()
         run: |
-          git checkout staging
+          git fetch origin
+          if git show-ref --verify --quiet refs/heads/staging; then
+            git checkout staging
+          else
+            git checkout -b staging
+            git push origin staging
+          fi
           git merge ${{ github.ref_name }} --no-ff
           git push origin staging
 
