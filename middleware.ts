@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 
 export function middleware(req: NextRequest) {
-  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';  // Provide a default version
+  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.1';  // Provide a default version
 
   const currentVersion = req.cookies.get('app_version')?.value;
 
