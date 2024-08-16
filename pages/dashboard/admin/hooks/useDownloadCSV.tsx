@@ -6,7 +6,8 @@ import { FormikHelpers } from 'formik';
 
 interface ICSV {
     start: string;
-    end: string
+    end: string;
+    school: string
 }
 
 const useDownloadCSV = () => {

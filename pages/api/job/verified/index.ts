@@ -13,7 +13,8 @@ export default async function handler(
   if (req.method !== 'GET')
     return res.status(400).json({ message: 'Method not allowed' })
 
-  const job = await db.job.findMany({
+  // Fetch jobs ordered by school and createdAt
+  const jobs = await db.job.findMany({
     where: {
       school: {
         sch_verified: 1,
@@ -39,18 +40,46 @@ export default async function handler(
       school: {
         select: {
           sch_id: true,
+          sch_name: true,
           sch_city: true,
           sch_state: true,
           sch_lga: true,
           sch_address: true,
+          landmark: true
         },
       },
       applied: true,
     },
     orderBy: {
-      createdAt: 'desc'
+      createdAt: 'desc' // Order by latest created first
     }
   })
 
-  res.status(200).json({ message: 'Succesful', job })
+  // Group by school and calculate the index for each job
+  const schoolIndexMap = new Map<string, number>()
+  const jobsWithTag = jobs.map((job) => {
+    const schoolId = job.school.sch_id
+    const schoolName = job.school.sch_name.split(' ')
+    const schoolAcro = schoolName.map(el => el[0]?.toUpperCase())
+
+
+    // Initialize or increment the job index for the school
+    const jobIndex = (schoolIndexMap.get(schoolId) || 0) + 1
+    schoolIndexMap.set(schoolId, jobIndex)
+
+    // Format the job tag
+    const datePart = job.createdAt.toISOString().slice(2, 10).replace(/-/g, '') // e.g., 08092024
+    const idxPart = jobIndex.toString().padStart(2, '0') // Pad index with leading zero if needed
+
+    const tag = `${datePart}-${schoolAcro.join('').slice(0, 3)}-${idxPart}`
+
+
+    return {
+      ...job,
+      tag,
+      idx: jobIndex
+    }
+  })
+
+  res.status(200).json({ message: 'Successful', job: jobsWithTag })
 }

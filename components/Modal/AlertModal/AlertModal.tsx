@@ -8,31 +8,6 @@ const AlertModal: React.FC<{
   msg: string | ReactNode
   timeout: number // Timeout in milliseconds
 }> = ({ isOpen, close, msg, timeout }) => {
-  // const [progress, setProgress] = useState(100)
-
-  // useEffect(() => {
-  //   let interval: NodeJS.Timeout | null = null
-
-  //   if (isOpen) {
-  //     interval = setInterval(() => {
-  //       setProgress(prevProgress => {
-  //         if (prevProgress <= 0) {
-  //           clearInterval(interval as NodeJS.Timeout)
-  //           setProgress(100)
-  //           close() // Close modal when progress reaches 0
-  //         }
-  //         return prevProgress - 1.3
-  //       })
-  //     }, timeout/ 200)
-  //   }
-
-  
-
-  //   return () => {
-  //     if (interval) clearInterval(interval)
-  //       setProgress(100)
-  //   }
-  // }, [isOpen, close, timeout]) // Include timeout here
 
   return (
     <StyledModal open={isOpen} closable footer={null}>

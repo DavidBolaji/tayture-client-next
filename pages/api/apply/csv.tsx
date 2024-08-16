@@ -3,9 +3,11 @@ import xlsx from 'xlsx'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+const handler =  async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const { start, end } = req.body
+    const { start, end, school } = req.body
+
+    console.log(school)
 
     try {
       // Fetch data from the database using db
@@ -15,6 +17,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
             gte: new Date(start),
             lte: new Date(end),
           },
+          schoolId: school.trim().length ? school : undefined
         },
         include: {
           user: true,
@@ -55,3 +58,5 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     res.status(405).json({ error: 'Method not allowed' })
   }
 }
+
+export default handler

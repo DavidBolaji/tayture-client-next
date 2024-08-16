@@ -15,12 +15,14 @@ export interface IJobSchDb {
   jobUserzId: String
   createdAt: Date | string
   updatedAt?: Date
+  tag: string
   school: {
     sch_id: string
     sch_city: string
     sch_state: string
     sch_lga: string
     sch_address: string
+    landmark: string
   }
   applied: { id: string }[]
 }

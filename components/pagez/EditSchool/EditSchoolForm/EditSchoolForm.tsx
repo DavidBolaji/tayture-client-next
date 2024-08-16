@@ -25,6 +25,7 @@ const formatVal = (data: School) => {
     sch_url: data.sch_url,
     sch_phone: data.sch_phone,
     sch_name: data.sch_name,
+    landmark: data.landmark || ''
   }
 }
 
@@ -91,6 +92,14 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               city="sch_city"
               state="sch_state"
               lga="sch_lga"
+              disabled={user.role !== "SUPER_ADMIN"}
+            />
+            <Field
+              name="landmark"
+              as={StyledInput}
+              placeholder="Closest bus stop/Landmark"
+              type={'text'}
+              text={'Closest bus stop/Landmark'}
               disabled={user.role !== "SUPER_ADMIN"}
             />
 
