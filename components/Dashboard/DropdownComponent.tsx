@@ -97,6 +97,7 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     onSuccess: () => {
       queryClient.clear()
       localStorage.clear()
+      router.replace('/auth/login')
     },
   })
 
@@ -253,9 +254,6 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         <span
           className={regularFont.className}
           onClick={() => {
-            if (window) {
-              window.location.replace('/auth/login')
-            }
             signout()
           }}
         >

@@ -18,12 +18,13 @@ const JobCard: React.FC<{
 }> = ({ job, copy = false, related = false }) => {
   const {
     job_title: title,
-    school: { sch_lga: lga, sch_city: city, sch_state: state },
+    school: { sch_lga: lga, sch_city: city, sch_state: state, landmark },
     job_min_sal: min,
     job_max_sal: max,
     job_exp: exp,
     job_qual: qual,
     job_id: id,
+    tag
   } = job
   const [open, setOpen] = useState(false)
   const screens = useBreakpoint()
@@ -57,7 +58,7 @@ const JobCard: React.FC<{
         <div
           onClick={() => {
             navigator.clipboard.writeText(
-              `${process.env.NEXT_PUBLIC_FRONTEND_API}/jobs?find=${id}`,
+              `${process.env.NEXT_PUBLIC_FRONTEND_API}/jobs?find=${id}&tag=${tag}`,
             )
             message.success('Link copied to clipboard')
           }}
@@ -73,7 +74,19 @@ const JobCard: React.FC<{
           curId === id ? 'border-orange' : 'border-ash_400 '
         } ${regularFont.className}`}
       >
-        <h2 className={`mb-3 text-[14px] ${boldFont.className}`}>{title}</h2>
+        <h2 className={`mb-1 text-[14px] ${boldFont.className}`}>{title}</h2>
+        <div className='mb-3'>
+          <Tag
+            className={`bg-orange border-none italic text-white ${regularFont.className} text-[12px]`}
+          >
+            {tag}
+          </Tag>
+         {!landmark ? null : <Tag
+            className={`bg-blue-500 border-none italic text-white ${regularFont.className} text-[12px]`}
+          >
+            {`${landmark} area`}
+          </Tag>}
+        </div>
         <Space>
           <FaLocationDot className="text-orange" />
           <span className={`${regularFont.className} text-[14px]`}>
@@ -96,6 +109,7 @@ const JobCard: React.FC<{
           >
             {exp} years Experience
           </Tag>
+        
         </div>
         <Drawer
           closable

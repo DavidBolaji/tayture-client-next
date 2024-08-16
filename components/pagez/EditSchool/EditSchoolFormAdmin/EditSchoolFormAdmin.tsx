@@ -13,6 +13,7 @@ import { ISchData, useGlobalContext } from '@/Context/store'
 import { createSchool, updateSchool } from '@/lib/api/school'
 import { useRouter } from 'next/router'
 import { validationSchema } from './Schema/EditSchoolAdminSchema'
+import school from '@/pages/api/school/me/school'
 type ISchaAdminData = {
   sch_admin_name: string
   sch_admin_phone: string
@@ -64,6 +65,7 @@ const EditSchoolFormAdmin: React.FC<{update?: boolean}> = ({update = false}) => 
       sch_logo: img.trim().length > 3 ? img : sch.sch_logo,
       ...createSch,
       sch_admin: JSON.stringify(values.participants),
+      sch_id: sch.sch_id
     })
     resetForm()
   }

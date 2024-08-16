@@ -34,9 +34,11 @@ Axios.interceptors.response.use(
   },
   async (error) => {
     const prevRequest = error?.config;
+    const currentPath = window?.location.pathname;
     if (error?.response?.status === 401) {
-      if(window) {
+      if(window && currentPath !== '/auth/login' && currentPath !== '/jobs') {
         localStorage.clear()
+      
         window.location.replace('/auth/login'); 
       }
     
