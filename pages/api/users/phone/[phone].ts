@@ -19,7 +19,6 @@ export default async function handler(
     const user = await db.user.findFirstOrThrow({
       where: {
         phone: (String(req.query.phone)! as string),
-        // phone: (String(req.query.phone)! as string,
       },
     })
   

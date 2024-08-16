@@ -39,3 +39,4 @@ next-env.d.ts
 .cache
 .env.production
 .env.staging
+/pages/api/migrate

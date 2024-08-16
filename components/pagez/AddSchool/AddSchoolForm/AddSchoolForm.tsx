@@ -22,6 +22,7 @@ const initialValues = {
   sch_url: '',
   sch_phone: '',
   sch_name: '',
+  landmark: '',
 }
 
 const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
@@ -49,8 +50,7 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
     }, 400)
   }
   return (
-    <div className='pb-10'>
-
+    <div className="pb-10">
       <div className="pt-[32px] flex justify-center">
         <UploadComponent />
       </div>
@@ -70,7 +70,9 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               type={'text'}
               text={'School name'}
             />
-            <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>No of employees</h3>
+            <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>
+              No of employees
+            </h3>
             <Field
               name="sch_no_emp"
               as={SelectInput}
@@ -78,12 +80,20 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
               text={'No of Employees'}
               option={employes}
             />
-            
+
             <Field
               as={LocationComponent}
               city="sch_city"
               state="sch_state"
               lga="sch_lga"
+            />
+
+            <Field
+              name="landmark"
+              as={StyledInput}
+              placeholder="Closest bus stop/Landmark"
+              type={'text'}
+              text={'Closest bus stop/Landmark'}
             />
 
             <Field

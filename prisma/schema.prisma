@@ -302,6 +302,7 @@ model School {
   sch_state        String        @db.VarChar(80)
   sch_lga          String        @db.VarChar(100)
   pending_job_post Int           @default(0)
+  landmark         String?
   schUserId        String
   user             User          @relation(fields: [schUserId], references: [id])
   wallet           Wallet?

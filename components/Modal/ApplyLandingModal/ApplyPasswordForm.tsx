@@ -13,6 +13,7 @@ import { useGlobalContext } from '@/Context/store'
 // import Link from "next/link";
 import * as Yup from 'yup'
 import { useRouter } from 'next/router'
+import { AxiosError } from 'axios'
 
 export const passwordSchema = Yup.object().shape({
   password: Yup.string().required('Email is required'),
@@ -41,13 +42,14 @@ const ApplyPasswordForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
       return router.push(`/dashboard?job=1`)
     },
     onError: (err) => {
-      setMessage(() => (err as Error).message)
+      console.log((err as AxiosError<{error: string}>).response?.data.error)
+      setMessage(() => (err as AxiosError<{error: string}>).response?.data.error || (err as Error).message)
     },
   })
 
   const onSubmit = async (
     values: { password: string },
-    { resetForm }: FormikHelpers<{ password: string }>,
+    resetForm:(arg: { values: {password: string} }) => void ,
   ) => {
     loginMutate({ email: user.email!, password: values.password })
     resetForm({
@@ -69,13 +71,13 @@ const ApplyPasswordForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
         validateOnMount
         validationSchema={passwordSchema}
         key={SW?.current}
-        onSubmit={onSubmit}
+        onSubmit={() => {}}
         initialValues={{
           password: '',
         }}
       >
-        {({ isValid, handleSubmit }) => (
-          <Form onSubmit={handleSubmit}>
+        {({ isValid, resetForm, values }) => (
+          <Form>
             <Field
               as={StyledInput}
               name={'password'}
@@ -88,12 +90,13 @@ const ApplyPasswordForm: React.FC<ApplyEmailFormProps> = ({ SW }) => {
             </Link> */}
             <div className="w-full flex justify-center">
               <Button
-                type="submit"
+                type="button"
                 bold={false}
                 text={isPending ? <Spinner color="white" /> : 'Next'}
                 disabled={!isValid}
                 hover={isValid}
                 render="light"
+                onClick={() => onSubmit(values, resetForm)}
               />
             </div>
           </Form>

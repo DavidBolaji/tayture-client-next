@@ -31,9 +31,10 @@ const sendTextMessage = async (phone, msg) => {
 }
 
 const monitor = new cronitor.Monitor('job-application-message')
+
 // '*/2 * * * *'
 // '0 20 * * 5'
-
+// weekly sms for available jobs
 cron.schedule('0 20 * * 5', async () => {
  if (process.env.NEXT_PUBLIC_RUN_CRONITOR === "true") {
   monitor.ping({ state: 'run' })

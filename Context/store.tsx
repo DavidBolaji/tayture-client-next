@@ -35,6 +35,7 @@ export type ISchData = {
   sch_name: string
   sch_logo: string
   sch_admin: string
+  sch_id?: string
 }
 
 type UIkeyz =

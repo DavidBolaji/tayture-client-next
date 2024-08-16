@@ -22,11 +22,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     'sch_phone',
     'sch_logo',
     'active',
+    'landmark'
   ]
 
   const holderUser = ['sch_logo', 'sch_name', 'sch_phone']
+  const id = req.body.sch_id;
 
   const keys = Object.keys(req.body)
+
   const hasSchoolAdmin = keys.includes('sch_admin')
   const data: any = {}
 
@@ -45,7 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const school = await db.school.update({
       where: {
-        sch_id: req.authUser!.school[+req.query.defaultSchool!].sch_id,
+        sch_id: req.authUser?.role === "SUPER_ADMIN" ? id : req.authUser!.school[+req.query.defaultSchool!].sch_id,
       },
       data: { ...data },
     })
