@@ -27,6 +27,7 @@ export default async function handler(
   if (categoryId !== "all") {
     blogs = await db.blog.findMany({
       where: {
+        published: true,
         categories: {
           id: categoryId as string
         },
@@ -64,6 +65,7 @@ export default async function handler(
   } else {
     blogs = await db.blog.findMany({
       where: {
+        published: true,
         id: {
           not: {
             equals: except as string 

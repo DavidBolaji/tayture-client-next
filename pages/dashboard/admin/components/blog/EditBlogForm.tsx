@@ -145,7 +145,7 @@ const EditBlogForm: React.FC<{
                 <Field
                   name="except"
                   as={StyledTextarea}
-                  placeholder="except"
+                  placeholder="excerpt"
                   type={'text'}
                   text={'Except'}
                   rows={2}

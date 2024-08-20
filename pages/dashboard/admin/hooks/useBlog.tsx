@@ -19,7 +19,7 @@ const useBlog = () => {
   const { data: blog, isPending } = useQuery({
     queryKey: ['allBlog'],
     queryFn: async () => {
-      const sch = await Axios.get('/blog')
+      const sch = await Axios.get('/blog?all=1')
       return sch.data.blog
     },
   })
@@ -71,9 +71,13 @@ const useBlog = () => {
   const handleUpdate = (data: Partial<Blog>) => updateBlog(data)
 
   const handleEdit = (data: Blog) => {
-    setImg(() => data.banner)
+    setImg(() => data.banner!)
     setDrawer(true)
     setEditBlog(data)
+  }
+
+  const handlePublish = (data: Blog) => {
+   handleUpdate({...data, published: !data.published})
   }
 
   const columns: ColumnsType<Blog> = [
@@ -91,7 +95,7 @@ const useBlog = () => {
         <Image
           width={50}
           height={50}
-          src={record.banner}
+          src={record.banner!}
           alt={'blog_picture'}
           className="object-cover rounded-full"
         />
@@ -127,6 +131,7 @@ const useBlog = () => {
             <a>Delete</a>
           </Popconfirm>
           <a onClick={() => handleEdit(record)}>Edit</a>
+          <a onClick={() => handlePublish(record)}>{record.published ? 'Unpublish': 'Publish'}</a>
         </Space>
       ),
     },

@@ -119,7 +119,7 @@ function SingleBlogTemplate({
               <div className="container my-10 sm:my-12">
                 <Image
                   priority
-                  src={blog?.banner}
+                  src={blog?.banner!}
                   width={1060}
                   height={750}
 

@@ -48,19 +48,6 @@ const useTransaction = () => {
       width: 50,
       render: (_, record, idx) => idx + 1,
     },
-    // {
-    //   title: 'Name',
-    //   dataIndex: 'message',
-    //   key: 'message',
-
-    //   render: (_, record) => (
-    //     <div className="">
-    //       <h3 className='text-sm'>{record.message}</h3>
-    //       <span className='text-[10px]'>{record.id}</span>
-    //     </div>
-    //   ),
-    // },
-
     {
       title: 'State',
       dataIndex: 'type',
@@ -122,18 +109,6 @@ const useTransaction = () => {
         </Tag>
       ),
     },
-    // {
-    //   title: 'Name',
-    //   dataIndex: 'message',
-    //   key: 'message',
-    //   render: (_, record) => (
-    //     <div className="">
-    //       <h3 className="text-sm">{record.message}</h3>
-    //       <span className="text-xs">{record.id}</span>
-    //     </div>
-    //   ),
-    // },
-
     {
       title: 'Amount',
       dataIndex: 'amount',

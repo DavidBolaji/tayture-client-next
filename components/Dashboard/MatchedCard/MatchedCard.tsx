@@ -75,6 +75,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
     : AMOUNT_PER_HIRE * curAppCount
 
   const [amt, setAmt] = useState<string | number>('')
+  console.log(amt)
 
   useEffect(() => {
     if (typeof wb === 'number' && typeof amountFinal === 'number') {
@@ -321,7 +322,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         <div className="border bord border-b-0">
           {!loading &&
             matchedJob?.applied.length > 0 &&
-            matchedJob?.applied.map((match: any, ind: number) => (
+            matchedJob?.applied.map((match: any) => (
               <div
                 key={match.user.id}
                 className="grid grid-cols-12 border-b p-[24px] hover:bg-slate-50 hover:cursor-pointer transition-colors duration-300"
@@ -446,20 +447,28 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
           {/* {String(amt).trim().length > 0 && ( */}
           <Formik
             onSubmit={(data: any) => {
+              console.log(data)
               setAmt(data.amount)
             }}
             initialValues={{
               amount: amt,
             }}
             enableReinitialize
-            key={String(ui.postLandingModal?.visibility)}
-            validateOnChange
+            key={amt || 0}
             validate={valid}
+            
           >
-            {({ handleSubmit, handleChange }) => (
+            {({ handleSubmit, handleChange, setFieldValue, values }) => (
               <Form onSubmit={handleSubmit}>
+                {amt}
+                {values.amount}
                 <Field
-                  onChange={handleSubmit}
+                  onChange={(e: any) => {
+                    handleChange(e)
+                    setFieldValue('amount', e)
+                    console.log(values)
+                    setAmt(values.amount)
+                  }}
                   name="amount"
                   as={StyledInput}
                   type="num"

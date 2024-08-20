@@ -12,7 +12,8 @@ const AuthLayer = (props: PropsWithChildren) => {
   const [mounted, setMounted] = useState(false)
   const queryClient = useQueryClient()
   const { setUI } = useGlobalContext()
-  const permission = queryClient.getQueryData(['permission'])
+
+  // const permission = queryClient.getQueryData(['permission'])
   const job = router.query?.job
   const profile = router.query?.profile
   const school = router.query?.school
@@ -20,6 +21,13 @@ const AuthLayer = (props: PropsWithChildren) => {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  const { data: permission } = useQuery({
+    queryKey: ['permision'],
+    queryFn: async () => {
+      return queryClient.getQueryData(['permission']);
+    }
+  })
 
   const { isError, isLoading, data } = useQuery({
     queryKey: ['user'],
@@ -40,18 +48,22 @@ const AuthLayer = (props: PropsWithChildren) => {
     refetchOnWindowFocus: false,
   })
 
+
+
   useEffect(() => {
     if (!mounted) return
 
     if (data) {
-      if (!data.validated) {
-        setUI((prev: any) => ({
-          ...prev,
-          OTPModal: {
-            ...prev.OTPModal,
-            visibility: true,
-          },
-        }))
+      if (permission !== 'limited') {
+        if (!data.validated) {
+          setUI((prev: any) => ({
+            ...prev,
+            OTPModal: {
+              ...prev.OTPModal,
+              visibility: true,
+            },
+          }))
+        }
       }
 
       if (permission !== 'limited') {

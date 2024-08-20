@@ -6,7 +6,6 @@ import Cloudinary from '@/request/cloudinary'
 import { Images } from '@/assets'
 
 const BlogBanner: React.FC = () => {
-  const blogBannerRef = useRef<HTMLInputElement | null>(null)
   const [loading, setLoading] = useState(false)
   const { img, setMessage, setImg } = useGlobalContext()
 
