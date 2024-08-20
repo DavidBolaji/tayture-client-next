@@ -8,10 +8,10 @@ const CategoriesSection = () => {
 
   return (
     <section className="grid grid-cols-10 gap-5">
-      <div className="col-span-3">
+      <div className="md:col-span-3 col-span-10">
         <CreateCategoryCard />
       </div>
-      <div className="col-span-7">
+      <div className="col-span-10 md:col-span-7">
         <Table
           rowKey="id"
           scroll={{ x: 500 }}

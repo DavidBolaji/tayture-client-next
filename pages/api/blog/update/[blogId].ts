@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return res.status(405).json({ message: 'Method not allowed' })
 
   try {
-    const { banner, title, except, text, blogCategoryId } = req.body
+    const { banner, title, except, text, blogCategoryId, published } = req.body
 
     const dataToUpdate: any = {}
 
@@ -27,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       where: {
         id: req.query.blogId as string,
       },
-      data: dataToUpdate,
+      data: {...dataToUpdate, published},
     })
 
     res.status(200).json({ message: 'Blog Updated Successfully', blog: updatedBlog })

@@ -4,7 +4,6 @@ import { regularFont } from '@/assets/fonts/fonts'
 import SchoolAnalytics from '@/components/Dashboard/SchoolAnalytics/SchoolAnalytics'
 import SchoolCard from '@/components/Dashboard/SchoolCard/SchoolCard'
 import WalletCard2 from '@/components/Dashboard/WalletCard2'
-// import WalletCard from '@/components/Dashboard/WalletCard'
 import PricingCard from '@/components/PricingCard/PricingCard'
 import useTransaction from '@/hooks/useTransaction'
 import { getUser } from '@/lib/api/user'
@@ -18,8 +17,16 @@ const { useBreakpoint } = Grid
 const SchoolPage = () => {
   const { access } = useGlobalContext()
   const queryClient = useQueryClient()
-  const permission = queryClient.getQueryData(['permission'])
+
+  // const permission = queryClient.getQueryData(['permission'])
+  const { data: permission } = useQuery({
+    queryKey: ['permission'],
+    queryFn: async () => {
+      return queryClient.getQueryData(['permission'])
+    },
+  })
   const permissionGranted = permission !== 'limited'
+
 
   const { data: user } = useQuery({
     queryKey: ['user'],
@@ -32,9 +39,12 @@ const SchoolPage = () => {
     },
   })
 
-  const school = queryClient.getQueryData(['school']) as
-    | (School & { sch_admin: SchoolAdmin[] })
-    | undefined
+  const { data: school } = useQuery({
+    queryKey: ['school'],
+    queryFn: async () => {
+      return queryClient.getQueryData(['school']) as (School & { sch_admin: SchoolAdmin[] })
+    },
+  })
 
   /**check if path is defined */
   const pathExist = user?.path ? true : false
@@ -77,7 +87,6 @@ const SchoolPage = () => {
         <div className="md:col-span-5 h-[242px] md:mt-0 -mt-3 md:mb-0 mb-3 rounded-2xl p-3 bg-white col-span-10">
           <Table
             rowKey="id"
-            // scroll={{ x: 700 }}
             dataSource={limitTransaction}
             columns={columns2}
             loading={isPending}
