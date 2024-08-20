@@ -41,6 +41,7 @@ const HandlePayment: React.FC<HandlePaymentProp> = ({
     })
   }
   useEffect(() => {
+    console.log(amount)
     setCount((prev) => prev + 1)
   }, [amount])
 

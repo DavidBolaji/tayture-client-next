@@ -6,12 +6,22 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { IJobSchDb } from '@/pages/api/job/types'
 import * as momentT from 'moment-timezone'
-import { Education, Profile, School, SchoolAdmin, Skills, Summary, User, WorkHistory } from '@prisma/client'
+import {
+  Education,
+  Profile,
+  School,
+  SchoolAdmin,
+  Skills,
+  Summary,
+  User,
+  WorkHistory,
+} from '@prisma/client'
 
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
-export const AMOUNT_PER_HIRE = process.env.NEXT_PUBLIC_ENV === 'dev' ? 100 : 10000
+export const AMOUNT_PER_HIRE =
+  process.env.NEXT_PUBLIC_ENV === 'dev' ? 10000 : 10000
 
 const matchQualHash: { [key: string]: number } = {
   SSCE: 1,
@@ -31,39 +41,78 @@ const matchExpHash: { [key: string]: number } = {
   '5+': 5,
 }
 
+/**
+ * merges styles
+ * @param inputs
+ * @returns
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+/**
+ * Checks if input is not a number
+ * @param input string
+ * @returns boolean
+ */
 export function isNotNumber(input: string) {
   return input === '' || !/^\d+$/.test(input)
 }
 
+/**
+ * checks if input is not an alphabet
+ * @param input string
+ * @returns boolean
+ */
 export function isNotText(input: string) {
   return input === '' || !/^\D+$/.test(input)
 }
 
+/**
+ * Checks that email is valid
+ * @param email string
+ * @returns boolean
+ */
 export const isValidEmail = (email: string) => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
   return emailRegex.test(email)
 }
 
+/**
+ * Converts date string to day and month
+ * @param date string
+ * @returns date
+ */
 export const closingDate = (date: string) => {
   const formattedDate = date ? moment(date).format('Do MMM') : ''
   return formattedDate
 }
+
+/**
+ * Converts date string to day and month
+ * @param date string
+ * @returns date
+ */
 export const closingDate2 = (date: string) => {
   const formattedDate = date ? moment(date).format('Do MMM') : ''
   return formattedDate
 }
 
 export const formatXAxisLabel = (dateString: string) => {
-  const date = new Date(dateString);
-  const day = date.getDate();
-  const month = date.toLocaleString('default', { month: 'short' });
-  const formattedDate = `${day}${day === 1 || day === 21 || day === 31 ? 'st' : day === 2 || day === 22 ? 'nd' : day === 3 || day === 23 ? 'rd' : 'th'} ${month}`;
-  return formattedDate;
-};
+  const date = new Date(dateString)
+  const day = date.getDate()
+  const month = date.toLocaleString('default', { month: 'short' })
+  const formattedDate = `${day}${
+    day === 1 || day === 21 || day === 31
+      ? 'st'
+      : day === 2 || day === 22
+      ? 'nd'
+      : day === 3 || day === 23
+      ? 'rd'
+      : 'th'
+  } ${month}`
+  return formattedDate
+}
 
 export function handleFormat(dataList: any) {
   for (const entry of dataList) {
@@ -215,82 +264,130 @@ export const calculateProgress = (data: {
 }) => {
   let score = 0
   if (data) {
-    if (data.education.length > 0){ score += 10; console.log('education');}
-    if (data.skills.length > 0){ score += 10; console.log('skills');}
-    if (data.work.length > 0){ score += 10; console.log('work length');}
-    if (data.profile.address){ score += 10; console.log('address');}
-    if (data.profile.cv){ score += 10; console.log('cv');}
-    if (data.profile.cover){ score += 10; console.log('cover');}
-    if (data.profile.available){ score += 10; console.log('available');}
-    if (data.profile.address){ score += 10; console.log('address');}
-    if (data.profile.workplace) {score += 5; console.log('workplace');}
-    if (data.profile.picture) {score += 5; console.log('pictire');}
-    if (data.summary.text) {score += 10; console.log('summary');}
+    if (data.education.length > 0) {
+      score += 10
+      console.log('education')
+    }
+    if (data.skills.length > 0) {
+      score += 10
+      console.log('skills')
+    }
+    if (data.work.length > 0) {
+      score += 10
+      console.log('work length')
+    }
+    if (data.profile.address) {
+      score += 10
+      console.log('address')
+    }
+    if (data.profile.cv) {
+      score += 10
+      console.log('cv')
+    }
+    if (data.profile.cover) {
+      score += 10
+      console.log('cover')
+    }
+    if (data.profile.available) {
+      score += 10
+      console.log('available')
+    }
+    if (data.profile.address) {
+      score += 10
+      console.log('address')
+    }
+    if (data.profile.workplace) {
+      score += 5
+      console.log('workplace')
+    }
+    if (data.profile.picture) {
+      score += 5
+      console.log('pictire')
+    }
+    if (data.summary.text) {
+      score += 10
+      console.log('summary')
+    }
   }
   return score
 }
 
 export const formatNumberToK = (value: string) => {
   const numList = value.split('-')
-  const nNumList = numList.map(n =>  {
-    const num = Number(n.trim().replace(',',''))
+  const nNumList = numList.map((n) => {
+    const num = Number(n.trim().replace(',', ''))
 
     if (isNaN(num)) {
-      return null; // Return null if value is not a valid number
+      return null // Return null if value is not a valid number
     }
 
     if (num < 1000) {
-      return num.toString(); // Return the number as is if it's less than 1000
-  }
-  
-  const suffixes = ['', 'k', 'M', 'B', 'T']; // Add more suffixes if needed
-  const suffixIndex = Math.floor(Math.log10(num) / 3);
-  const shortValue = (num / Math.pow(1000, suffixIndex)).toFixed(0);
-  return shortValue + suffixes[suffixIndex]
+      return num.toString() // Return the number as is if it's less than 1000
+    }
+
+    const suffixes = ['', 'k', 'M', 'B', 'T'] // Add more suffixes if needed
+    const suffixIndex = Math.floor(Math.log10(num) / 3)
+    const shortValue = (num / Math.pow(1000, suffixIndex)).toFixed(0)
+    return shortValue + suffixes[suffixIndex]
   })
-  
+
   if (nNumList.length > 1) {
-   return `${nNumList[0]} - ${nNumList[1]}/month`
+    return `${nNumList[0]} - ${nNumList[1]}/month`
   } else {
     return `${nNumList[0]}/month`
   }
 }
 
-export const canManageSchool = (schAdmin: SchoolAdmin[], email: string, isCreator: boolean) => {
-    const isAdmin = schAdmin?.find((admin: SchoolAdmin) => admin.sch_admin_email === email)
-    if (!isAdmin?.sch_admin_email) {
-      return true
-    }
-    return isCreator ? true : isAdmin?.sch_admin_active
+export const canManageSchool = (
+  schAdmin: SchoolAdmin[],
+  email: string,
+  isCreator: boolean,
+) => {
+  const isAdmin = schAdmin?.find(
+    (admin: SchoolAdmin) => admin.sch_admin_email === email,
+  )
+  if (!isAdmin?.sch_admin_email) {
+    return true
+  }
+  return isCreator ? true : isAdmin?.sch_admin_active
 }
 
 export function userFilterChart(users: User[]) {
-  const countByDate: { [key: string]: number } = {};
+  const countByDate: { [key: string]: number } = {}
 
   users?.forEach((item) => {
-    const createdAt = new Date(item.createdAt!).toDateString();
+    const createdAt = new Date(item.createdAt!).toDateString()
 
     if (countByDate[createdAt]) {
-      countByDate[createdAt]++;
+      countByDate[createdAt]++
     } else {
-      countByDate[createdAt] = 1;
+      countByDate[createdAt] = 1
     }
-  });
-  const data = Object.values(countByDate);
-  const labels = Object.keys(countByDate);
+  })
+  const data = Object.values(countByDate)
+  const labels = Object.keys(countByDate)
   return {
     data,
     labels,
-  };
+  }
 }
 
 export const getRandomColor = () => {
-  const colors = ['#FF5733', '#33FF57', '#5733FF', '#FF33E9', '#33E9FF', '#E9FF33', '#333333', '#000000']; // Add your list of colors here
-  const randomIndex = Math.floor(Math.random() * colors.length);
-  return colors[randomIndex];
-};
+  const colors = [
+    '#FF5733',
+    '#33FF57',
+    '#5733FF',
+    '#FF33E9',
+    '#33E9FF',
+    '#E9FF33',
+    '#333333',
+    '#000000',
+  ] // Add your list of colors here
+  const randomIndex = Math.floor(Math.random() * colors.length)
+  return colors[randomIndex]
+}
 
 export const getRandomColor2 = (colors: string[]) => {
-  const randomIndex = Math.floor(Math.random() * colors.length);
-  return colors[randomIndex];
+  const randomIndex = Math.floor(Math.random() * colors.length)
+  return colors[randomIndex]
 }

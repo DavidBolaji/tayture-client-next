@@ -16,12 +16,14 @@ import { FaCaretRight, FaLock } from 'react-icons/fa'
 import Link from 'next/link'
 import { formatNumber } from '@/utils/helpers'
 import { Axios } from '@/request/request'
+import { useRouter } from 'next/router'
 
 const WalletCard2 = () => {
   const { setUI, setMessage, defaultSchool, access } = useGlobalContext()
   const queryClient = useQueryClient()
    const permission = queryClient.getQueryData(['permission'])
   const permissionGranted = permission !== 'limited'
+  const router = useRouter()
   
   const { data: school, isLoading } = useQuery({
     queryKey: ['school'],
@@ -62,6 +64,12 @@ const WalletCard2 = () => {
       })
       
       setMessage(() => 'Wallet successfully funded')
+      console.log('got here')
+
+      const t = setTimeout(() => {
+        clearTimeout(t)
+        router.replace(router.asPath)
+      }, 2000)
 
     },
     onError: (err) => {

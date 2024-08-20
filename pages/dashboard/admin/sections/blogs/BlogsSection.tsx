@@ -17,7 +17,7 @@ const BlogsSection = () => {
   } = useBlog()
   return (
     <section className="grid grid-cols-10 gap-5">
-      <div className="col-span-5">
+      <div className="col-span-10 md:col-span-5">
         <CreateBlogCard />
       </div>
       <div className="col-span-10">
