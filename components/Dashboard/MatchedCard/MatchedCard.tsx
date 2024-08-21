@@ -33,6 +33,7 @@ import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import Spinner from '@/components/Spinner/Spinner'
 import HandleSchedule from '@/components/HandleSchedule'
 import { useRouter } from 'next/router'
+import { FiCheck } from 'react-icons/fi'
 
 interface MatchedCardProps {
   params: { jobId: string }
@@ -257,12 +258,13 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
     const errors: { amount?: string } = {}
 
     const { amount } = values
+
     const isValidAmount = +String(amount) >= Math.abs(wb - amountFinal)
     setValid(isValidAmount)
+    setAmt(amount)
     if (!isValidAmount) {
       errors.amount = `Amount cannot be less than ${Math.abs(wb - amountFinal)}`
     }
-
     return errors
   }
 
@@ -301,15 +303,14 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
           />
         )}
         <div className="sticky top-0 w-full z-20 bg-[#faf9f9] bottom-0 py-2 mb-2">
-        <button
-          disabled={matchedJob?.job?.status}
-          onClick={handleClick}
-          className=' bg-green-600 gap-x-2 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center'
-        >
-          {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}
-          <span>{matchedJob?.job?.status ? 'Paid' : 'Pay'}</span>
-        </button>
-
+          <button
+            disabled={matchedJob?.job?.status}
+            onClick={handleClick}
+            className=" bg-green-600 gap-x-2 text-white px-5 py-1 rounded-md cursor-pointer right-2 flex items-center justify-center"
+          >
+            {transactionLoading ? <Spinner color="#fff" /> : <FaMoneyBill />}
+            <span>{matchedJob?.job?.status ? 'Paid' : 'Pay'}</span>
+          </button>
         </div>
         <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky top-10 z-20 ">
           <div className="col-span-1">Name</div>
@@ -318,100 +319,99 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
           <div className="col-span-2 text-center">Qualification</div>
           <div className="col-span-2">Status</div>
         </div>
-        <div className=' pb-32'>
-        <div className="border bord border-b-0">
-          {!loading &&
-            matchedJob?.applied.length > 0 &&
-            matchedJob?.applied.map((match: any) => (
-              <div
-                key={match.user.id}
-                className="grid grid-cols-12 border-b p-[24px] hover:bg-slate-50 hover:cursor-pointer transition-colors duration-300"
-              >
-                <div className="col-span-1">
-                  <h3 className="mb-2">{match.user.fname}</h3>
-                </div>
-                <div className="col-span-4">
-                  <ListComponent
-                    key="l9"
-                    title="Experience length"
-                    text={`${match.exp} years`}
-                  />
-                  <ListComponent
-                    key="l10"
-                    title="Qualification"
-                    text={match.qual}
-                  />
-                  <BlurComponent
-                    redirect={redirect}
-                    pay={handleClick}
-                    status={matchedJob?.job?.status}
-                  />
-                </div>
+        <div className=" pb-32">
+          <div className="border bord border-b-0">
+            {!loading &&
+              matchedJob?.applied.length > 0 &&
+              matchedJob?.applied.map((match: any) => (
+                <div
+                  key={match.user.id}
+                  className="grid grid-cols-12 border-b p-[24px] hover:bg-slate-50 hover:cursor-pointer transition-colors duration-300"
+                >
+                  <div className="col-span-1">
+                    <h3 className="mb-2">{match.user.fname}</h3>
+                  </div>
+                  <div className="col-span-4">
+                    <ListComponent
+                      key="l9"
+                      title="Experience length"
+                      text={`${match.exp} years`}
+                    />
+                    <ListComponent
+                      key="l10"
+                      title="Qualification"
+                      text={match.qual}
+                    />
+                    <BlurComponent
+                      redirect={redirect}
+                      pay={handleClick}
+                      status={matchedJob?.job?.status}
+                    />
+                  </div>
 
-                <div className="col-span-2">
-                  {checkIsExpMatch({
-                    exp: match.exp,
-                    job: matchedJob.job.job_exp,
-                  }) ? (
-                    <div className="w-full flex justify-center">
-                      <FaCircleCheck color="green" size={20} />
-                    </div>
-                  ) : (
-                    <div className="flex w-full justify-center">
-                      <FaCircleXmark color={'red'} size={20} />
-                    </div>
-                  )}
-                </div>
-                <div className="col-span-2">
-                  {checkIsQualMatch({
-                    qual: match.qual,
-                    job: matchedJob.job.job_qual,
-                  }) ? (
-                    <div className="w-full flex justify-center">
-                      <FaCircleCheck color="green" size={20} />
-                    </div>
-                  ) : (
-                    <div className="flex w-full justify-center">
-                      <FaCircleXmark color={'red'} size={20} />
-                    </div>
-                  )}
-                </div>
-                <div className="col-span-2 text-center justify-end">
-                  {matchedJob.job && (
-                    <button
-                      disabled={
-                        !matchedJob?.job?.status ||
-                        (matchedJob?.job?.schedule &&
-                          matchedJob?.job?.schedule
-                            .map((e: any) => e.user.id)
-                            .includes(match.user.id))
-                      }
-                      onClick={() =>
-                        handleSchedule({
-                          id: match.user.id,
-                          fname: match.user.fname,
-                          email: match.user.email,
-                        })
-                      }
-                      className="gap-2 disabled:bg-[#FFA466] bg-orange text-black px-5 py-1 rounded-md cursor-pointer  flex items-center justify-center mb-3"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FaClock color="#000" size={16} />
-                        <span>
-                          {matchedJob.job.schedule
-                            .map((e: any) => e.user.id)
-                            .includes(match.user.id)
-                            ? 'Scheduled'
-                            : 'Schedule'}
-                        </span>
+                  <div className="col-span-2">
+                    {checkIsExpMatch({
+                      exp: match.exp,
+                      job: matchedJob.job.job_exp,
+                    }) ? (
+                      <div className="w-full flex justify-center">
+                        <FaCircleCheck color="green" size={20} />
                       </div>
-                    </button>
-                  )}
+                    ) : (
+                      <div className="flex w-full justify-center">
+                        <FaCircleXmark color={'red'} size={20} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="col-span-2">
+                    {checkIsQualMatch({
+                      qual: match.qual,
+                      job: matchedJob.job.job_qual,
+                    }) ? (
+                      <div className="w-full flex justify-center">
+                        <FaCircleCheck color="green" size={20} />
+                      </div>
+                    ) : (
+                      <div className="flex w-full justify-center">
+                        <FaCircleXmark color={'red'} size={20} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="col-span-2 text-center justify-end">
+                    {matchedJob.job && (
+                      <button
+                        disabled={
+                          !matchedJob?.job?.status ||
+                          (matchedJob?.job?.schedule &&
+                            matchedJob?.job?.schedule
+                              .map((e: any) => e.user.id)
+                              .includes(match.user.id))
+                        }
+                        onClick={() =>
+                          handleSchedule({
+                            id: match.user.id,
+                            fname: match.user.fname,
+                            email: match.user.email,
+                          })
+                        }
+                        className="gap-2 disabled:bg-[#FFA466] bg-orange text-black px-5 py-1 rounded-md cursor-pointer  flex items-center justify-center mb-3"
+                      >
+                        <div className="flex items-center gap-2">
+                          <FaClock color="#000" size={16} />
+                          <span>
+                            {matchedJob.job.schedule
+                              .map((e: any) => e.user.id)
+                              .includes(match.user.id)
+                              ? 'Scheduled'
+                              : 'Schedule'}
+                          </span>
+                        </div>
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-        </div>
-
+              ))}
+          </div>
         </div>
       </div>
       <HandlePayment
@@ -419,7 +419,6 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         onFailure={onFailure}
         amount={+amt}
         valid={valid1}
-        // valid={valid.}
       >
         <div className={`${regularFont.className}`}>
           <div>
@@ -444,39 +443,36 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
             Fund Wallet Amount
           </label>
 
-          {/* {String(amt).trim().length > 0 && ( */}
           <Formik
-            onSubmit={(data: any) => {
-              console.log(data)
-              setAmt(data.amount)
-            }}
+            onSubmit={() => {}}
             initialValues={{
               amount: amt,
+              // coupoun: '',
             }}
-            enableReinitialize
-            key={amt || 0}
             validate={valid}
-            
           >
-            {({ handleSubmit, handleChange, setFieldValue, values }) => (
-              <Form onSubmit={handleSubmit}>
-                {amt}
-                {values.amount}
-                <Field
-                  onChange={(e: any) => {
-                    handleChange(e)
-                    setFieldValue('amount', e)
-                    console.log(values)
-                    setAmt(values.amount)
-                  }}
-                  name="amount"
-                  as={StyledInput}
-                  type="num"
-                />
+            {({}) => (
+              <Form>
+                <Field name="amount" as={StyledInput} type="num" />
+                {/* <div className="grid grid-cols-8 gap-x-2">
+                  <div className='col-span-7'>
+                    <Field
+                      name="coupoun"
+                      as={StyledInput}
+                      placeholder="Enter coupoun code"
+                    />
+                  </div>
+                  <div className='col-span-1 mt-2'>
+                    <button type='button'
+                    className='border px-2 py-1 rounded-sm'
+                    >
+                      <FiCheck color='green' size={20} />
+                    </button>
+                  </div>
+                </div> */}
               </Form>
             )}
           </Formik>
-          {/* )} */}
         </div>
       </HandlePayment>
       <HandleSchedule status={'create'} />

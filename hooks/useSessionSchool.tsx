@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -26,14 +26,14 @@ const useSessionSchool = () => {
       )
     },
     onSuccess: (res: AxiosResponse) => {
-        queryClient.clear();
-        queryClient.setQueryData(['permission'], () => 'limited')
-      
-        queryClient.setQueryData(['user'], () => res.data.user)
+      queryClient.clear()
+      queryClient.setQueryData(['permission'], () => 'limited')
+
+      queryClient.setQueryData(['user'], () => res.data.user)
       const t = setTimeout(() => {
-        clearTimeout(t)
         router.push('/dashboard/school')
-      }, 1000)
+        clearTimeout(t)
+      }, 3000)
     },
     onError: (err) => {
       setMessage(
