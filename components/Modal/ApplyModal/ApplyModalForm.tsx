@@ -38,13 +38,13 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
         validateOnMount={true}
         validationSchema={ApplyFormSchema}
         initialValues={{
-          cv: user.profile.cv ?? '',
+          cv: user?.profile?.cv ?? '',
           qual: '',
           exp: '',
-          country: user.profile.country ?? '',
-          state: user.profile.state ?? '',
-          city: user.profile.city ?? '',
-          lga: user.profile.lga ?? '',
+          country: user?.profile?.country ?? '',
+          state: user?.profile?.state ?? '',
+          city: user?.profile?.city ?? '',
+          lga: user?.profile?.lga ?? '',
         }}
         onSubmit={() => {}}
       >

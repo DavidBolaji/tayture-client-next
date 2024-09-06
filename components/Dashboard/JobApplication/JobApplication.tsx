@@ -9,6 +9,7 @@ import { Empty, Skeleton } from 'antd'
 import { cn } from '@/utils/helpers'
 import { useRouter } from 'next/router'
 import { AxiosResponse } from 'axios'
+import Spinner from '@/components/Spinner/Spinner'
 
 interface JobApplicationProps {
   className?: string
@@ -82,7 +83,11 @@ const JobApplication: React.FC<JobApplicationProps> = ({
   ) : (
     <div className="flex w-full items-center justify-center flex-col pb-[100px]">
       <div className="bg-white w-full py-10">
-        <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />
+        {!isPending ?<Empty image={Empty.PRESENTED_IMAGE_DEFAULT} />:
+        <div className='flex items-center justify-center w-full h-full'>
+         <Spinner color='orange' />
+         </div>
+         }
       </div>
     </div>
   )

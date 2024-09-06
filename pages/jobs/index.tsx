@@ -6,7 +6,6 @@ import Wrapper from '@/components/Wrapper/Wrapper'
 import Career from './components/Career'
 import { Footer } from '@/components/Footer'
 import JobRelated from '@/components/Dashboard/JobRelated/JobRelated'
-import { boldFont } from '@/assets/fonts/fonts'
 
 const FindJob = () => {
   return (
