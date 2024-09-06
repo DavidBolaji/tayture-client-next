@@ -1,5 +1,4 @@
 import { Ibigquestion } from '@/utils/data'
-import { Col, Row } from 'antd'
 import Image from 'next/image'
 
 function BigQuestion({ text, icon }: Ibigquestion) {

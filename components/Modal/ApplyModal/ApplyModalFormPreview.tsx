@@ -5,7 +5,7 @@ import { SelectInput } from '../../Form/SelectInput/SelectInput'
 import { regularFont } from '@/assets/fonts/fonts'
 import { degree, expL } from '@/utils/data'
 import CVComponent from '../../CVComponent'
-import { checkFileExtension } from '@/utils/helpers'
+import { appliedSucces, checkFileExtension } from '@/utils/helpers'
 import { useGlobalContext } from '@/Context/store'
 import Spinner from '../../Spinner/Spinner'
 import { ApplyFormSchema } from './ApplyFormSchema'
@@ -13,13 +13,18 @@ import Button from '../../Button/Button'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createApplication } from '@/lib/api/apply'
 import { IJobSchDb } from '@/pages/api/job/types'
-import { getUser } from '@/lib/api/user'
 import { useRouter } from 'next/router'
 import { usePathname } from 'next/navigation'
+import { updateProfile } from '@/lib/api/job'
+import LocationComponent from '@/components/Form/LocationComponent/LocationComponent'
 type UserApply = {
   cv: string
   exp: string
   qual: string
+  country: string
+  state: string
+  city: string
+  lga: string
 }
 const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
   const queryClient = useQueryClient()
@@ -33,7 +38,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
   const activeJob = queryClient.getQueryData(['activeJob']) as IJobSchDb
   const isRelated = queryClient.getQueryData(['isRelated'])
   const relatedJob = queryClient.getQueryData(['relatedJob']) as IJobSchDb
-  
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: UserApply) => {
       return await createApplication({
@@ -42,57 +47,16 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
         jobId: isRelated ? relatedJob.job_id : activeJob.job_id,
       })
     },
-    onSuccess: async (res) => {
-      const applied = res.data.applied
-      if (pathname === '/jobs') {
-        setUI((prev) => {
-          return {
-            ...prev,
-            applyLandingModal: {
-              ...prev.applyLandingModal,
-              visibility: false,
-            },
-          }
-        })
-        setMessage(() => res.data.message)
-        const t = setTimeout(() => {
-          router.push('/dashboard')
-          clearTimeout(t)
-        }, 3000)
-      } else {
-
-        setUI((prev) => {
-          return {
-            ...prev,
-            applyModal: {
-              ...prev.applyModal,
-              visibility: false,
-            },
-          }
-        })
-        setMessage(() => res.data.message)
- 
-        const req = await getUser()
-        queryClient.setQueryData(['user'], () => req.data.user)
-        queryClient.invalidateQueries({
-          queryKey: ['user', 'jobs', 'school'],
-        })
-        
-        const t = setTimeout(() => {
-          clearTimeout(t)
-          SW.prev()
-        }, 3000)
-        
-        if (router.query.job === '1') {
-          router.replace('/dashboard/jobs')
-        }
-      }
-
-      return applied
-    },
+    onSuccess: async (res) =>
+      appliedSucces(res, pathname, setUI, setMessage, router, queryClient, SW),
     onError: (err) => {
       setMessage(() => (err as Error).message)
     },
+  })
+
+  const { mutate: update, isPending: CVpending } = useMutation({
+    mutationKey: ['profile-update'],
+    mutationFn: updateProfile,
   })
 
   const handleNext = async (
@@ -100,15 +64,25 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
     { resetForm }: FormikHelpers<UserApply>,
   ) => {
     mutate({ ...values })
+    update({
+      country: values.country,
+      state: values.state,
+      cv: values.cv,
+      lga: values.lga.length ? values.lga : undefined,
+      city: values.city.length ? values.city : undefined
+    })
 
     resetForm({
       values: {
         cv: '',
         qual: '',
         exp: '',
+        country: '',
+        state: '',
+        lga: '',
+        city: ''
       },
     })
-
   }
 
   return (
@@ -135,7 +109,7 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
               disabled
               placeholder={'Your highest degree or certification'}
             />
-             <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
+            <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
               Work experience
             </label>
             <Field
@@ -145,12 +119,19 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
               disabled
               placeholder={'How many years have you worked ?'}
             />
+            <LocationComponent
+              country="country"
+              state="state"
+              city="city"
+              lga="lga"
+              disabled
+            />
 
             {values?.cv && (
               <>
-               <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
-              Curriculum Vitae
-              </label>
+                <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
+                  Curriculum Vitae
+                </label>
 
                 <div className="mb-3">
                   <CVComponent
@@ -173,10 +154,10 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
                 onClick={() => (isPending ? {} : SW.prev())}
               />
               <Button
-                disabled={isSubmitting || isPending}
+                disabled={isSubmitting || isPending || CVpending}
                 type="submit"
                 text={
-                  isSubmitting || isPending ? (
+                  isSubmitting || isPending || CVpending ? (
                     <Spinner color="#fff" />
                   ) : (
                     'Submit'

@@ -11,6 +11,7 @@ import { regularFont } from '@/assets/fonts/fonts'
 import {
   AMOUNT_PER_HIRE,
   checkIsExpMatch,
+  checkIsLocMatch,
   checkIsQualMatch,
 } from '@/utils/helpers'
 import { FaClock, FaMoneyBill } from 'react-icons/fa'
@@ -33,7 +34,7 @@ import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import Spinner from '@/components/Spinner/Spinner'
 import HandleSchedule from '@/components/HandleSchedule'
 import { useRouter } from 'next/router'
-import { FiCheck } from 'react-icons/fi'
+
 
 interface MatchedCardProps {
   params: { jobId: string }
@@ -165,6 +166,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
     })
   }
 
+  // wallet has excess of amount to be paid
   const handlePayment = () => {
     const canSchedule = wb >= amountFinal
     if (canSchedule) {
@@ -189,6 +191,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
     }
   }
 
+  // wallet has insufficient funds
   const handlePayment2 = () => {
     setAmt(Math.abs(wb - amountFinal + AMOUNT_PER_HIRE * hasBeenPaidfor))
     /** Display modal  */
@@ -250,6 +253,7 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
     : String(amt).trim().length > 0
     ? () => handlePayment()
     : () => handlePayment2()
+  
   const redirect = () =>
     router.push(`/dashboard/school/manage/${jobId}?default=3`)
   const [valid1, setValid] = useState(+String(amt).trim().length < 1)
@@ -314,9 +318,10 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
         </div>
         <div className="grid grid-cols-12 bg-white p-[24px] rounded-t-[15px] sticky top-10 z-20 ">
           <div className="col-span-1">Name</div>
-          <div className="col-span-4">Details</div>
+          <div className="col-span-3">Details</div>
           <div className="col-span-2 text-center">Experience</div>
           <div className="col-span-2 text-center">Qualification</div>
+          <div className="col-span-2 text-center">Location</div>
           <div className="col-span-2">Status</div>
         </div>
         <div className=" pb-32">
@@ -325,13 +330,13 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
               matchedJob?.applied.length > 0 &&
               matchedJob?.applied.map((match: any) => (
                 <div
-                  key={match.user.id}
+                  key={match.id}
                   className="grid grid-cols-12 border-b p-[24px] hover:bg-slate-50 hover:cursor-pointer transition-colors duration-300"
                 >
                   <div className="col-span-1">
                     <h3 className="mb-2">{match.user.fname}</h3>
                   </div>
-                  <div className="col-span-4">
+                  <div className="col-span-3">
                     <ListComponent
                       key="l9"
                       title="Experience length"
@@ -367,6 +372,20 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
                     {checkIsQualMatch({
                       qual: match.qual,
                       job: matchedJob.job.job_qual,
+                    }) ? (
+                      <div className="w-full flex justify-center">
+                        <FaCircleCheck color="green" size={20} />
+                      </div>
+                    ) : (
+                      <div className="flex w-full justify-center">
+                        <FaCircleXmark color={'red'} size={20} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="col-span-2">
+                    {checkIsLocMatch({
+                      userLoc: match.user?.profile,
+                      jobLoc: matchedJob.job.school,
                     }) ? (
                       <div className="w-full flex justify-center">
                         <FaCircleCheck color="green" size={20} />

@@ -55,15 +55,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         ...admin,
       })),
     })
+
     const schWallet = db.wallet.create({
       data: {
         walletSchId,
+        wallet_balance: 4000,
         walletUserId: req.authUser.id,
       },
     })
 
     await Promise.all([schAdmin, schWallet])
-    await db.notifcation.create({
+
+    await db.transaction.create({
+      data: {
+        amount: 4000,   
+        type:   'BONUS',
+        message:  'School Creation Bonus',
+        userId:   req.authUser.id,
+        schoolId: schoolCreate.sch_id
+   
+      }
+    })
+    db.notifcation.create({
       data: {
         msg: `Hurray!!! you have succesfully created a school`,
         notificationUser: req.authUser?.id as string,
@@ -71,7 +84,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     })
     
-    await sendSchoolCreated({
+    sendSchoolCreated({
       user: `${req.authUser.fname} ${req.authUser.lname}`,
       school: schoolCreate.sch_name
     })

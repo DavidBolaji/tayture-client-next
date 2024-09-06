@@ -2,7 +2,7 @@ import {  sessionUserSchema } from './Schema/loginSchema'
 import { setCookie } from 'nookies'
 
 import { NextApiRequest, NextApiResponse } from 'next'
-import { sendWelcome } from '@/lib/services/user'
+
 import db from '@/db/db'
 import verifyToken2 from '@/middleware/verifyToken2'
 

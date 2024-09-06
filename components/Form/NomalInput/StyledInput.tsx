@@ -49,11 +49,7 @@ const StyledInput: React.FC<InputProps> = ({ name, ...rest }) => {
             if (!isNotNumber(e.target.value) || e.target.value === '') {
               handleChange(e)
             }
-          } else if (rest.type === 'text') {
-            if (!isNotText(e.target.value) || e.target.value === '') {
-              handleChange(e)
-            }
-          } else {
+          } else  {
             handleChange(e)
           }
         }}

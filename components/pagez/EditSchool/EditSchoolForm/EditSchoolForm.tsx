@@ -8,7 +8,7 @@ import { employes } from '@/utils/data'
 import CustomPhoneInput from '@/components/Form/CustomPhoneInput/CustomPhoneInput'
 import LocationComponent from '@/components/Form/LocationComponent/LocationComponent'
 import Button from '@/components/Button/Button'
-import { ISchData, useGlobalContext } from '@/Context/store'
+import { useGlobalContext } from '@/Context/store'
 
 import UploadComponent from '@/components/UploadComponent/UploadComponent'
 import { useQueryClient } from '@tanstack/react-query'
@@ -25,7 +25,8 @@ const formatVal = (data: School) => {
     sch_url: data.sch_url,
     sch_phone: data.sch_phone,
     sch_name: data.sch_name,
-    landmark: data.landmark || ''
+    landmark: data.landmark || '',
+    country: data.country ?? ''
   }
 }
 
@@ -89,6 +90,7 @@ const EditSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
             />
             <Field
               as={LocationComponent}
+              country="country"
               city="sch_city"
               state="sch_state"
               lga="sch_lga"

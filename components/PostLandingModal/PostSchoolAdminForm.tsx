@@ -12,6 +12,7 @@ import { useGlobalContext } from '@/Context/store'
 import { createSchool } from '@/lib/api/school'
 import { validationSchema } from '../pagez/AddSchool/AddSchoolFormAdmin/Schema/AddSchoolAdminSchema'
 import { User } from '@prisma/client'
+import { sleep } from '@/utils/helpers'
 type ISchAdmin = {
   [key: string]: {
     sch_admin_name: string
@@ -20,21 +21,22 @@ type ISchAdmin = {
   }[]
 }
 
-
 const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
   SW,
   move = true,
 }) => {
-  const { img, createSch, setMessage, setUI, defaultSchool } = useGlobalContext()
-  const queryClient = useQueryClient();
+  const { img, createSch, setMessage, setUI, defaultSchool } =
+    useGlobalContext()
+  const queryClient = useQueryClient()
   const user = queryClient.getQueryData(['user']) as User
 
   const initialValues: ISchAdmin = {
     participants: [
       {
-        sch_admin_name: typeof user !== "undefined" ? `${user?.fname} ${user?.lname}`: "",
-        sch_admin_email: typeof user !== "undefined" ? user?.email : "",
-        sch_admin_phone: typeof user !== "undefined" ? user?.phone : "",
+        sch_admin_name:
+          typeof user !== 'undefined' ? `${user?.fname} ${user?.lname}` : '',
+        sch_admin_email: typeof user !== 'undefined' ? user?.email : '',
+        sch_admin_phone: typeof user !== 'undefined' ? user?.phone : '',
       },
     ],
   }
@@ -66,18 +68,17 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
           () =>
             'Hurray!!!, school created succesfully, you can now fund wallet',
         )
-        const t = setTimeout(() => {
-          setMessage(() => '')
-          setUI((prev) => {
-            return {
-              ...prev,
-              paymentModal: {
-                ...prev.paymentModal,
-                visibility: !prev.paymentModal?.visibility,
-              },
-            }
-          })
-        }, 3000)
+        await sleep(3000)
+        setMessage(() => '')
+        setUI((prev) => {
+          return {
+            ...prev,
+            paymentModal: {
+              ...prev.paymentModal,
+              visibility: !prev.paymentModal?.visibility,
+            },
+          }
+        })
       }
     },
     onError: (err) => {
@@ -107,11 +108,12 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
   return (
     <div id="create" className="mt-[25px] w-full text-center">
       <div className={`${regularFont.className} mb-[32px]`}>
-      <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
+        <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
           Add Account Admin
         </h3>
         <p className="text-ash_400 mb-12 text-center">
-          Administrators help manage your school&apos;s account on Tayture. Add now.
+          Administrators help manage your school&apos;s account on Tayture. Add
+          now.
         </p>
       </div>
       <Formik
@@ -159,29 +161,29 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
                     </div>
                   ))}
 
-                 <div className='text-left'>
-                 <Button
-                    render="light"
-                    transparent
-                    onClick={() =>
-                      push({
-                        sch_admin_name: '',
-                        sch_admin_email: '',
-                        sch_admin_phone: '',
-                      })
-                    }
-                    bold={false}
-                    rounded
-                    text={
-                      <Space>
-                        <FaPlus color="#FF7517" />
-                        <span className="text-[16px] text-orange">
-                          Another Admin
-                        </span>
-                      </Space>
-                    }
-                  />
-                 </div>
+                  <div className="text-left">
+                    <Button
+                      render="light"
+                      transparent
+                      onClick={() =>
+                        push({
+                          sch_admin_name: '',
+                          sch_admin_email: '',
+                          sch_admin_phone: '',
+                        })
+                      }
+                      bold={false}
+                      rounded
+                      text={
+                        <Space>
+                          <FaPlus color="#FF7517" />
+                          <span className="text-[16px] text-orange">
+                            Another Admin
+                          </span>
+                        </Space>
+                      }
+                    />
+                  </div>
                 </>
               )}
             </FieldArray>

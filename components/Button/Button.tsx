@@ -19,7 +19,7 @@ interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   ref?: RefObject<HTMLButtonElement>;
 }
 
-function Button({
+export default function Button({
   text,
   bold,
   render,
@@ -70,8 +70,6 @@ function Button({
     </button>
   )
 }
-
-export default Button
 
 export function CheckBtn({
   loading,

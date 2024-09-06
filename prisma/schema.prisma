@@ -25,6 +25,7 @@ enum WalletState {
   DEBIT
   LOCKED
   UNLOCKED
+  BONUS
 }
 
 model Account {
@@ -151,6 +152,7 @@ model Coupoun {
   amount    Int      @default(0)
   used      Boolean  @default(false)
   couponJob Job?
+  expires   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -292,6 +294,7 @@ model Profile {
   description  String? @db.VarChar(300)
   address      String? @db.VarChar(300)
   lga          String? @db.VarChar(30)
+  country      String? @db.VarChar(100)
   state        String? @db.VarChar(30)
   city         String? @db.VarChar(30)
   available    Boolean @default(false)
@@ -307,15 +310,16 @@ model School {
   sch_name         String        @db.VarChar(50)
   sch_no_emp       String        @db.VarChar(30)
   sch_address      String        @db.VarChar(30)
+  country          String?       @db.VarChar(100) @default("Nigeria")
   sch_url          String        @db.VarChar(100)
   sch_phone        String        @db.VarChar(20)
   sch_verified     Int?          @default(0)
   sch_admin        SchoolAdmin[]
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-  sch_city         String        @db.VarChar(100)
+  sch_city         String?        @db.VarChar(100)
   sch_state        String        @db.VarChar(80)
-  sch_lga          String        @db.VarChar(100)
+  sch_lga          String?        @db.VarChar(100)
   pending_job_post Int           @default(0)
   landmark         String?
   schUserId        String

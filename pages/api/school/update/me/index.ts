@@ -22,7 +22,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     'sch_phone',
     'sch_logo',
     'active',
-    'landmark'
+    'landmark',
+    'country'
   ]
 
   const holderUser = ['sch_logo', 'sch_name', 'sch_phone']

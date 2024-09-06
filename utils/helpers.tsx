@@ -16,6 +16,12 @@ import {
   User,
   WorkHistory,
 } from '@prisma/client'
+import { ChangeEvent, Dispatch, SetStateAction } from 'react'
+import Cloudinary from '@/request/cloudinary'
+import { AxiosResponse } from 'axios'
+import { getUser } from '@/lib/api/user'
+import { NextRouter } from 'next/router'
+import { QueryClient } from '@tanstack/react-query'
 
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
@@ -234,6 +240,7 @@ export const checkIsQualMatch = ({
 }): boolean => {
   return matchQualHash[qual] >= matchQualHash[job]
 }
+
 export const checkIsMatch = ({
   application,
   job,
@@ -245,6 +252,18 @@ export const checkIsMatch = ({
     matchExpHash[application.exp] >= +job.job_exp &&
     matchQualHash[application.qual] >= matchQualHash[job.job_qual]
   )
+}
+
+export const checkIsLocMatch = ({
+  userLoc,
+  jobLoc,
+}: {
+  userLoc: {country: string, state: string, lga: string, city: string}
+  jobLoc: {country: string, sch_state: string, sch_city: string, sch_lga: string}
+}): boolean => {
+  console.log('[USERLPC]', userLoc)
+  console.log('[JOBLPC]', jobLoc)
+  return userLoc?.country === jobLoc?.country
 }
 
 export const formatTo12HourTime = (dateString: string): any => {
@@ -390,4 +409,110 @@ export const getRandomColor = () => {
 export const getRandomColor2 = (colors: string[]) => {
   const randomIndex = Math.floor(Math.random() * colors.length)
   return colors[randomIndex]
+}
+
+export const isAllowedFileType = (fileType: string) =>
+  [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ].includes(fileType)
+
+export const handleUpload = async (
+  e: ChangeEvent<HTMLInputElement>,
+  fn: (name: string, val: any) => void,
+  cb: (msg: string) => void,
+  load: (val: boolean) => void,
+) => {
+  const inputElement = e.target
+  const files = inputElement.files
+
+  if (files && files.length > 0) {
+    const selectedFile = files[0]
+
+    if (!isAllowedFileType(files[0].type))
+      return cb('Invalid file type. Please upload a PDF, DOC, or DOCX file.')
+
+    const isLt2M = files[0].size / 1024 / 1024 < 2
+    if (!isLt2M) return cb('Image must be smaller than 2MB!')
+    load(true)
+
+    const formData = new FormData()
+    formData.append('file', selectedFile)
+    formData.append(
+      'upload_preset',
+      `${process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}`,
+    )
+
+    try {
+      const response = await Cloudinary.post('/auto/upload', formData)
+      const { secure_url } = response.data
+      fn('cv', secure_url)
+    } catch (error: any) {
+      cb(`Error uploading banner: ${error.message}`)
+    } finally {
+      load(false)
+    }
+  }
+}
+
+export const appliedSucces = async (
+  res: AxiosResponse,
+  path: string,
+  uiCb: Dispatch<SetStateAction<any>>,
+  msgCb: Dispatch<SetStateAction<string>>,
+  router: NextRouter,
+  queryClient: QueryClient,
+  SW: any
+) => {
+  // const applied = res.data.applied
+  if (path === '/jobs') {
+    uiCb((prev: any) => {
+      return {
+        ...prev,
+        applyLandingModal: {
+          ...prev.applyLandingModal,
+          visibility: false,
+        },
+      }
+    })
+    msgCb(res.data.message)
+    await sleep(3000)
+    router.push('/dashboard')
+  
+  } else {
+    uiCb((prev: any) => {
+      return {
+        ...prev,
+        applyModal: {
+          ...prev.applyModal,
+          visibility: false,
+        },
+      }
+    })
+    await sleep(2000)
+    msgCb(res.data.message)
+    SW.prev()
+    
+    const req = await getUser()
+    queryClient.setQueryData(['user'], () => req.data.user)
+    queryClient.invalidateQueries({
+      queryKey: ['user', 'jobs', 'school'],
+    })
+    
+    if (router.query.job === '1') {
+      return router.replace('/dashboard/jobs')
+    }
+    console.log('[ROYTER]: got-here')
+    router.push(router.asPath)
+  }
+}
+
+/**
+ * Pauses execution for a specified amount of time.
+ * @param ms - The number of milliseconds to sleep.
+ * @returns A promise that resolves after the specified time.
+ */
+export async function sleep(ms: number): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, ms));
 }
