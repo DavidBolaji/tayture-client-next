@@ -38,7 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return await Promise.all([req1, req2])
       })
       return res.status(200).json({
-        message: 'Job Created',
+        message: 'Wallet funded successfully',
         wallet,
       })
     } else {

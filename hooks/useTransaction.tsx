@@ -72,7 +72,7 @@ const useTransaction = () => {
             {record.type === 'DEBIT' && <GiPayMoney color="red" />}
             {record.type === 'LOCKED' && <FaHandHolding color="yellow" />}
             {record.type === 'UNLOCKED' && <FaLockOpen color="green" />}
-            {record.type === 'BONUS' && <FaGift color="white" />}
+            {record.type === 'BONUS' && <FaGift color="orange" />}
           </div>
           <div>{formatNumber(record.amount, 'NGN', {})}</div>
         </div>
@@ -121,7 +121,7 @@ const useTransaction = () => {
             {record.type === 'DEBIT' && <GiPayMoney color="red" />}
             {record.type === 'LOCKED' && <GrLock color="yellow" />}
             {record.type === 'UNLOCKED' && <GrUnlock color="purple" />}
-            {record.type === 'BONUS' && <GrGift color="white" />}
+            {record.type === 'BONUS' && <GrGift color="orange" />}
           </div>
           <div>{formatNumber(record.amount, 'NGN', {})}</div>
         </div>

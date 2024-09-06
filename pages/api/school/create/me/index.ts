@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { v4 as uuid } from 'uuid'
 import { ISchDb } from '../../types'
 import sendSchoolCreated from '@/mail/sendSchoolCreated'
+import { formatNumber } from '@/utils/helpers'
 type Data = {
   message: string
   school?: ISchDb
@@ -70,7 +71,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         amount: 4000,   
         type:   'BONUS',
-        message:  'School Creation Bonus',
+        message:  `School Creation Bonus of ₦ ${formatNumber((4000), "NGN", {})}`,
         userId:   req.authUser.id,
         schoolId: schoolCreate.sch_id
    
