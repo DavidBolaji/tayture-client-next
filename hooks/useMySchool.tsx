@@ -22,7 +22,7 @@ interface DataType {
 const useMySchool = () => {
   const queryClient = useQueryClient()
   const [count, setCount] = useState(-1)
-  const {setMessage} = useGlobalContext()
+  const { setMessage } = useGlobalContext()
   const { data: my_schools, isPending } = useQuery({
     queryKey: ['allMySchools'],
     queryFn: async () => {
@@ -32,7 +32,13 @@ const useMySchool = () => {
   })
 
   const { mutate } = useMutation({
-    mutationFn: async ({ stat, adminId }: { stat: boolean; adminId: string }) => {
+    mutationFn: async ({
+      stat,
+      adminId,
+    }: {
+      stat: boolean
+      adminId: string
+    }) => {
       return await Axios.put(`/schooladmin/update/${adminId}`, {
         sch_admin_active: stat,
       })
@@ -60,8 +66,8 @@ const useMySchool = () => {
   })
 
   const setEdit = (id: string) => {
-    const allSchools = queryClient.getQueryData(['allSchools']) as School[]
-    const selectedSch = allSchools.find(
+    const allSchools = queryClient.getQueryData(['allMySchools']) as School[]
+    const selectedSch = allSchools?.find(
       (sch: School) => sch.sch_id === id,
     ) as School
     updateSchool(selectedSch)
@@ -106,13 +112,19 @@ const useMySchool = () => {
                     <Switch
                       checked
                       onChange={(e) =>
-                        mutate({ stat: e ? true : false, adminId: d.sch_admin_id! })
+                        mutate({
+                          stat: e ? true : false,
+                          adminId: d.sch_admin_id!,
+                        })
                       }
                     />
                   ) : (
                     <Switch
                       onChange={(e) =>
-                        mutate({ stat: e ? true : false, adminId: d.sch_admin_id! })
+                        mutate({
+                          stat: e ? true : false,
+                          adminId: d.sch_admin_id!,
+                        })
                       }
                     />
                   )}

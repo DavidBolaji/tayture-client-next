@@ -24,5 +24,6 @@ export interface ISchDb {
   sch_participants?: ISchAdmin[]
   // wallet?: string;
   sch_admins_str?: string
+  country: string
   created_at?: Date
 }

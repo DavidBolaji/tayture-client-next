@@ -23,6 +23,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             id: true,
             fname: true,
             email: true,
+            hired: {
+              where: {
+                jobId: req.query.jobId as string
+              }
+            },
             profile: {
               select: {
                 country: true,
@@ -50,13 +55,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 country: true,
                 sch_state: true,
                 sch_city: true,
-                sch_lga: true
+                sch_lga: true,
               }
-            }
+            },
           },
          
-        },
+        }, 
       },
+      orderBy: [
+        {
+          rating: 'desc',
+        },
+        {
+          createdAt: 'desc',
+        },
+      ],
     })
 
   
@@ -68,7 +81,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ...rest,
           user,
         })),
-        job: applied[0].job,
+        job: applied[0].job
       },
     })
   } catch (error) {

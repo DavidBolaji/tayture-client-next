@@ -261,8 +261,6 @@ export const checkIsLocMatch = ({
   userLoc: {country: string, state: string, lga: string, city: string}
   jobLoc: {country: string, sch_state: string, sch_city: string, sch_lga: string}
 }): boolean => {
-  console.log('[USERLPC]', userLoc)
-  console.log('[JOBLPC]', jobLoc)
   return userLoc?.country === jobLoc?.country
 }
 
@@ -503,7 +501,6 @@ export const appliedSucces = async (
     if (router.query.job === '1') {
       return router.replace('/dashboard/jobs')
     }
-    console.log('[ROYTER]: got-here')
     router.push(router.asPath)
   }
 }

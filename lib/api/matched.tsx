@@ -10,3 +10,11 @@ export const getAppliedJobUsers = async (jobId: string) => {
   return result
 }
 
+export const sendRejectionMessage = async (
+  {jobId, user}:
+  {jobId: string, user: {userId: string}[]}
+) => {
+  const result = await Axios.post(`/apply/rejection/${jobId}`, {userIds: user})
+  return result
+}
+

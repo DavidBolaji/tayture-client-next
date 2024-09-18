@@ -40,7 +40,7 @@ const WalletCard2 = () => {
         return req.data.school[defaultSchool]
       }
     },
-    enabled: !!permission
+    // enabled: !!permission
   })
   const [amt, setAmt] = useState<string | number>('')
   const { data: user } = useQuery({

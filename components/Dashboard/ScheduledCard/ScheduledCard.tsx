@@ -1,11 +1,16 @@
 'use client'
-import { Alert, Modal,Switch, Tag } from 'antd'
+import { Alert, Modal, Switch, Tag } from 'antd'
 
 import { useGlobalContext } from '@/Context/store'
 import ListComponent from '@/components/ListComponent'
 import { FaCircleCheck, FaCircleXmark } from 'react-icons/fa6'
 import { regularFont } from '@/assets/fonts/fonts'
-import { checkFileExtension, checkIsExpMatch, checkIsQualMatch } from '@/utils/helpers'
+import {
+  checkFileExtension,
+  checkIsExpMatch,
+  checkIsQualMatch,
+  sleep,
+} from '@/utils/helpers'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ISchDb } from '@/pages/api/school/types'
 import { FaBook, FaPenSquare, FaPlusSquare } from 'react-icons/fa'
@@ -23,6 +28,9 @@ export const StyledModal = styled(Modal)`
   overflow: hidden;
   border-radius: 10px;
   && {
+    > * .ant-modal-root .ant-modal-mask {
+      opacity: 0.2 !important;
+    }
     > * .ant-btn-primary {
       background-color: #ff7517;
     }
@@ -65,65 +73,66 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
   const [id, setId] = useState('')
   const router = useRouter()
 
-
   const queryClient = useQueryClient()
-  const school = queryClient.getQueryData(['school']) as ISchDb
-  const user = queryClient.getQueryData(['user']) as User
+  // const school = queryClient.getQueryData(['school']) as ISchDb
+  // const user = queryClient.getQueryData(['user']) as User
 
-  const {mutate, isPending} = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       return await Axios.post('/hired/create', {
         userId: id,
         jobId: router.query.jobId,
         role: matchedJob.job.job_title,
-        defaultSchool
+        defaultSchool,
       })
     },
     onSuccess: (res) => {
       setOpen(false)
       setMessage(() => res.data.message)
       queryClient.invalidateQueries({
-        queryKey: [`job/scheduled/${router.query.jobId}`]
+        queryKey: [`job/scheduled/${router.query.jobId}`],
       })
       setId('')
     },
     onError: (error) => {
-      setMessage(() => (error as AxiosError<{error: string}>).response?.data?.error ||(error as Error).message)
-    }
+      setMessage(
+        () =>
+          (error as AxiosError<{ error: string }>).response?.data?.error ||
+          (error as Error).message,
+      )
+    },
   })
 
-  const handleModalSchedule = (
+  const handleModalSchedule = async (
     modal: 'create' | 'view' | 'edit',
     data: any,
   ) => {
     setStatus(modal)
-    const t = setTimeout(() => {
-      setUI((prev) => {
-        return {
-          ...prev,
-          scheduleModal: {
-            data: {
-              ...prev.scheduleModal?.data,
-              mode: data.mode,
-              date: data.date,
-              time: data.time,
-              link: data.link,
-              fname: data.user.fname,
-              email: data.user.email,
-              status: data.status,
-              userId: data.user.id,
-              scheduleId: data.id,
-              instruction: data.instruction,
-              reminder: data.reminder,
-            },
-            visibility: true,
+    await sleep(500)
+    setUI((prev) => {
+      return {
+        ...prev,
+        scheduleModal: {
+          data: {
+            ...prev.scheduleModal?.data,
+            mode: data.mode,
+            date: data.date,
+            time: data.time,
+            link: data.link,
+            fname: data.user.fname,
+            email: data.user.email,
+            status: data.status,
+            userId: data.user.id,
+            scheduleId: data.id,
+            instruction: data.instruction,
+            reminder: data.reminder,
           },
-        }
-      })
-      clearTimeout(t)
-    }, 500)
+          visibility: true,
+        },
+      }
+    })
   }
-  
+
   return (
     <div className={`${regularFont.className} h-[400px] no-s mr-10`}>
       <div className="min-w-[900px] ">
@@ -140,7 +149,7 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
         <div className="border bord border-b-0 mb-32">
           {!loading &&
             matchedJob?.scheduled.length > 0 &&
-            matchedJob?.scheduled.map((match: any, ind: number) => (
+            matchedJob?.scheduled.map((match: any) => (
               <div
                 key={`${match.user.id}_scheduled`}
                 className="grid grid-cols-12 border-b p-[24px] hover:bg-slate-50 transition-colors duration-300"
@@ -161,13 +170,29 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
                     title="Qualification"
                     text={match.user.applied[0].qual}
                   />
-                  
-                  {match.user.applied[0].cv ? 
-                  <Link className='text-black' href={`${match.user.applied[0].cv}`} target='_blank'>
-                  <CVComponent 
-                   ext={checkFileExtension(match.user.applied[0].cv)}
-                  name={match.user.applied[0].cv.split('/')[match.user.applied[0].cv.split('/').length - 1]}
-                  /> </Link>: <Alert showIcon message={'User has not uploaded cv'} type="info" /> }
+
+                  {match.user.applied[0].cv ? (
+                    <Link
+                      className="text-black"
+                      href={`${match.user.applied[0].cv}`}
+                      target="_blank"
+                    >
+                      <CVComponent
+                        ext={checkFileExtension(match.user.applied[0].cv)}
+                        name={
+                          match.user.applied[0].cv.split('/')[
+                            match.user.applied[0].cv.split('/').length - 1
+                          ]
+                        }
+                      />{' '}
+                    </Link>
+                  ) : (
+                    <Alert
+                      showIcon
+                      message={'User has not uploaded cv'}
+                      type="info"
+                    />
+                  )}
                 </div>
 
                 <div className="col-span-1">
@@ -256,49 +281,56 @@ const ScheduledCard: React.FC<ScheduledCardProps> = ({
                     </Link>
                   )}
                 </div>
-                <div onClick={() => setOpen(true)} className="col-span-1 scale-90 text-center -translate-y-2 translate-x-2">
+                <div
+                  onClick={() => setOpen(true)}
+                  className="col-span-1 scale-90 text-center -translate-y-2 translate-x-2"
+                >
                   {match.user.hired && match.user.hired.length > 0 ? (
-                    <Switch checked disabled style={{
-                      backgroundColor: '#ff7517'
-                    }} />
-                  ) : (
-                    <div className='relative'>
-                      <Switch
-                      loading={isPending}
-                      value={false}
-                      onClick={() => {
-                        setOpen(true)
-                        setId(match.user.id)
+                    <Switch
+                      checked
+                      disabled
+                      style={{
+                        backgroundColor: '#ff7517',
                       }}
-                      className='bg-[#898a8b]'
+                    />
+                  ) : (
+                    <div className="relative">
+                      <Switch
+                        loading={isPending}
+                        value={false}
+                        onClick={() => {
+                          setOpen(true)
+                          setId(match.user.id)
+                        }}
+                        className="bg-[#898a8b]"
                         defaultValue={false}
                       />
                     </div>
                   )}
-                 
                 </div>
               </div>
             ))}
         </div>
       </div>
       <HandleSchedule status={status} />
-      <StyledModal open={open} onCancel={() => setOpen(false)}
+      <StyledModal
+        open={open}
+        onCancel={() => setOpen(false)}
         okText="Yes"
         cancelText="No"
         onOk={() => {
           setOpen(false)
           mutate()
         }}
-        
       >
-      <h3
-      className={`font-[600] text-black_400 text-[18px] mb-4 ${regularFont.className}`}
-    >
-      🚫 Confirmation
-    </h3>
-    <p className={`text-[14px] ${regularFont.className}`}>
-    Applicant has been hired?
-    </p>
+        <h3
+          className={`font-[600] text-black_400 text-[18px] mb-4 ${regularFont.className}`}
+        >
+          🚫 Confirmation
+        </h3>
+        <p className={`text-[14px] ${regularFont.className}`}>
+          Applicant has been hired?
+        </p>
       </StyledModal>
     </div>
   )
