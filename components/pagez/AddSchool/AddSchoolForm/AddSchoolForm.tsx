@@ -23,6 +23,7 @@ const initialValues = {
   sch_phone: '',
   sch_name: '',
   landmark: '',
+  country: '',
 }
 
 const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
@@ -83,6 +84,7 @@ const AddSchoolForm: React.FC<{ SW: any }> = ({ SW }) => {
 
             <Field
               as={LocationComponent}
+              country="country"
               city="sch_city"
               state="sch_state"
               lga="sch_lga"

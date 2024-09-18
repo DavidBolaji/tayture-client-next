@@ -1,5 +1,4 @@
 import db from '@/db/db'
-import { getJobById } from '@/lib/api/job'
 import verifyToken from '@/middleware/verifyToken'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -11,8 +10,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.query.jobId)
     return res.status(400).json({ message: 'job id is required' })
 
-  // const jobs = await getJobById(req.query.jobId as string)
-
   try {
     /** get applied */
     const req1 = db.applied.findMany({
@@ -21,10 +18,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
 
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            fname: true,
+            email: true,
+            hired: {
+              where: {
+                jobId: req.query.jobId as string
+              }
+            },
+            profile: {
+              select: {
+                country: true,
+                state: true,
+                city: true,
+                lga: true
+              }
+            }
+          },
+         
+        },
         job: {
           include: {
-           
             schedule: {
               where: {
                 jobId: req.query.jobId as string,
@@ -32,10 +48,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               include: {
                 user: true,
               },
+              
+            },
+            school: {
+              select: {
+                country: true,
+                sch_state: true,
+                sch_city: true,
+                sch_lga: true,
+              }
             },
           },
-        },
+         
+        }, 
       },
+      orderBy: [
+        {
+          rating: 'desc',
+        },
+        {
+          createdAt: 'desc',
+        },
+      ],
     })
 
   
@@ -47,7 +81,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ...rest,
           user,
         })),
-        job: applied[0].job,
+        job: applied[0].job
       },
     })
   } catch (error) {

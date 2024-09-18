@@ -12,7 +12,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const coupoun = await db.coupoun.create({
       data: {
        value,
-       amount: +amount
+       amount: +amount,
+       expires: new Date(Date.now() +  60 * 60 * 1000 * 24)
       },
     })
     return res.status(200).json({

@@ -24,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   })
 
-  console.log(req.body)
+
 
   try {
     if (!req.body['active']) {
@@ -33,7 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           const req2 = tx.wallet.update({
             where: {
               // walletUserId: req.authUser!.id as string,
-              walletSchId: req.authUser!.school[+req.body.defaultSchool] as unknown as string
+              walletSchId: req.authUser!.school[+req.body.defaultSchool].sch_id as unknown as string
             },
             data: {
               wallet_balance: {
@@ -62,7 +62,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           }
 
 
-          const job = db.job.update({
+          const job = tx.job.update({
             where: {
               job_id: req.query.jobId as string,
             },
@@ -91,8 +91,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const job = await db.$transaction(async (tx) => {
           const req2 = tx.wallet.update({
             where: {
-              // walletUserId: req.authUser!.id as string,
-              walletSchId: req.authUser!.school[+req.body.defaultSchool] as unknown as string
+              walletUserId: req.authUser!.id as string,
+              walletSchId: req.authUser!.school[+req.body.defaultSchool].sch_id as unknown as string
             },
             data: {
               wallet_balance: {
@@ -121,7 +121,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           }
 
 
-          const job = db.job.update({
+          const job = tx.job.update({
             where: {
               job_id: req.query.jobId as string,
             },

@@ -1,5 +1,4 @@
 import db from '@/db/db'
-import verifyToken from '@/middleware/verifyToken'
 import verifyToken2 from '@/middleware/verifyToken2'
 import { formatNumber } from '@/utils/helpers'
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -39,7 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return await Promise.all([req1, req2])
       })
       return res.status(200).json({
-        message: 'Job Created',
+        message: 'Wallet Funded Successfully',
         wallet,
       })
     } else {

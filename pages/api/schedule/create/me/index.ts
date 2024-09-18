@@ -26,6 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     'date',
     'time',
     'scheduleId',
+    'country'
   ]
 
   // Extract the fields from the request body
@@ -114,14 +115,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await Promise.all([note1, note2])
 
     // Send schedule mail to the user
-    await sendScheduleMail({
-      email: req.body['email'],
-      firstName: req.body['fname'],
-      company: req.body['sch_name']!,
-      job_title: req.body['job_title'],
-      link: `${process.env.NEXT_PUBLIC_FRONTEND_API}dashboard/jobs/all`,
-    })
-
+    if (process.env.NEXT_PUBLIC_ENV === 'prod') {
+      sendScheduleMail({
+        email: req.body['email'],
+        firstName: req.body['fname'],
+        company: req.body['sch_name']!,
+        job_title: req.body['job_title'],
+        link: `${process.env.NEXT_PUBLIC_FRONTEND_API}dashboard/jobs/all`,
+      })
+    }
     // Schedule a reminder email if required
     if (req.body['remainder']) {
       const targetDateTime = moment

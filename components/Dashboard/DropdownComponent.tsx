@@ -226,6 +226,7 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     },
     {
       label: (
+        user?.role === "SUPER_ADMIN" &&
         <div
           className={regularFont.className}
           onClick={
@@ -252,7 +253,7 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       key: 'signout',
       label: (
         <span
-          className={regularFont.className}
+          className={`${regularFont.className} inline-block w-full`}
           onClick={() => {
             signout()
           }}

@@ -49,7 +49,9 @@ const sendRemainderMail = async ({
   }
 
   try {
-    await transporter.sendMail(mailOption)
+    if(process.env.NEXT_PUBLIC_ENV === 'prod') {
+      await transporter.sendMail(mailOption)
+    }
     console.log('Reminder mail sent succesfully')
   } catch (error) {
     //@ts-ignore

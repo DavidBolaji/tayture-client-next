@@ -1,23 +1,19 @@
 'use client'
 import { Field, Form, Formik } from 'formik'
-import React, { ChangeEvent, FC, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import { SelectInput } from '../../Form/SelectInput/SelectInput'
 import { regularFont } from '@/assets/fonts/fonts'
 import { degree, expL } from '@/utils/data'
 import CVComponent from '../../CVComponent'
-import { checkFileExtension } from '@/utils/helpers'
-import Cloudinary from '@/request/cloudinary'
+import { checkFileExtension, handleUpload } from '@/utils/helpers'
 import { useGlobalContext } from '@/Context/store'
 import Spinner from '../../Spinner/Spinner'
 import { ApplyFormSchema } from './ApplyFormSchema'
 import Button from '../../Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
-const isAllowedFileType = (fileType: string) =>
-  [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  ].includes(fileType)
+import { Profile, User } from '@prisma/client'
+import { LuAsterisk } from 'react-icons/lu'
+import LocationComponent from '@/components/Form/LocationComponent/LocationComponent'
 
 const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
   const [loading, setLoading] = useState<boolean>(false)
@@ -25,49 +21,14 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
   const queryClient = useQueryClient()
   const { setMessage, setCount } = useGlobalContext()
 
-  const handleUpload = async (
-    e: ChangeEvent<HTMLInputElement>,
-    fn: (name: string, val: any) => void,
-  ) => {
-    const inputElement = e.target
-    const files = inputElement.files
-
-    if (files && files.length > 0) {
-      const selectedFile = files[0]
-
-      if (!isAllowedFileType(files[0].type))
-        return setMessage(
-          () => 'Invalid file type. Please upload a PDF, DOC, or DOCX file.',
-        )
-
-      const isLt2M = files[0].size / 1024 / 1024 < 2
-      if (!isLt2M) return setMessage(() => 'Image must be smaller than 2MB!')
-      setLoading(true)
-
-      const formData = new FormData()
-      formData.append('file', selectedFile)
-      formData.append(
-        'upload_preset',
-        `${process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}`,
-      )
-
-      try {
-        const response = await Cloudinary.post('/auto/upload', formData)
-        const { secure_url } = response.data
-        fn('cv', secure_url)
-      } catch (error: any) {
-        setMessage(() => `Error uploading banner: ${error.message}`)
-      } finally {
-        setLoading(false)
-      }
-    }
-  }
+  const user = queryClient.getQueryData(['user']) as User & { profile: Profile }
 
   const handleNext = (data: { exp: string; qual: string; cv: string }) => {
-    queryClient.setQueryData(['jobApplication'], data)
+    queryClient.setQueryData(['jobApplication'], () => data)
     setCount((prev) => prev + 1)
     SW.next()
   }
+
   return (
     <div className={`w-full ${regularFont.className}`}>
       <h2 className="text-center text-[24px] mb-[40px] text-black">
@@ -77,14 +38,18 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
         validateOnMount={true}
         validationSchema={ApplyFormSchema}
         initialValues={{
-          cv: '',
+          cv: user?.profile?.cv ?? '',
           qual: '',
           exp: '',
+          country: user?.profile?.country ?? '',
+          state: user?.profile?.state ?? '',
+          city: user?.profile?.city ?? '',
+          lga: user?.profile?.lga ?? '',
         }}
         onSubmit={() => {}}
       >
         {({ values, setFieldValue, isValid }) => (
-          <Form className='w-full'>
+          <Form className="w-full">
             <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
               Educational qualification
             </label>
@@ -103,8 +68,17 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
               as={SelectInput}
               placeholder={'How many years have you worked ?'}
             />
+            <LocationComponent
+              country="country"
+              state="state"
+              city="city"
+              lga="lga"
+            />
             <label className="mb-2 inline-block text-sm md:text-[20px] ml-1">
-              Curriculum Vitae
+              <div className="flex gap-1">
+                <span>Curriculum Vitae</span>
+                <LuAsterisk size={12} className="mt-0.5" color="red" />
+              </div>
             </label>
             {loading && (
               <div className="mb-3 flex items-center justify-center">
@@ -135,7 +109,9 @@ const ApplyModalForm: FC<{ SW: any }> = ({ SW }) => {
               className="hidden"
               ref={inputRef}
               accept=".pdf, .doc, .docx"
-              onChange={(e) => handleUpload(e, setFieldValue)}
+              onChange={(e) =>
+                handleUpload(e, setFieldValue, setMessage, setLoading)
+              }
             />
             <div className="pt-10 pb-20 text-center">
               <Button

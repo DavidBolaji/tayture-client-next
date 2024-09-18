@@ -20,7 +20,18 @@ const handler =  async (req: NextApiRequest, res: NextApiResponse) => {
           schoolId: school.trim().length ? school : undefined
         },
         include: {
-          user: true,
+          user: {
+            include: {
+              profile: {
+                select: {
+                  lga: true,
+                  state: true,
+                  city: true,
+                  country: true
+                }
+              }
+            }
+          },
           school: true,
           job: true,
         },
@@ -29,6 +40,11 @@ const handler =  async (req: NextApiRequest, res: NextApiResponse) => {
       const data = results.map((result) => ({
         fname: result.user.fname,
         lname: result.user.lname,
+        phone: result.user.phone,
+        lga: result.user.profile?.lga,
+        city: result.user.profile?.city,
+        state: result.user.profile?.state,
+        country: result.user.profile?.country,
         sch_name: result.school.sch_name,
         job_title: result.job.job_title,
         cv: result.cv,

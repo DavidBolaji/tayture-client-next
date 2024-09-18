@@ -2,7 +2,7 @@ import {  sessionUserSchema } from './Schema/loginSchema'
 import { setCookie } from 'nookies'
 
 import { NextApiRequest, NextApiResponse } from 'next'
-import { sendWelcome } from '@/lib/services/user'
+
 import db from '@/db/db'
 import verifyToken2 from '@/middleware/verifyToken2'
 
@@ -23,7 +23,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const { session } = validation.data
-  const user = req.authUser
 
   try {
     const sessionData = await db.session.findUnique({
@@ -32,7 +31,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
-    console.log('[SESSION_DATA]',sessionData)
 
     if (!sessionData) {
       return res.json({ error: 'Invalid Session' })
@@ -48,12 +46,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     // Set the cookie containing the token
-    if (user?.first_time) {
-      sendWelcome({
-        firstName: user.fname,
-        email: user.email,
-      })
-    }
 
     return res
       .status(200)

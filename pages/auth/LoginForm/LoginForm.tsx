@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import Spinner from '@/components/Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
 import { loginUser } from '@/lib/api/user'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query'
 import * as Yup from 'yup'
 import { Axios } from '@/request/request'
 import { AxiosError } from 'axios'
@@ -34,7 +34,7 @@ const loginSchema = Yup.object().shape({
 
 const LoginForm = ({ show = true, redirect = true, close }: {show?: boolean, redirect?: boolean, close?: () => void}) => {
   const router = useRouter()
-  const queryClient = useQueryClient()
+  const queryClient: QueryClient = useQueryClient()
   const { setMessage, colorList } = useGlobalContext()
 
   const data = queryClient.getQueryData(['cvData']) as any
@@ -73,6 +73,7 @@ const LoginForm = ({ show = true, redirect = true, close }: {show?: boolean, red
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: ILogin) => await loginUser({ ...values }),
     onSuccess: async (res) => {
+      
       if (!show) {
         await downloadCv()
         const t = setTimeout(() => {
@@ -105,6 +106,7 @@ const LoginForm = ({ show = true, redirect = true, close }: {show?: boolean, red
     values: ILogin,
     { resetForm }: FormikHelpers<ILogin>,
   ) => {
+    queryClient.clear()
     mutate({ ...values })
     resetForm({
       values: initilaValues,

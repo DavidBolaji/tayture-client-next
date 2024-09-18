@@ -4,7 +4,6 @@ import Spinner from '../Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
 import axios from 'axios'
 import { FaAsterisk } from 'react-icons/fa'
-import Image from 'next/image'
 
 const UploadComponent: FC<{ image?: string, blog?:boolean }> = ({ image, blog = false }) => {
   const uploadRef = useRef<HTMLImageElement | null>(null)
