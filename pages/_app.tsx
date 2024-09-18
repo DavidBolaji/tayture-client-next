@@ -15,8 +15,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import NextNProgress from 'nextjs-progressbar'
 import HandleUpload from '@/components/Modal/HandleUpload'
 import Whatsapp from '@/components/Whatsapp/Whatsapp'
-import Head from 'next/head'
-import Script from 'next/script'
+// import Head from 'next/head'
+// import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/react'
 
 
