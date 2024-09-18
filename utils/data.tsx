@@ -260,6 +260,15 @@ export const employes = [
   { key: '51+', value: '51+' },
 ]
 
+export const ratings = [
+  { key: '0', value: 0 },
+  { key: '1', value: 1 },
+  { key: '2', value: 2 },
+  { key: '3', value: 3 },
+  { key: '4', value: 4 },
+  { key: '5', value: 5 },
+]
+
 export const countries: { name: string; country_code: string }[] = [
   { name: 'Afghanistan', country_code: 'AF' },
   { name: 'Albania', country_code: 'AL' },

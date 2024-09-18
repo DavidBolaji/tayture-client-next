@@ -274,7 +274,6 @@ const GlobalContext = createContext<ContextProps>({
 })
 
 export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
-  const queryClient = useQueryClient()
   const [user, setUser] = useState<Partial<IProfile>>(INIT)
   const [defaultSchool, setDefaultSchool] = useState<number>(0)
   const [message, setMessage] = useState<string>('')

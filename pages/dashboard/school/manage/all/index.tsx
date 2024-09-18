@@ -2,23 +2,24 @@ import ScheduledCard from '@/components/Dashboard/ScheduledCard/ScheduledCard'
 import AllJobCard from '@/components/JobCard/AllJobCard'
 
 import { Hired, Job, School } from '@prisma/client'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {  useQuery, useQueryClient } from '@tanstack/react-query'
 import { ConfigProvider, Tabs, TabsProps } from 'antd'
-import { useRouter } from 'next/router'
 import React from 'react'
 
 const ManageAllPage:React.FC = (props) => {
-    const router = useRouter() 
     const queryClient = useQueryClient();
-    const school = queryClient.getQueryData(['school']) as School & {job: (Job & {hired: Hired[]})[]}
-    const onChange = () => {}
+    const {data: school} = useQuery({
+      queryKey: ['school'],
+      queryFn: () => queryClient.getQueryData(['school']) as School & {job: (Job & {hired: Hired[]})[]}
+    })
+ 
   
     const items: TabsProps['items'] = [
       {
         key: 'all',
         label: 'All jobs',
         children: (
-          <AllJobCard job={school.job} />
+          <AllJobCard job={school!.job} />
         ),
       }
     ]
@@ -42,7 +43,7 @@ const ManageAllPage:React.FC = (props) => {
         <Tabs
           defaultActiveKey={'all'}
           items={items}
-          onChange={onChange}
+          onChange={() => {}}
         />
       </ConfigProvider>
     )

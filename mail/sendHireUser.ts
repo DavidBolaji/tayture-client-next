@@ -46,7 +46,9 @@ const sendHireUser = async ({
   }
 
   try {
-    await transporter.sendMail(mailOption)
+    if(process.env.NEXT_PUBLIC_ENV === 'prod') {
+      await transporter.sendMail(mailOption)
+    }
     console.log('Hire user mail sent succesfully')
   } catch (error) {
     //@ts-ignore

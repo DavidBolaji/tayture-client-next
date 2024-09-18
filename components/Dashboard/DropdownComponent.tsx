@@ -226,6 +226,7 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     },
     {
       label: (
+        user?.role === "SUPER_ADMIN" &&
         <div
           className={regularFont.className}
           onClick={
