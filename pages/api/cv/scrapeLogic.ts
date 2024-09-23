@@ -9,15 +9,16 @@ import sendCvMail from '@/mail/sendCvMail'
 let chrome: any = {}
 let puppeteer: any
 
-const isProd = false
-  // process.env.AWS_LAMBDA_FUNCTION_VERSION ||
-  // process.env.NEXT_PUBLIC_ENV === 'prod'
+const isProd =
+  process.env.AWS_LAMBDA_FUNCTION_VERSION ||
+  process.env.NEXT_PUBLIC_ENV === 'prod' ||
+  true
 
 async function loadPuppeteer() {
   if (isProd) {
     // Dynamically import chrome-aws-lambda and puppeteer-core for AWS Lambda
-    const chromeModule = await import('@sparticuz/chromium')
-    // const chromeModule = await import('chrome-aws-lambda')
+    // const chromeModule = await import('@sparticuz/chromium')
+    const chromeModule = await import('chrome-aws-lambda')
     const puppeteerCore = (await import(
       'puppeteer-core'
     )) as unknown as CPuppeteer
@@ -174,27 +175,24 @@ export const scrapeLogic = async (res: any, arg: Arg): Promise<void> => {
 
     if (isProd) {
       options = {
-        // defaultViewport: chrome.defaultViewport,
-        // headless: chrome.headless,
-        ignoreHTTPSErrors: true,
+        defaultViewport: chrome.defaultViewport,
+        headless: chrome.headless,
+        // ignoreHTTPSErrors: true,
       }
     }
 
     browser = await puppeteer.launch({
       args: [
-        '--disable-setuid-sandbox',
-        '--no-sandbox',
-        // '--single-process',
-        '--no-zygote',
+        // '--disable-setuid-sandbox',
+        // '--no-sandbox',
+        // '--no-zygote',
         ...(isProd ? chrome.args : []),
       ],
       executablePath:
         //@ts-ignore
         isProd
-          ? (await chrome.executablePath) ||
-            (await chrome.executablePath(
-              '/var/task/node_modules/@sparticuz/chromium/bin',
-            ))
+          ? process.env.NEXT_PUBLIC_PUPPETEER_EXECUTABLE_PATH ||
+            (await chrome.executablePath)
           : puppeteer.executablePath(),
       ...options,
     })
