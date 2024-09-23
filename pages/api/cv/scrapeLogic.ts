@@ -9,9 +9,9 @@ import sendCvMail from '@/mail/sendCvMail'
 let chrome: any = {}
 let puppeteer: any
 
-const isProd =
-  process.env.AWS_LAMBDA_FUNCTION_VERSION ||
-  process.env.NEXT_PUBLIC_ENV === 'prod'
+const isProd = false
+  // process.env.AWS_LAMBDA_FUNCTION_VERSION ||
+  // process.env.NEXT_PUBLIC_ENV === 'prod'
 
 async function loadPuppeteer() {
   if (isProd) {
