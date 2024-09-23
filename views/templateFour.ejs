@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[<%= colorList.background %>] text-gray-900">
+
+  <div class="max-w-4xl mx-auto p-8">
+    <!-- Header -->
+    <div class="flex gap-5 items-end">
+      <div class="flex items-end justify-end h-28 w-32 text-4xl p-2 tracking-wider font-bold bg-[<%= colorList.foreground %>] text-[<%= colorList.textOne %>]">
+        <%= data.name.split(" ")[0].split("")[0].toUpperCase() %><%= data.name.split(" ")[1].split("")[0].toUpperCase() %>
+      </div>
+      <div class="flex flex-col">
+        <h1 class="text-4xl font-semibold uppercase tracking-[0.6rem] text-[<%= colorList.colorParagraph %>]"><%= data.name %></h1>
+        <% if (data.linkedIn || data.github || data.web) { %>
+            <div class="flex flex-wrap gap-4 pl-1">
+                <% if(data.github) { %>
+                    <div class="flex gap-1 items-center">
+                      <div>
+                        <i class="fa fa-github text-[<%= colorList.foreground %>]"></i>
+                      </div>
+                      <div class="text-xs text-[<%= colorList.foreground %>]"><%= data.github %></div>
+                    </div>
+                    <% } %>
+                    <% if(data.web) { %>
+                    <div class="flex gap-1 items-center">
+                      <div>
+                        <i class="fa fa-globe text-[<%= colorList.foreground %>]"></i>
+                      </div>
+                      <div class="text-xs text-[<%= colorList.foreground %>]"><%= data.web %></div>
+                    </div>
+                    <% } %>
+                    <% if(data.linkedIn) { %>
+                    <div class="flex gap-1 items-center">
+                      <div>
+                        <i class="fa fa-linkedin text-[<%= colorList.foreground %>]"></i>
+                      </div>
+                      <div class="text-xs text-[<%= colorList.foreground %>]"><%= data.linkedIn %></div>
+                    </div>
+                    <% } %>
+            </div>
+            <% } %>
+        <div class="flex flex-wrap  gap-4 pl-1">
+          <div class="flex gap-1 items-center">
+            <div>
+              <i class="fa fa-envelope-o text-[<%= colorList.foreground %>]"></i>
+            </div>
+            <div class="text-xs text-[<%= colorList.foreground %>]"><%= data.email %></div>
+          </div>
+          <div class="flex gap-1 items-center">
+            <div>
+              <i class="fa fa-phone text-[<%= colorList.foreground %>]"></i>
+            </div>
+            <div class="text-xs text-[<%= colorList.foreground %>]"><%= data.phone %></div>
+          </div>
+          <% if(data.location) { %>
+          <div class="flex gap-1 items-center">
+            <div>
+              <i class="fa fa-map-marker text-[<%= colorList.foreground %>]"></i>
+            </div>
+            <div class="text-xs text-[<%= colorList.foreground %>]"><%= data.location %></div>
+          </div>
+          <% } %>
+        </div>
+       
+      </div>
+    </div>
+
+    <!-- Professional Summary -->
+    <section class="my-8">
+      <h2 class="text-xl font-bold text-blue-600 mb-2 pb-1 border-b-2 border-[#ededed]">PROFESSIONAL SUMMARY</h2>
+      <p class="text-gray-700 font-semibold text-[14px]"><%= data.summary %></p>
+    </section>
+
+    <!-- Skills -->
+    <section class="my-8">
+      <h2 class="text-xl font-bold text-blue-600 mb-2 border-b-2 border-[#ededed]">SKILLS</h2>
+      <ul class="grid grid-cols-2 gap-4 text-gray-700 list-disc list-inside text-[14px] font-semibold">
+        <% data.skills.forEach(skill => { %>
+        <li><%= skill.name %></li>
+        <% }) %>
+      </ul>
+    </section>
+
+    <!-- Experience -->
+    <section class="my-8">
+      <h2 class="text-xl font-bold text-blue-600 mb-2 border-b-2 border-[#ededed]">WORK EXPERIENCE</h2>
+      <% data.employment.forEach(job => { %>
+        <div class="mt-4">
+          <div class="flex justify-between items-center bg-[#ededed] p-2">
+            <p class="font-bold text-md uppercase brBold"><%= job.title %></p>
+            <p class="text-xs"><%= job.date %></p>
+          </div>
+          <p class="text-sm font-bold pl-2 pt-1"><%= job.location %></p>
+          <ul class="list-disc ml-4 text-sm space-y-1 mt-2 p-2">
+            <% job.roles.forEach(role => { %> <% if (role.length === 2) { %>
+            <li>
+              <strong class="text-sm"><%= role[0] %></strong>
+              <p class="font-semibold text-xs leading-loose"><%= role[1] %></p>
+            </li>
+            <% } else { %>
+            <li><%= role[0] %></li>
+            <% } %> <% }) %>
+          </ul>
+        </div>
+        <% }) %>
+    </section>
+
+    <!-- Education -->
+    <section class="my-8">
+        <h2 class="text-xl font-bold text-blue-600 mb-2 border-b-2 border-[#ededed]">EDUCATION</h2>
+      <!-- Education Content -->
+      <% data.education.forEach(edu => { %>
+        <div class="mt-4">
+          <div class="flex justify-between items-center mb-2">
+            <p class="font-bold text-md uppercase brBold">
+              <%= edu.degree %>
+            </p>
+            <p class="text-xs"><%= edu.year %></p>
+          </div>
+          <p class="text-sm font-bold"><%= edu.school %></p>
+          <p class="text-xs font-bold"><%= edu.more %></p>
+        </div>
+        <% }) %>
+    </section>
+
+     <!-- Certificate -->
+     <section class="my-8">
+        <h2 class="text-xl font-bold text-blue-600 mb-2 border-b-2 border-[#ededed]">CERTIFICATES</h2>
+      <!-- Education Content -->
+      <% data.certificates.forEach(cert => { %>
+        <div class="flex justify-between items-center mt-4">
+          <div>
+            <p class="text-md brBold"><%= cert.issuer %></p>
+            <a
+              href="<%= cert.link %>"
+              target="_blank"
+              class="text-md brBold text-blue-500 hover:underline"
+              ><%= cert.name %></a
+            >
+          </div>
+          <p class="text-sm"><%= cert.date %></p>
+        </div>
+        <% }) %>
+    </section>
+   
+  </div>
+</body>
+
+</html>
