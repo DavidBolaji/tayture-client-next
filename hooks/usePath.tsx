@@ -9,6 +9,7 @@ const usePath = () => {
   const jobId = router.query.jobId
   const scheduleId = router.query.scheduleId
   const blogId = router.query.blogId
+  const template = router.query.template
   const [locationCurrent, setLoc] = useState('')
 
   useEffect(() => {
@@ -35,6 +36,10 @@ const usePath = () => {
         ? '/dashboard'
         : pathname === '/dashboard/jobs'
         ? '/dashboard/jobs'
+        : pathname === '/dashboard/cv'
+        ? '/dashboard/cv'
+        : pathname === `/dashboard/cv/${template}`
+        ? '/dashboard/cv'
         : pathname === '/dashboard/admin'
         ? '/dashboard/admin'
         : pathname === '/dashboard/jobs/invited'

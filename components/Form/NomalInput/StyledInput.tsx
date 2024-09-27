@@ -11,9 +11,9 @@ const StyledInput: React.FC<InputProps> = ({ name, ...rest }) => {
   const {
     getFieldProps,
     handleBlur,
-    handleChange,
     getFieldMeta,
     isValidating,
+    setFieldValue
   } = useFormikContext()
 
   const fieldProps = getFieldProps(name!)
@@ -47,10 +47,10 @@ const StyledInput: React.FC<InputProps> = ({ name, ...rest }) => {
         onChange={(e) => {
           if (rest.type === 'num') {
             if (!isNotNumber(e.target.value) || e.target.value === '') {
-              handleChange(e)
+              setFieldValue(name!,e.target.value)
             }
           } else  {
-            handleChange(e)
+            setFieldValue(name!,e.target.value)
           }
         }}
         onBlur={handleBlur}

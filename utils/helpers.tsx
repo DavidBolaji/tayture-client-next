@@ -9,7 +9,6 @@ import * as momentT from 'moment-timezone'
 import {
   Education,
   Profile,
-  School,
   SchoolAdmin,
   Skills,
   Summary,
@@ -22,6 +21,8 @@ import { AxiosResponse } from 'axios'
 import { getUser } from '@/lib/api/user'
 import { NextRouter } from 'next/router'
 import { QueryClient } from '@tanstack/react-query'
+import { cvSchemafive, cvSchemaFour, cvSchemaOne, cvSchemaSeven, cvSchemaSix, cvSchemaThree, cvSchemaTwo } from '@/components/cv/valodationSchema'
+import { cvValuesfive, cvValuesFour, cvValuesOne, cvValuesSeven, cvValuesSix, cvValuesThree, cvValuesTwo } from '@/components/cv/data'
 
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
@@ -513,3 +514,101 @@ export const appliedSucces = async (
 export async function sleep(ms: number): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export const validationHash = {
+  personal: cvSchemaOne,
+  skills: cvSchemaTwo,
+  education: cvSchemaThree,
+  employment: cvSchemaFour,
+  languages: cvSchemafive,
+  certificates: cvSchemaSix,
+  hobbies: cvSchemaSeven,
+}
+
+export const initialHash = {
+  personal: cvValuesOne,
+  skills: cvValuesTwo,
+  education: cvValuesThree,
+  employment: cvValuesFour,
+  languages: cvValuesfive,
+  certificates: cvValuesSix,
+  hobbies: cvValuesSeven,
+}
+
+
+export const validation = (step: number, stage: {id: string, title: string}[]) => {
+  return validationHash[stage[step].id as keyof typeof validationHash]
+}
+
+export const handleInitial = (step: number, stage: {id: string, title: string}[]) => {
+ return initialHash[stage[step].id as keyof typeof initialHash]
+}
+
+
+export const convertData = (originalData: any) => {
+  // List of sections to check for dynamic ordering
+  const sectionsOrder = ['education', 'employment', 'certificates'];
+
+  // Create an object to store the ordered sections
+  const orderedSections: any = {};
+
+  // Loop through the keys in originalData and handle education, employment, and certificates in the order they appear
+  Object.keys(originalData).forEach((key) => {
+    if (sectionsOrder.includes(key)) {
+      if (key === 'education') {
+        orderedSections.education = originalData.education.map((edu: any) => ({
+          degree: edu.degree,
+          year: `${edu.startYear} – ${edu.endYear}`,
+          school: edu.school,
+          more: edu.more || "",
+        }));
+      }
+      if (key === 'employment') {
+        orderedSections.employment = originalData.employment.map((emp: any) => ({
+          title: emp.title,
+          date: `${emp.startMonth}/${emp.startYear} – ${emp.endMonth}/${emp.endYear}`,
+          location: emp.location,
+          roles: emp.roles.map((role: any) => [role]),
+        }));
+      }
+      if (key === 'certificates') {
+        orderedSections.certificates = originalData.certificates.map((cert: any) => ({
+          name: cert.name,
+          date: "Present", // Assuming "Present" for now
+          link: cert.link || "",
+          issuer: cert.issuer,
+        }));
+      }
+    }
+  });
+
+  // Build the final return object
+  return {
+    data: {
+      profilePicture: "https://media.licdn.com/dms/image/D4D03AQFnUQECnGBQyQ/profile-displayphoto-shrink_800_800/0/1708900917541?e=1724889600&v=beta&t=9lg-vJWno6DVqLlB3c5cGDVmV97fJ-zY0iim5pSLGUQ",
+      name: originalData.name,
+      title: "Physiologist | Educator and Researcher",
+      email: originalData.email,
+      phone: originalData.phone,
+      summary: originalData.summary,
+      location: `${originalData.country}, ${originalData.state}, ${originalData.city}`,
+      linkedIn: originalData.linkedIn,
+      languages: originalData.languages.map((lang: any) => ({
+        name: lang.name,
+      })),
+      hobbies: originalData.hobbies.map((hobby: any) => hobby.name),
+      skills: originalData.skills.map((skill: {name: string, scale: any}) => ({
+        name: skill.name,
+        scale: parseInt(skill.scale) || 0
+      })),
+      ...orderedSections // Dynamically inject the ordered sections based on the original data order
+    },
+    colorList: {
+      foreground: "#2563eb",
+      colorParagraph: "#000",
+      background: "#fff",
+      textOne: "#fff"
+    },
+    email: originalData.email
+  };
+};

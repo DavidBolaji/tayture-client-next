@@ -1,22 +1,21 @@
 import ejs from 'ejs';
 import path from 'path';
-import fs from 'fs';
+import fs, {promises} from 'fs';
+
 import { PDFDocument } from 'pdf-lib';
-import { Puppeteer } from 'puppeteer';
-import { Puppeteer as CPuppeteer } from 'puppeteer-core';
-import sendCvMail from '@/mail/sendCvMail';
+
 
 let chrome: any;
 let puppeteer: any;
+// let executablePath: any
 
-const isProd = process.env.AWS_LAMBDA_FUNCTION_VERSION || process.env.NEXT_PUBLIC_ENV === 'prod' || true;
-
+const isProd = process.env.AWS_LAMBDA_FUNCTION_VERSION || process.env.NEXT_PUBLIC_ENV === 'prod';
 async function loadPuppeteer() {
   if (isProd) {
     const chromeModule = await import('chrome-aws-lambda');
-    const puppeteerCore = await import('puppeteer-core');
+    // const puppeteerCore = await import('puppeteer-core');
     chrome = chromeModule.default;
-    puppeteer = puppeteerCore;
+    puppeteer = chrome.puppeteer;
   } else {
     const puppeteerModule = await import('puppeteer');
     puppeteer = puppeteerModule;
@@ -71,7 +70,7 @@ async function generatePDFPages(
     const a4PageHeight = 842;
     totalPages = Math.ceil(height / a4PageHeight);
 
-    for (let i = 0; i < totalPages - 1; i++) {
+    for (let i = 0; i < totalPages; i++) {
       const pageHtml = await ejs.renderFile(templatePath, {
         data,
         colorList,
@@ -97,6 +96,11 @@ async function generatePDFPages(
             : { top: 10, right: 0, bottom: 40, left: 0 },
           preferCSSPageSize: true,
           pageRanges: `${i + 1}`,
+          footerTemplate: `
+          <div style="font-size:10px;width:100%;text-align:right;margin-right:32px;">
+            <span class="pageNumber"></span>/<span class="totalPages"></span>
+          </div>`,
+        headerTemplate: '<div></div>', 
         });
       } catch (error) {
         console.error(`Error generating PDF for page ${i + 1}:`, error);
@@ -153,8 +157,6 @@ export const scrapeLogic = async (res: any, arg: Arg): Promise<void> => {
       throw new Error('Puppeteer is not initialized properly');
     }
 
-    console.log(chrome);
-
     if (isProd) {
       options = {
         defaultViewport: chrome.defaultViewport,
@@ -164,7 +166,7 @@ export const scrapeLogic = async (res: any, arg: Arg): Promise<void> => {
 
     browser = await puppeteer.launch({
       args: [
-        ...(isProd ? chrome.args : []),
+        ...(isProd ? await chrome.args : []),
       ],
       executablePath: isProd
         ? process.env.NEXT_PUBLIC_PUPPETEER_EXECUTABLE_PATH || (await chrome.executablePath)
@@ -185,14 +187,30 @@ export const scrapeLogic = async (res: any, arg: Arg): Promise<void> => {
     const name = `html_full`;
     const mergedPdfPath = await mergePDFs(pdfPaths, name);
 
-    await sendCvMail({
-      firstName: data.name.split(' \n')[0],
-      email: email,
-      filename: `${name}.pdf`,
-      path: mergedPdfPath,
-    });
+     // Send the PDF as a response to the client
+    // Read the PDF file as a buffer
+    const pdfBuffer = await promises.readFile(mergedPdfPath);
 
-    pdfPaths.forEach((pdfPath) => fs.unlinkSync(pdfPath));
+    // Set response headers to download the file
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${name}.pdf"`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+
+    // Send the PDF buffer
+    res.end(pdfBuffer);
+
+    // Clean up the temporary files
+    // pdfPaths.forEach((pdfPath) => promises.unlink(pdfPath));
+    // await promises.unlink(mergedPdfPath); // Remove the merged PDF after 
+
+    // await sendCvMail({
+    //   firstName: data.name.split(' \n')[0],
+    //   email: email,
+    //   filename: `${name}.pdf`,
+    //   path: mergedPdfPath,
+    // });
+
+    // pdfPaths.forEach((pdfPath) => fs.unlinkSync(pdfPath));
 
     res.send({ message: 'Resume sent to email' });
   } catch (error) {

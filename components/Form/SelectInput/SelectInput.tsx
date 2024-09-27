@@ -77,6 +77,7 @@ export const SelectInput: React.FC<ISelect> = ({
           }
           className={`w-full h-full ring-transparent -font-br ${regularFont.className}`}
           optionFilterProp="children"
+          placeholder={placeholder}
         >
           <Option value="" className={`text-ash_400 ${regularFont.className}`}>
             {placeholder}
