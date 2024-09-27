@@ -14,11 +14,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       email,
     })
 
-    res.end(holder.data.buffer)
-    res.status(201).json({
-      message: 'Job status updated',
-    })
+    console.log(holder.data)
+
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf')
+    res.end(holder.data.buffer) // Send the PDF buffer directly
+
+    // res.end(holder.data.buffer)
+    // res.status(201).json({
+    //   message: 'Job status updated',
+    // })
   } catch (error) {
+    console.log((error as Error).message)
     res.status(400).json({
       message: `An error occured: ${(error as Error).message}`,
     })
