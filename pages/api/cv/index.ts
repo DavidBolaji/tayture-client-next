@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { scrapeLogic } from './scrapeLogic'
 import axios from 'axios'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -9,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     // await scrapeLogic(res, { colorList, data, email });
-    const holder = await axios.post('/.netlify/functions/scrape', {
+    const holder = await axios.post('https://fabulous-cranachan-d89a47.netlify.app/.netlify/functions/scrape', {
       colorList,
       data,
       email,

@@ -130,7 +130,7 @@ async function mergePDFs(pdfPaths, baseName) {
   }
 }
 
-export const scrapeLogic = async (arg) => {
+const scrapeLogic = async (arg) => {
   let browser
   let options = {}
 
