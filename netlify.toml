@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
   publish = ".next"
-  functions = "netlify/functions"
+  functions = ".netlify/functions"
 
 [build.environment]
   PUPPETEER_EXECUTABLE_PATH ="/opt/build/repo/node_modules/chromium/lib/chromium/chrome-linux/chrome"
