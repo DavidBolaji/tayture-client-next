@@ -43,7 +43,7 @@ export default function Button({
 
   const dark = `bg-black_200 text-white border-black_200 ${commonStyles} ${
     hover && 'hover:bg-orange hover:text-black_400 '
-  } disabled:bg-black`
+  } disabled:bg-black_100 disabled:opacity-75`
 
   return (
     <button

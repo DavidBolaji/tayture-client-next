@@ -32,6 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         city: req.body['city'],
         state: req.body['state'],
         lga: req.body['lga'],
+        country: req.body['country'],
         address: req.body['address'],
         userId: req.authUser!.id,
       },

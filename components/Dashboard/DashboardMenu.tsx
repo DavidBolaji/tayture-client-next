@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Menu } from 'antd'
 import { useRouter } from 'next/navigation'
 import { FcOnlineSupport } from 'react-icons/fc'
-import { FiHome, FiBriefcase, FiLock } from 'react-icons/fi'
+import { FiHome, FiBriefcase, FiLock, FiBookOpen } from 'react-icons/fi'
 import type { MenuProps } from 'antd'
 import usePath from '@/hooks/usePath'
 import styled from '@emotion/styled'
@@ -69,6 +69,7 @@ const items: MenuItem[] = [
   getItem('Jobs', '/dashboard/jobs', <FiBriefcase />),
   getItem('My School', '/dashboard/school', <FiHome />),
   getItem('Admin', '/dashboard/admin', <FiLock />),
+  getItem('My CV', '/dashboard/cv', <FiBookOpen />),
 ]
 
 const DashboardMenu: React.FC<{ collapsed: boolean }> = ({ collapsed }) => {

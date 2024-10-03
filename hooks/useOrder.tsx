@@ -1,7 +1,7 @@
 'use client'
 
-import Education from '@/pages/buildcv/components/CVform/Education'
-import WorkHistory from '@/pages/buildcv/components/CVform/WorkHistory'
+// import Education from '@/pages/buildcv/components/CVform/Education'
+// import WorkHistory from '@/pages/buildcv/components/CVform/WorkHistory'
 import { DragEndEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useState } from 'react'
@@ -83,12 +83,12 @@ export const useOrder = () => {
     {
       key: '1',
       name: <h1>History</h1>,
-      section: <WorkHistory />,
+      // section: <WorkHistory />,
     },
     {
       key: '2',
       name: <h2>Education</h2>,
-      section: <Education />,
+      // section: <Education />,
     },
   ])
 

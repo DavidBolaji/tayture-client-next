@@ -18,7 +18,8 @@ import Whatsapp from '@/components/Whatsapp/Whatsapp'
 import Head from 'next/head'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/react'
-
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
 const pages = [
   'Home',
@@ -42,7 +43,11 @@ export default function App({
   const pageName = Component.name || ''
   let layout
 
-  if (pageName === 'Login' || pageName === 'Register' || pageName === "Session") {
+  if (
+    pageName === 'Login' ||
+    pageName === 'Register' ||
+    pageName === 'Session'
+  ) {
     layout = (
       <AuthLayout>
         <Component {...pageProps} />
@@ -66,29 +71,10 @@ export default function App({
         <Component {...pageProps} />
       </DashboardLayout>
     )
-    
   }
 
   return (
     <TanStackProvider>
-      <Head>
-        {/* <!-- Google tag (gtag.js) --> */}
-        {/* //@ts-ignore */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-4PXXQ3NN30"
-        ></script>
-      
-      </Head>
-      <Script id="google-analytics">
-          {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-      
-        gtag('config', 'G-4PXXQ3NN30');
-      `}
-        </Script> 
       <GlobalContextProvider>
         <AnimatePresence mode="wait">
           <motion.div

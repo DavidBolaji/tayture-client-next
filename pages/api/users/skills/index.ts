@@ -22,8 +22,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const result = await db.skills.createMany({
-      data: req.body['skill'].map((skill: string) => ({
-        skill,
+      data: req.body['skill'].map((skill: {name: string}) => ({
+        skill: skill.name,
         userId: req.body['userId'],
       })),
     })

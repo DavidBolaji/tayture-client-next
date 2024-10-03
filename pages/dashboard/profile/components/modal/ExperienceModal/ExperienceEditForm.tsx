@@ -29,16 +29,19 @@ import { useGlobalContext } from '@/Context/store'
 import { useMutation } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { regularFont } from '@/assets/fonts/fonts'
+import { sleep } from '@/utils/helpers'
+import { useRouter } from 'next/router'
 
 const ExperienceEditForm: React.FC<{
   exp: WorkHistory & { roles: WorkRole[] }
 }> = ({ exp }) => {
   const { setUI, setMessage } = useGlobalContext()
+  const router = useRouter()
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: WorkHistory) => {
       await Axios.put(`/users/work/me/update/${exp.id}`, data)
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       setUI((prev) => {
         return {
           ...prev,
@@ -48,11 +51,8 @@ const ExperienceEditForm: React.FC<{
         }
       })
       setMessage(() => 'Work Experience updated successfully')
-      const t = setTimeout(() => {
-        setMessage(() => '')
-        window.location.reload()
-        clearTimeout(t)
-      }, 4000)
+      await sleep(4000)
+      router.replace(router.asPath)
     },
   })
 
@@ -80,6 +80,7 @@ const ExperienceEditForm: React.FC<{
         lga: exp.lga ?? '',
         roles: exp?.roles,
         address: exp?.address,
+        country: exp?.country
       }}
       onSubmit={handleClick}
       validationSchema={validationSchema}
@@ -285,7 +286,7 @@ const ExperienceEditForm: React.FC<{
           </div>
 
           <div>
-            <Field as={LocationComponent} city="city" state="state" lga="lga" />
+            <Field as={LocationComponent} country="country" city="city" state="state" lga="lga" />
           </div>
 
           <Field

@@ -29,6 +29,7 @@ export default function Page({
     skills: Skills[]
   }
 }) {
+  
   return (
     <>
       <Meta
@@ -54,6 +55,7 @@ export default function Page({
           phone={profile.phone}
           picture={profile?.profile?.picture}
           address={profile?.profile?.address}
+          country={profile?.profile?.country}
           state={profile?.profile?.state}
           city={profile?.profile?.city}
           lga={profile?.profile?.lga}

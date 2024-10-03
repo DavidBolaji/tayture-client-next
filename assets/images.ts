@@ -31,8 +31,8 @@ import Dart from "./images/dart.png";
 import Dart2 from "./images/dart2.png";
 import CV from './images/cvv.png'
 import CV2 from './images/cvv2.png'
-import CV3 from './images/cvv3.png'
-import CV4 from './images/cvv4.png'
+import CV3 from './images/cv3.png'
+import CV4 from './images/cv4.png'
 import Prolife from './images/prolife.png'
 
 export const Images = {

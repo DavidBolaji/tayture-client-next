@@ -36,11 +36,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       })
     }
+
     const createWork = req.body['work'].map(
       async (data: {
         title: string
         date: string
         location: string
+        country: string
         lga: string
         city: string
         address: string
@@ -48,25 +50,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         endDate: string
         roles: { role: string }[]
       }) => {
-       
         await db.workHistory.create({
-
           data: {
-            title: data.title,
-            startYear: data.date.split('-')[0].split(',')[1],
-            startMonth: data.date.split('-')[0].split(',')[0],
-            endMonth: data.date.split('-')[1].trim() === "Current" ? data.date.split('-')[0].split(',')[0] : data.date.split('-')[1].split(',')[0],
-            endYear:  data.date.split('-')[1].trim() === "Current" ? data.date.split('-')[0].split(',')[1] : data.date.split('-')[1].split(',')[1],
-            location: data.location,
-            endDate:  data.date.split('-')[1].trim() === "Current" ? "Current" : undefined,
-            lga: data.lga,
-            city: data.city,
-            address: data.address,
-            state: data.state,
+            title: data?.title,
+            startYear: data?.date?.split("/")[1].slice(0,4),
+            startMonth: data?.date?.split("/")[0],
+            //@ts-ignore
+            endMonth: data?.date?.split("/")[1].slice((data?.date?.split("/")[1].split('').map(el => el.trim()) as unknown as string).findLastIndex((val) => val == "")).trim(),
+            endYear:  data?.date?.split("/")[2],
+            location: data?.location,
+            endDate:  data?.date?.split('-')[1]?.trim() === "Current" ? "Current" : undefined,
+            lga: data?.lga ?? undefined,
+            city: data?.city ?? undefined,
+            address: data.address ?? undefined,
+            state: data?.state ?? undefined,
             userId: req.body['userId'],
             roles: {
-              create: data.roles.map((role: { role: string }) => ({
-                role: role.role,
+              create: data.roles.map((role: any) => ({
+                role: role[0],
                 id: uuid(),
               })),
             },

@@ -31,6 +31,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           lga: true,
           state: true,
           city: true,
+          country: true,
           available: true,
           workplace: true,
         },

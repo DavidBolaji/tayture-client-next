@@ -60,8 +60,8 @@ const items: MenuProps['items'] = [
     key: '/post_landing',
   },
   // {
-  //   label: 'Blog',
-  //   key: '/blog',
+  //   label: 'My CV',
+  //   key: '/cv',
   // },
   // {
   //   label: 'Build CV',

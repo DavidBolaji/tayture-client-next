@@ -165,10 +165,10 @@ model Education {
   degree     String
   startYear  String
   endYear    String
-  startMonth String
-  endMonth   String
+  startMonth String?
+  endMonth   String?
   school     String
-  field      String
+  field      String?
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
@@ -505,10 +505,11 @@ model WorkHistory {
   startMonth String
   endMonth   String
   endDate    String?
-  city       String
-  state      String
-  lga        String
-  address    String
+  country    String?
+  city       String?
+  state      String?
+  lga        String?
+  address    String?
   roles      WorkRole[]
 
   userId String
