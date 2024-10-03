@@ -37,7 +37,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           startYear: year.slice(0,4),
           startMonth: undefined,
           endMonth: undefined,
-          endYear: year.slice(year.split("").map(el => el.trim()).findLastIndex((val) => val === ""), year.split("").length),
+          //@ts-ignore
+          endYear: year.slice((year.split("").map(el => el.trim()) as unknown as string).findLastIndex((val) => val === ""), year.split("").length),
           school,
           userId: req.body['userId'],
         }),

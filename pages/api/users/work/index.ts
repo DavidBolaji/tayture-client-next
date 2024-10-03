@@ -55,7 +55,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             title: data?.title,
             startYear: data?.date?.split("/")[1].slice(0,4),
             startMonth: data?.date?.split("/")[0],
-            endMonth: data?.date?.split("/")[1].slice(data?.date?.split("/")[1].split('').map(el => el.trim()).findLastIndex((val) => val == "")).trim(),
+            //@ts-ignore
+            endMonth: data?.date?.split("/")[1].slice((data?.date?.split("/")[1].split('').map(el => el.trim()) as unknown as string).findLastIndex((val) => val == "")).trim(),
             endYear:  data?.date?.split("/")[2],
             location: data?.location,
             endDate:  data?.date?.split('-')[1]?.trim() === "Current" ? "Current" : undefined,
