@@ -110,9 +110,9 @@ export const cvSchemafive = Yup.object().shape({
     Yup.object().shape({
       name: Yup.string().required('Language name is required'),
     }),
-  ),
+  ).min(1, 'At least one language is required'),
 })
 
 export const cvSchemaSeven = Yup.object().shape({
-  hobbies: Yup.array().of(Yup.object().shape({ name: Yup.string() })),
+  hobbies: Yup.array().of(Yup.object().shape({ name: Yup.string() })).min(1, 'At least one hobby is required'),
 })

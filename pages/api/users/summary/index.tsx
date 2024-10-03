@@ -33,6 +33,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       summary: result,
     })
   } catch (error) {
+    console.log('[ERROR_UPDATE]', (error as Error).message)
+   
     if ((error as Error).name === 'PrismaClientKnownRequestError') {
       return res.status(400).json({
         message: `An error occured: ${(error as Error).message}`,

@@ -27,17 +27,8 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
   formValues,
   setFormValues
 }) => {
-  // const [formValues, setFormValues] = useState<Record<string, any>>({})
   const [isStepValid, setIsStepValid] = useState<boolean[]>([])
 
-  // useEffect(() => {
-  //   const initialValues = steps.reduce((acc, step) => {
-  //     return { ...acc, ...initialHash[step.id as keyof typeof initialHash] }
-  //   }, {})
-    
-  //   setFormValues(initialValues)
-  //   setIsStepValid(new Array(steps.length).fill(false))
-  // }, [steps])
 
   useEffect(() => {
     setIsStepValid(new Array(steps.length).fill(false));

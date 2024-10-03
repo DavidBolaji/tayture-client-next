@@ -1,16 +1,4 @@
 [build]
   command = "npm run build"
   publish = ".next"
-  functions = "dist-functions"
 
-[dev]
-  targetPort = 5000
-  port = 3000
-
-
-[functions]
-  node_bundler = "esbuild"
-  external_node_modules = ["@sparticuz/chromium", "puppeteer-core"]
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"

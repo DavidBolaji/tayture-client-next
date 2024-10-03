@@ -15,12 +15,23 @@ import { Axios } from '@/request/request'
 import { regularFont } from '@/assets/fonts/fonts'
 import { useGlobalContext } from '@/Context/store'
 import PersonalForm2 from './PersonalForm2'
+import { sleep } from '@/utils/helpers'
+import { useRouter } from 'next/router'
 
 export const personalFormSchema = Yup.object().shape({
-  state: Yup.string().required('State is required'),
-  city: Yup.string().required('City is required'),
+  country: Yup.string().required('Country is compulsory'),
+  state: Yup.string().required('State is compulsory'),
+  city: Yup.string().when('country', {
+    is: (country: string) => country === 'Nigeria',
+    then: Yup.string().required('City is required'),
+    otherwise: Yup.string().notRequired(),
+  }),
+  lga: Yup.string().when('country', {
+    is: (country: string) => country === 'Nigeria',
+    then: Yup.string().required('LGA is required'),
+    otherwise: Yup.string().notRequired(),
+  }),
   address: Yup.string().required('Address is required'),
-  lga: Yup.string().required('Lga is required'),
   workplace: Yup.string().required('Workplace is required'),
   others: Yup.string().notRequired(),
 })
@@ -32,10 +43,12 @@ const PersonalForm: React.FC<PersonalInformationCardProp> = ({
   lga,
   address,
   workplace,
+  country,
 }) => {
   const queryClient = useQueryClient()
   const auth = queryClient.getQueryData(['user']) as User
   const { setMessage, setUI } = useGlobalContext()
+  const router = useRouter()
   const [path, setPath] = useState<any>(auth.path ?? [])
   const [data, setData] = useState<{ othersText: string; others: string[] }>({
     othersText: '',
@@ -55,6 +68,7 @@ const PersonalForm: React.FC<PersonalInformationCardProp> = ({
         state: data.state,
         address: data.address,
         workplace: data.workplace,
+        country: data.country
       })
 
       let uniqueStringsSet = new Set(data.path)
@@ -71,7 +85,7 @@ const PersonalForm: React.FC<PersonalInformationCardProp> = ({
 
       return await Promise.all([profile, user, others])
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       setUI((prev) => {
         return {
           ...prev,
@@ -85,10 +99,8 @@ const PersonalForm: React.FC<PersonalInformationCardProp> = ({
       queryClient.invalidateQueries({
         queryKey: ['user'],
       })
-      const t = setTimeout(() => {
-        window.location.reload()
-        clearTimeout(t)
-      }, 4000)
+      await sleep(4000)
+      router.replace(router.asPath)
     },
   })
 
@@ -121,6 +133,7 @@ const PersonalForm: React.FC<PersonalInformationCardProp> = ({
         lga: lga ?? '',
         address: address ?? '',
         workplace: workplace ?? '',
+        country: country ?? '',
       }}
       onSubmit={onSubmit}
       validationSchema={personalFormSchema}
@@ -140,7 +153,13 @@ const PersonalForm: React.FC<PersonalInformationCardProp> = ({
             text={'Email'}
             disabled
           />
-          <Field as={LocationComponent} city="city" state="state" lga="lga" />
+          <Field
+            as={LocationComponent}
+            country="country"
+            city="city"
+            state="state"
+            lga="lga"
+          />
           <div className="my-16">
             <Field
               name="address"

@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { Axios } from '@/request/request'
-import Script from 'next/script'
+import React from 'react'
+
+import { useParams } from 'next/navigation'
+import TemplateOne from './templates/one'
+import TemplateThree from './templates/three'
+import TemplateFour from './templates/four'
+import { useGlobalContext } from '@/Context/store'
 
 export interface IProfile {
   profilePicture: string
   name: string
-  title: string
   email: string
+  github?: string,
+  web?: string,
+  title?: string,
   phone: string
   summary: string
   location: string
@@ -59,49 +65,31 @@ export interface ColorList {
   textOne: string
 }
 
+type cv = 'one' | 'three' | 'four'
+
 const CVPreview: React.FC<{
   data: IProfile
   colorList: ColorList
   email: string
-}> = ({ data, colorList, email }) => {
-  const [previewHtml, setPreviewHtml] = useState('')
+}> = ({ data, email }) => {
+  const { template } = useParams()
+  const {colorList} = useGlobalContext();
 
-  useEffect(() => {
-    const fetchPreview = async () => {
-      try {
-        const response = await Axios.post('/cv/render', {
-          data,
-          colorList,
-          email,
-        })
-        setPreviewHtml(response.data.html)
-      } catch (error) {
-        console.error('Error fetching preview:', error)
-      }
+
+  const renderTemplate = (view: string) => {
+    switch (view) {
+      case 'one':
+        return <TemplateOne data={data} colorList={colorList[template as cv]} email={email} />
+      case 'three':
+        return <TemplateThree data={data} colorList={colorList[template as cv]} email={email} />
+      case 'four':
+        return <TemplateFour data={data} colorList={colorList[template as cv]} email={email} />
+      default:
+        return null
     }
+  }
 
-    if (data) {
-      fetchPreview()
-    }
-  }, [data, colorList, email])
-
-  return (
-    <>
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-      />
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-      />
-      <Script src="https://cdn.tailwindcss.com"></Script>
-      <div
-        id="cv-preview"
-        dangerouslySetInnerHTML={{ __html: previewHtml }}
-      />
-    </>
-  )
+  return <div className='scale-[0.78] h-[700px] -translate-x-16 -translate-y-24'>{!template ? null : renderTemplate(template as string)}</div>
 }
 
 export default CVPreview

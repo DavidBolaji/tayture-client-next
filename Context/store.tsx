@@ -24,6 +24,15 @@ export interface IProfile extends IUser {
   pass?: ''
   pinId?: ''
 }
+
+export interface colors {
+  [key: string]: {
+    background: string
+    foreground: string
+    textOne: string
+    colorParagraph: string
+  }
+}
 export type ISchData = {
   sch_no_emp: string
   sch_address: string
@@ -112,11 +121,11 @@ interface IUi {
   experienceEditModal: {
     visibility: boolean
     data?: any
-  },
+  }
   skillModal: {
     visibility: boolean
     data?: any
-  ,}
+  }
   createSchoolModal: {
     visibility: boolean
     data?: any
@@ -218,25 +227,13 @@ type ContextProps = {
   setName: Dispatch<SetStateAction<string>>
   email: string
   setEmail: Dispatch<SetStateAction<string>>
-  colorList: {
-    background: string
-    foreground: string
-    textOne: string
-    textTwo: string
-    colorParagraph: string
-  }
+  colorList: colors
   setColors: Dispatch<
-    SetStateAction<{
-      background: string
-      foreground: string
-      textOne: string
-      textTwo: string
-      colorParagraph: string
-    }>
+    SetStateAction<colors>
   >
-  defaultSchool: number,
+  defaultSchool: number
   setDefaultSchool: Dispatch<SetStateAction<number>>
-  access: boolean,
+  access: boolean
   setSchAccess: Dispatch<SetStateAction<boolean>>
 }
 
@@ -260,18 +257,40 @@ const GlobalContext = createContext<ContextProps>({
   email: '',
   setEmail: () => '',
   colorList: {
-    background: '#102a73',
-    foreground: '#ffffff',
-    textOne: '#ffffff',
-    textTwo: '#102a73',
-    colorParagraph: '#000000',
+    one: {
+      background: '#102a73',
+      foreground: '#ffffff',
+      textOne: '#ffffff',
+      colorParagraph: '#000000',
+    },
   },
   setColors: () => {},
   defaultSchool: 0,
   setDefaultSchool: () => {},
   access: false,
-  setSchAccess: (data) => data
+  setSchAccess: (data) => data,
 })
+
+const four = {
+  foreground: '#2563eb',
+  background: '#fff',
+  colorParagraph: '#f7f7f7',
+  textOne: '#000',
+}
+
+const one = {
+  foreground: '#fff',
+  background: '#00308F',
+  colorParagraph: '#000',
+  textOne: '#fff',
+}
+
+const three = {
+  foreground: '#303846',
+  background: '#fff',
+  colorParagraph: '#000',
+  textOne: '#000',
+}
 
 export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<Partial<IProfile>>(INIT)
@@ -286,22 +305,22 @@ export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
   const [email, setEmail] = useState<string>('')
   const [access, setSchAccess] = useState<boolean>(false)
   const [colorList, setColors] = useState<{
-    background: string
-    foreground: string
-    textOne: string
-    textTwo: string
-    colorParagraph: string
+    [key: string]: {
+      background: string
+      foreground: string
+      textOne: string
+      colorParagraph: string
+    }
   }>({
-    background: '#102a73',
-    foreground: '#ffffff',
-    textOne: '#ffffff',
-    textTwo: '#102a73',
-    colorParagraph: '#000000',
+    one,
+    three,
+    four,
   })
+
 
   useEffect(() => {
     const idx = localStorage.getItem('schoolIdx')
-    if(!idx) return;
+    if (!idx) return
     setDefaultSchool(+JSON.parse(idx))
   }, [])
 
@@ -336,7 +355,7 @@ export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
         defaultSchool,
         setDefaultSchool,
         access,
-        setSchAccess
+        setSchAccess,
       }}
     >
       {children}

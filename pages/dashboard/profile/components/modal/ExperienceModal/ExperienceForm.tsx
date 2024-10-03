@@ -58,9 +58,18 @@ export const validationSchema = Yup.object().shape({
     then: Yup.string().required('End Year is required'),
     otherwise: Yup.string().notRequired(),
   }),
-  city: Yup.string().required('City is required'),
-  state: Yup.string().required('State is required'),
-  lga: Yup.string().required('Lga is required'),
+  country: Yup.string().required('Country is compulsory'),
+  state: Yup.string().required('State is compulsory'),
+  city: Yup.string().when('country', {
+    is: (country: string) => country === 'Nigeria',
+    then: Yup.string().required('City is required'),
+    otherwise: Yup.string().notRequired(),
+  }),
+  lga: Yup.string().when('country', {
+    is: (country: string) => country === 'Nigeria',
+    then: Yup.string().required('LGA is required'),
+    otherwise: Yup.string().notRequired(),
+  }),
   address: Yup.string().required('Address is required'),
   endDate: Yup.string().notRequired(),
   roles: Yup.array()
@@ -115,6 +124,7 @@ const ExperienceForm: React.FC = () => {
         endMonth: '',
         endYear: '',
         endDate: '',
+        country: '',
         city: '',
         state: '',
         address: '',
@@ -130,11 +140,8 @@ const ExperienceForm: React.FC = () => {
         errors,
         touched,
         handleBlur,
-        handleChange,
         handleSubmit,
-        isSubmitting,
         isValid,
-        setFieldTouched,
         setFieldValue,
       }) => (
         <Form
@@ -314,7 +321,7 @@ const ExperienceForm: React.FC = () => {
           </div>
 
           <div>
-            <Field as={LocationComponent} city="city" state="state" lga="lga" />
+            <Field as={LocationComponent} country="country" city="city" state="state" lga="lga" />
           </div>
 
 

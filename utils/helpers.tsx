@@ -587,11 +587,11 @@ export const convertData = (originalData: any) => {
     data: {
       profilePicture: "https://media.licdn.com/dms/image/D4D03AQFnUQECnGBQyQ/profile-displayphoto-shrink_800_800/0/1708900917541?e=1724889600&v=beta&t=9lg-vJWno6DVqLlB3c5cGDVmV97fJ-zY0iim5pSLGUQ",
       name: originalData.name,
-      title: "Physiologist | Educator and Researcher",
+      title: originalData.title ?? "Physiologist | Educator and Researcher",
       email: originalData.email,
       phone: originalData.phone,
       summary: originalData.summary,
-      location: `${originalData.country}, ${originalData.state}, ${originalData.city}`,
+      location: `${originalData.country}, ${originalData.state}, ${originalData.city}, ${originalData.lga} `,
       linkedIn: originalData.linkedIn,
       languages: originalData.languages.map((lang: any) => ({
         name: lang.name,
@@ -611,4 +611,157 @@ export const convertData = (originalData: any) => {
     },
     email: originalData.email
   };
+};
+
+
+const cvDataTemplate = {
+  data: {
+    profilePicture:
+      "https://res.cloudinary.com/dpi44zxlw/image/upload/v1718182805/89129DF2-9C9A-47C4-B7B4-E123DBC58A1E_ybtlxj.jpg",
+    name: "David Ologunleko",
+    // title: "Full Stack Developer",
+    email: "odavidbolaji4@gmail.com",
+    phone: "08107483900",
+    summary:
+      "I am a seasoned Full Stack Developer with half a decade of experience. My strong foundation in both front-end and back-end technologies enables me to consistently deliver robust and scalable solutions I am dedicated to continuous learning and hold certifications in JavaScript, React, Frontend Development, and Artificial Intelligence."
+      ,
+    location: "Sawmill behind Brent Mall Ibadan",
+    // github: "https://github.com/davidbolaji",
+    linkedIn: "www.linkedin.com/in/david-ologunleko-14616b227",
+    // web: "https://profile-eug.pages.dev",
+    skills: [
+      { name: "React", scale: 100 },
+      { name: "Next", scale: 90 },
+      { name: "MySQL", scale: 70 },
+    ],
+    languages: [
+      { name: "English", scale: 90 },
+      { name: "Yoruba", scale: 60 },
+    ],
+    hobbies: ["Singing", "Playing the keyboard", "Seeing a movie"],
+    education: [
+      {
+        degree: "Bachelors Degree",
+        year: "12/2010 – 06/2014",
+        school: "University of Ilorin, Ilorin",
+      },
+    ],
+    employment: [
+      {
+        title: "Chief Technology Officer",
+        date: "03/2023 – Present",
+        location: "Taytute, Ibadan",
+        roles: [
+          [
+            "Project Management:",
+            "I lead a team of amazing engineers to build a hiring management system which integrated with different third party API's such as Paystack, Zoho, to mention but a few.",
+          ],
+          [
+            "Web development:",
+            "I handled the refactoring of code from React to Next to help improve website's SEO ratings. Also l made use of the trending technology stacks, such as Next, Prisma, Socket, Tailwind in the process of converting figma designs into a working product",
+          ],
+          [
+            "Database Management:",
+            "Orchestrated server-side logic and database operations to guarantee efficient functionality and data integrity. Implemented scalable and optimized solutions for robust performance under high traffic.",
+          ],
+          [
+            "Documentation:",
+            "Maintained comprehensive and organized documentation, facilitating knowledge transfer and easing on-boarding processes for team members.",
+          ],
+          [
+            "Troubleshooting and Optimization:",
+            "Identified and resolved complex technical issues, employing analytical skills to optimize application performance. Implemented improvements and updates to enhance overall system efficiency.",
+          ],
+          [
+            "Testing:",
+            "Furthermore i handled the deployment of code, creating a deployment pipeline and code versioning with Git, also wrote negative and positive test cases for code coverage as well as unit test for components",
+          ],
+        ],
+      },
+      {
+        title: "Lead Software Engineer",
+        date: "05/2022 – 01/2023",
+        location: "Fitted, Lagos",
+        roles: [
+          [
+            "Order Management System Development:",
+            "Led the development of a comprehensive Order Management System (OMS) that streamlined the entire order lifecycle from purchase to delivery, ensuring efficiency and accuracy.",
+          ],
+          [
+            "Design Implementation:",
+            "Transformed Figma designs into responsive and high-quality code, enhancing the user experience with pixel-perfect accuracy.",
+          ],
+          [
+            "Order Management System Enhancement:",
+            "Enhanced the OMS by implementing key functionalities such as payment processing, dispatch management, embroidery integration, VoIP calls, messaging, and extensive code refactoring to improve performance and scalability.",
+          ],
+          [
+            "Bug Fixing and Troubleshooting:",
+            "Proactively identified and resolved code issues, ensuring a seamless and bug-free application performance through meticulous troubleshooting and debugging.",
+          ],
+        ],
+      },
+      {
+        title: "Principal Engineer",
+        date: "09/2018 – 12/2021",
+        location: "OIRS (Osun Internal Revenue State), Osogbo",
+        roles: [
+          [
+            "Receipt Generation System Development:",
+            "Developed a sophisticated receipt generation system for a state tax organization, ensuring precise accuracy and adherence to tax regulations.",
+          ],
+          [
+            "System Enhancement and Maintenance:",
+            "Engineered additional functionalities and conducted comprehensive system refactoring to significantly enhance efficiency and usability.",
+          ],
+          [
+            "Bug Fixing and Troubleshooting:",
+            "Diagnosed and resolved intricate technical issues, ensuring the system's unwavering stability and reliability.",
+          ],
+          [
+            "Data Integrity and Security:",
+            "Safeguarded data integrity and security by implementing advanced encryption and rigorous validation protocols.",
+          ],
+          [
+            "Documentation:",
+            "Curated comprehensive and well-organized documentation, streamlining knowledge transfer and simplifying onboarding processes for team members.",
+          ],
+        ],
+      },
+    ],
+   "certificates": [
+    {
+      "name": "Javascript",
+      "date": "Present",
+      "link": "https://www.hackerrank.com/certificates/45d30364b41c",
+      "issuer": "HackerRank"
+    },
+    {
+      "name": "React",
+      "date": "Present",
+      "link": "https://www.hackerrank.com/certificates/11fe36bbc438",
+      "issuer": "HackerRank"
+    },
+    {
+      "name": "Frontend Developer",
+      "date": "Present",
+      "link": "https://www.hackerrank.com/certificates/fb6b3856cc8d",
+      "issuer": "HackerRank"
+    },
+    // {
+    //   "name": "Rest API",
+    //   "date": "Present",
+    //   "link": "https://www.hackerrank.com/certificates/5b3317b77895",
+    //   "issuer": "HackerRank"
+    // },
+    // {
+    //   "name": "Artificial Intelligence",
+    //   "date": "Present",
+    //   "link": "https://drive.google.com/file/d/1m1Tr1rb2UwL-5pISgj2vjOxQT_8VN3uj/view?usp=sharing",
+    //   "issuer": "British Computer Society"
+    // }
+  ],
+  },
+  colorList: {},
+  email: "odavidbolaji14@gmail.com",
 };

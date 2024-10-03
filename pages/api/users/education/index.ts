@@ -32,23 +32,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           year: string
           school: string
         }) => ({
-          degree: degree.split(',')[0],
-          field: degree.split(',')[1],
-          startYear: year.split('-')[0].split(',')[1],
-          startMonth: year.split('-')[0].split(',')[0],
-          endMonth: year.split('-')[1].split(',')[0],
-          endYear: year.split('-')[1].split(',')[1],
+          degree: degree,
+          field: undefined,
+          startYear: year.slice(0,4),
+          startMonth: undefined,
+          endMonth: undefined,
+          endYear: year.slice(year.split("").map(el => el.trim()).findLastIndex((val) => val === ""), year.split("").length),
           school,
           userId: req.body['userId'],
         }),
       ),
     })
 
+
     return res.status(200).json({
       message: 'Education Created',
       education: result,
     })
   } catch (error) {
+    console.log('[ERROR_WDUCATION]', (error as Error).message)
     if ((error as Error).name === 'PrismaClientKnownRequestError') {
       return res.status(400).json({
         message: `An error occured: ${(error as Error).message}`,

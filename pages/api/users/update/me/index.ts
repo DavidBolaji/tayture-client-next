@@ -20,15 +20,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   })
 
+  try {
+    const user = await db.user.update({
+      where: {
+        id: req.authUser?.id,
+      },
+      data,
+    })
+  
+    return res.status(200).json({ message: 'User Updated', user })
+    
+  } catch (error) {
+    console.log('[ERROR_UPDATE]', (error as Error).message)
+    res.status(400).json({
+      message: `An error occured: ${(error as Error).message}`,
+    })
+  }
 
-  const user = await db.user.update({
-    where: {
-      id: req.authUser?.id,
-    },
-    data,
-  })
-
-  return res.status(200).json({ message: 'User Updated', user })
 }
 
 export default verifyToken(handler)

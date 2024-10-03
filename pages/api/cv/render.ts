@@ -3,12 +3,16 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+const templateHash = {
+
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
-
-      const template = readFileSync(join(process.cwd(), 'views', 'templateFour.ejs'), 'utf8');
-      const html = ejs.render(template, {
+      const { template } = req.query
+      const templat = readFileSync(join(process.cwd(), 'views', 'templateFour.ejs'), 'utf8');
+      const html = ejs.render(templat, {
         data: req.body.data,
         colorList: req.body.colorList,
         page: 1

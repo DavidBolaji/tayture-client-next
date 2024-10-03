@@ -1,21 +1,55 @@
-'use client'
-
 import { Images } from '@/assets'
 import { boldFont, regularFont } from '@/assets/fonts/fonts'
-import Button from '@/components/Button/Button'
+import CVList from '@/components/cv/CVList'
+import DashboardLayout from '@/components/layouts/DashboardLayout'
 import Wrapper from '@/components/Wrapper/Wrapper'
 import { Divider } from 'antd'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import Head from 'next/head'
 
 const BuildPage = () => {
-  const [selected, setSelected] = useState('')
-  const router = useRouter()
   return (
     <div
       className={`${regularFont.className} pt-16 text-center h-[90vh] overflow-x-auto`}
     >
+      <Head>
+        <title>Download CV | Professional Resume</title>
+        <meta
+          name="description"
+          content="Create your Cv so others can learn more about my professional experience, skills, and accomplishments. Follow the link to access and download your own CV."
+        />
+        <meta
+          name="keywords"
+          content="CV, resume, professional, experience, skills, download CV, download resume, career, job application"
+        />
+        <meta name="author" content="Your Name" />
+        <meta
+          property="og:title"
+          content="Download CV | Professional Resume"
+        />
+        <meta
+          property="og:description"
+          content="Access and download professional CV, showcasing your career journey, skills, and qualifications. Follow the link to get yours."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://tayture.com/dashboard/cv" />
+        <meta
+          property="og:image"
+          content={Images.Logo as unknown as string}
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Download CV | Professional Resume"
+        />
+        <meta
+          name="twitter:description"
+          content="Create your Cv so others can learn more about your career journey, skills, and qualifications. Access the link to download yours too."
+        />
+        <meta
+          name="twitter:image"
+          content={Images.Logo as unknown as string}
+        />
+      </Head>
       <Wrapper>
         <h1
           className={`text-center text-3xl tracking-wider leading-[38px] mb-4 ${boldFont.className}`}
@@ -25,45 +59,17 @@ const BuildPage = () => {
         <Divider>
           <span className="text-xl font-semibold">TEMPLATES</span>
         </Divider>
-        <div className="flex overflow-x-auto no-s">
-          {['template'].map((el) => (
-            <div key={el} className="flex-shrink-0 mr-3 ">
-              <label
-                className="radio-image w-[250px]"
-                onClick={() => setSelected(el)}
-              >
-                <input
-                  type="radio"
-                  name="template"
-                  value={el}
-                  className="hidden-radio"
-                />
-                <div className="w-[250px] h-[300px] overflow-hidden cont">
-                  <Image
-                    className="object-fit "
-                    src={Images.CV}
-                    alt={`Template ${el}`}
-                    width={300}
-                    height={225}
-                  />
-                </div>
-              </label>
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-end mt-5">
-          <Button
-            onClick={() => router.push(`/dashboard/cv/${selected}`)}
-            disabled={selected.trim().length < 5}
-            text="Next"
-            render="light"
-            bold={false}
-          />
-        </div>
+
+        {/* React Slick Carousel */}
+        <CVList />
       </Wrapper>
-     
     </div>
   )
 }
+
+BuildPage.getLayout = function getLayout(page: React.ReactNode) {
+  return <DashboardLayout>{page}</DashboardLayout>
+}
+
 
 export default BuildPage

@@ -1,3 +1,4 @@
+'use client'
 import { useGlobalContext } from '@/Context/store'
 import CardWrapper from '@/components/Dashboard/CardWrapper'
 import React from 'react'
@@ -12,6 +13,7 @@ export interface PersonalInformationCardProp {
   state: string | null
   lga: string | null
   workplace: string | null
+  country: string | null
 }
 
 const PersonalInformationCard: React.FC<PersonalInformationCardProp> = ({
@@ -22,8 +24,9 @@ const PersonalInformationCard: React.FC<PersonalInformationCardProp> = ({
   state,
   lga,
   workplace,
+  country,
 }) => {
-  const { setUI } = useGlobalContext()
+  const { setUI, ui } = useGlobalContext()
 
   const handleOpen = () => {
     setUI((prev) => {
@@ -36,6 +39,7 @@ const PersonalInformationCard: React.FC<PersonalInformationCardProp> = ({
       }
     })
   }
+
   return (
     <>
       <CardWrapper title="Personal Information" onClick={handleOpen}>
@@ -75,6 +79,7 @@ const PersonalInformationCard: React.FC<PersonalInformationCardProp> = ({
           state,
           lga,
           workplace,
+          country,
         }}
       />
     </>
