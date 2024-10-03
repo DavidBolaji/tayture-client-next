@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
-import { Axios } from '@/request/request'
 import verifyToken from '@/middleware/verifyToken'
 
 const url =
-  process.env.NEXT_PUBLIC_ENV === 'dev'
+  process.env.NEXT_PUBLIC_CV_ENV === 'dev'
     ? 'http://localhost:4000/api'
     : process.env.NEXT_PUBLIC_RENDER_CV
 let host =
@@ -18,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { colorList, data, email } = req.body
   const { template } = req.query
   const location = data.location.split(',')
-  console.log(colorList)
+
 
   await axios.put(
     `${host}/users/profile/update/me`,
