@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/next-script-for-ga */
 import { GlobalContextProvider } from '@/Context/store'
 import AuthLayout from '@/components/layouts/AuthLayout'
 import DashboardLayout from '@/components/layouts/DashboardLayout'
@@ -75,6 +76,21 @@ export default function App({
 
   return (
     <TanStackProvider>
+      <Head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-4PXXQ3NN30"
+        ></script>
+      </Head>
+      <Script id="google-analytics">
+        {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+      
+        gtag('config', 'G-4PXXQ3NN30');
+      `}
+      </Script>
       <GlobalContextProvider>
         <AnimatePresence mode="wait">
           <motion.div
