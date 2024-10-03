@@ -14,7 +14,7 @@ const dataNav = [
     title: 'Jobs',
   },
   {
-    id: 'dnav2',
+    id: 'dnav4',
     path: '/dashboard/school',
     title: 'My School',
   },
@@ -22,6 +22,11 @@ const dataNav = [
     id: 'dnav2',
     path: '/dashboard/admin',
     title: 'Admin',
+  },
+  {
+    id: 'dnav3',
+    path: '/dashboard/cv',
+    title: 'My CV',
   },
 ]
 
