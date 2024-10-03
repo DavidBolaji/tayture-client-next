@@ -614,7 +614,7 @@ export const convertData = (originalData: any) => {
 };
 
 
-const cvDataTemplate = {
+export const cvDataTemplate = {
   data: {
     profilePicture:
       "https://res.cloudinary.com/dpi44zxlw/image/upload/v1718182805/89129DF2-9C9A-47C4-B7B4-E123DBC58A1E_ybtlxj.jpg",
@@ -625,7 +625,7 @@ const cvDataTemplate = {
     summary:
       "I am a seasoned Full Stack Developer with half a decade of experience. My strong foundation in both front-end and back-end technologies enables me to consistently deliver robust and scalable solutions I am dedicated to continuous learning and hold certifications in JavaScript, React, Frontend Development, and Artificial Intelligence."
       ,
-    location: "Sawmill behind Brent Mall Ibadan",
+    location: "Nigeria, Oyo, Ibadan, Ibadan Central",
     // github: "https://github.com/davidbolaji",
     linkedIn: "www.linkedin.com/in/david-ologunleko-14616b227",
     // web: "https://profile-eug.pages.dev",

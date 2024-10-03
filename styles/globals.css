@@ -165,7 +165,11 @@ label {
 
 
 @media (max-width: 573px){
-  .ant-modal {
+  .ant-modal:not(.cv_modal) {
     width: 320px !important;
+  }
+
+  .ant-modal.cv_modal {
+    width: 92vw !important; /* 95% of the viewport width */
   }
 }

@@ -7,7 +7,13 @@ import { cvValuesOne, initialSteps } from '@/components/cv/data'
 import MultiStepForm from '@/components/cv/MultiStepForm'
 import Aside from '@/components/cv/Aside'
 import { AnimatePresence } from 'framer-motion'
-import { convertData, initialHash, sleep, validationHash } from '@/utils/helpers'
+import {
+  convertData,
+  cvDataTemplate,
+  initialHash,
+  sleep,
+  validationHash,
+} from '@/utils/helpers'
 import HandleCVModal from '@/components/Modal/HandleCVModal'
 import CVPreview, {
   ColorList,
@@ -37,7 +43,7 @@ const ResumePage = () => {
   } | null>(null)
   const [open, setOpen] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
-  const {colorList} = useGlobalContext()
+  const { colorList } = useGlobalContext()
   const param = useParams()
   const router = useRouter()
   const template = param?.template
@@ -75,23 +81,37 @@ const ResumePage = () => {
         content: 'Please do not leave page CV is being generated...',
         duration: 0,
       })
-       await Axios.post(
+      const response = await Axios.post(
         `/cv?template=${template}`,
         {
           ...cvData,
-          colorList: colorList[template as hash]
+          colorList: colorList[template as hash],
         },
-        { responseType: 'blob' },
+        {
+          responseType: 'arraybuffer',
+        },
       )
 
+      const file = new Blob([response.data], { type: 'application/pdf' });
+      
+      // Create a link element, hide it, direct it towards the blob, and then trigger a click
+      const fileURL = URL.createObjectURL(file);
+      const link = document.createElement('a');
+      link.href = fileURL;
+      link.download = `download.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up by revoking the object URL
+      URL.revokeObjectURL(fileURL);
       messageApi.open({
         key,
         type: 'success',
-        content: 'Loaded!',
+        content: 'Download Completed!',
         duration: 10,
       })
       await sleep(5000)
-      router.push("/dashboard/cv/success")
+      router.push('/dashboard/cv/success')
     } catch (error) {
       console.error('Error fetching preview:', error)
       messageApi.open({

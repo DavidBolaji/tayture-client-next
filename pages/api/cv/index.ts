@@ -18,7 +18,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { template } = req.query
   const location = data.location.split(',')
 
-
   await axios.put(
     `${host}/users/profile/update/me`,
     {
@@ -54,6 +53,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     userId: req.authUser?.id,
   })
 
+
+
   try {
     await Promise.all([updateSummary, updateWork, updateEdu, updateSkills])
 
@@ -67,16 +68,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       { responseType: 'arraybuffer' },
     )
 
-    // Set appropriate headers for downloading PDF
+    // Check if the response is actually a PDF
+    if (holder.headers['content-type'] !== 'application/pdf') {
+      throw new Error('Received non-PDF response')
+    }
+
     res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="${data.name}.pdf"`,
-    )
-    res.setHeader('Content-Length', holder.data.length)
 
     res.send(holder.data)
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Error sending the PDF:', error)
+    if (error.response) {
+      console.error('Response data:', error?.response?.data)
+      console.error('Response status:', error?.response?.status)
+      console.error('Response headers:', error?.response?.headers)
+    }
     console.log((error as Error).message)
     res.status(400).json({
       message: `An error occured: ${(error as Error).message}`,
