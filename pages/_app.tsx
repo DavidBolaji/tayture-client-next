@@ -15,8 +15,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import NextNProgress from 'nextjs-progressbar'
 import HandleUpload from '@/components/Modal/HandleUpload'
 import Whatsapp from '@/components/Whatsapp/Whatsapp'
-// import Head from 'next/head'
-// import Script from 'next/script'
+import Head from 'next/head'
+import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/react'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -75,16 +75,16 @@ export default function App({
 
   return (
     <TanStackProvider>
-      {/* <Head> */}
-      {/* <!-- Google tag (gtag.js) --> */}
-      {/* //@ts-ignore */}
-      {/* <script
+      <Head>
+        {/* <!-- Google tag (gtag.js) --> */}
+        {/* //@ts-ignore */}
+        <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-4PXXQ3NN30"
-        ></script> */}
-
-      {/* </Head> */}
-      {/* <Script id="google-analytics">
+        ></script>
+      
+      </Head>
+      <Script id="google-analytics">
           {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -92,8 +92,7 @@ export default function App({
       
         gtag('config', 'G-4PXXQ3NN30');
       `}
-        </Script> */}
-     
+        </Script> 
       <GlobalContextProvider>
         <AnimatePresence mode="wait">
           <motion.div
