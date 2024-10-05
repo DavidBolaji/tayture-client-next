@@ -51,16 +51,16 @@ const ResumePage = () => {
   const router = useRouter()
   const template = param?.template
 
-  const {data, isPending} = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['prof'],
     queryFn: async () => {
       const res = await Axios.get('/users/profile')
-      return  res.data.profile as IProf
+      return res.data.profile as IProf
     },
   })
 
   const r = useCallback((data: any) => {
-    if(data) {
+    if (data) {
       const res = prepareCvDate(data)
       setFormValues(res)
     }
@@ -71,7 +71,6 @@ const ResumePage = () => {
       r(data)
     }
   }, [data, r])
-
 
   const handleSubmit = (values: any) => {
     const orderedValues = steps.reduce((acc, step) => {
@@ -98,33 +97,15 @@ const ResumePage = () => {
         content: 'Please do not leave page CV is being generated...',
         duration: 0,
       })
-      const response = await Axios.post(
-        `/cv?template=${template}`,
-        {
-          ...cvData,
-          colorList: colorList[template as hash],
-        },
-        {
-          // responseType: 'arraybuffer',
-        },
-      )
-
-      // const file = new Blob([response.data], { type: 'application/pdf' })
-
-      // Create a link element, hide it, direct it towards the blob, and then trigger a click
-      // const fileURL = URL.createObjectURL(file)
-      // const link = document.createElement('a')
-      // link.href = fileURL
-      // link.download = `download.pdf`
-      // document.body.appendChild(link)
-      // link.click()
-
-      // Clean up by revoking the object URL
-      // URL.revokeObjectURL(fileURL)
+      await Axios.post(`/cv?template=${template}`, {
+        ...cvData,
+        colorList: colorList[template as hash],
+      })
       messageApi.open({
         key,
         type: 'success',
-        content: 'Hurray!!!, Link to Cv has been generated and sent to your phone.',
+        content:
+          'Hurray!!!, Link to Cv has been generated and sent to your email.',
         duration: 10,
       })
       await sleep(5000)
@@ -147,76 +128,84 @@ const ResumePage = () => {
     setSteps(newSteps)
   }
 
-
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" id="admin_cv">
       {contextHolder}
-      {isPending ? <Spinner color='orange' /> : <><div className="max-w-6xl mx-auto">
-        <DndProvider backend={HTML5Backend}>
-          <div className="grid grid-cols-7 md:gap-6">
-            <div className="w-full col-span-7 md:col-span-2">
-              <Aside
-                steps={steps}
-                setSteps={setSteps}
-                currentStep={currentStep}
-                setCurrentStep={setCurrentStep}
-                moveStep={moveStep}
-              />
-            </div>
-            <div className="w-full col-span-7 md:col-span-5">
-              <AnimatePresence mode="wait">
-                <MultiStepForm
-                  currentStep={currentStep}
-                  setCurrentStep={setCurrentStep}
-                  steps={steps}
-                  submit={handleSubmit}
-                  formValues={formValues}
-                  setFormValues={setFormValues}
-                />
-              </AnimatePresence>
-            </div>
-          </div>
-        </DndProvider>
-      </div>
-      <HandleCVModal
-        isOpen={open}
-        close={() => setOpen(false)}
-        ok={handleDownload}
-      >
-        <div className="mt-10"></div>
-        {template && (
-          <div className="flex items-center w-full justify-around -translate-x-8 -translate-y-8">
-            <div className="flex-row jus items-center justify-center">
-              <div>Background</div>
-              <div className="flex justify-center mx-auto">
-                <ColorPalete
-                  background="background"
-                  template={template as string}
-                />
+      {isPending ? (
+        <Spinner color="orange" />
+      ) : (
+        <>
+          <div className="max-w-6xl mx-auto">
+            <DndProvider backend={HTML5Backend}>
+              <div className="grid grid-cols-7 md:gap-6">
+                <div className="w-full col-span-7 md:col-span-2">
+                  <Aside
+                    steps={steps}
+                    setSteps={setSteps}
+                    currentStep={currentStep}
+                    setCurrentStep={setCurrentStep}
+                    moveStep={moveStep}
+                  />
+                </div>
+                <div className="w-full col-span-7 md:col-span-5">
+                  <AnimatePresence mode="wait">
+                    <MultiStepForm
+                      currentStep={currentStep}
+                      setCurrentStep={setCurrentStep}
+                      steps={steps}
+                      submit={handleSubmit}
+                      formValues={formValues}
+                      setFormValues={setFormValues}
+                    />
+                  </AnimatePresence>
+                </div>
               </div>
-            </div>
-            <div className="flex-row jus items-center justify-center">
-              <span>Foreground</span>
-              <ColorPalete
-                background="foreground"
-                template={template as string}
-              />
-            </div>
-            <div className="flex-row jus items-center justify-center">
-              <span>Text 1</span>
-              <ColorPalete background="textOne" template={template as string} />
-            </div>
-            <div className="flex-row jus items-center justify-center">
-              <span>Text2</span>
-              <ColorPalete
-                background="colorParagraph"
-                template={template as string}
-              />
-            </div>
+            </DndProvider>
           </div>
-        )}
-        <CVPreview {...cvData!} />
-      </HandleCVModal></>}
+          <HandleCVModal
+            isOpen={open}
+            close={() => setOpen(false)}
+            ok={handleDownload}
+          >
+            <div className="mt-10"></div>
+            {template && (
+              <div className="flex items-center w-full justify-around -translate-x-8 -translate-y-8">
+                <div className="flex-row jus items-center justify-center">
+                  <div>Background</div>
+                  <div className="flex justify-center mx-auto">
+                    <ColorPalete
+                      background="background"
+                      template={template as string}
+                    />
+                  </div>
+                </div>
+                <div className="flex-row jus items-center justify-center">
+                  <span>Foreground</span>
+                  <ColorPalete
+                    background="foreground"
+                    template={template as string}
+                  />
+                </div>
+                <div className="flex-row jus items-center justify-center">
+                  <span>Text 1</span>
+                  <ColorPalete
+                    background="textOne"
+                    template={template as string}
+                  />
+                </div>
+                <div className="flex-row jus items-center justify-center">
+                  <span>Text2</span>
+                  <ColorPalete
+                    background="colorParagraph"
+                    template={template as string}
+                  />
+                </div>
+              </div>
+            )}
+            <CVPreview {...cvData!} />
+          </HandleCVModal>
+        </>
+      )}
     </div>
   )
 }
