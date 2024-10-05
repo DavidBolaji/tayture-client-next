@@ -89,7 +89,7 @@ const CVPreview: React.FC<{
     }
   }
 
-  return <div className='md:scale-[0.78] scale-[0.68] h-[700px] md:-translate-x-16 -translate-x-20 md:-translate-y-24 -translate-y-32'>{!template ? null : renderTemplate(template as string)}</div>
+  return <div className='scale-[0.78] h-[700px] -translate-x-16 -translate-y-24'>{!template ? null : renderTemplate(template as string)}</div>
 }
 
 export default CVPreview

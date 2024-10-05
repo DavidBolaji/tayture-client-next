@@ -208,7 +208,7 @@ label {
   }
 
   .ant-modal.cv_modal {
-    width: 95vw !important; /* 95% of the viewport width */
-    transform: scale(0.90);
+    width: 90vw !important; /*95% of the viewport width */
+    /* transform: scale(0.80) translateX(-5%); */
   }
 }

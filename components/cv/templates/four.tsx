@@ -35,7 +35,7 @@ const TemplateFour: React.FC<{
               style={{
                 color: colorList.foreground,
               }}
-              className={`text-2xl font-semibold uppercase tracking-[0.6rem]`}
+              className={`md:text-2xl font-semibold uppercase tracking-[0.6rem]`}
             >
               {data.name}
             </h1>
@@ -50,7 +50,7 @@ const TemplateFour: React.FC<{
                       style={{
                         color: colorList.foreground,
                       }}
-                      className={`text-xs`}
+                      className={`md:text-xs text-[10px]`}
                     >
                       {data.github}
                     </div>
@@ -65,7 +65,7 @@ const TemplateFour: React.FC<{
                       style={{
                         color: colorList.foreground,
                       }}
-                      className={`text-xs`}
+                      className={`md:text-xs text-[10px]`}
                     >
                       {data.web}
                     </div>
@@ -80,7 +80,7 @@ const TemplateFour: React.FC<{
                       style={{
                         color: colorList.foreground,
                       }}
-                      className={`text-xs`}
+                      className={`md:text-xs text-[10px]`}
                     >
                       {data.linkedIn}
                     </div>
@@ -97,7 +97,7 @@ const TemplateFour: React.FC<{
                   style={{
                     color: colorList.foreground,
                   }}
-                  className={`text-xs`}
+                  className={`md:text-xs text-[10px]`}
                 >
                   {data.email}
                 </div>
@@ -110,7 +110,7 @@ const TemplateFour: React.FC<{
                   style={{
                     color: colorList.foreground,
                   }}
-                  className={`text-xs`}
+                  className={`md:text-xs text-[10px]`}
                 >
                   {data.phone}
                 </div>
@@ -124,7 +124,7 @@ const TemplateFour: React.FC<{
                     style={{
                       color: colorList.foreground,
                     }}
-                    className={`text-xs`}
+                    className={`md:text-xs text-[10px]`}
                   >
                     {data.location}
                   </div>

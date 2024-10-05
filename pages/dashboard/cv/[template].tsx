@@ -171,7 +171,7 @@ const ResumePage = () => {
             {template && (
               <div className="flex items-center w-full justify-around -translate-x-8 -translate-y-8">
                 <div className="flex-row jus items-center justify-center">
-                  <div>Background</div>
+                  <div className='text-xs'>Back</div>
                   <div className="flex justify-center mx-auto">
                     <ColorPalete
                       background="background"
@@ -180,21 +180,21 @@ const ResumePage = () => {
                   </div>
                 </div>
                 <div className="flex-row jus items-center justify-center">
-                  <span>Foreground</span>
+                  <span className='text-xs'>Front</span>
                   <ColorPalete
                     background="foreground"
                     template={template as string}
                   />
                 </div>
                 <div className="flex-row jus items-center justify-center">
-                  <span>Text 1</span>
+                  <span className='text-xs'>Text 1</span>
                   <ColorPalete
                     background="textOne"
                     template={template as string}
                   />
                 </div>
                 <div className="flex-row jus items-center justify-center">
-                  <span>Text2</span>
+                  <span className='text-xs'>Text2</span>
                   <ColorPalete
                     background="colorParagraph"
                     template={template as string}

@@ -44,11 +44,6 @@ export const StyledApplyModal = styled(Modal)`
       margin-top: 3px;
     }
   }
-@media (max-width: 573px){
-  .ant-modal {
-    width: 720px !important;
-  }
-}
 `
 const HandleCVModal: React.FC<{
   isOpen: boolean
@@ -56,8 +51,14 @@ const HandleCVModal: React.FC<{
   ok: () => void
   children: ReactNode
 }> = ({ isOpen, close, ok, children }) => (
-  <StyledApplyModal className='cv_modal' open={isOpen} closable footer={null} onCancel={close}>
-    {children}
+  <StyledApplyModal
+    className="cv_modal"
+    open={isOpen}
+    closable
+    footer={null}
+    onCancel={close}
+  >
+    <div className='pl-4'>{children}</div>
     <div className="absolute -top-10 w-full left-0 flex ">
       <button
         onClick={ok}

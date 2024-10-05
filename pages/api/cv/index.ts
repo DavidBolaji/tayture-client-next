@@ -31,7 +31,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
       { headers: { Authorization: `Bearer ${req.token}` } },
     ),
-    axios.post(`${url}/${template}`, { colorList, data, email }),
     axios.put(`${host}/users/summary`, {
       summary: data.summary,
       userId: req.authUser?.id,
@@ -51,6 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   ]
 
   try {
+    await axios.post(`${url}/${template}`, { colorList, data, email }),
     res.status(200).send({ message: 'success' })
 
     // Non-blocking background tasks - don't await these
