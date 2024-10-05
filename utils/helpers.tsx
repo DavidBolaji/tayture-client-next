@@ -814,7 +814,7 @@ export const prepareCvDate = (data: any) => {
     name: `${data?.fname} ${data?.lname}`,
     email: data?.email,
     phone: data?.phone,
-    summary: data?.summary.text ?? '',
+    summary: !data?.summary ?  '' : data?.summary?.text,
     country: data?.profile?.country?.trim() ?? '',
     state: data?.profile?.state?.trim() ?? '',
     city: data?.profile?.city?.trim() ?? '',
