@@ -54,7 +54,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const generateCv = axios.post(
       `${url}/${template}`,
       { colorList, data, email },
-      { responseType: 'arraybuffer', timeout: 300000 } // Timeout added for axios request
+      { responseType: 'arraybuffer', timeout: 30000000 } // Timeout added for axios request
     )
 
     // Ensure non-blocking processing of async tasks

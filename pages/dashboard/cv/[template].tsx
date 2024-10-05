@@ -43,7 +43,7 @@ const ResumePage = () => {
     colorList: ColorList
     email: string
     //@ts-ignore
-  } | null>(cvDataTemplate)
+  } | null>(null)
   const [open, setOpen] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const { colorList } = useGlobalContext()
@@ -106,7 +106,7 @@ const ResumePage = () => {
         },
         {
           responseType: 'arraybuffer',
-          timeout: 300000
+          timeout: 300000000
         },
       )
 
@@ -179,7 +179,6 @@ const ResumePage = () => {
           </div>
         </DndProvider>
       </div>
-      <button onClick={() => setOpen(true)}>Preview</button>
       <HandleCVModal
         isOpen={open}
         close={() => setOpen(false)}
