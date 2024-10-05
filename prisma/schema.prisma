@@ -498,8 +498,8 @@ model Wallet {
 
 model WorkHistory {
   id         String     @id @default(uuid())
-  title      String     @db.VarChar(50)
-  location   String     @db.VarChar(100)
+  title      String     @db.VarChar(300)
+  location   String     @db.VarChar(300)
   startYear  String
   endYear    String
   startMonth String
@@ -525,7 +525,7 @@ model WorkRole {
   id     String      @id @default(uuid())
   workId String
   work   WorkHistory @relation(fields: [workId], references: [id])
-  role   String
+  role   String       @db.LongText()
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

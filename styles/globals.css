@@ -163,6 +163,44 @@ label {
   outline: 0;
 } */
 
+/* Hide default checkbox */
+.custom-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+/* Create custom checkbox */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.custom-checkbox .checkmark {
+  height: 15px;
+  width: 15px;
+  background-color: white;
+  border: 2px solid #e5e7eb;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+/* Change background and border color when checked */
+.custom-checkbox input[type="checkbox"]:checked + .checkmark {
+  background-color: #FF7517; /* Change to your preferred color */
+  border-color: #FF7517;
+}
+
+/* Optional: Add a check icon or symbol inside the checkbox */
+.custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+  content: '\2713'; /* Checkmark symbol */
+  color: white;
+  font-size: 14px;
+}
+
+
 
 @media (max-width: 573px){
   .ant-modal:not(.cv_modal) {
@@ -170,6 +208,7 @@ label {
   }
 
   .ant-modal.cv_modal {
-    width: 92vw !important; /* 95% of the viewport width */
+    width: 95vw !important; /* 95% of the viewport width */
+    transform: scale(0.90);
   }
 }

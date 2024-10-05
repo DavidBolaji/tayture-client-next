@@ -17,10 +17,7 @@ import EducationCard from './components/card/EducationCard'
 import ExperienceCard from './components/card/ExperienceCard'
 import SkillCard from './components/card/SkillCard'
 import Meta from './components/Meta'
-
-export default function Page({
-  profile,
-}: {
+export interface IProf {
   profile: User & { profile: Profile } & { summary: Summary } & {
     education: Education[]
   } & {
@@ -28,7 +25,10 @@ export default function Page({
   } & {
     skills: Skills[]
   }
-}) {
+}
+export default function Page({
+  profile,
+}:IProf ) {
   
   return (
     <>
@@ -84,15 +84,3 @@ export const getServerSideProps = async (ctx: any) => {
 
   return { props: { profile } }
 }
-
-
-  // const token = cookies.token
-
-  // if (!token || !jwt.verify(token, process.env.NEXT_PUBLIC_NEXTAUTH_SECRET!)) {
-  //   return {
-  //     redirect: {
-  //       destination: '/auth/login',
-  //       permanent: false,
-  //     },
-  //   }
-  // }

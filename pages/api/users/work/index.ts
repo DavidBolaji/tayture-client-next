@@ -37,10 +37,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
+
     const createWork = req.body['work'].map(
       async (data: {
         title: string
         date: string
+        startYear: string
+        startMonth: string
+        endYear: string
+        endMonth: string
+        currentDate: boolean
         location: string
         country: string
         lga: string
@@ -50,16 +56,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         endDate: string
         roles: { role: string }[]
       }) => {
+
         await db.workHistory.create({
           data: {
             title: data?.title,
-            startYear: data?.date?.split("/")[1].slice(0,4),
-            startMonth: data?.date?.split("/")[0],
-            //@ts-ignore
-            endMonth: data?.date?.split("/")[1].slice((data?.date?.split("/")[1].split('').map(el => el.trim()) as unknown as string).findLastIndex((val) => val == "")).trim(),
-            endYear:  data?.date?.split("/")[2],
+            startYear: data?.startYear,
+            startMonth: data?.startMonth,
+            endMonth: data?.endMonth?.trim()?.length === 0 ? data?.startMonth : data?.endMonth,
+            endYear:  data?.endYear?.trim()?.length === 0 ? data?.startYear : data?.endYear,
             location: data?.location,
-            endDate:  data?.date?.split('-')[1]?.trim() === "Current" ? "Current" : undefined,
+            endDate:  data?.endMonth?.trim().length === 0 && data?.endYear?.trim()?.length === 0  ? "Current" : undefined,
             lga: data?.lga ?? undefined,
             city: data?.city ?? undefined,
             address: data.address ?? undefined,

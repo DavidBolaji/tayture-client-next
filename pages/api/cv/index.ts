@@ -14,78 +14,78 @@ let host =
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST')
     return res.status(405).json({ message: 'Method not allowed' })
+
   const { colorList, data, email } = req.body
   const { template } = req.query
   const location = data.location.split(',')
 
-  await axios.put(
-    `${host}/users/profile/update/me`,
-    {
-      country: location[0]?.trim(),
-      state: location[1]?.trim(),
-      city: location[2]?.trim()?.length > 0 ? location[2] : undefined,
-      lga: location[3]?.trim()?.length > 0 ? location[3] : undefined,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${req.token}`,
+  // Start non-essential updates as async tasks
+  const asyncTasks = [
+    axios.put(
+      `${host}/users/profile/update/me`,
+      {
+        country: location[0]?.trim(),
+        state: location[1]?.trim(),
+        city: location[2]?.trim()?.length > 0 ? location[2] : undefined,
+        lga: location[3]?.trim()?.length > 0 ? location[3] : undefined,
       },
-    },
-  )
-
-  const updateSummary = axios.put(`${host}/users/summary`, {
-    summary: data.summary,
-    userId: req.authUser?.id,
-  })
-
-  const updateWork = axios.put(`${host}/users/work`, {
-    work: data.employment,
-    userId: req.authUser?.id,
-  })
-
-  const updateEdu = axios.put(`${host}/users/education`, {
-    education: data.education,
-    userId: req.authUser?.id,
-  })
-
-  const updateSkills = axios.put(`${host}/users/skills`, {
-    skill: data.skills,
-    userId: req.authUser?.id,
-  })
-
-
+      { headers: { Authorization: `Bearer ${req.token}` } }
+    ),
+    axios.put(`${host}/users/summary`, {
+      summary: data.summary,
+      userId: req.authUser?.id,
+    }),
+    axios.put(`${host}/users/work`, {
+      work: data.employment,
+      userId: req.authUser?.id,
+    }),
+    axios.put(`${host}/users/education`, {
+      education: data.education,
+      userId: req.authUser?.id,
+    }),
+    axios.put(`${host}/users/skills`, {
+      skill: data.skills,
+      userId: req.authUser?.id,
+    }),
+  ]
 
   try {
-    await Promise.all([updateSummary, updateWork, updateEdu, updateSkills])
-
-    const holder = await axios.post(
+    // Only wait for generateCv since it is critical to the response
+    const generateCv = axios.post(
       `${url}/${template}`,
-      {
-        colorList,
-        data,
-        email,
-      },
-      { responseType: 'arraybuffer' },
+      { colorList, data, email },
+      { responseType: 'arraybuffer', timeout: 300000 } // Timeout added for axios request
     )
+
+    // Ensure non-blocking processing of async tasks
+    const [holder] = await Promise.all([generateCv])
 
     // Check if the response is actually a PDF
     if (holder.headers['content-type'] !== 'application/pdf') {
       throw new Error('Received non-PDF response')
     }
 
+    // Stream the PDF response back to the client
     res.setHeader('Content-Type', 'application/pdf')
-
     res.send(holder.data)
+
+    // Non-blocking background tasks - don't await these
+    Promise.all(asyncTasks).catch((error) =>
+      console.error('Error in background tasks:', error)
+    )
   } catch (error: any) {
-    console.error('Error sending the PDF:', error)
+    console.error('Error generating the CV or updating data:', error)
+
+    // Enhanced error logging for better troubleshooting
     if (error.response) {
       console.error('Response data:', error?.response?.data)
       console.error('Response status:', error?.response?.status)
       console.error('Response headers:', error?.response?.headers)
     }
-    console.log((error as Error).message)
+
+    // Return error response to client
     res.status(400).json({
-      message: `An error occured: ${(error as Error).message}`,
+      message: `An error occurred: ${(error as Error).message}`,
     })
   }
 }

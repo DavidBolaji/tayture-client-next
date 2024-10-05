@@ -11,7 +11,7 @@ const TemplateOne: React.FC<{
 }> = ({ data, colorList, page = 1 }) => {
   return (
     <div className="">
-      <div className="grid grid-cols-12 border w-[640px]">
+      <div className="grid grid-cols-12 border md:w-[640px] w-[580px]">
         <div
           className="col-span-9 p-3"
           style={{ backgroundColor: colorList.foreground }}
@@ -248,17 +248,6 @@ const TemplateOne: React.FC<{
                     alignItems: 'center',
                   }}
                 >
-                  {/* <div
-                    className='w-8 h-8 rounded-full flex items-center justify-center'
-                    style={{
-                      backgroundColor: colorList.textOne
-                    }}
-                  >
-                    <i
-                      className="fa fa-phone"
-                      style={{ color: colorList.background }}
-                    ></i>
-                  </div> */}
                   <FaPhone color={colorList.textOne} />
                   <div style={{ fontSize: '10px', color: colorList.textOne }}>
                     {data.phone}

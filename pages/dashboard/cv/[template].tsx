@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -11,6 +11,7 @@ import {
   convertData,
   cvDataTemplate,
   initialHash,
+  prepareCvDate,
   sleep,
   validationHash,
 } from '@/utils/helpers'
@@ -21,13 +22,15 @@ import CVPreview, {
 } from '@/components/cv/PreviewComponent'
 import { Axios } from '@/request/request'
 import { message } from 'antd'
-import { useEffectOnce } from 'react-use'
 import { useParams } from 'next/navigation'
 
 import { useGlobalContext } from '@/Context/store'
 import DashboardLayout from '@/components/layouts/DashboardLayout'
 import ColorPalete from '@/components/ColorPalete'
 import { useRouter } from 'next/router'
+import { useQuery } from '@tanstack/react-query'
+import { IProf } from '../profile'
+import Spinner from '@/components/Spinner/Spinner'
 
 type hash = 'one' | 'three' | 'four'
 
@@ -40,7 +43,7 @@ const ResumePage = () => {
     colorList: ColorList
     email: string
     //@ts-ignore
-  } | null>(null)
+  } | null>(cvDataTemplate)
   const [open, setOpen] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const { colorList } = useGlobalContext()
@@ -48,13 +51,27 @@ const ResumePage = () => {
   const router = useRouter()
   const template = param?.template
 
-  useEffectOnce(() => {
-    const initialValues = steps.reduce((acc, step) => {
-      return { ...acc, ...initialHash[step.id as keyof typeof initialHash] }
-    }, {})
-
-    setFormValues(initialValues)
+  const {data, isPending} = useQuery({
+    queryKey: ['prof'],
+    queryFn: async () => {
+      const res = await Axios.get('/users/profile')
+      return  res.data.profile as IProf
+    },
   })
+
+  const r = useCallback((data: any) => {
+    if(data) {
+      const res = prepareCvDate(data)
+      setFormValues(res)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (data) {
+      r(data)
+    }
+  }, [data, r])
+
 
   const handleSubmit = (values: any) => {
     const orderedValues = steps.reduce((acc, step) => {
@@ -89,21 +106,22 @@ const ResumePage = () => {
         },
         {
           responseType: 'arraybuffer',
+          timeout: 300000
         },
       )
 
-      const file = new Blob([response.data], { type: 'application/pdf' });
-      
+      const file = new Blob([response.data], { type: 'application/pdf' })
+
       // Create a link element, hide it, direct it towards the blob, and then trigger a click
-      const fileURL = URL.createObjectURL(file);
-      const link = document.createElement('a');
-      link.href = fileURL;
-      link.download = `download.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      
+      const fileURL = URL.createObjectURL(file)
+      const link = document.createElement('a')
+      link.href = fileURL
+      link.download = `download.pdf`
+      document.body.appendChild(link)
+      link.click()
+
       // Clean up by revoking the object URL
-      URL.revokeObjectURL(fileURL);
+      URL.revokeObjectURL(fileURL)
       messageApi.open({
         key,
         type: 'success',
@@ -130,10 +148,11 @@ const ResumePage = () => {
     setSteps(newSteps)
   }
 
+
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" id="admin_cv">
       {contextHolder}
-      <div className="max-w-6xl mx-auto">
+      {isPending ? <Spinner color='orange' /> : <><div className="max-w-6xl mx-auto">
         <DndProvider backend={HTML5Backend}>
           <div className="grid grid-cols-7 md:gap-6">
             <div className="w-full col-span-7 md:col-span-2">
@@ -160,6 +179,7 @@ const ResumePage = () => {
           </div>
         </DndProvider>
       </div>
+      <button onClick={() => setOpen(true)}>Preview</button>
       <HandleCVModal
         isOpen={open}
         close={() => setOpen(false)}
@@ -198,7 +218,7 @@ const ResumePage = () => {
           </div>
         )}
         <CVPreview {...cvData!} />
-      </HandleCVModal>
+      </HandleCVModal></>}
     </div>
   )
 }

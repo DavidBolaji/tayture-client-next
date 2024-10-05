@@ -286,10 +286,10 @@ const one = {
 }
 
 const three = {
-  foreground: '#303846',
-  background: '#fff',
+  foreground: '#e48d8d',
+  background: '#00308F',
   colorParagraph: '#000',
-  textOne: '#000',
+  textOne: '#fff'
 }
 
 export const GlobalContextProvider = ({ children }: PropsWithChildren) => {

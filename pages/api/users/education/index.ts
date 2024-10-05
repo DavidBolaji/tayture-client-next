@@ -1,7 +1,6 @@
 import db from '@/db/db'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'PUT')
     return res.status(405).json({ message: 'Method not allowed' })
@@ -27,24 +26,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           degree,
           year,
           school,
+          startYear,
+          endYear
         }: {
           degree: string
           year: string
           school: string
-        }) => ({
-          degree: degree,
-          field: undefined,
-          startYear: year.slice(0,4),
-          startMonth: undefined,
-          endMonth: undefined,
-          //@ts-ignore
-          endYear: year.slice((year.split("").map(el => el.trim()) as unknown as string).findLastIndex((val) => val === ""), year.split("").length),
-          school,
-          userId: req.body['userId'],
-        }),
+          startYear: string
+          endYear: string
+        }) => {
+        
+          return {
+            degree: degree,
+            field: undefined,
+            startYear: startYear,
+            startMonth: undefined,
+            endMonth: undefined,
+            endYear: endYear,
+            school,
+            userId: req.body['userId'],
+          }
+        },
       ),
     })
-
 
     return res.status(200).json({
       message: 'Education Created',

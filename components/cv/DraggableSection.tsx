@@ -9,6 +9,7 @@ import SkillCvForm from './forms/SkillCvForm'
 import EducationCVForm from './forms/EducationCVForm'
 import EmployementCVForm from './forms/EmployementCVForm'
 import CertificateCVForm from './forms/CertificateCVForm'
+import RatingInput from '../Form/RatingInput/RatingInput'
 
 interface DraggableSectionProps {
   name: string
@@ -132,11 +133,18 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
         return <CertificateCVForm name={name} index={index} />
       case 'languages':
         return (
-          <Field
-            as={StyledInput}
-            name={`${name}[${index}].name`}
-            placeholder="Language Name"
-          />
+          <>
+            <Field
+              as={StyledInput}
+              name={`${name}[${index}].name`}
+              placeholder="Language Name"
+            />
+            <Field
+              as={RatingInput}
+              name={`${name}[${index}].scale`}
+              placeholder="Language Level"
+            />
+          </>
         )
       case 'hobbies':
         return (
@@ -159,9 +167,9 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       className="border p-4 mb-4 bg-white rounded shadow"
     >
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold">{`${
+        <h3 className="text-lg font-semibold">{` ${index + 1}. ${
           name.charAt(0).toUpperCase() + name.slice(1)
-        } ${index + 1}`}</h3>
+        }`}</h3>
         <Button
           render="dark"
           bold={false}

@@ -79,7 +79,7 @@ const TemplateThree: React.FC<{
         <div
           className={` mt-4 px-[1.25rem] h-auto col-span-9`}
           style={{
-            backgroundColor: colorList.background
+            // backgroundColor: colorList.background
           }}
         >
           <h2 className="text-xl font-bold brBold uppercase border-b border-gray-300 pb-2">
@@ -179,16 +179,14 @@ const TemplateThree: React.FC<{
         {/* Sidebar */}
         <div
           id="main"
-          className={`px-[1rem] border-l mt-4 ${
-            page === 1 ? 'top-[185px]' : 'top-0'
-          } bottom-0 col-span-3`}
+          className={`px-[1rem]  border-l -mt-0 col-span-3`}
           style={{
             backgroundColor: colorList.background
           }}
         >
           {page === 1 && data.skills && (
             <div>
-              <h2 className="text-lg font-bold brBold uppercase border-b-2 border-gray-300 pb-2 text-gray-800">
+              <h2 className="text-lg font-bold pt-3.5 brBold uppercase border-b-2 border-gray-300 pb-2 text-gray-800">
                 Skills
               </h2>
               <ul className="mt-1 space-y-4">

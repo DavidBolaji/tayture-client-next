@@ -2,6 +2,7 @@ import StyledInput from '@/components/Form/NomalInput/StyledInput'
 import { Field } from 'formik'
 import React from 'react'
 import { ICVForm } from '../DraggableSection'
+import RatingInput from '@/components/Form/RatingInput/RatingInput'
 
 const SkillCvForm:React.FC<ICVForm> = ({name, index}) => {
   return (
@@ -12,9 +13,9 @@ const SkillCvForm:React.FC<ICVForm> = ({name, index}) => {
         placeholder="Skill Name"
       />
       <Field
-        as={StyledInput}
+        as={RatingInput}
         name={`${name}[${index}].scale`}
-        placeholder="Skill Level (0-100)"
+        placeholder="Skill Level"
       />
     </>
   )
