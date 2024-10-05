@@ -106,7 +106,6 @@ const ResumePage = () => {
         },
         {
           responseType: 'arraybuffer',
-          timeout: 300000000
         },
       )
 
