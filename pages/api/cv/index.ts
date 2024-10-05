@@ -31,6 +31,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
       { headers: { Authorization: `Bearer ${req.token}` } }
     ),
+    axios.post(
+      `${url}/${template}`,
+      { colorList, data, email },
+      // { responseType: 'arraybuffer' } // Timeout added for axios request
+    ),
     axios.put(`${host}/users/summary`, {
       summary: data.summary,
       userId: req.authUser?.id,
@@ -51,23 +56,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     // Only wait for generateCv since it is critical to the response
-    const generateCv = axios.post(
-      `${url}/${template}`,
-      { colorList, data, email },
-      { responseType: 'arraybuffer' } // Timeout added for axios request
-    )
+    // const generateCv = axios.post(
+    //   `${url}/${template}`,
+    //   { colorList, data, email },
+    //   // { responseType: 'arraybuffer' } // Timeout added for axios request
+    // )
 
     // Ensure non-blocking processing of async tasks
-    const [holder] = await Promise.all([generateCv])
+    // const [holder] = await Promise.all([generateCv])
 
     // Check if the response is actually a PDF
-    if (holder.headers['content-type'] !== 'application/pdf') {
-      throw new Error('Received non-PDF response')
-    }
+    // if (holder.headers['content-type'] !== 'application/pdf') {
+    //   throw new Error('Received non-PDF response')
+    // }
 
     // Stream the PDF response back to the client
-    res.setHeader('Content-Type', 'application/pdf')
-    res.send(holder.data)
+    // res.setHeader('Content-Type', 'application/pdf')
+    res.status(200).send({message: "success"})
 
     // Non-blocking background tasks - don't await these
     Promise.all(asyncTasks).catch((error) =>

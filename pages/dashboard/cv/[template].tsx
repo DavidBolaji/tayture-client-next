@@ -105,26 +105,26 @@ const ResumePage = () => {
           colorList: colorList[template as hash],
         },
         {
-          responseType: 'arraybuffer',
+          // responseType: 'arraybuffer',
         },
       )
 
-      const file = new Blob([response.data], { type: 'application/pdf' })
+      // const file = new Blob([response.data], { type: 'application/pdf' })
 
       // Create a link element, hide it, direct it towards the blob, and then trigger a click
-      const fileURL = URL.createObjectURL(file)
-      const link = document.createElement('a')
-      link.href = fileURL
-      link.download = `download.pdf`
-      document.body.appendChild(link)
-      link.click()
+      // const fileURL = URL.createObjectURL(file)
+      // const link = document.createElement('a')
+      // link.href = fileURL
+      // link.download = `download.pdf`
+      // document.body.appendChild(link)
+      // link.click()
 
       // Clean up by revoking the object URL
-      URL.revokeObjectURL(fileURL)
+      // URL.revokeObjectURL(fileURL)
       messageApi.open({
         key,
         type: 'success',
-        content: 'Download Completed!',
+        content: 'Hurray!!!, Link to Cv has been generated and sent to your phone.',
         duration: 10,
       })
       await sleep(5000)
