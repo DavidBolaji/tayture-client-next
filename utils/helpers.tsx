@@ -585,8 +585,8 @@ export const convertData = (originalData: any) => {
         orderedSections.education = originalData.education.map((edu: any) => ({
           degree: edu.degree,
           year: `${edu.startYear} – ${edu.endYear}`,
-          startYear: edu.startYear,
-          endYear: edu.endYear,
+          startYear: String(+edu.startYear),
+          endYear: String(+edu.endYear),
           school: edu.school,
           more: edu.more || '',
         }))
