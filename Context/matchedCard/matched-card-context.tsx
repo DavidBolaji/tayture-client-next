@@ -22,6 +22,12 @@ import {
   createTransactionLimit,
 } from '@/lib/api/transaction'
 import { boolean } from 'yup'
+import { StyledModal } from '@/components/Dashboard/ScheduledCard/ScheduledCard'
+import { regularFont } from '@/assets/fonts/fonts'
+import { AxiosError } from 'axios'
+import { getAppliedJobUsers, sendRejectionMessage } from '@/lib/api/matched'
+import { updateJob } from '@/lib/api/job'
+import { Axios } from '@/request/request'
 
 const matchedContext = createContext<
   Partial<{
@@ -48,8 +54,10 @@ const matchedContext = createContext<
     fundWallet: (amount: string) => void
     transaction: (arg: any) => void,
     schoolId: number
+    setOpen: Dispatch<SetStateAction<boolean>>
+    hirePending: boolean
   }>
->({})
+  >({})
 
 export const useMatchedContet = () => useContext(matchedContext)
 
@@ -58,6 +66,7 @@ export const MatchedContextProvider: React.FC<
 > = ({ children, cur, jobId }) => {
   const [amt, setAmt] = useState<string | number>('')
   const { setMessage, setUI, defaultSchool } = useGlobalContext()
+  const [open, setOpen] = useState(false);
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
   const permission = queryClient.getQueryData(['permission'])
@@ -182,6 +191,58 @@ export const MatchedContextProvider: React.FC<
     }))
   }
 
+  const { mutate: hire, isPending: hirePending } = useMutation({
+    mutationFn: async () => {
+      return await Axios.post('/hired/create', {
+        userId: id,
+        jobId: jobId,
+        role: cur.job.job_title,
+        defaultSchool,
+      })
+    },
+    onSuccess: async (res) => {
+      /**
+       * no of hire on job
+       *
+       * if equal
+       * all applied except hiredlist, send rejection mail,
+       * archieve job
+       */
+
+      const totalHire = +cur.job.job_no_hires
+      const alreadyHired = res.data.job.job.hired.length
+      console.log(totalHire)
+      if (totalHire >= alreadyHired) {
+        await sendRejectionMessage({
+          jobId: cur.job.job_id,
+          user: res.data.job.job.hired,
+        })
+        await updateJob(cur.job.job_id)
+      }
+
+      const req = await getAppliedJobUsers(cur.job.job_id as string)
+
+      queryClient.setQueryData(
+        [`job/${cur.job.job_id}`],
+        () => req.data.applied,
+      )
+
+      setOpen!(false)
+      setMessage(() => res.data.message)
+
+      setId!('')
+    },
+    onError: (error) => {
+      setMessage(
+        () =>
+          (error as AxiosError<{ error: string }>).response?.data?.error ||
+          (error as Error).message,
+      )
+    },
+  })
+
+  
+
   const value = {
     sufficientBalancePayment,
     inSufficientPayment,
@@ -203,11 +264,32 @@ export const MatchedContextProvider: React.FC<
     curAppCount,
     fundWallet,
     transaction,
-    schoolId: school.sch_id
+    schoolId: school.sch_id,
+    setOpen,
+    hirePending
   }
   return (
     <matchedContext.Provider value={value}>
       {children}
+      <StyledModal
+        open={open}
+        onCancel={() =>setOpen(false)}
+        okText="Yes"
+        cancelText="No"
+        onOk={() => {
+          setOpen(false)
+          hire()
+        }}
+      >
+        <h3
+          className={`font-[600] text-black_400 text-[18px] mb-4 ${regularFont.className}`}
+        >
+          🚫 Confirmation
+        </h3>
+        <p className={`text-[14px] ${regularFont.className}`}>
+          Applicant has been hired?
+        </p>
+      </StyledModal>
     </matchedContext.Provider>
   )
 }

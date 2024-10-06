@@ -24,20 +24,19 @@ const MatchedCard: React.FC<MatchedCardProps> = ({
       <MatchedContextProvider cur={matchedJob} jobId={jobId}>
         <div className="min-w-[900px]">
           <MatchedCardAlert status={matchedJob?.job?.status} />
-          <MatchedCardPayButton  status={matchedJob?.job?.status} />
+          <MatchedCardPayButton status={matchedJob?.job?.status} />
           <MatchedCardTableTitle />
           <div className=" pb-32">
             <div className="border bord border-b-0">
               {!loading &&
                 matchedJob?.applied.length > 0 &&
                 matchedJob?.applied.map((match: any) => (
-                 <MatchedCardAppliedItem key={match.id} match={match} />
+                  <MatchedCardAppliedItem key={match.id} match={match} />
                 ))}
             </div>
           </div>
         </div>
       </MatchedContextProvider>
-    
     </div>
   )
 }

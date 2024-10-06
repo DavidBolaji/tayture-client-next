@@ -9,13 +9,17 @@ import { useGlobalContext } from '@/Context/store'
 import { AiOutlineCopy } from 'react-icons/ai'
 import JobPoster from '../JobPoster/JobPoster'
 import { usePathname } from 'next/navigation'
+import { Axios } from '@/request/request'
+import { AxiosError } from 'axios'
 const { useBreakpoint } = Grid
 
 const JobCard: React.FC<{
   job: IJobSchDb
   copy?: boolean
   related?: boolean
-}> = ({ job, copy = false, related = false }) => {
+  assign?: boolean
+  user?: string | null
+}> = ({ job, copy = false, related = false, assign = false, user }) => {
   const {
     job_title: title,
     school: { sch_lga: lga, sch_city: city, sch_state: state, landmark },
@@ -24,14 +28,15 @@ const JobCard: React.FC<{
     job_exp: exp,
     job_qual: qual,
     job_id: id,
-    tag
+    tag,
   } = job
   const [open, setOpen] = useState(false)
   const screens = useBreakpoint()
   const queryClient = useQueryClient()
-  const { count, setCount } = useGlobalContext()
+  const { setCount } = useGlobalContext()
   const data = queryClient.getQueryData(['activeJob']) as IJobSchDb
   const data2 = queryClient.getQueryData(['relatedJob']) as IJobSchDb
+  const [messageApi, contextHolder] = message.useMessage()
   const curId = related ? data2?.job_id : data?.job_id
   const path = usePathname()
   const isDashboard = path === '/dashboard/jobs'
@@ -52,8 +57,37 @@ const JobCard: React.FC<{
     }
   }
 
+  const handleAssign = async () => {
+    let key = 'assign'
+    try {
+      messageApi.open({
+        key,
+        type: 'loading',
+        content: 'Assigning',
+        duration: 0,
+      })
+      await Axios.post('/job/assign', { jobId: id, userId: user })
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'User has been assigned',
+        duration: 10,
+      })
+    } catch (error) {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: `Error: ${
+          (error as AxiosError<{ error: string }>).response?.data.error
+        }`,
+        duration: 4,
+      })
+    }
+  }
+
   return (
     <div className="relative">
+      {contextHolder}
       {copy && (
         <div
           onClick={() => {
@@ -67,25 +101,35 @@ const JobCard: React.FC<{
           <AiOutlineCopy />
         </div>
       )}
+      {assign && (
+        <div
+          onClick={handleAssign}
+          className="absolute z-[0] text-xs text-white top-1 right-1 bg-orange p-1 cursor-pointer"
+        >
+          Assign
+        </div>
+      )}
       <div
-        onClick={handleClick}
+        onClick={() => !assign && handleClick()}
         key={id}
         className={`transition-all rounded-md cursor-pointer hover:shadow-md p-[24px] border mb-5 ${
           curId === id ? 'border-orange' : 'border-ash_400 '
         } ${regularFont.className}`}
       >
         <h2 className={`mb-1 text-[14px] ${boldFont.className}`}>{title}</h2>
-        <div className='mb-3'>
+        <div className="mb-3">
           <Tag
             className={`bg-orange border-none italic text-white ${regularFont.className} text-[12px]`}
           >
             {tag}
           </Tag>
-         {!landmark ? null : <Tag
-            className={`bg-blue-500 border-none italic text-white ${regularFont.className} text-[12px]`}
-          >
-            {`${landmark} area`}
-          </Tag>}
+          {!landmark ? null : (
+            <Tag
+              className={`bg-blue-500 border-none italic text-white ${regularFont.className} text-[12px]`}
+            >
+              {`${landmark} area`}
+            </Tag>
+          )}
         </div>
         <Space>
           <FaLocationDot className="text-orange" />
@@ -109,8 +153,8 @@ const JobCard: React.FC<{
           >
             {exp} years Experience
           </Tag>
-        
         </div>
+
         <Drawer
           closable
           open={open}

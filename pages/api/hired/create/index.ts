@@ -110,7 +110,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (process.env.NEXT_PUBLIC_ENV === 'prod') {
       sendTextMessage(
         jobCreate.job.school.user.phone as string,
-        `Hello ${jobCreate.job.school.user.fname}, This message is to inform you that you have succesfully been hired for the role of ${jobCreate.job.job_title} at ${jobCreate.job.school.sch_name}.`,
+        `Hello ${jobCreate.job.school.user.fname}, This message is to inform you that you have succesfully hired for the role of ${jobCreate.job.job_title} at ${jobCreate.job.school.sch_name}.`,
       )
     }
     

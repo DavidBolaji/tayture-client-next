@@ -17,10 +17,19 @@ export const getJobById = async (jobId: string) => {
   const result = await Axios.get(`/job/${jobId}`)
   return result
 }
-export const getClientJobs = async () => {
-  const result = await Axios.get('/job/verified')
+
+export const getClientJobs = async ({
+  searchTerm = '',
+  filterBy = '',
+  currentPage = 1,
+  pageSize = 10,
+} = {}) => {
+  const result = await Axios.get('/job/verified', {
+    params: { searchTerm, filterBy, currentPage, pageSize },
+  })
   return result
 }
+
 export const getClientJobsByType = async (type: string) => {
   const result = await Axios.get(`/job/verified/${type}`)
   return result

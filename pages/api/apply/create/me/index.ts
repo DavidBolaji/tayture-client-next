@@ -74,54 +74,53 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Method not allowed' })
 
   // validate field
-  const { qual, exp, schoolId, cv, jobId } = req.body
+  const { qual, exp, schoolId, cv, jobId, userId } = req.body
   if (!qual || !exp || !schoolId || !jobId)
     return res
       .status(400)
       .json({ message: 'Validation error all fields are required' })
 
-
   try {
-     // check if already applied
-  const isAppliedReq = db.applied.findMany({
-    where: {
-      AND: [
-        {
-          jobId: jobId,
-        },
-        {
-          userId: req.authUser?.id,
-        },
-      ],
-    },
-  })
-
-  const jobsReq = db.job.findUnique({
-    where: {
-      job_id: jobId,
-    },
-  })
-
-  const [isApplied, jobs] = await Promise.all([isAppliedReq, jobsReq])
-
-  if (isApplied.length) {
-    return res.status(200).json({
-      message: 'User Applied Already',
-      applied: isApplied[0],
+    // check if already applied
+    const isAppliedReq = db.applied.findMany({
+      where: {
+        AND: [
+          {
+            jobId: jobId,
+          },
+          {
+            userId: !userId ? req.authUser?.id : userId,
+          },
+        ],
+      },
     })
-  }
+
+    const jobsReq = db.job.findUnique({
+      where: {
+        job_id: jobId,
+      },
+    })
+
+    const [isApplied, jobs] = await Promise.all([isAppliedReq, jobsReq])
+
+    if (isApplied.length) {
+      return res.status(200).json({
+        message: 'User Applied Already',
+        applied: isApplied[0],
+      })
+    }
     const applied = await db.applied.create({
       data: {
         exp,
         qual,
         schoolId,
         cv: cv ? cv : undefined,
-        userId: req.authUser!.id,
+        userId: !userId ? req.authUser?.id : userId,
         jobId,
       },
     })
 
-    if (req.authUser?.phone) {
+    if (!userId && req.authUser?.phone) {
       sendTextMessage(
         req.authUser?.phone,
         `Hello ${req.authUser.fname}, you have successfully applied for the role of ${jobs?.job_title}. Your application is under review and we will get back to you soon. Meanwhile, you can check the platform and apply to other jobs. Thanks`,
@@ -129,22 +128,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     // Schedule a cron job to check the application status every 2 weeks
-    if (!scheduledTasks[req.authUser!.id]) {
-      scheduledTasks[req.authUser!.id] = {}
+    if (!scheduledTasks[!userId ? req.authUser?.id : userId]) {
+      scheduledTasks[!userId ? req.authUser?.id : userId] = {}
     }
 
-    if (scheduledTasks[req.authUser!.id][jobId]) {
-      scheduledTasks[req.authUser!.id][jobId].stop()
+    if (scheduledTasks[!userId ? req.authUser?.id : userId][jobId]) {
+      scheduledTasks[!userId ? req.authUser?.id : userId][jobId].stop()
     }
 
     //'0 0 */14 * *' 2weeks
     //'*/2 * * * *' 2 minutes
 
-    scheduledTasks[req.authUser!.id][jobId] = cron.schedule(
+    scheduledTasks[!userId ? req.authUser?.id : userId][jobId] = cron.schedule(
       '0 0 */14 * *',
       async () => {
         await checkApplicationStatus(
-          req.authUser!.id,
+          !userId ? req.authUser?.id : userId,
           jobId,
           jobs?.job_title,
           req.authUser?.phone,

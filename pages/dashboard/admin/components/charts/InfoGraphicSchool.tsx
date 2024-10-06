@@ -87,49 +87,100 @@ function InfoGraphicSchool() {
           </Button>,
         ]}
       >
-        {data.length === 0 && `No data`}
         <BarChartComponent
           key={JSON.stringify(filterData)}
           data={data}
           
           labels={labels.reverse()}
-          options={{
-            color: ["#3398DB"],
-            title: {
-              text: data.length > 0 ? `Total: ${total}` : 'No data',
-            },
-            tooltip: {
-              show: true,
-              trigger: 'axis', // Change trigger to 'axis' for bar chart
-              axisPointer: {
-                type: 'shadow', // Change axisPointer type for bar chart
-              },
-              formatter: '{a} <br/>{b}',
-            },
-            xAxis: {
-              type: 'category', // Specify the axis type as 'category' for bar chart
-              data: labels.map(lab => closingDate2(lab)),
-            },
-            yAxis: {
-              type: 'value', // Specify the axis type as 'value' for bar chart
-              minInterval: 1
-            },
-
-            series: [
-              {
-                name: 'Value',
-                type: 'line', // Change type to 'bar' for bar chart
-                data: data.map((value, index) => ({
-                  name: closingDate(labels[index]),
-                  value: value,
-                })),
-                label: {
-                  show: true,
-                  formatter: '{c}',
+          options={
+            {
+              color: ["#3398DB"],  // Custom color for bars
+              title: {
+                text: data.length > 0 ? `Total: ${total}` : 'No data',
+                left: 'left',
+                textStyle: {
+                  color: '#4a4a4a',
+                  fontWeight: 'bold',
+                  fontSize: 16,
                 },
               },
-            ],
-          }}
+              tooltip: {
+                show: true,
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'shadow',
+                },
+                formatter: (params: any) => {
+                  let content = `${params[0].name}<br/>`;
+                  params.forEach((item: any) => {
+                    content += `<strong>${item.seriesName}:</strong> ${item.value}<br/>`;
+                  });
+                  return content;
+                },
+              },
+              grid: {
+                left: '0%',
+                right: '2%',
+                bottom: '3%',
+                containLabel: true,
+              },
+              xAxis: {
+                type: 'category',
+                data: labels.map(label => closingDate2(label)),
+                axisLabel: {
+                  rotate: 45, // Rotate labels for better readability
+                  color: '#6e6e6e',
+                  fontSize: 12,
+                },
+                axisLine: {
+                  lineStyle: {
+                    color: '#c4c4c4',
+                  },
+                },
+              },
+              yAxis: {
+                type: 'value',
+                minInterval: 1,
+                axisLabel: {
+                  color: '#6e6e6e',
+                },
+                axisLine: {
+                  show: false,
+                },
+                splitLine: {
+                  lineStyle: {
+                    color: '#e8e8e8',
+                  },
+                },
+              },
+              series: [
+                {
+                  name: 'Value',
+                  type: 'bar', // Changed to 'bar' for the bar chart
+                  barWidth: '60%',
+                  data: data.map((value, index) => ({
+                    name: closingDate(labels[index]),
+                    value: value,
+                  })),
+                  label: {
+                    show: true,
+                    position: 'top',
+                    color: '#000',  // Color of the labels on the bars
+                    formatter: '{c}',
+                  },
+                  itemStyle: {
+                    barBorderRadius: [4, 4, 0, 0], // Rounded top corners for bars
+                  },
+                  emphasis: {
+                    focus: 'series',
+                    itemStyle: {
+                      color: '#FF8C00', // Highlight bar on hover
+                    },
+                  },
+                },
+              ],
+            }
+        }
         />
       </Card>
     </CardStyledWrapper>

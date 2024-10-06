@@ -6,7 +6,7 @@ import { Applied, Hired, Schedule, User } from '@prisma/client'
 import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 import debounce from 'lodash/debounce'
-import { AxiosResponse } from 'axios'
+
 
 type DataType = User & {
   applied: Applied[]
@@ -16,6 +16,7 @@ type DataType = User & {
 
 const useUser = () => {
   const [drawer, setDrawer] = useState(false)
+  const [jobDrawer, setJobDrawer] = useState(false)
   const [title, setTitle] = useState('')
   const [allUsers, setAllUsers] = useState<DataType[] | []>([])
   const [drawerContent, setDrawerContent] = useState<
@@ -23,6 +24,8 @@ const useUser = () => {
   >(null)
   const queryClient = useQueryClient()
   const [val, setVal] = useState('')
+  const [user, setUser] = useState<null | string>(null)
+  
   const { data: users, isPending, refetch } = useQuery({
     queryKey: ['allUsers'],
     queryFn: async () => {
@@ -30,6 +33,8 @@ const useUser = () => {
       return res.data.user
     },
   })
+
+
 
   const { mutate, isPending: isUserPending } = useMutation({
     mutationFn: async (title: string) => {
@@ -92,6 +97,22 @@ const useUser = () => {
       ),
     },
     {
+      title: 'Assign',
+      dataIndex: 'assign',
+      key: 'assign',
+      render: (_, record) => (
+        <span
+          className="text-xs cursor-pointer transition-colors duration-300 hover:underline hover:text-orange"
+          onClick={() => {
+            setUser(record.id)
+            setJobDrawer(true)
+          }}
+        >
+          Assign
+        </span>
+      ),
+    },
+    {
       title: 'Applied',
       dataIndex: 'applied',
       key: 'applied',
@@ -143,7 +164,11 @@ const useUser = () => {
     setDrawer,
     handleSearch,
     val,
-    refetch
+    refetch,
+    jobDrawer,
+    setJobDrawer,
+    setUser,
+    user
   }
 }
 
