@@ -1,4 +1,5 @@
 import db from '@/db/db'
+import { sendTextMessage } from '@/lib/services/user'
 import verifyToken from '@/middleware/verifyToken'
 import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -27,6 +28,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         cv: true,
         qual: true,
         exp: true,
+        user: {
+          select: {
+            phone: true,
+            fname: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -51,6 +58,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         job_id: jobId,
       },
       select: {
+        job_role: true,
         school: {
           select: {
             sch_id: true,
@@ -75,6 +83,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       },
     )
+
+    if (process.env.NEXT_PUBLIC_ENV === 'prod') {
+      await sendTextMessage(
+        applied[0].user.phone,
+        `Hi ${applied[0].user.fname}, you're now being considered for the ${job?.job_role} role on Tayture. Check your dashboard for updates. Thanks!`,
+      )
+    }
 
     return res
       .status(200)

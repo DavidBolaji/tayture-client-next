@@ -27,7 +27,6 @@ const UserSection = () => {
 
   const {
     jobList,
-    jobPending,
     handleFilterChange,
     onSearchChange,
     pageSize,
