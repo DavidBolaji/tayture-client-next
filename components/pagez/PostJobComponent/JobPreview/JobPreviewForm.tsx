@@ -9,7 +9,7 @@ import { SelectInput } from '@/components/Form/SelectInput/SelectInput'
 import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
 import { degree, expL } from '@/utils/data'
 import { Field, Form, Formik } from 'formik'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { jobValidationSchema } from '../Schema/JobValidationSchema'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
@@ -18,6 +18,9 @@ import { createJob } from '@/lib/api/job'
 import { useRouter } from 'next/router'
 import { useGlobalContext } from '@/Context/store'
 import Spinner from '@/components/Spinner/Spinner'
+import { Axios } from '@/request/request'
+import { sleep } from '@/utils/helpers'
+import { Job } from '@prisma/client'
 
 dayjs.extend(utc)
 dayjs().utcOffset('local')
@@ -29,7 +32,11 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
 
   const school = queryClient.getQueryData(['school']) as any
   const jobData = queryClient.getQueryData(['jobData']) as any
+  const editJob = queryClient.getQueryData(['edit_job']) as Job
   const idz = queryClient.getQueryData(['schId'])
+  const params = useRouter()
+  const isDuplicate = params.query?.duplicate
+  const isEdit = params.query?.edit
 
   const isArrayJson = ({ ...jobData }?.job_active as string)?.includes('[')
   const { setMessage, ui, setUI } = useGlobalContext()
@@ -57,11 +64,14 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
         queryKey: ['schoolJobs', 'notifications'],
       })
       queryClient.removeQueries({ queryKey: ['jobData'] })
+
       router.push('/dashboard/school')
-      return setMessage(() => 
-        res.data.message === text ? 
-        res.data.message + ' link ()' :
-        res.data.message)
+
+      return setMessage(() =>
+        res.data.message === text
+          ? res.data.message + ' link ()'
+          : res.data.message,
+      )
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
@@ -70,9 +80,31 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
       }, 2000)
     },
   })
+
+  const { mutate: updateJob, isPending: jobPending } = useMutation({
+    mutationFn: async (data: { [key: string]: any }) => {
+      return await Axios.put(`/job/update/${editJob.job_id}`, data)
+    },
+    onSuccess: async () => {
+      setMessage(() => 'Job updated succesfully')
+      await sleep(3000)
+      router.push('/dashboard/school')
+    },
+    onError: async (err) => {
+      setMessage(() => (err as Error).message)
+      await sleep(2000)
+      setMessage(() => '')
+    },
+  })
+
   const handleSubmit = (values: any) => {
-    mutate({ ...values, jobSchoolId: idz ?? school?.sch_id })
+    if (isEdit) {
+      updateJob({ ...values, jobSchoolId: idz ?? school?.sch_id })
+    } else {
+      mutate({ ...values, jobSchoolId: idz ?? school?.sch_id })
+    }
   }
+
   const goBack = () => {
     SW.prev()
 
@@ -87,6 +119,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
       clearTimeout(time)
     }, 1500)
   }
+
   return (
     <Formik
       key={1}
@@ -105,11 +138,11 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
         <Form className="w-full">
           <div>
             <h3
-               className={` ml-1 text-[20px] text-center text-black ${regularFont.className}`}
+              className={` ml-1 text-[20px] text-center text-black ${regularFont.className}`}
             >
               Select Teacher or Administrator?
             </h3>
-            <div className='text-xs w-full text-center mb-2 italic'>
+            <div className="text-xs w-full text-center mb-2 italic">
               Note: Posted jobs cannot be edited. Please review before posting.
             </div>
             <Field
@@ -121,7 +154,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
               disabled
             />
           </div>
-          <div className='-space-y-4'>
+          <div className="-space-y-4">
             <div>
               <h3 className="mb-[10px] ml-1 text-black">Job Title</h3>
               <Field
@@ -231,7 +264,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
           </div>
           <div className="flex justify-between pb-[100px]">
             <Button
-              disabled={isPending}
+              disabled={isPending || jobPending}
               bold={false}
               hover={true}
               text={'Edit'}
@@ -240,10 +273,20 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
               type="button"
             />
             <Button
-              disabled={isPending}
+              disabled={isPending || jobPending}
               bold={false}
               hover={true}
-              text={isPending ? <Spinner /> : 'Post Job'}
+              text={
+                isPending ? (
+                  <Spinner />
+                ) : isDuplicate ? (
+                  'Duplicate Job'
+                ) : isEdit ? (
+                  'Update Job'
+                ) : (
+                  'Post Job'
+                )
+              }
               render="light"
               onClick={() => handleSubmit(values)}
               type="button"

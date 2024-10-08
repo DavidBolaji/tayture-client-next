@@ -12,14 +12,21 @@ import React from 'react'
 import { jobValidationSchema } from '../Schema/JobValidationSchema'
 import Button from '@/components/Button/Button'
 import JobRadioComponent from '@/components/Form/JobRadioComponent/JobRadioComponent'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { Job } from '@prisma/client'
 dayjs.extend(utc)
 dayjs().utcOffset('local')
 
 const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
   const queryClient = useQueryClient()
+  const {data: job} = useQuery({
+    queryKey: ['edit_job'],
+    queryFn: () => {
+      return queryClient.getQueryData(['edit_job']) as Job
+    }
+  })
   const handleSubmit = (values: any) => {
     SW.next()
 
@@ -41,19 +48,20 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
     }, 1500)
   }
 
-  return (
+return (
     <Formik
       validateOnMount={true}
       initialValues={{
-        job_role: '',
-        job_active: '',
-        job_exp: '',
-        job_qual: '',
-        job_desc: '',
-        job_min_sal: '',
-        job_max_sal: '',
-        job_resumption: '',
-        job_no_hires: '1',
+        job_title: job?.job_title ?? '',
+        job_role: job?.job_role ?? '',
+        job_active: job?.job_active ?? '',
+        job_exp: job?.job_exp ??  '',
+        job_qual: job?.job_qual ?? '',
+        job_desc: job?.job_desc ?? '',
+        job_min_sal: job?.job_min_sal ?? '',
+        job_max_sal: job?.job_max_sal ?? '',
+        job_resumption: dayjs(job?.job_resumption).isValid() ?  dayjs(job?.job_resumption, 'YYYY-MM-DD') : '',
+        job_no_hires: job?.job_no_hires ?? '1',
       }}
       onSubmit={() => {}}
       validationSchema={jobValidationSchema}
@@ -148,6 +156,7 @@ const JobOverviewForm: React.FC<{ SW: any }> = ({ SW }) => {
                 picker="date"
                 placeholder="MM/DD/YYYY"
                 minDate={dayjs(new Date(Date.now()).toISOString(), 'YYYY-MM-DD')}
+                defaultValue={dayjs(job?.job_resumption).isValid() ?  dayjs(job?.job_resumption, 'YYYY-MM-DD'): undefined}
               />
             </div>
             <div>

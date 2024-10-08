@@ -5,6 +5,7 @@ import InfoGraphicUser from '../../components/charts/InfoGraphicUser'
 import JobCard from '@/components/JobCard/JobCard'
 import { IJobSchDb } from '@/pages/api/job/types'
 import useAssign from '@/hooks/useAssign'
+import { FaTimes } from 'react-icons/fa'
 
 const UserSection = () => {
   const {
@@ -77,13 +78,11 @@ const UserSection = () => {
             setJobDrawer(false)
           }}
           extra={
-            <div
-              className="flex justify-between items-center"
-              style={{ marginBottom: 16 }}
-            >
+            <div className="flex justify-between items-center">
               <Input
                 placeholder={`Search by ${filterBy}`}
                 onChange={onSearchChange}
+                className="w-40"
                 allowClear
               />
               <Select
