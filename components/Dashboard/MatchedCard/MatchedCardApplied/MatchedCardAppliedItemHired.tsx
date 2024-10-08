@@ -15,7 +15,7 @@ const MatchedCardAppliedItemHired: React.FC<IMatchedCardAppliedItem> = ({
         onClick={() => {
           setOpen!(true)
         }}
-        className="col-span-1 scale-90 text-center -translate-y-2 translate-x-2"
+        className="col-span-1 scale-90 z-10 text-center -translate-y-2 translate-x-2"
       >
         {!cur?.job?.status ? (
           <Switch disabled loading={hirePending} />
