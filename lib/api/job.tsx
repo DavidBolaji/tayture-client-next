@@ -22,8 +22,10 @@ export const getClientJobs = async ({
   searchTerm = '',
   filterBy = '',
   currentPage = 1,
-  pageSize = '',
+  pageSize: p = 0,
 } = {}) => {
+  let pageSize:any;
+  pageSize = (p === 0 ? '' : p)
   const result = await Axios.get('/job/verified', {
     params: { searchTerm, filterBy, currentPage, pageSize },
   })
