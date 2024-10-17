@@ -94,6 +94,9 @@ export default async function handler(
       },
       applied: true,
     },
+    orderBy: {
+      createdAt: 'desc', // Order by latest created first
+    },
    })
   }
 

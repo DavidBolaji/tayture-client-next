@@ -31,7 +31,7 @@ const JobApplication: React.FC<JobApplicationProps> = ({
       if (type) {
         req = await getClientJobsByType(type!)
       } else {
-        req = await getClientJobs()
+        req = await getClientJobs({})
       }
 
       const cur = queryClient.getQueryData(['activeJob'])

@@ -22,7 +22,7 @@ export const getClientJobs = async ({
   searchTerm = '',
   filterBy = '',
   currentPage = 1,
-  pageSize = 10,
+  pageSize = '',
 } = {}) => {
   const result = await Axios.get('/job/verified', {
     params: { searchTerm, filterBy, currentPage, pageSize },

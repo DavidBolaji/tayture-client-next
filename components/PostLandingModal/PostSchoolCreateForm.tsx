@@ -25,7 +25,10 @@ const initialValues = {
   sch_name: '',
 }
 
-const PostSchoolCreateForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move = true }) => {
+const PostSchoolCreateForm: React.FC<{ SW: any; move?: boolean }> = ({
+  SW,
+  move = true,
+}) => {
   const { img, setCreateSch } = useGlobalContext()
   const noImage = img.trim().length < 1
   const handleSubmit = (data: Partial<ISchData>) => {
@@ -33,26 +36,29 @@ const PostSchoolCreateForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move 
     document.getElementById('create')?.scrollIntoView({
       behavior: 'smooth',
     })
-   
+
     setTimeout(() => {
       SW?.next()
     }, 2500)
-
   }
   return (
-    <div id='hhhty'>
-      <div className={`${regularFont.className} max-w-[387px] text-center mx-auto`}>
+    <div id="hhhty">
+      <div
+        className={`${regularFont.className} max-w-[387px] text-center mx-auto`}
+      >
         <h3 className="md:text-[24px] text-[20px] text-center font-[600] text-black_400">
           Add a school
         </h3>
 
-        {!move ? <p className="text-center text-ash_400 md:text-[16px] text-[12px] mx-auto">
-          You haven&apos;t created a school before, so you&apos;ll have to create school to fund your
-          wallet
-        </p>: <p className="text-center text-ash_400 md:text-[16px] text-[12px] mx-auto">
-          You haven&apos;t posted a job before, so you&apos;ll have to add your
-          school information
-        </p>}
+        {!move ? (
+          <p className="text-center text-ash_400 md:text-[16px] text-[12px] mx-auto">
+            Add a school to fund your wallet
+          </p>
+        ) : (
+          <p className="text-center text-ash_400 md:text-[16px] text-[12px] mx-auto">
+            Add a school to post a job
+          </p>
+        )}
       </div>
       {/* <h2 className="w-full font-br font-bold">School information</h2> */}
       <div className="pt-3 pb-5 flex justify-center">
@@ -74,7 +80,9 @@ const PostSchoolCreateForm: React.FC<{ SW: any, move?: boolean }> = ({ SW, move 
               type={'text'}
               text={'School name'}
             />
-            <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>No of employees</h3>
+            <h3 className={`ml-1 mb-1 text-[14px] font-[600]`}>
+              No of employees
+            </h3>
             <Field
               name="sch_no_emp"
               as={SelectInput}

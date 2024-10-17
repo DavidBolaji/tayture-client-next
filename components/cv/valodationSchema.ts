@@ -46,7 +46,7 @@ export const cvSchemaThree = Yup.object().shape({
   education: Yup.array()
     .of(
       Yup.object().shape({
-        degree: Yup.string().required('Degree is required'),
+        degree: Yup.string().required('Required'),
         startYear: Yup.string().required('Start year is required'),
         endYear: Yup.string() // Start year as a number
           .required('End year is required')

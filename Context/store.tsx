@@ -10,7 +10,6 @@ import {
 } from 'react'
 import { IUser } from '@/pages/api/users/types'
 import { ques as quesData } from './data'
-import { useQueryClient } from '@tanstack/react-query'
 
 const INIT = {
   fname: '',
@@ -286,10 +285,10 @@ const one = {
 }
 
 const three = {
-  foreground: '#e48d8d',
-  background: '#00308F',
+  foreground: '#00308F',
+  background: '#ffffff',
   colorParagraph: '#000',
-  textOne: '#fff'
+  textOne: '#000'
 }
 
 export const GlobalContextProvider = ({ children }: PropsWithChildren) => {

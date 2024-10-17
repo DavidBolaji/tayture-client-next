@@ -137,11 +137,6 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
       {({ values, isValid }) => (
         <Form className="w-full">
           <div>
-            <h3
-              className={` ml-1 text-[20px] text-center text-black ${regularFont.className}`}
-            >
-              Select Teacher or Administrator?
-            </h3>
             <div className="text-xs w-full text-center mb-2 italic">
               Note: Posted jobs cannot be edited. Please review before posting.
             </div>
