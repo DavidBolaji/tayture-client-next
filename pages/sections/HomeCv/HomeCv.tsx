@@ -15,13 +15,13 @@ const HomeCv = () => {
       left={
         <div className="lg:px-0 px-5 flex items-center -translate-y-5  lg:scale-100 justify-center xl:justify-start xl:mb-0 lg:translate-x-0 -translate-x-2">
           <CardComponent
-            src={Images.Transform_Max_Image}
+            src={Images.CVImage}
             alt="tayture transform"
           />
         </div>
       }
       right={
-        <div className="xl:max-w-[40rem] xl:w-[40rem] flex flex-col text-center lg:text-left justify-center lg:mt-0 -mt-16 md:-mt-4">
+        <div className="xl:max-w-[40rem] xl:w-[40rem] flex flex-col text-center lg:text-left justify-center lg:mt-0 -mt-8 md:-mt-4">
           <h2
             className={`text-black_200 mt-5 text-center lg:text-left text-[10px] lg:text-[20px] tracking-[2.4px] lg:tracking-[3.48px] lg:translate-x-0 translate-x-4 ${boldFont.className}`}
           >
@@ -30,7 +30,7 @@ const HomeCv = () => {
           <h2
             className={`-ml-1 text-black_200 font-[700] text-[24px] lg:text-[40px] mb-[4px] lg:text-left text-center  lg:translate-x-0 translate-x-4  ${boldFont.className}`}
           >
-            Craete Your{' '}
+            Create Your{' '}
             <span className={`text-orange ${regularFont.className}`}>
               {' '}
               CV

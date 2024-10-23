@@ -30,6 +30,7 @@ import GalleryEmpty from "./images/tabler_photo.png";
 import Dart from "./images/dart.png";
 import Dart2 from "./images/dart2.png";
 import CV from './images/cvv.png'
+import CVImage from './images/cv_image.jpg'
 import CV2 from './images/cvv2.png'
 import CV3 from './images/cv3.png'
 import CV4 from './images/cv4.png'
@@ -71,5 +72,6 @@ export const Images = {
   CV2,
   CV3,
   CV4,
-  Prolife
+  Prolife,
+  CVImage
 };
