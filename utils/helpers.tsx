@@ -846,7 +846,10 @@ export const prepareCvDate = (data: any) => {
         location: wrk.location,
         roles: wrk.roles.map((role: any) => role.role),
       })) ?? [],
-    languages: [],
+    languages: [{
+      name: 'English',
+      scale: 80,
+    }],
     hobbies: [],
     certificates: [],
   }

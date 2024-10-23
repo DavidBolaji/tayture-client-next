@@ -160,6 +160,18 @@ model Coupoun {
   @@index([value])
 }
 
+model CVDownloadProcess {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  started   Boolean  @default(true)
+  ended     Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
 model Education {
   id         String @id @default(uuid())
   degree     String
@@ -476,6 +488,7 @@ model User {
   hired        Hired[]
   transaction  Transaction[]
   schedule     Schedule[]
+  cvDownloadProcesses CVDownloadProcess[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

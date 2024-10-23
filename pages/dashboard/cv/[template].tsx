@@ -28,7 +28,7 @@ import { useGlobalContext } from '@/Context/store'
 import DashboardLayout from '@/components/layouts/DashboardLayout'
 import ColorPalete from '@/components/ColorPalete'
 import { useRouter } from 'next/router'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { IProf } from '../profile'
 import Spinner from '@/components/Spinner/Spinner'
 
@@ -38,6 +38,7 @@ const ResumePage = () => {
   const [currentStep, setCurrentStep] = useState(0)
   const [steps, setSteps] = useState(initialSteps)
   const [formValues, setFormValues] = useState<Record<string, any>>({})
+  const [cvReview, setCvReview] = useState(false)
   const [cvData, setCVData] = useState<{
     data: IProfile
     colorList: ColorList
@@ -50,6 +51,7 @@ const ResumePage = () => {
   const param = useParams()
   const router = useRouter()
   const template = param?.template
+  const queryClient = useQueryClient()
 
   const { data, isPending } = useQuery({
     queryKey: ['prof'],
@@ -66,11 +68,22 @@ const ResumePage = () => {
     }
   }, [])
 
+  const startProcess = useCallback(async () => {
+    const res = await Axios.post('/cv/process')
+    return res.data.processId
+  }, [])
+
   useEffect(() => {
     if (data) {
       r(data)
     }
   }, [data, r])
+
+  useEffect(() => {
+    startProcess().then((id) => {
+      queryClient.setQueryData(['process'], id)
+    })
+  }, [startProcess, queryClient])
 
   const handleSubmit = (values: any) => {
     const orderedValues = steps.reduce((acc, step) => {
@@ -90,6 +103,7 @@ const ResumePage = () => {
 
   const handleDownload = async () => {
     const key = 'cv'
+    const processId = queryClient.getQueryData(['process'])
     try {
       messageApi.open({
         key,
@@ -97,10 +111,11 @@ const ResumePage = () => {
         content: 'Please do not leave page CV is being generated...',
         duration: 0,
       })
-      await Axios.post(`/cv?template=${template}`, {
+      await Axios.post(`/cv?template=${template}&review=${cvReview}`, {
         ...cvData,
         colorList: colorList[template as hash],
       })
+      await Axios.patch(`/cv/${processId}`)
       messageApi.open({
         key,
         type: 'success',
@@ -167,11 +182,24 @@ const ResumePage = () => {
             close={() => setOpen(false)}
             ok={handleDownload}
           >
-            <div className="mt-10"></div>
+            <div className="mt-14"></div>
+            <div className="absolute top-2 left-0 h-10 py-5 pr-2 bg-transparent z-30 w-full animate-in fade-in duration-500 flex items-center">
+              <input
+                type="checkbox"
+                id="cvReview"
+                className="ml-2 bg-white"
+                onChange={(e) => {
+                  setCvReview(e.target.checked)
+                }}
+              />
+              <label htmlFor="cvReview" className="text-sm bg-white py-3 px-2 block w-full ">
+                Review my CV
+              </label>
+            </div>
             {template && (
-              <div className="flex items-center w-full justify-around -translate-x-8 -translate-y-8">
+              <div className="flex items-center w-full justify-around -translate-x-14 -translate-y-8">
                 <div className="flex-row jus items-center justify-center">
-                  <div className='text-xs'>Back</div>
+                  <div className="text-xs">Back</div>
                   <div className="flex justify-center mx-auto">
                     <ColorPalete
                       background="background"
@@ -180,21 +208,21 @@ const ResumePage = () => {
                   </div>
                 </div>
                 <div className="flex-row jus items-center justify-center">
-                  <span className='text-xs'>Front</span>
+                  <span className="text-xs">Front</span>
                   <ColorPalete
                     background="foreground"
                     template={template as string}
                   />
                 </div>
                 <div className="flex-row jus items-center justify-center">
-                  <span className='text-xs'>Text 1</span>
+                  <span className="text-xs">Text 1</span>
                   <ColorPalete
                     background="textOne"
                     template={template as string}
                   />
                 </div>
                 <div className="flex-row jus items-center justify-center">
-                  <span className='text-xs'>Text2</span>
+                  <span className="text-xs">Text2</span>
                   <ColorPalete
                     background="colorParagraph"
                     template={template as string}
@@ -203,6 +231,7 @@ const ResumePage = () => {
               </div>
             )}
             <CVPreview {...cvData!} />
+           
           </HandleCVModal>
         </>
       )}

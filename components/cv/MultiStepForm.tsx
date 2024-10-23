@@ -9,6 +9,7 @@ import { initialHash, validationHash } from '@/utils/helpers'
 import { useEffect, useState } from 'react'
 import { cvValuesOne } from './data'
 import { AnimatePresence, motion } from 'framer-motion'
+import { debounce } from 'lodash';
 
 interface MultiStepFormProps {
   currentStep: number
@@ -29,10 +30,19 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
 }) => {
   const [isStepValid, setIsStepValid] = useState<boolean[]>([])
 
+  const debouncedValidateAllSteps = debounce(async (values: any) => {
+    const stepValidations = await Promise.all(
+      steps.map((step) =>
+        validationHash[step.id as keyof typeof validationHash].isValid(values)
+      )
+    );
+    setIsStepValid(stepValidations);
+  }, 300);
 
   useEffect(() => {
-    setIsStepValid(new Array(steps.length).fill(false));
-  }, [steps]);
+    debouncedValidateAllSteps(formValues);
+  }, [formValues, steps]);
+
 
   const handleSubmit = async (values: any, actions: FormikHelpers<any>) => {
     const updatedValues = { ...formValues, ...values }
@@ -45,7 +55,6 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
         submit(updatedValues)
       } else {
         actions.setSubmitting(false)
-        // Optionally, you can show an error message here
       }
     } else {
       setCurrentStep(currentStep + 1)

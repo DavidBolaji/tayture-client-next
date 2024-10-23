@@ -4,9 +4,10 @@ import UserSection from './sections/users/UserSection'
 import CategoriesSection from './sections/categories/CategoriesSection'
 import BlogsSection from './sections/blogs/BlogsSection'
 import { Segmented } from 'antd'
-import { AppstoreOutlined, BarsOutlined, UserOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, BarsOutlined, FileOutlined, UserOutlined } from '@ant-design/icons'
 import AppliedSection from './sections/applied/AppliedSection'
 import JobsSection from './sections/jobs/JobSextion'
+import CVSection from './sections/cv/CVSection'
 
 const AdminPage = () => {
   const [path, setPath] = useState('School')
@@ -31,6 +32,11 @@ const AdminPage = () => {
             { label: 'Blog', value: 'Blog', icon: <AppstoreOutlined /> },
             { label: 'Applied', value: 'Applied', icon: <AppstoreOutlined /> },
             { label: 'Jobs', value: 'Jobs', icon: <AppstoreOutlined /> },
+            {
+              label: 'CV',
+              value: 'CVDownloads',
+              icon: <FileOutlined />,
+            },
           ]}
         />
       </div>
@@ -41,6 +47,7 @@ const AdminPage = () => {
         {path === 'Category' && <CategoriesSection />}
         {path === 'Applied' && <AppliedSection />}
         {path === 'Jobs' && <JobsSection />}
+        {path === 'CVDownloads' && <CVSection />}
       </div>
     </div>
   )

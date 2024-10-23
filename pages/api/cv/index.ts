@@ -3,7 +3,7 @@ import axios from 'axios'
 import verifyToken from '@/middleware/verifyToken'
 
 const url =
-  process.env.NEXT_PUBLIC_CV_ENV === 'dev'
+  process.env.NEXT_PUBLIC_CV_ENV !== 'dev'
     ? 'http://localhost:4000/api'
     : process.env.NEXT_PUBLIC_RENDER_CV
 let host =
@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Method not allowed' })
 
   const { colorList, data, email } = req.body
-  const { template } = req.query
+  const { template, review } = req.query
   const location = data.location.split(',')
 
   // Start non-essential updates as async tasks
@@ -49,8 +49,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }),
   ]
 
+  console.log(review)
+
   try {
-    await axios.post(`${url}/${template}`, { colorList, data, email }),
+    await axios.post(`${url}/${template}`, { colorList, data, email, review }),
     res.status(200).send({ message: 'success' })
 
     // Non-blocking background tasks - don't await these

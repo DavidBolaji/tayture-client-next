@@ -17,13 +17,11 @@ import { ConfigProvider } from 'antd'
 import InputDateComponent from '@/pages/dashboard/profile/components/InputDateComponent'
 import dayjs from 'dayjs'
 
-import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
 import { RangePickerProps } from 'antd/es/date-picker'
 
-
 import { motion } from 'framer-motion'
-import { useState } from 'react'
 import FormError from '@/components/Form/FormError/FormError'
+import StyledTextarea from '@/components/Form/TextareaInput/StyledTextarea'
 
 const EmploymentCVForm: React.FC<ICVForm & { formik: FormikProps<any> }> = ({
   name,
@@ -198,7 +196,7 @@ const EmploymentCVForm: React.FC<ICVForm & { formik: FormikProps<any> }> = ({
               (role: string, roleIndex: number) => (
                 <div key={roleIndex} className="flex gap-x-4">
                   <div className="w-full h-full">
-                    <StyledTextarea
+                  <StyledTextarea
                       name={`${name}[${index}].roles[${roleIndex}]`}
                       value={role}
                       onChange={formik.handleChange}

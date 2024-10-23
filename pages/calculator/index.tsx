@@ -246,12 +246,10 @@ const Calculator = () => {
                   <Image src={Images.Transition} alt="transition" />
                 </div>
                 <p className="dsm:text-[24px] font-[500] text-black_400 dsm:max-w-[600px]">
-                  Great work on completing the {path[cur]} Path quiz Now,
-                  le&apos;s focus on your role as a {path[cur + 1]}
+                  Great work completing the {path[cur]}&apos;s questions.
+                  Le&apos;s move to the {path[cur + 1]}&apos;s questions.
                 </p>
-                <p className="dsm:text-[20px] text-ash_400 mb-5">
-                  Click continue to go the {path[cur + 1]} path quiz
-                </p>
+               
                 <Button
                   bold={false}
                   text={loading ? <Spinner /> : 'continue'}

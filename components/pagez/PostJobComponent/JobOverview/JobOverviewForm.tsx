@@ -88,7 +88,7 @@ return (
               <Field
                 name="job_title"
                 as={StyledInput}
-                placeholder="job title"
+                placeholder="Job title"
                 type={'text'}
                 maxLength={30}
               />
