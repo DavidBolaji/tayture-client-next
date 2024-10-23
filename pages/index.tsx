@@ -12,6 +12,7 @@ import Transform from './sections/Transform/Transform'
 import HomeLayout from '@/components/layouts/HomeLayout'
 import Meta from './dashboard/profile/components/Meta'
 import { Images } from '@/assets'
+import HomeCv from './sections/HomeCv/HomeCv'
 
 const Home = () => {
   return (
@@ -27,6 +28,7 @@ const Home = () => {
       <Hero />
       <Learnig />
       <Hiring />
+      <HomeCv />
       <Question />
       <Transform />
       <Empower />
