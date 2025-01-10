@@ -1,4 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query'
+
 import axios from 'axios'
 import { parseCookies } from 'nookies'
 

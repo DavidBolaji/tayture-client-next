@@ -19,6 +19,7 @@ const StyledDropdown = styled(Dropdown)`
   .ant-dropdown {
     width: 390px !important;
   }
+     
   .anticon.anticon-down > svg {
     color: #575757;
     transform: translateY(2px);
