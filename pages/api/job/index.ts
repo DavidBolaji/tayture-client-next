@@ -1,31 +1,38 @@
 import db from '@/db/db'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { IJobSchDb } from './types'
-
-type Data = {
-  message: string
-  job?: IJobSchDb[]
-}
+import { Prisma } from '@prisma/client'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse,
 ) {
-  if (req.method !== 'GET')
+  if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' })
-  let jobs;
+  }
 
-  if(req.query.title) {
-    jobs = await db.job.findMany({
-      where: {
-        job_title: {
-          contains: (req.query.title as string).toLowerCase(),
-        },
-        school: {
-          sch_verified: 1,
-        },
-        active: true
-      },
+  const { title, location, minPrice, maxPrice } = req.query
+
+  const whereClause: Prisma.JobWhereInput = {
+    school: {
+      sch_verified: 1,
+    },
+    active: true,
+  }
+
+  if (title) {
+    whereClause.job_title = {
+      contains: (title as string).toLowerCase(),
+    }
+  }
+
+  if (location) {
+    whereClause!.school!.sch_state = location as string
+  }
+
+  try {
+    let jobs = await db.job.findMany({
+      where: whereClause,
       select: {
         job_id: true,
         job_title: true,
@@ -50,84 +57,56 @@ export default async function handler(
             sch_state: true,
             sch_lga: true,
             sch_address: true,
-            landmark: true
+            landmark: true,
           },
         },
         applied: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
 
-  } else {
-   jobs = await db.job.findMany({
-    where: {
-      school: {
-        sch_verified: 1,
-      },
-      active: true
-    },
-    select: {
-      job_id: true,
-      job_title: true,
-      job_role: true,
-      job_active: true,
-      job_desc: true,
-      job_min_sal: true,
-      job_max_sal: true,
-      job_exp: true,
-      job_qual: true,
-      job_resumption: true,
-      job_no_hires: true,
-      jobSchoolId: true,
-      jobUserzId: true,
-      createdAt: true,
-      updatedAt: true,
-      school: {
-        select: {
-          sch_id: true,
-          sch_name: true,
-          sch_city: true,
-          sch_state: true,
-          sch_lga: true,
-          sch_address: true,
-          landmark: true
-        },
-      },
-      applied: true,
-    },
-    orderBy: {
-      createdAt: 'desc', // Order by latest created first
-    },
-   })
-  }
+    // Convert salary strings to numbers and filter manually
+    jobs = jobs.filter((job) => {
+      const minSalary = parseFloat(job.job_min_sal) || 0
+      const maxSalary = parseFloat(job.job_max_sal) || 0
 
-    // Group by school and calculate the index for each job
+      if (minPrice && minSalary < Number(minPrice)) return false
+      if (maxPrice && maxSalary > Number(maxPrice)) return false
+
+      return true
+    })
+
+    // Generate unique job tags
     const schoolIndexMap = new Map<string, number>()
     const jobsWithTag = jobs.map((job) => {
       const schoolId = job.school.sch_id
       const schoolName = job.school.sch_name.split(' ')
-      const schoolAcro = schoolName.map(el => el[0]?.toUpperCase())
-  
-  
-      // Initialize or increment the job index for the school
+      const schoolAcro = schoolName.map((el) => el[0]?.toUpperCase())
+
       const jobIndex = (schoolIndexMap.get(schoolId) || 0) + 1
       schoolIndexMap.set(schoolId, jobIndex)
-  
-      // Format the job tag
-      const datePart = job.createdAt.toISOString().slice(2, 10).replace(/-/g, '') // e.g., 08092024
-      const idxPart = jobIndex.toString().padStart(2, '0') // Pad index with leading zero if needed
-  
+
+      const datePart = job.createdAt
+        .toISOString()
+        .slice(2, 10)
+        .replace(/-/g, '')
+      const idxPart = jobIndex.toString().padStart(2, '0')
       const tag = `${datePart}-${schoolAcro.join('').slice(0, 3)}-${idxPart}`
-  
-  
+
       return {
         ...job,
         tag,
-        idx: jobIndex
+        idx: jobIndex,
       }
     })
 
-
-  return res
-    .status(200)
-    .json({ message: 'Succesful', job: jobsWithTag as unknown as IJobSchDb[] })
+    return res.status(200).json({
+      message: 'Successful',
+      job: jobsWithTag as unknown as IJobSchDb[],
+    })
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error })
+  }
 }
