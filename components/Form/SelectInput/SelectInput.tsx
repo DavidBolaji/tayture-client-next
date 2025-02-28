@@ -73,7 +73,7 @@ export const SelectInput: React.FC<ISelect> = ({
                   handleBlur(e)
                   setFieldTouched(name!)
                 }
-              : (e) => (rest as { onBlur: (e: any) => void }).onBlur(e)!
+              : (e) => (rest as { onBlur: (e: any) => void })?.onBlur(e)!
           }
           className={`w-full h-full ring-transparent -font-br ${regularFont.className}`}
           optionFilterProp="children"

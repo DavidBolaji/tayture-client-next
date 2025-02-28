@@ -6,6 +6,7 @@ import Wrapper from '@/components/Wrapper/Wrapper'
 import Career from './components/Career'
 import { Footer } from '@/components/Footer'
 import JobRelated from '@/components/Dashboard/JobRelated/JobRelated'
+import FilterModal from '@/components/JobSearch/components/filter-modal'
 
 const FindJob = () => {
   return (
@@ -23,6 +24,7 @@ const FindJob = () => {
         </div>
       </Wrapper>
       <Footer />
+      <FilterModal />
     </div>
   )
 }

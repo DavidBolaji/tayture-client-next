@@ -10,6 +10,7 @@ const useAddress = () => {
         const format = req.data.data.map((e: any) => ({
           key: e.name,
           value: e.name,
+          label: e.name,
         }))
         setStates([...format])
       } catch (error: any) {

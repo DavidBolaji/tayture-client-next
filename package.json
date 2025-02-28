@@ -104,6 +104,7 @@
     "puppeteer": "^22.4.0",
     "puppeteer-core": "19.6.0",
     "rc-picker": "^4.0.0-alpha.37",
+    "rc-select": "^14.16.6",
     "react": "18.2.0",
     "react-avatar": "^5.0.3",
     "react-beautiful-dnd": "^13.1.1",

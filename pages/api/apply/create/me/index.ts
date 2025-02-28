@@ -1,5 +1,6 @@
 import db from '@/db/db'
 import { sendTextMessage } from '@/lib/services/user'
+import sendAppliedEmail from '@/mail/sendAppliedEmail'
 import verifyToken from '@/middleware/verifyToken'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import cron from 'node-cron'
@@ -135,6 +136,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (scheduledTasks[!userId ? req.authUser?.id : userId][jobId]) {
       scheduledTasks[!userId ? req.authUser?.id : userId][jobId].stop()
     }
+
+    const school = await db.school.findUnique({
+      where: { sch_id: applied.schoolId },
+      select: { user: { select: { email: true } } },
+    })
+
+    await sendAppliedEmail({ email: school?.user?.email as string })
 
     //'0 0 */14 * *' 2weeks
     //'*/2 * * * *' 2 minutes
