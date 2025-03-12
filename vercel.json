@@ -1,7 +1,7 @@
 {
     "buildCommand": "bun run build",
     "installCommand": "bun install --legacy-peer-deps",
-    "cron": [{
+    "crons": [{
             "path": "/api/cron/email",
             "schedule": "0 19 * * 5"
         },

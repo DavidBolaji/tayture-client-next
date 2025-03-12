@@ -53,7 +53,7 @@ const MatchedCardAppliedItemSchedule: React.FC<IMatchedCardAppliedItem> = ({
 
   return (
     <>
-      <div className="col-span-2 text-center ml-auto">
+      <div className="col-span-1 text-center ml-auto">
         {cur.job && (
           <button
             disabled={disabled}

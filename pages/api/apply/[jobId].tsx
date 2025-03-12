@@ -23,21 +23,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             id: true,
             fname: true,
             email: true,
+            createdAt: true,
             hired: {
               where: {
-                jobId: req.query.jobId as string
-              }
+                jobId: req.query.jobId as string,
+              },
             },
             profile: {
               select: {
                 country: true,
                 state: true,
                 city: true,
-                lga: true
-              }
-            }
+                lga: true,
+              },
+            },
           },
-         
         },
         job: {
           include: {
@@ -48,7 +48,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               include: {
                 user: true,
               },
-              
             },
             school: {
               select: {
@@ -56,11 +55,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 sch_state: true,
                 sch_city: true,
                 sch_lga: true,
-              }
+              },
             },
           },
-         
-        }, 
+        },
       },
       orderBy: [
         {
@@ -72,7 +70,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       ],
     })
 
-  
     const [applied] = await Promise.all([req1])
     return res.status(200).json({
       message: 'Applied fetched succesfully',
@@ -81,7 +78,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ...rest,
           user,
         })),
-        job: applied[0].job
+        job: applied[0].job,
       },
     })
   } catch (error) {

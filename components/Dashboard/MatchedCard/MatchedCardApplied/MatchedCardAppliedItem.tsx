@@ -8,10 +8,10 @@ import MatchedCardAppliedItemQual from './MatchedCardAppliedItemQual'
 import MatchedCardAppliedItemLoc from './MatchedCardAppliedItemLoc'
 import MatchedCardAppliedItemSchedule from './MatchedCardAppliedItemSchedule'
 import MatchedCardAppliedItemHired from './MatchedCardAppliedItemHired'
-import { useGlobalContext } from '@/Context/store'
 import { useQueryClient } from '@tanstack/react-query'
 import { User } from '@prisma/client'
 import MatchedCardAppliedItemRating from './MatchedCardAppliedItemRating'
+import MatchedCardDate from './MatchedCardDate'
 
 export interface IMatchedCardAppliedItem {
   match: any
@@ -21,7 +21,7 @@ const MatchedCardAppliedItem: React.FC<IMatchedCardAppliedItem> = ({
   match,
 }) => {
   const { cur } = useMatchedContet()
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   const user = queryClient.getQueryData(['user']) as User
   return (
     <div className="relative">
@@ -38,10 +38,14 @@ const MatchedCardAppliedItem: React.FC<IMatchedCardAppliedItem> = ({
         <MatchedCardAppliedItemQual match={match} />
         <MatchedCardAppliedItemLoc match={match} />
         <MatchedCardAppliedItemSchedule match={match} />
+        <MatchedCardDate match={match} />
         <MatchedCardAppliedItemHired match={match} />
-        {user?.role && <div className='text-lg absolute -bottom-10 right-8 z-10'>
-          <MatchedCardAppliedItemRating match={match} />
-        </div>}
+
+        {user?.role && (
+          <div className="text-lg absolute -bottom-10 right-8 z-10">
+            <MatchedCardAppliedItemRating match={match} />
+          </div>
+        )}
       </div>
     </div>
   )

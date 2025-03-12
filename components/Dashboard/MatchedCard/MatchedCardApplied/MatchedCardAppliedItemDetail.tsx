@@ -12,17 +12,18 @@ import { useRouter } from 'next/router'
 const MatchedCardAppliedItemDetail: React.FC<IMatchedCardAppliedItem> = ({
   match,
 }) => {
-  const { cur, sufficientBalancePayment, inSufficientPayment, amt, jobId } = useMatchedContet();
+  const { cur, sufficientBalancePayment, inSufficientPayment, amt, jobId } =
+    useMatchedContet()
   const router = useRouter()
-  const redirect = () => router.push(`/dashboard/school/manage/${jobId}?default=3`)
+  const redirect = () =>
+    router.push(`/dashboard/school/manage/${jobId}?default=3`)
 
-  
   const handleClick = cur?.job?.status
     ? () => console.log('object')
     : String(amt).trim().length > 0
     ? () => sufficientBalancePayment!()
     : () => inSufficientPayment!()
-  
+
   return (
     <div className="col-span-3">
       <ListComponent

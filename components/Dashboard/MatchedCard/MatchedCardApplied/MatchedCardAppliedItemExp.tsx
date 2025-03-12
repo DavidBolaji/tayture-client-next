@@ -9,7 +9,7 @@ const MatchedCardAppliedItemExp: React.FC<IMatchedCardAppliedItem> = ({
 }) => {
   const { cur } = useMatchedContet()
   return (
-    <div className="col-span-2">
+    <div className="col-span-1">
       {checkIsExpMatch({
         exp: match.exp,
         job: cur.job.job_exp,

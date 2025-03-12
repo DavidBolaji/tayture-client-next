@@ -9,7 +9,6 @@ import { useGlobalContext } from '@/Context/store'
 import { useMatchedContet } from '@/Context/matchedCard/matched-card-context'
 import { FaCircleInfo } from 'react-icons/fa6'
 import { AMOUNT_PER_HIRE, formatNumber } from '@/utils/helpers'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 const MatchedCardAppliedItemPayment = () => {
