@@ -17,12 +17,11 @@ const FilterModal = () => {
       const req = await Axios.get(
         `/job?location=${filter?.location || ''}&minPrice=${
           filter?.minPrice || ''
-        }&maxPrice=${filter?.maxPrice || ''}`,
+        }`,
       )
       return req.data
     },
     onSuccess: (res) => {
-      console.log('[RES]', res)
       queryClient.setQueryData(['activeJob'], res.job[0])
       queryClient.setQueryData(['jobs'], res.job)
     },
@@ -59,20 +58,11 @@ const FilterModal = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block mb-1">Min Price</label>
+        <label className="block mb-1">Salary</label>
         <Input
           type="number"
           value={filter?.minPrice}
           onChange={(e) => setQuery('minPrice', e.target.value)}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-1">Max Price</label>
-        <Input
-          type="number"
-          value={filter?.maxPrice}
-          onChange={(e) => setQuery('maxPrice', e.target.value)}
         />
       </div>
     </Modal>

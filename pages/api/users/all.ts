@@ -18,12 +18,16 @@ export default async function handler(
     const user = await db.user.findMany({
       select: {
         fname: true,
-        phone: true
-      }
+        phone: true,
+        email: true,
+      },
     })
-    
+
     console.log(user)
-    res.status(200).json({ message: 'Successful', user: user.filter(u => isValidPhoneNumber(u.phone)) })
+    res.status(200).json({
+      message: 'Successful',
+      user: user.filter((u) => isValidPhoneNumber(u.phone)),
+    })
   } catch (error) {
     res.status(400).json({
       message: `An error occured: ${(error as Error).message}`,

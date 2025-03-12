@@ -11,7 +11,7 @@ export default async function handler(
     return res.status(405).json({ message: 'Method not allowed' })
   }
 
-  const { title, location, minPrice, maxPrice } = req.query
+  const { title, location, minPrice } = req.query
 
   const whereClause: Prisma.JobWhereInput = {
     school: {
@@ -72,8 +72,11 @@ export default async function handler(
       const minSalary = parseFloat(job.job_min_sal) || 0
       const maxSalary = parseFloat(job.job_max_sal) || 0
 
-      if (minPrice && minSalary < Number(minPrice)) return false
-      if (maxPrice && maxSalary > Number(maxPrice)) return false
+      if (minPrice) {
+        const minPriceNum = Number(minPrice)
+        // Check if the minPrice falls within the salary range
+        if (minSalary > minPriceNum || maxSalary < minPriceNum) return false
+      }
 
       return true
     })

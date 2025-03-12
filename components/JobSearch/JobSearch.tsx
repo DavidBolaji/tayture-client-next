@@ -31,7 +31,7 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
       const req = await Axios.get(
         `/job?title=${title}&location=${filter?.location || ''}&minPrice=${
           filter?.minPrice || ''
-        }&maxPrice=${filter?.maxPrice || ''}`,
+        }`,
       )
       return req.data
     },
@@ -47,7 +47,7 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
       const req = await Axios.get(
         `/job?title=${title}&location=${filter?.location || ''}&minPrice=${
           filter?.minPrice || ''
-        }&maxPrice=${filter?.maxPrice || ''}`,
+        }`,
       )
       return req.data
     },
@@ -180,9 +180,6 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
           )}
           {filter?.minPrice && (
             <span className="mr-2">Min Price: {filter?.minPrice}</span>
-          )}
-          {filter?.maxPrice && (
-            <span className="mr-2">Max Price: {filter?.maxPrice}</span>
           )}
         </div>
       </div>
