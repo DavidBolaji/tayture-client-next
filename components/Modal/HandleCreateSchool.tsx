@@ -8,7 +8,6 @@ import PostLandingModal from '../PostLandingModal/PostLandingModal'
 import PostSchoolCreateForm from '../PostLandingModal/PostSchoolCreateForm'
 import PostSchoolAdminForm from '../PostLandingModal/PostSchoolAdminForm'
 
-
 export const checkPath = (path: string | null) => {
   if (!path) return false
   return true
@@ -43,7 +42,7 @@ const HandleCreateSchool = () => {
     >
       <Stepper init={setSW} className="overflow-hidden w-full">
         <PostSchoolCreateForm SW={SW} move={false} />
-        <PostSchoolAdminForm SW={SW} move={false}  />
+        <PostSchoolAdminForm SW={SW} move={false} />
       </Stepper>
     </PostLandingModal>
   )

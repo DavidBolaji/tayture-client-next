@@ -23,6 +23,7 @@ const initialValues = {
   sch_url: '',
   sch_phone: '',
   sch_name: '',
+  country: '',
 }
 
 const PostSchoolCreateForm: React.FC<{ SW: any; move?: boolean }> = ({
@@ -30,7 +31,7 @@ const PostSchoolCreateForm: React.FC<{ SW: any; move?: boolean }> = ({
   move = true,
 }) => {
   const { img, setCreateSch } = useGlobalContext()
-  const noImage = img.trim().length < 1
+  const noImage = img?.trim()?.length < 1
   const handleSubmit = (data: Partial<ISchData>) => {
     setCreateSch(() => data)
     document.getElementById('create')?.scrollIntoView({
@@ -90,11 +91,13 @@ const PostSchoolCreateForm: React.FC<{ SW: any; move?: boolean }> = ({
               text={'No of Employees'}
               option={employes}
             />
+
             <Field
               as={LocationComponent}
               city="sch_city"
               state="sch_state"
               lga="sch_lga"
+              country="country"
             />
 
             <Field

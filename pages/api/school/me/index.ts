@@ -7,8 +7,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Method not allowed' })
 
   try {
+    // If user is SUPER_ADMIN, fetch all schools
+    if (req.authUser?.role === 'SUPER_ADMIN') {
+      const allSchools = await db.school.findMany({
+        include: {
+          sch_admin: true,
+          wallet: true,
+          job: {
+            include: {
+              hired: true,
+            },
+          },
+        },
+      })
+      return res.status(200).json({
+        message: `Successful`,
+        school: allSchools,
+      })
+    }
+
     /**
-     * check if email exist as admin
+     * Check if email exists as an admin
      */
     const schoolAdminSchool = await db.schoolAdmin.findFirst({
       where: {
@@ -17,8 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     /**
-     * is not an admin
-     * fetch school
+     * If not an admin, fetch user's assigned schools
      */
     const reqSch = db.school.findMany({
       where: {
@@ -37,7 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const [school] = await Promise.all([reqSch])
 
-    let uniqueSchools = school.slice() // Copying the school array
+    let uniqueSchools = school.slice() // Copy the school array
     if (schoolAdminSchool) {
       const adminSchool = await db.school.findMany({
         where: {
@@ -53,17 +71,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         },
       })
-      uniqueSchools = uniqueSchools.concat(adminSchool) // Concatenating adminSchool to uniqueSchools
+      uniqueSchools = uniqueSchools.concat(adminSchool) // Merge adminSchool data
     }
 
-    // Using Set to get unique schools
+    // Remove duplicates using Set
     const uniqueSchoolSet = new Set(
       uniqueSchools.map((school) => JSON.stringify(school)),
     )
     const uniqueSchoolArray = Array.from(uniqueSchoolSet).map((school) =>
       JSON.parse(school),
     )
-    
+
     return res.status(200).json({
       message: `Successful`,
       school: uniqueSchoolArray,

@@ -1,5 +1,5 @@
 import db from '@/db/db'
-import {  User, School } from '@prisma/client'
+import { User, School } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
@@ -65,9 +65,26 @@ const verifyToken =
         },
       })
 
-      const school = await db.schoolAdmin.findMany({
+      if (!user) {
+        return res.status(401).json({ error: 'Unauthorized: User not found' })
+      }
+
+      // If user is SUPER_ADMIN, get all schools
+      if (user.role === 'SUPER_ADMIN') {
+        const allSchools = await db.school.findMany({
+          select: { sch_id: true },
+        })
+        req.authUser = { ...user, school: allSchools } as User & {
+          school: { sch_id: string }[]
+        }
+        req.token = token
+        return next(req, res)
+      }
+
+      // If not SUPER_ADMIN, fetch assigned schools
+      const schoolAdminSchools = await db.schoolAdmin.findMany({
         where: {
-          sch_admin_email: user?.email,
+          sch_admin_email: user.email,
         },
         include: {
           school: {
@@ -77,38 +94,29 @@ const verifyToken =
           },
         },
       })
-     
-      const allSchId = !user || !user?.school ? [] : user.school.map((s: Partial<School>) => {
-        return {
-          sch_id: s.sch_id
-        }
-      }) 
-      const allSchId2 = !school ? [] : school.map((s) => {
-        return {
-          sch_id: s.school.sch_id
-        }
-      })
 
-      // Merge both arrays
-      const mergedArray = [...allSchId, ...allSchId2];
+      const userSchoolIds = user.school
+        ? user.school.map((s) => ({ sch_id: s.sch_id }))
+        : []
 
-      // Create a set of unique sch_id objects
-      const uniqueSchIdSet = new Set(mergedArray.map((item) => JSON.stringify(item)));
+      const adminSchoolIds = schoolAdminSchools.map((s) => ({
+        sch_id: s.school.sch_id,
+      }))
 
-      // Convert back to array format
-      const uniqueSchIdArray = Array.from(uniqueSchIdSet).map((item) => JSON.parse(item));
+      // Merge and remove duplicates
+      const uniqueSchoolIds = Array.from(
+        new Set(
+          [...userSchoolIds, ...adminSchoolIds].map((s) => JSON.stringify(s)),
+        ),
+      ).map((s) => JSON.parse(s))
 
-      if (!user) {
-        return res.status(401).json({ error: 'Unauthorized: User not found' })
-      }
+      const newUser = {
+        ...user,
+        school: uniqueSchoolIds,
+      } as User & { school: { sch_id: string }[] }
 
-      
-        const newUser = {
-          ...user,
-          school: uniqueSchIdArray
-        } as User & { school: { sch_id: string }[] }
-        req.authUser! = newUser
-        req.token = token
+      req.authUser = newUser
+      req.token = token
       next(req, res)
     } catch (error) {
       console.error('Error during token verification:', error)

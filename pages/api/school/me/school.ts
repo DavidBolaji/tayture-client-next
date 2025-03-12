@@ -1,5 +1,5 @@
 import db from '@/db/db'
-import verifyToken from '@/middleware/verifyToken'
+
 import verifyToken2 from '@/middleware/verifyToken2'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -17,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
-    let uniqueSchools;// Copying the school array
+    let uniqueSchools // Copying the school array
     if (schoolAdminSchool) {
       const adminSchool = await db.school.findMany({
         where: {
@@ -34,8 +34,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       })
       uniqueSchools = adminSchool
-    }  
-    
+    }
+
     return res.status(200).json({
       message: `Successful`,
       school: uniqueSchools,

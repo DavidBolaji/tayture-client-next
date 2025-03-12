@@ -1,5 +1,5 @@
 import db from '@/db/db'
-import {  User, School } from '@prisma/client'
+import { User, School } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server'
 declare module 'next' {
   interface NextApiRequest {
     authUser: (User & { school: { sch_id: string }[] }) | null
-    token: string;
+    token: string
     schEmail: string
   }
 }
@@ -21,6 +21,18 @@ const corsHeaders = {
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders })
 }
+
+/**
+ * Middleware function that verifies JWT token and attaches user data with limited permission to request
+ * @param next - The next API handler function to be called after token verification
+ * @returns A middleware function that:
+ * - Extracts JWT token from cookies or Authorization header
+ * - Verifies token validity and expiration
+ * - Fetches associated user data from database
+ * - Fetches schools associated with user's email (for school admins)
+ * - Attaches decoded user data, token and email to request object
+ * - Handles various auth error cases (missing token, expired token, invalid token, user not found)
+ */
 
 const verifyToken2 =
   (next: NextApiHandler) =>
@@ -59,7 +71,6 @@ const verifyToken2 =
         where: { id: (decodedUser as unknown as { id: string }).id },
       })
 
-
       const school = await db.schoolAdmin.findMany({
         where: {
           sch_admin_email: (decodedUser as unknown as { email: string }).email,
@@ -72,34 +83,40 @@ const verifyToken2 =
           },
         },
       })
-     
-      const allSchId2 = !school ? [] : school.map((s) => {
-        return {
-          sch_id: s.school.sch_id
-        }
-      })
+
+      const allSchId2 = !school
+        ? []
+        : school.map((s) => {
+            return {
+              sch_id: s.school.sch_id,
+            }
+          })
 
       // Merge both arrays
-      const mergedArray = [...allSchId2];
+      const mergedArray = [...allSchId2]
 
       // Create a set of unique sch_id objects
-      const uniqueSchIdSet = new Set(mergedArray.map((item) => JSON.stringify(item)));
+      const uniqueSchIdSet = new Set(
+        mergedArray.map((item) => JSON.stringify(item)),
+      )
 
       // Convert back to array format
-      const uniqueSchIdArray = Array.from(uniqueSchIdSet).map((item) => JSON.parse(item));
+      const uniqueSchIdArray = Array.from(uniqueSchIdSet).map((item) =>
+        JSON.parse(item),
+      )
 
       if (!user) {
         return res.status(401).json({ error: 'Unauthorized: User not found' })
       }
 
-        const newUser = {
-          ...user,
-          school: uniqueSchIdArray
-        } as User & { school: { sch_id: string }[] }
+      const newUser = {
+        ...user,
+        school: uniqueSchIdArray,
+      } as User & { school: { sch_id: string }[] }
 
-        req.authUser! = newUser
-        req.token = token
-        req.schEmail = (decodedUser as unknown as { email: string }).email
+      req.authUser! = newUser
+      req.token = token
+      req.schEmail = (decodedUser as unknown as { email: string }).email
       next(req, res)
     } catch (error) {
       console.error('Error during token verification:', error)

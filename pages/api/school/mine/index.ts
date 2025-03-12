@@ -7,28 +7,42 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Method not allowed' })
 
   try {
+    let schools
 
-     const reqSch = db.school.findMany({
-      where: {
-        schUserId: req.authUser?.id,
-      },
-      include: {
-        sch_admin: true,
-        wallet: true,
-        job: {
-          include: {
-            hired: true
-          }
-        }
-      },
-    })
-
-    const [school] = await Promise.all([ reqSch])
-   
+    if (req.authUser?.role === 'SUPER_ADMIN') {
+      // Fetch all schools if user is SUPER_ADMIN
+      schools = await db.school.findMany({
+        include: {
+          sch_admin: true,
+          wallet: true,
+          job: {
+            include: {
+              hired: true,
+            },
+          },
+        },
+      })
+    } else {
+      // Fetch only schools assigned to the user
+      schools = await db.school.findMany({
+        where: {
+          schUserId: req.authUser?.id,
+        },
+        include: {
+          sch_admin: true,
+          wallet: true,
+          job: {
+            include: {
+              hired: true,
+            },
+          },
+        },
+      })
+    }
 
     return res.status(200).json({
-      message: `Succesful`,
-      school,
+      message: 'Successful',
+      school: schools,
     })
   } catch (error) {
     console.log('[API/SCHOOL/MINE]', (error as Error).message)

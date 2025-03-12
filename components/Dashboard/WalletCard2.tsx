@@ -28,11 +28,11 @@ const WalletCard2 = () => {
   })
   const permissionGranted = permission !== 'limited'
   const router = useRouter()
-  
+
   const { data: school, isLoading } = useQuery({
     queryKey: ['school'],
     queryFn: async () => {
-      if(permissionGranted) {
+      if (permissionGranted) {
         const req = await getUserSchool()
         return req.data.school[defaultSchool]
       } else {
@@ -52,28 +52,37 @@ const WalletCard2 = () => {
       }
       return queryClient.getQueryData(['user'])
     },
-    enabled: !!permission
+    enabled: !!permission,
   })
 
-
   const { mutate } = useMutation({
-    mutationFn: async ({amount, schoolId}: {amount: string, schoolId: string}) =>
-      {
-        if (permissionGranted) {
-          return await Axios.put(`/wallet/update/me?defaultSchool=${defaultSchool}`, {wallet_balance: +amount, schoolId}) 
-        }
-        return await Axios.put(`/wallet/update/me/limit?defaultSchool=${defaultSchool}`, {wallet_balance: +amount, schoolId})
-      },
+    mutationFn: async ({
+      amount,
+      schoolId,
+    }: {
+      amount: string
+      schoolId: string
+    }) => {
+      if (permissionGranted) {
+        return await Axios.put(
+          `/wallet/update/me?defaultSchool=${defaultSchool}`,
+          { wallet_balance: +amount, schoolId },
+        )
+      }
+      return await Axios.put(
+        `/wallet/update/me/limit?defaultSchool=${defaultSchool}`,
+        { wallet_balance: +amount, schoolId },
+      )
+    },
     onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: ['school', 'allTransactions'],
       })
-      
+
       setMessage(() => 'Wallet successfully funded')
       console.log('got here')
       await sleep(2000)
       router.replace(router.asPath)
-      
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
@@ -82,14 +91,13 @@ const WalletCard2 = () => {
 
   const pathExist = user?.path ? true : false
 
-
   let isSchAdmin =
     pathExist &&
     (JSON.parse(user!.path?.replace("'", '')!) as unknown as string[]).includes(
       'school admin',
     )
   let isHasSch = school?.sch_id.trim().length > 0 ? true : false
-   
+
   const handleShow = () => {
     setUI((prev) => {
       return {
@@ -104,10 +112,11 @@ const WalletCard2 = () => {
 
   const handleCreateSchool = () => {
     setUI((prev) => {
+      console.log(prev)
       return {
         ...prev,
         createSchoolModal: {
-          ...prev.createSchoolModal,
+          ...prev?.createSchoolModal,
           visibility: true,
         },
       }
@@ -126,58 +135,82 @@ const WalletCard2 = () => {
     })
   }
   const onSuccess = () => {
-    mutate({amount: amt as string, schoolId: school.sch_id})
+    mutate({ amount: amt as string, schoolId: school.sch_id })
   }
 
   const onFailure = () => {
     setMessage(() => 'User aborted task')
   }
   return (
-    <div className={`bg-[#ffc299] h-[242px]  p-6 rounded-2xl relative overflow-hidden mb-5 ${regularFont.className}`}>
+    <div
+      className={`bg-[#ffc299] h-[242px]  p-6 rounded-2xl relative overflow-hidden mb-5 ${regularFont.className}`}
+    >
       <div className="border-b relative pb-1 border-[#666666] flex justify-between">
         <div>
-          <div className={`inline-block text-[#666666] text-[12px] md:text-[16px] ${boldFont.className}`}>Wallet Balance</div>
-          <div className={`md:text-[30px] text-[18px] whitespace-nowrap font-bolder text-black ${boldFont.className}`}> ₦{' '}
-          {!isLoading && school?.wallet?.wallet_balance
-            ? formatNumber(school?.wallet?.wallet_balance, 'NGN', {})
-            : 0}</div>
+          <div
+            className={`inline-block text-[#666666] text-[12px] md:text-[16px] ${boldFont.className}`}
+          >
+            Wallet Balance
+          </div>
+          <div
+            className={`md:text-[30px] text-[18px] whitespace-nowrap font-bolder text-black ${boldFont.className}`}
+          >
+            {' '}
+            ₦{' '}
+            {!isLoading && school?.wallet?.wallet_balance
+              ? formatNumber(school?.wallet?.wallet_balance, 'NGN', {})
+              : 0}
+          </div>
         </div>
         {/* <div>
           <FaEye />
         </div> */}
       </div>
-      <div className='flex flex-col gap-3 mt-3'>
+      <div className="flex flex-col gap-3 mt-3">
         <div>
-          <div className={`inline-block text-[#666666] text-[10px] md:text-[14px] ${boldFont.className}`}>Locked Balance</div>
+          <div
+            className={`inline-block text-[#666666] text-[10px] md:text-[14px] ${boldFont.className}`}
+          >
+            Locked Balance
+          </div>
           <div className="flex gap-2 items-center">
             <FaLock />
             <div className={boldFont.className}>
-            ₦{' '}
-            {!isLoading && school?.wallet?.wallet_locked_balance
-            ? formatNumber(school?.wallet?.wallet_locked_balance, 'NGN', {})
-            : 0}
+              ₦{' '}
+              {!isLoading && school?.wallet?.wallet_locked_balance
+                ? formatNumber(school?.wallet?.wallet_locked_balance, 'NGN', {})
+                : 0}
             </div>
           </div>
         </div>
         <div className="absolute bottom-7  md:-right-6 -right-10">
-        <Image
-          src={Images.Wallet}
-          className="md:scale-100 scale-75"
-          alt="wallet"
-        />
-      </div>
-        <div className='flex justify-end flex-col-reverse w-[120px] relative z-10'>
+          <Image
+            src={Images.Wallet}
+            className="md:scale-100 scale-75"
+            alt="wallet"
+          />
+        </div>
+        <div className="flex justify-end flex-col-reverse w-[120px] relative z-10">
           <Button
             disabled={!access}
             text="Topup"
             render="dark"
             hover={false}
             bold={false}
-            onClick={() => (isSchAdmin ? isHasSch ? handlePayment(): handleCreateSchool() : handleShow())}
+            onClick={() =>
+              isSchAdmin
+                ? isHasSch
+                  ? handlePayment()
+                  : handleCreateSchool()
+                : handleShow()
+            }
           />
         </div>
       </div>
-      <Link href={'/dashboard/school/transaction'} className="absolute left-0 bottom-0 h-8 px-5 bg-[#eed2bf] text-black flex items-center w-full justify-between">
+      <Link
+        href={'/dashboard/school/transaction'}
+        className="absolute left-0 bottom-0 h-8 px-5 bg-[#eed2bf] text-black flex items-center w-full justify-between"
+      >
         <div>View Transactions</div>
         <div>
           <FaCaretRight />
@@ -190,7 +223,7 @@ const WalletCard2 = () => {
         valid={String(amt).trim().length > 0}
       >
         <div className={`w-full ${regularFont.className}`}>
-          <div className='w-full'>
+          <div className="w-full">
             <span className="text-2xl block text-center mb-2">Wallet</span>
           </div>
           <div className={`mb-2 text-[12px]`}>
