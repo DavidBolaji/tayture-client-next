@@ -12,7 +12,7 @@ interface ImailOptions {
   attachments?: { filename: string; path: string }[]
 }
 
-const sendCvMail = async ({
+const sendPromptMail = async ({
   firstName,
   email,
   job,
@@ -32,7 +32,10 @@ const sendCvMail = async ({
     current.getHours() + ':' + current.getMinutes() + ':' + current.getSeconds()
   let dateTime = cDate + ' ' + cTime
   const templatePath = path.join(process.cwd(), 'views', 'prompt.ejs')
-  const dat = await ejs.renderFile(templatePath)
+  const dat = await ejs.renderFile(templatePath, {
+    firstName,
+    job,
+  })
 
   const mailOption: ImailOptions = {
     from: 'hello@tayture.com',
@@ -49,4 +52,4 @@ const sendCvMail = async ({
   }
 }
 
-export default sendCvMail
+export default sendPromptMail

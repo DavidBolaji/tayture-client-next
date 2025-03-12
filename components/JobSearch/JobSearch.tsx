@@ -83,17 +83,6 @@ const JobSearch: React.FC<JobSearchProps> = ({ className }) => {
 
   useEffect(() => {
     if (val.length === 0) {
-      // Axios.get(`/job`)
-      //   .then((res) => {
-      //     queryClient.setQueryData(['activeJob'], res.data.job[0])
-      //     queryClient.setQueryData(['jobs'], res.data.job)
-      //     queryClient.removeQueries({
-      //       queryKey: ['relatedJob', 'relatedJobs'],
-      //     })
-      //   })
-      //   .catch((err) => {
-      //     message.error((err as Error).message)
-      //   })
       reset()
     }
   }, [val, queryClient, router.query.find])
