@@ -33,7 +33,7 @@ const sendAppliedEmail = async ({ email }: { email: string }) => {
 
   try {
     await transporter.sendMail(mailOption)
-    console.log('Hire tayture mail sent succesfully')
+    console.log('Applied mail sent succesfully')
   } catch (error) {
     //@ts-ignore
     console.log('Error sending mail', error)
