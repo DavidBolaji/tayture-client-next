@@ -73,6 +73,9 @@ const verifyToken =
       if (user.role === 'SUPER_ADMIN') {
         const allSchools = await db.school.findMany({
           select: { sch_id: true },
+          orderBy: {
+            sch_id: 'asc',
+          },
         })
         req.authUser = { ...user, school: allSchools } as User & {
           school: { sch_id: string }[]

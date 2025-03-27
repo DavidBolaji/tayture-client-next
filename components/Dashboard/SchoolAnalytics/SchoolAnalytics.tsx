@@ -15,17 +15,19 @@ const SchoolAnalytics = () => {
   const permission = queryClient.getQueryData(['permission'])
   const permissionGranted = permission !== 'limited'
 
+  const fetchSchoolJob = async () => {
+    if (permissionGranted) {
+      const req = await getSchoolJobs(defaultSchool)
+      return req.data.job
+    } else {
+      const req = await getSchoolLimitedJobs(defaultSchool)
+      return req.data.job
+    }
+  }
+
   const { data: schJobList, isLoading } = useQuery({
     queryKey: ['schoolJobs'],
-    queryFn: async () => {
-      if (permissionGranted) {
-        const req = await getSchoolJobs(defaultSchool)
-        return req.data.job
-      } else {
-        const req = await getSchoolLimitedJobs(defaultSchool)
-        return req.data.job
-      }
-    },
+    queryFn: fetchSchoolJob,
   })
 
   return (
