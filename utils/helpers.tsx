@@ -51,8 +51,8 @@ export const AMOUNT_PER_HIRE =
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY
 const PAYSTACK_SECRET_KEY_PROD = process.env.PAYSTACK_SECRET_KEY_PROD
 const isProd = process.env.NEXT_PUBLIC_ENV === 'prod'
-const accountNumber = !isProd ? '0947535518' : '0000000000'
-const bankCode = !isProd ? '058' : '011'
+const accountNumber = isProd ? '0947535518' : '0000000000'
+const bankCode = isProd ? '058' : '011'
 const key = isProd ? PAYSTACK_SECRET_KEY_PROD : PAYSTACK_SECRET_KEY
 
 const matchQualHash: { [key: string]: number } = {
@@ -949,7 +949,7 @@ export async function initiateTransfer(
         source: 'balance',
         reason: reason,
         amount,
-        recipient: recipientCode
+        recipient: recipientCode,
       },
       {
         headers: {

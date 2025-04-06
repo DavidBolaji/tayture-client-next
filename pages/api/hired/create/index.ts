@@ -3,15 +3,12 @@ import { sendTextMessage } from '@/lib/services/user'
 import sendHireTayture from '@/mail/sendHireTayture'
 import sendHireUser from '@/mail/sendHireUser'
 import verifyToken from '@/middleware/verifyToken'
-import { AMOUNT_PER_HIRE, formatNumber } from '@/utils/helpers'
+import { AMOUNT_PER_HIRE } from '@/utils/helpers'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
 
-const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY
-const PAYSTACK_SECRET_KEY_PROD = process.env.PAYSTACK_SECRET_KEY_PROD
 const isProd = process.env.NEXT_PUBLIC_ENV === 'prod'
-const url = isProd ? '' : process.env.NEXT_PUBLIC_DEV
-const key = isProd ? PAYSTACK_SECRET_KEY_PROD : PAYSTACK_SECRET_KEY
+const url = isProd ? process.env.NEXT_PUBLIC_PROD : process.env.NEXT_PUBLIC_DEV
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST')

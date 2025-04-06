@@ -183,6 +183,7 @@ model DvaTransaction {
   metadata      Json?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  
 
   @@index([reference])
   @@index([accountNumber])
