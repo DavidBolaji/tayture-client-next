@@ -41,3 +41,5 @@ next-env.d.ts
 .env.staging
 /pages/api/migrate
 .netlify
+seed.js
+combined.log

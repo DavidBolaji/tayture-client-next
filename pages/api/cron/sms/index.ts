@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { subDays, startOfDay, endOfDay } from 'date-fns'
 import axios from 'axios'
+import { logger } from '@/middleware/logger'
 
 const url =
   process.env.NEXT_PUBLIC_ENV === 'prod'
@@ -20,10 +21,10 @@ const sendTextMessage = async (phone: string, msg: string) => {
         channel: 'generic',
       },
     )
-    console.log('SMS sent successfully')
+    logger.info('SMS sent successfully')
     return result.data
   } catch (error) {
-    console.error('Error sending SMS:', (error as Error).message)
+    logger.error(`Error sending SMS: ${(error as Error).message}`)
   }
 }
 
@@ -50,10 +51,12 @@ export default async function handler(
       )
     }
 
+    logger.info('All SMS sent successfully with status 200')
     return res.status(200).json({
       message: 'Successful',
     })
   } catch (error) {
+    logger.error(`Final Error sending SMS: ${(error as Error).message}`)
     return res.status(500).json({ message: 'Internal server error', error })
   }
 }

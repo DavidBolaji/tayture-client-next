@@ -22,13 +22,18 @@ const PaymentComponent: React.FC<{
 }) => {
   const queryClient = useQueryClient()
   const auth = queryClient.getQueryData(['user']) as IUser
-  const {setUI} = useGlobalContext()
+  const school = queryClient.getQueryData(['school']) as {
+    account: [{ bankName: string; accountNumber: string }]
+  }
+  const { setUI } = useGlobalContext()
 
   const [config, setConfig] = useState<{
     reference: string
     email: string
     amount: number
     publicKey: string
+    accountNumber: string
+    bankName: string
   }>({
     reference: Date.now().toString(),
     email: auth.email,
@@ -37,6 +42,8 @@ const PaymentComponent: React.FC<{
       process.env.NEXT_PUBLIC_ENV === 'dev'
         ? process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC!
         : process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_PROD!,
+    accountNumber: school.account[0].accountNumber || '', // Replace with actual DVA account
+    bankName: school.account[0].bankName || '',
   })
 
   const onSuccess = () => {
@@ -68,20 +75,17 @@ const PaymentComponent: React.FC<{
     })
   }, [amount])
 
-
-
   const componentProps = {
     ...config,
     text: 'Paystack Button Implementation',
     onSuccess: () => onSuccess(),
     onClose: () => onClose(),
-    callback: function(response: any){
-      console.log(response);
-      
-      let message = 'Payment complete! Reference: ' + response.reference;
-      alert(message);
+    callback: function (response: any) {
+      console.log(response)
 
-    }
+      let message = 'Payment complete! Reference: ' + response.reference
+      alert(message)
+    },
   }
 
   return (

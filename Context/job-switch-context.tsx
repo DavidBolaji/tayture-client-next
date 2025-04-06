@@ -106,13 +106,21 @@ export const JobSwitchProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleSwitch = (active: boolean, job: Job & { hired: Hired[] }) => {
     if (!job) return
     const pendingHire = job.noPaid - job.hired.length
+    console.log(pendingHire)
     const unlockFundAmt = AMOUNT_PER_HIRE * pendingHire
+    console.log(unlockFundAmt)
     const triggerUnlockFund = pendingHire > 0
+    console.log(triggerUnlockFund)
     const refund = triggerUnlockFund || job.hired.length === 0
+    console.log(refund)
 
     if (active && refund) {
       console.log('active and refund')
-      if (school.wallet.wallet_balance < unlockFundAmt) {
+      if (
+        school.wallet.wallet_balance < unlockFundAmt &&
+        school.wallet.wallet_locked_balance < unlockFundAmt
+      ) {
+        console.log('active and refund 2')
         //set current state for payment
         setMutateState({
           active,

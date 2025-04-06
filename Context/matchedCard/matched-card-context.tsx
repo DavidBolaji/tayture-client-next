@@ -52,12 +52,12 @@ const matchedContext = createContext<
     noOfHires: number
     curAppCount: number
     fundWallet: (amount: string) => void
-    transaction: (arg: any) => void,
+    transaction: (arg: any) => void
     schoolId: number
     setOpen: Dispatch<SetStateAction<boolean>>
     hirePending: boolean
   }>
-  >({})
+>({})
 
 export const useMatchedContet = () => useContext(matchedContext)
 
@@ -66,7 +66,7 @@ export const MatchedContextProvider: React.FC<
 > = ({ children, cur, jobId }) => {
   const [amt, setAmt] = useState<string | number>('')
   const { setMessage, setUI, defaultSchool } = useGlobalContext()
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const school = queryClient.getQueryData(['school']) as ISchDb
   const permission = queryClient.getQueryData(['permission'])
@@ -198,6 +198,7 @@ export const MatchedContextProvider: React.FC<
         jobId: jobId,
         role: cur.job.job_title,
         defaultSchool,
+        customer: school.account[0].reference,
       })
     },
     onSuccess: async (res) => {
@@ -241,8 +242,6 @@ export const MatchedContextProvider: React.FC<
     },
   })
 
-  
-
   const value = {
     sufficientBalancePayment,
     inSufficientPayment,
@@ -266,14 +265,14 @@ export const MatchedContextProvider: React.FC<
     transaction,
     schoolId: school.sch_id,
     setOpen,
-    hirePending
+    hirePending,
   }
   return (
     <matchedContext.Provider value={value}>
       {children}
       <StyledModal
         open={open}
-        onCancel={() =>setOpen(false)}
+        onCancel={() => setOpen(false)}
         okText="Yes"
         cancelText="No"
         onOk={() => {

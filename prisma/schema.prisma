@@ -160,6 +160,8 @@ model Coupoun {
   @@index([value])
 }
 
+
+
 model CVDownloadProcess {
   id        String   @id @default(uuid())
   userId    String
@@ -170,6 +172,36 @@ model CVDownloadProcess {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+model DvaTransaction {
+  id            String   @id @default(cuid())
+  reference     String   @unique
+  amount        Float
+  status        String
+  accountNumber String
+  metadata      Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([reference])
+  @@index([accountNumber])
+}
+
+model DvaAccount {
+  id             String   @id @default(cuid())
+  schoolId       String   @unique
+  school         School   @relation(fields: [schoolId], references: [sch_id], onDelete: Cascade)
+  accountNumber  String   @unique
+  bankName       String
+  bankCode       String
+  reference      String   @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([accountNumber])
+  @@index([reference])
 }
 
 model Education {
@@ -343,6 +375,7 @@ model School {
   matched          Matched[]
   transaction      Transaction[]
   schedule         Schedule[]
+  account          DvaAccount[]
 
   @@index([schUserId])
 }
@@ -449,6 +482,7 @@ model Transaction {
   @@index([schoolId])
 }
 
+
 model User {
   id                     String   @id @default(uuid())
   role                   Role     @default(USER)
@@ -507,6 +541,22 @@ model Wallet {
 
   @@index([walletUserId])
   @@index([walletSchId])
+}
+
+model WebhookEvent {
+  id            String   @id @default(cuid())
+  eventType     String
+  payload       Json
+  processedAt   DateTime?
+  status        String   @default("pending") // pending, processed, failed
+  retryCount    Int      @default(0)
+  idempotencyKey String  @unique
+  error         String?  @db.LongText()
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+  @@index([idempotencyKey])
 }
 
 model WorkHistory {

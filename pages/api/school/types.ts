@@ -26,4 +26,5 @@ export interface ISchDb {
   sch_admins_str?: string
   country: string
   created_at?: Date
+  account: { reference: string; accountNumber: string; bankName: string }[]
 }

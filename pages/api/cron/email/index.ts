@@ -3,6 +3,7 @@ import { subDays, startOfDay, endOfDay } from 'date-fns'
 import axios from 'axios'
 import { User } from '@prisma/client'
 import sendPromptMail from '@/mail/sendPrompt'
+import { logger } from '@/middleware/logger'
 
 const url =
   process.env.NEXT_PUBLIC_ENV === 'prod'
@@ -35,7 +36,7 @@ export default async function handler(
           job: jobs.data.jobs[0].job_title,
         })
 
-        console.log(`Email sent to: ${user.email}`)
+        logger.info(`Email sent to: ${user.email}`)
 
         // Wait for 1 minute before sending the next email
         await delay(60000)
@@ -46,6 +47,7 @@ export default async function handler(
       message: 'Emails sent successfully with 1-minute intervals.',
     })
   } catch (error) {
+    logger.error('Error processing webhook:', (error as Error).message)
     return res.status(500).json({ message: 'Internal server error', error })
   }
 }

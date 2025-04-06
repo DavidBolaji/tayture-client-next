@@ -13,6 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         include: {
           sch_admin: true,
           wallet: true,
+          account: true,
           job: {
             include: {
               hired: true,
@@ -45,6 +46,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       include: {
         sch_admin: true,
         wallet: true,
+        account: true,
         job: {
           include: {
             hired: true,
@@ -64,6 +66,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         include: {
           sch_admin: true,
           wallet: true,
+          account: true,
           job: {
             include: {
               hired: true,
