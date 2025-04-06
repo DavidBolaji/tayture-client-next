@@ -3,6 +3,7 @@ import { getUserById } from '@/lib/services/user'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { ISchDb } from '../types'
 import { v4 as uuid } from 'uuid'
+import { appendSchoolIdToEmail, createDVA } from '@/utils/helpers'
 type Data = {
   message: string
   school?: ISchDb
@@ -38,6 +39,7 @@ export default async function handler(
   })
 
   try {
+    // create school
     const schoolCreate = await db.school.create({
       data: {
         ...data,
@@ -50,6 +52,7 @@ export default async function handler(
       req.body['sch_admin'].replace(/'/g, '"'),
     )
 
+    // create school admin
     const schAdmin = db.schoolAdmin.createMany({
       data: schAdminDataArray.map((admin: any) => ({
         sch_admin_id: uuid(),
@@ -57,6 +60,8 @@ export default async function handler(
         ...admin,
       })),
     })
+
+    // create school wallet
     const schWallet = db.wallet.create({
       data: {
         walletSchId,
@@ -64,7 +69,29 @@ export default async function handler(
       },
     })
 
-    await Promise.all([schAdmin, schWallet])
+    // create unique email
+    const email = appendSchoolIdToEmail(xUser.email, walletSchId)
+    // create dedicated virtual account paystack
+    const dva = createDVA(
+      walletSchId,
+      xUser.id,
+      schoolCreate.sch_name,
+      email,
+      xUser.phone,
+    )
+
+    const [, , dAccount] = await Promise.all([schAdmin, schWallet, dva])
+
+    // create prisma Dedicated virtual account
+    await db.dvaAccount.create({
+      data: {
+        schoolId: walletSchId,
+        accountNumber: dAccount.data.account_number,
+        bankName: dAccount.data.bank.name,
+        bankCode: dAccount.data.bank.code,
+        reference: dAccount.data.reference,
+      },
+    })
 
     res.status(201).json({
       message: 'School Created',

@@ -25,7 +25,7 @@ export const JobSwitchProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const wb = school?.wallet?.wallet_balance
   const [paymentValid, setPaymentValid] = useState(
-    +String(amt).trim().length < 1,
+    +String(amt).trim().length < 1
   )
 
   const { mutate: updateJob, isPending } = useMutation({
@@ -65,7 +65,7 @@ export const JobSwitchProvider: React.FC<{ children: React.ReactNode }> = ({
           wallet_balance: +amount,
           schoolId: school.sch_id,
         },
-        defaultSchool,
+        defaultSchool
       ),
     onSuccess: async (res) => {
       updateJob(mutateState)
@@ -106,13 +106,18 @@ export const JobSwitchProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleSwitch = (active: boolean, job: Job & { hired: Hired[] }) => {
     if (!job) return
     const pendingHire = job.noPaid - job.hired.length
+
     const unlockFundAmt = AMOUNT_PER_HIRE * pendingHire
+
     const triggerUnlockFund = pendingHire > 0
+
     const refund = triggerUnlockFund || job.hired.length === 0
 
     if (active && refund) {
-      console.log('active and refund')
-      if (school.wallet.wallet_balance < unlockFundAmt) {
+      if (
+        school.wallet.wallet_balance < unlockFundAmt &&
+        school.wallet.wallet_locked_balance < unlockFundAmt
+      ) {
         //set current state for payment
         setMutateState({
           active,

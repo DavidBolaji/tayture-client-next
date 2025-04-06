@@ -27,7 +27,7 @@ const sendAppliedEmail = async ({ email }: { email: string }) => {
   const mailOption: ImailOptions = {
     from: 'Tayture <hello@tayture.com>',
     to: email,
-    subject: `🌟 Hire complete 🌟 <${dateTime}>`,
+    subject: `🌟 Application complete 🌟 <${dateTime}>`,
     html: dat,
   }
 

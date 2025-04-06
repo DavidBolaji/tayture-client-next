@@ -3,12 +3,19 @@ import { sendTextMessage } from '@/lib/services/user'
 import sendHireTayture from '@/mail/sendHireTayture'
 import sendHireUser from '@/mail/sendHireUser'
 import verifyToken from '@/middleware/verifyToken'
-import { AMOUNT_PER_HIRE, formatNumber } from '@/utils/helpers'
+import { AMOUNT_PER_HIRE } from '@/utils/helpers'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import axios from 'axios'
+
+const isProd = process.env.NEXT_PUBLIC_ENV === 'prod'
+const url = isProd ? process.env.NEXT_PUBLIC_PROD : process.env.NEXT_PUBLIC_DEV
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST')
     return res.status(405).json({ message: 'Method not allowed' })
+
+  const schoolId = req.authUser!.school[+req.body.defaultSchool]
+    .sch_id as unknown as string
 
   try {
     const jobCreate = await db.$transaction(async (tx) => {
@@ -44,34 +51,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       })
 
-      const r = tx.wallet.update({
-        where: {
-          walletUserId: req.authUser?.id,
-          walletSchId: req.authUser!.school[+req.body.defaultSchool]
-            .sch_id as unknown as string,
-        },
-        data: {
-          wallet_locked_balance: {
-            decrement: AMOUNT_PER_HIRE,
-          },
-        },
+      // const balance = await getDVABalance(req.body.customer)
+      await axios.post(`${url}/transfer`, {
+        amount: AMOUNT_PER_HIRE,
+        reason: 'Hire completed',
+        schoolId,
+        jobId: req.body.jobId,
+        userId: req.body.userId,
+        customerId: req.body.customer,
+        role: req.body['role'],
       })
 
-      const v = tx.transaction.create({
-        data: {
-          type: 'DEBIT',
-          amount: AMOUNT_PER_HIRE,
-          userId: req.authUser!.id,
-          message: `Succesful Hiring of ${req.body['role']} at ₦${formatNumber(
-            AMOUNT_PER_HIRE,
-            'NGN',
-            {},
-          )}`,
-          schoolId: h.job.school.sch_id,
-        },
-      })
-
-      await Promise.all([r, v])
       return h
     })
 
@@ -110,10 +100,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (process.env.NEXT_PUBLIC_ENV === 'prod') {
       sendTextMessage(
         jobCreate.job.school.user.phone as string,
-        `Hello ${jobCreate.job.school.user.fname}, This message is to inform you that you have succesfully hired for the role of ${jobCreate.job.job_title} at ${jobCreate.job.school.sch_name}.`,
+        `Hello ${jobCreate.job.school.user.fname}, This message is to inform you that you have succesfully hired for the role of ${jobCreate.job.job_title} at ${jobCreate.job.school.sch_name}.`
       )
     }
-    
+
     res.status(201).json({
       message: 'Job status updated',
       job: jobCreate,

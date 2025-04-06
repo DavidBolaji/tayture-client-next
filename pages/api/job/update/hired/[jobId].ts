@@ -24,7 +24,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   })
 
-
+  console.log(
+    '[SCHOOLID]',
+    req.authUser!.school[+req.body.defaultSchool].sch_id,
+  )
+  console.log('[WALLETBALANCE]', req.body['amt'])
+  console.log('[ACTIVE]', req.body['active'])
+  console.log('[REFUND]', req.body['refund'])
 
   try {
     if (!req.body['active']) {
@@ -33,7 +39,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           const req2 = tx.wallet.update({
             where: {
               // walletUserId: req.authUser!.id as string,
-              walletSchId: req.authUser!.school[+req.body.defaultSchool].sch_id as unknown as string
+              walletSchId: req.authUser!.school[+req.body.defaultSchool]
+                .sch_id as unknown as string,
             },
             data: {
               wallet_balance: {
@@ -46,21 +53,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           })
 
           if (req.body['amt'] > 0) {
-              await tx.transaction.create({
-                data: {
-                  type: 'UNLOCKED',
-                  amount: req.body['amt'],
-                  userId: req.authUser!.id,
-                  message: `Discontinue hiring, funds unlocked ₦${formatNumber(
-                    req.body['amt'],
-                    'NGN',
-                    {},
-                  )}`,
-                  schoolId: req.body['schoolId'],
-                },
-              })
+            await tx.transaction.create({
+              data: {
+                type: 'UNLOCKED',
+                amount: req.body['amt'],
+                userId: req.authUser!.id,
+                message: `Discontinue hiring, funds unlocked ₦${formatNumber(
+                  req.body['amt'],
+                  'NGN',
+                  {},
+                )}`,
+                schoolId: req.body['schoolId'],
+              },
+            })
           }
-
 
           const job = tx.job.update({
             where: {
@@ -89,22 +95,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
       if (req.body['refund']) {
         const job = await db.$transaction(async (tx) => {
-          const req2 = tx.wallet.update({
+          const wallet = await tx.wallet.findUnique({
             where: {
-              walletUserId: req.authUser!.id as string,
-              walletSchId: req.authUser!.school[+req.body.defaultSchool].sch_id as unknown as string
-            },
-            data: {
-              wallet_balance: {
-                decrement: req.body['amt'],
-              },
-              wallet_locked_balance: {
-                increment: req.body['amt'],
-              },
+              walletSchId: req.authUser!.school[+req.body.defaultSchool].sch_id,
             },
           })
+          let req2: any
+          if (!((wallet?.wallet_locked_balance || 0) > 0)) {
+            req2 = tx.wallet.update({
+              where: {
+                // walletUserId: req.authUser!.id as string,
+                walletSchId: req.authUser!.school[+req.body.defaultSchool]
+                  .sch_id as unknown as string,
+              },
+              data: {
+                wallet_balance: {
+                  decrement: req.body['amt'],
+                },
+                wallet_locked_balance: {
+                  increment: req.body['amt'],
+                },
+              },
+            })
+          }
 
           if (req.body['amt'] > 0) {
+            if (!((wallet?.wallet_locked_balance || 0) > 0)) {
               await tx.transaction.create({
                 data: {
                   type: 'LOCKED',
@@ -118,8 +134,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                   schoolId: req.body['schoolId'],
                 },
               })
+            }
           }
-
 
           const job = tx.job.update({
             where: {
@@ -150,6 +166,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).json({ message: `Error: ${(error as Error).message}` })
   }
 }
-
 
 export default verifyToken(handler)

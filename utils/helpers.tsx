@@ -17,7 +17,7 @@ import {
 } from '@prisma/client'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import Cloudinary from '@/request/cloudinary'
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { getUser } from '@/lib/api/user'
 import { NextRouter } from 'next/router'
 import { QueryClient } from '@tanstack/react-query'
@@ -39,14 +39,21 @@ import {
   cvValuesThree,
   cvValuesTwo,
 } from '@/components/cv/data'
-import dayjs from 'dayjs'
+
 import { getMonthNumber } from './data'
+import axios from 'axios'
 
 TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
 export const AMOUNT_PER_HIRE =
   process.env.NEXT_PUBLIC_ENV === 'dev' ? 10000 : 10000
+const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY
+const PAYSTACK_SECRET_KEY_PROD = process.env.PAYSTACK_SECRET_KEY_PROD
+const isProd = process.env.NEXT_PUBLIC_ENV === 'prod'
+const accountNumber = isProd ? '0947535518' : '0000000000'
+const bankCode = isProd ? '058' : '011'
+const key = isProd ? PAYSTACK_SECRET_KEY_PROD : PAYSTACK_SECRET_KEY
 
 const matchQualHash: { [key: string]: number } = {
   SSCE: 1,
@@ -57,6 +64,7 @@ const matchQualHash: { [key: string]: number } = {
   MASTERS: 6,
   DOCTORATE: 7,
 }
+
 const matchExpHash: { [key: string]: number } = {
   'less than 1': 0,
   '1': 1,
@@ -178,7 +186,7 @@ export function generateNumberCode() {
   const uuid = v4()
   const random4DigitNumber = parseInt(
     uuid.replace(/-/g, '').substring(0, 5),
-    16,
+    16
   )
   return random4DigitNumber.toString().padStart(5, '0')
 }
@@ -186,7 +194,7 @@ export function generateNumberCode() {
 export const formatNumber = (
   num: number,
   locale: string | undefined,
-  options: any,
+  options: any
 ) => {
   try {
     return new Intl.NumberFormat(locale || undefined, options || {}).format(num)
@@ -382,10 +390,10 @@ export const formatNumberToK = (value: string) => {
 export const canManageSchool = (
   schAdmin: SchoolAdmin[],
   email: string,
-  isCreator: boolean,
+  isCreator: boolean
 ) => {
   const isAdmin = schAdmin?.find(
-    (admin: SchoolAdmin) => admin.sch_admin_email === email,
+    (admin: SchoolAdmin) => admin.sch_admin_email === email
   )
   if (!isAdmin?.sch_admin_email) {
     return true
@@ -444,7 +452,7 @@ export const handleUpload = async (
   e: ChangeEvent<HTMLInputElement>,
   fn: (name: string, val: any) => void,
   cb: (msg: string) => void,
-  load: (val: boolean) => void,
+  load: (val: boolean) => void
 ) => {
   const inputElement = e.target
   const files = inputElement.files
@@ -463,7 +471,7 @@ export const handleUpload = async (
     formData.append('file', selectedFile)
     formData.append(
       'upload_preset',
-      `${process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}`,
+      `${process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}`
     )
 
     try {
@@ -485,7 +493,7 @@ export const appliedSucces = async (
   msgCb: Dispatch<SetStateAction<string>>,
   router: NextRouter,
   queryClient: QueryClient,
-  SW: any,
+  SW: any
 ) => {
   // const applied = res.data.applied
   if (path === '/jobs') {
@@ -559,14 +567,14 @@ export const initialHash = {
 
 export const validation = (
   step: number,
-  stage: { id: string; title: string }[],
+  stage: { id: string; title: string }[]
 ) => {
   return validationHash[stage[step].id as keyof typeof validationHash]
 }
 
 export const handleInitial = (
   step: number,
-  stage: { id: string; title: string }[],
+  stage: { id: string; title: string }[]
 ) => {
   return initialHash[stage[step].id as keyof typeof initialHash]
 }
@@ -595,8 +603,14 @@ export const convertData = (originalData: any) => {
         orderedSections.employment = originalData.employment.map(
           (emp: any) => ({
             title: emp.title,
-            date: `${getMonthNumber[emp.startMonth as keyof typeof getMonthNumber]}/${emp.startYear} – ${
-              emp.endMonth === '' ? 'Present' : `${getMonthNumber[emp.endMonth as keyof typeof getMonthNumber]}/${emp.endYear}`
+            date: `${
+              getMonthNumber[emp.startMonth as keyof typeof getMonthNumber]
+            }/${emp.startYear} – ${
+              emp.endMonth === ''
+                ? 'Present'
+                : `${
+                    getMonthNumber[emp.endMonth as keyof typeof getMonthNumber]
+                  }/${emp.endYear}`
             }`,
             startMonth: emp.startMonth.toString(),
             endMonth: emp.endMonth.toString(),
@@ -605,7 +619,7 @@ export const convertData = (originalData: any) => {
             location: emp.location,
             currentDate: emp.currentDate,
             roles: emp.roles.map((role: any) => [role]),
-          }),
+          })
         )
       }
       if (key === 'certificates') {
@@ -615,7 +629,7 @@ export const convertData = (originalData: any) => {
             date: 'Present', // Assuming "Present" for now
             link: cert.link || '',
             issuer: cert.issuer,
-          }),
+          })
         )
       }
     }
@@ -642,7 +656,7 @@ export const convertData = (originalData: any) => {
         (skill: { name: string; scale: any }) => ({
           name: skill.name,
           scale: parseInt(skill.scale) || 100,
-        }),
+        })
       ),
       ...orderedSections, // Dynamically inject the ordered sections based on the original data order
     },
@@ -809,12 +823,11 @@ export const cvDataTemplate = {
 }
 
 export const prepareCvDate = (data: any) => {
-
   return {
     name: `${data?.fname} ${data?.lname}`,
     email: data?.email,
     phone: data?.phone,
-    summary: !data?.summary ?  '' : data?.summary?.text,
+    summary: !data?.summary ? '' : data?.summary?.text,
     country: data?.profile?.country?.trim() ?? '',
     state: data?.profile?.state?.trim() ?? '',
     city: data?.profile?.city?.trim() ?? '',
@@ -846,11 +859,157 @@ export const prepareCvDate = (data: any) => {
         location: wrk.location,
         roles: wrk.roles.map((role: any) => role.role),
       })) ?? [],
-    languages: [{
-      name: 'English',
-      scale: 80,
-    }],
+    languages: [
+      {
+        name: 'English',
+        scale: 80,
+      },
+    ],
     hobbies: [],
     certificates: [],
   }
+}
+
+export async function createDVA(
+  schoolId: string,
+  userId: string,
+  schoolName: string,
+  email: string,
+  phone: string
+) {
+  const randomOption = Math.floor(Math.random() * 2)
+  const banks = ['titan-paystack', 'wema-bank']
+
+  try {
+    const response = await axios.post(
+      'https://api.paystack.co/dedicated_account/assign',
+      {
+        email: email,
+        first_name: schoolName,
+        last_name: schoolName,
+        phone,
+        metadata: { schoolId, userId },
+        preferred_bank: isProd ? banks[randomOption] : 'test-bank',
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      }
+    )
+
+    return response.data
+  } catch (error) {
+    return (error as AxiosError).response?.data
+  }
+}
+
+/**
+ * Resolve recipient bank account before making a transfer.
+ */
+export async function resolveBankAccount() {
+  console.log(accountNumber, bankCode)
+  try {
+    const response = await axios.get(`https://api.paystack.co/bank/resolve`, {
+      params: {
+        account_number: accountNumber,
+        bank_code: bankCode,
+      },
+      headers: {
+        Authorization: `Bearer ${key}`,
+      },
+    })
+
+    return response.data.status ? response.data.data : null
+  } catch (error) {
+    console.error(
+      'Bank account resolution failed:',
+      (error as AxiosError).response?.data || (error as Error).message
+    )
+    return null
+  }
+}
+
+/**
+ * Initiate a transfer with metadata.
+ * @param {string} recipientCode - The Paystack recipient code.
+ * @param {number} amount - Transfer amount in kobo (e.g., 1000 NGN = 100000 kobo).
+ * @param {string} reason - Transfer description.
+ *
+ */
+export async function initiateTransfer(
+  recipientCode: string,
+  amount: number,
+  reason: any
+) {
+  try {
+    const response = await axios.post(
+      'https://api.paystack.co/transfer',
+      {
+        source: 'balance',
+        reason: reason,
+        amount,
+        recipient: recipientCode,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      }
+    )
+
+    console.log(JSON.stringify(response.data, null, 2))
+
+    return response.data.status ? response.data.data : null
+  } catch (error) {
+    console.error(
+      'Transfer initiation failed:',
+      (error as AxiosError).response?.data || (error as Error).message
+    )
+    return null
+  }
+}
+
+/**
+ * Create a transfer recipient in Paystack.
+ * @param {string} name - Recipient's name.
+ */
+export async function createTransferRecipient(name: string) {
+  try {
+    const response = await axios.post(
+      'https://api.paystack.co/transferrecipient',
+      {
+        type: 'nuban',
+        name,
+        account_number: accountNumber,
+        bank_code: bankCode,
+        currency: 'NGN',
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+
+    // logger.info(JSON.stringify(response.data, null, 2))
+    console.log(JSON.stringify(response.data, null, 2))
+    return response.data.status ? response.data.data.recipient_code : null
+  } catch (error) {
+    console.error(
+      'Transfer recipient creation failed:',
+      (error as AxiosError).response?.data || (error as Error).message
+    )
+    return null
+  }
+}
+
+export function appendSchoolIdToEmail(email: string, schoolId: string): string {
+  if (!email.includes('@')) {
+    throw new Error('Invalid email format')
+  }
+
+  const [name, domain] = email.split('@')
+  return `${name}_${schoolId}@${domain}`
 }

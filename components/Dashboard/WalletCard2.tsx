@@ -16,6 +16,8 @@ import Link from 'next/link'
 import { formatNumber, sleep } from '@/utils/helpers'
 import { Axios } from '@/request/request'
 import { useRouter } from 'next/router'
+import { CopyFilled, CopyOutlined } from '@ant-design/icons'
+import { GiBanknote } from 'react-icons/gi'
 
 const WalletCard2 = () => {
   const { setUI, setMessage, defaultSchool, access } = useGlobalContext()
@@ -141,9 +143,17 @@ const WalletCard2 = () => {
   const onFailure = () => {
     setMessage(() => 'User aborted task')
   }
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText('')
+    alert('Account number copied!')
+  }
+
   return (
     <div
-      className={`bg-[#ffc299] h-[242px]  p-6 rounded-2xl relative overflow-hidden mb-5 ${regularFont.className}`}
+      className={`bg-[#ffc299] 
+         
+         p-6 rounded-2xl relative overflow-hidden mb-5 ${regularFont.className}`}
     >
       <div className="border-b relative pb-1 border-[#666666] flex justify-between">
         <div>
@@ -162,12 +172,25 @@ const WalletCard2 = () => {
               : 0}
           </div>
         </div>
-        {/* <div>
-          <FaEye />
-        </div> */}
+        <div className="flex justify-end flex-col-reverse w-[120px] relative z-10">
+          <Button
+            disabled={!access}
+            text="Topup"
+            render="dark"
+            hover={false}
+            bold={false}
+            onClick={() =>
+              isSchAdmin
+                ? isHasSch
+                  ? handlePayment()
+                  : handleCreateSchool()
+                : handleShow()
+            }
+          />
+        </div>
       </div>
-      <div className="flex flex-col gap-3 mt-3">
-        <div>
+      <div className="flex flex-col gap-3 mt-3 ">
+        <div className="border-b relative pb-3 border-[#666666]">
           <div
             className={`inline-block text-[#666666] text-[10px] md:text-[14px] ${boldFont.className}`}
           >
@@ -183,27 +206,28 @@ const WalletCard2 = () => {
             </div>
           </div>
         </div>
+        <div className="flex flex-col space-y-2 pb-4  rounded-lg">
+          <p className="text-gray-700 text-sm">Fund via Transfer</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-900 font-semibold">
+                {school?.account[0]?.bankName}
+              </p>
+              <p className="text-lg font-bold tracking-wide">
+                {school?.account[0]?.accountNumber}
+              </p>
+            </div>
+            <button onClick={copyToClipboard}>
+              <CopyFilled className="w-4 bg-white h-4 mr-1" /> Copy
+            </button>
+          </div>
+        </div>
+
         <div className="absolute bottom-7  md:-right-6 -right-10">
           <Image
             src={Images.Wallet}
             className="md:scale-100 scale-75"
             alt="wallet"
-          />
-        </div>
-        <div className="flex justify-end flex-col-reverse w-[120px] relative z-10">
-          <Button
-            disabled={!access}
-            text="Topup"
-            render="dark"
-            hover={false}
-            bold={false}
-            onClick={() =>
-              isSchAdmin
-                ? isHasSch
-                  ? handlePayment()
-                  : handleCreateSchool()
-                : handleShow()
-            }
           />
         </div>
       </div>
@@ -257,6 +281,52 @@ const WalletCard2 = () => {
       </HandlePayment>
       <HandleCreateSchool />
     </div>
+    // <div className="bg-orange-100 p-5 rounded-2xl shadow-md">
+    //   <div className="flex flex-col space-y-4">
+    //     <div className="flex justify-between items-center">
+    //       <div>
+    //         <h3 className="text-lg font-semibold text-gray-800">
+    //           Wallet Balance
+    //         </h3>
+    //         <p className="text-2xl font-bold text-gray-900">₦ {2323232}</p>
+    //       </div>
+    //       <img src="/wallet.png" alt="Wallet" className="w-20 h-20" />
+    //     </div>
+
+    //     <div className="flex justify-between text-sm text-gray-600">
+    //       <p>Locked Balance</p>
+    //       <p>🔒 ₦ 50,000</p>
+    //     </div>
+
+    //     <hr className="border-gray-300" />
+
+    //     <div className="flex flex-col space-y-2 bg-white p-3 rounded-lg shadow-sm">
+    //       <p className="text-gray-700 text-sm">Fund via Transfer</p>
+    //       <div className="flex items-center justify-between">
+    //         <div>
+    //           <p className="text-gray-900 font-semibold">{'Test bank'}</p>
+    //           <p className="text-lg font-bold tracking-wide">
+    //             {'006574534343'}
+    //           </p>
+    //         </div>
+    //         <button onClick={copyToClipboard}>
+    //           <CopyOutlined className="w-4 h-4 mr-1" /> Copy
+    //         </button>
+    //       </div>
+    //     </div>
+
+    //     <button className="w-full bg-black text-white">Top Up</button>
+
+    //     <div className="text-center text-sm text-gray-600 mt-2">
+    //       <a
+    //         href="#"
+    //         className="text-black font-semibold flex items-center justify-center"
+    //       >
+    //         <GiBanknote className="w-4 h-4 mr-1" /> View Transactions
+    //       </a>
+    //     </div>
+    //   </div>
+    // </div>
   )
 }
 
