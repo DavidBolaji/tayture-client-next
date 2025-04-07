@@ -5,12 +5,20 @@ import { logger } from '@/middleware/logger'
 import { withRateLimit } from '@/middleware/rateLimiter'
 import { Prisma } from '@prisma/client'
 import { formatNumber } from '@/utils/helpers'
-const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY!
+
+const isProd = process.env.NEXT_PUBLIC_ENV === 'prod'
+const PAYSTACK_SECRET_KEY = isProd
+  ? process.env.PAYSTACK_SECRET_KEY_PROD
+  : process.env.PAYSTACK_SECRET_KEY!
 const MAX_RETRIES = 3
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
+  }
+
+  if (!PAYSTACK_SECRET_KEY) {
+    throw new Error('Missing PAYSTACK_SECRET_KEY in environment variables')
   }
 
   logger.info('Received Headers:', req.headers) // Log all headers
