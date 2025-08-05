@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const sessionData = {
     userId: userId,
-    expires: new Date(Date.now() +  60 * 60 * 1000 * 24), //241hr,
+    expires: new Date(Date.now() +  60 * 60 * 1000 * 24), //24hr,
     sessionToken: token,
   }
 

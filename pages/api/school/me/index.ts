@@ -61,7 +61,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (schoolAdminSchool) {
       const adminSchool = await db.school.findMany({
         where: {
-          sch_id: schoolAdminSchool?.schoolId,
+           sch_admin: {
+            some: {
+              sch_admin_email: schoolAdminSchool.sch_admin_email
+            }
+          }
         },
         include: {
           sch_admin: true,

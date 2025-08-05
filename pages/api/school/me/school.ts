@@ -7,6 +7,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'GET')
     return res.status(405).json({ message: 'Method not allowed' })
 
+
   try {
     /**
      * check admin to get all schools associated with email
@@ -17,11 +18,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     })
 
+
     let uniqueSchools // Copying the school array
     if (schoolAdminSchool) {
       const adminSchool = await db.school.findMany({
         where: {
-          sch_id: schoolAdminSchool?.schoolId,
+          sch_admin: {
+            some: {
+              sch_admin_email: schoolAdminSchool.sch_admin_email
+            }
+          }
         },
         include: {
           sch_admin: true,
@@ -36,6 +42,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
       uniqueSchools = adminSchool
     }
+
 
     return res.status(200).json({
       message: `Successful`,

@@ -114,7 +114,7 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
                 if (permissionGranted) {
                   window.location.assign('/dashboard')
                 } else {
-                  router.replace(router.asPath)
+                  window.location.assign(router.asPath)
                 }
               }}
             >
