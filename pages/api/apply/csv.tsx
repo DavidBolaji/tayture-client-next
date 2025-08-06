@@ -40,6 +40,7 @@ const handler =  async (req: NextApiRequest, res: NextApiResponse) => {
       const data = results.map((result) => ({
         fname: result.user.fname,
         lname: result.user.lname,
+        email: result.user.email,
         phone: result.user.phone,
         lga: result.user.profile?.lga,
         city: result.user.profile?.city,
