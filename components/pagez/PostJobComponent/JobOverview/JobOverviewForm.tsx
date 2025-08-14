@@ -90,7 +90,7 @@ return (
                 as={StyledInput}
                 placeholder="Job title"
                 type={'text'}
-                maxLength={30}
+                maxLength={100}
               />
             </div>
             <div>
