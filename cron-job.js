@@ -54,11 +54,12 @@ cron.schedule('0 20 * * 5', async () => {
         users.data.user.map((user) =>
           sendTextMessage(
             user.phone,
-            `Hello ${user.fname}, hope you're having a great day! New jobs, including "${jobs.data.jobs[0].job_title}", have been added to the Tayture platform. Visit https://tayture.com/jobs to apply.`,
+            `Hello ${user.fname}, new and exciting jobs have been posted on Tayture. Be the first to apply, https://tayture.com/jobs.`,
           ),
         ),
       )
     }
+    
     monitor.ping({ state: 'complete' })
   } catch (error) {
     monitor.ping({ state: 'fail', message: error.message })

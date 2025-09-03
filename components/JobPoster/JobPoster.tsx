@@ -40,7 +40,7 @@ const JobPoster: React.FC<JobPosterProps> = ({ progress, related = false }) => {
     if (Array.isArray(jobActive)) return jobActive
     if (typeof jobActive === 'string') {
       try {
-        const validJson = jobActive.replace(/'/g, '"')
+        const validJson = jobActive?.replace(/'/g, '"')
         return JSON.parse(validJson)
       } catch (err) {
         // console.error('Error parsing job_active:', err)

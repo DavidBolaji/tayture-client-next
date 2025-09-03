@@ -1,13 +1,14 @@
 {
-    "buildCommand": "bun run build",
-    "installCommand": "bun install --legacy-peer-deps",
-    "crons": [{
-            "path": "/api/cron/email",
-            "schedule": "0 19 * * 5"
-        },
-        {
-            "path": "/api/cron/sms",
-            "schedule": "0 19 1,15 * *"
-        }
-    ]
+  "buildCommand": "bun run build",
+  "installCommand": "bun install --legacy-peer-deps",
+  "crons": [
+    {
+      "path": "/api/cron/email",
+      "schedule": "0 19 1 * *"
+    },
+    {
+      "path": "/api/cron/sms",
+      "schedule": "0 19 1 * *"
+    }
+  ]
 }

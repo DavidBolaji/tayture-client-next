@@ -51,7 +51,7 @@ const DashboardLayout = (props: PropsWithChildren) => {
   const isSchAdmin = !user
     ? false
     : user?.path && typeof user?.path === 'string' && user?.path?.trim() !== ''
-    ? JSON.parse(user?.path.replace(/'/g, '"')).includes('school admin')
+    ? JSON.parse(user?.path?.replace(/'/g, '"')).includes('school admin')
     : false
 
   const handleClick = (link: string) => {
@@ -152,7 +152,7 @@ const DashboardLayout = (props: PropsWithChildren) => {
                     </>
                   )}
                   <DropdownComponent isAdmin={isSchAdmin} />
-                  <div className="scale-75 mt-20 translate-x-24">
+                  {/* <div className="scale-75 mt-20 translate-x-24">
                     <a
                       href={'https://wa.me/+2347067799302'}
                       rel="noreferrer"
@@ -160,7 +160,7 @@ const DashboardLayout = (props: PropsWithChildren) => {
                     >
                       <Whatsapp2 />
                     </a>
-                  </div>
+                  </div> */}
                   {/* <Whatsapp2 /> */}
                 </div>
               </div>

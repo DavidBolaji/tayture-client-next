@@ -257,6 +257,7 @@ model Job {
   active         Boolean  @default(true) // job visibility
   job_resumption DateTime
   job_no_hires   String
+  assessmentId   String?
 
   noPaid      Int      @default(0)
   noScheduled Int      @default(0)

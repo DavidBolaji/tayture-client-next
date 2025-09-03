@@ -19,7 +19,7 @@ export default async function handler(
 
   if (
     !xUser?.path ||
-    !(JSON.parse(xUser.path.replace(/'/g, '"')) as string[]).includes(
+    !(JSON.parse(xUser.path?.replace(/'/g, '"')) as string[]).includes(
       'school admin',
     )
   )

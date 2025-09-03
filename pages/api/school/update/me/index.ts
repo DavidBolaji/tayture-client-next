@@ -56,7 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (hasSchoolAdmin) {
       const schAdminDataArray = JSON.parse(
-        req.body['sch_admin'].replace(/'/g, '"'),
+        req.body['sch_admin']?.replace(/'/g, '"'),
       )
 
       await db.schoolAdmin.deleteMany({
