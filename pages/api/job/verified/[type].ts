@@ -31,6 +31,7 @@ export default async function handler(
       job_max_sal: true,
       job_exp: true,
       job_qual: true,
+      assessmentId: true,
       job_resumption: true,
       job_no_hires: true,
       jobSchoolId: true,

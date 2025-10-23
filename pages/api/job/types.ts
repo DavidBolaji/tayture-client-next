@@ -11,7 +11,8 @@ export interface IJobSchDb {
   job_qual: string
   job_resumption: string
   job_no_hires: string
-  jobSchoolId: String
+  jobSchoolId: string
+  assessmentId: string
   jobUserzId: String
   createdAt: Date | string
   updatedAt?: Date

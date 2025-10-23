@@ -49,7 +49,6 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
       })
     },
     onSuccess: (res) => {
-      const job = res.data.job
       if (ui.postLandingModal?.visibility) {
         setUI((prev) => ({
           ...prev,
@@ -75,7 +74,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
-      const t = setTimeout(() => {
+      setTimeout(() => {
         setMessage(() => '')
       }, 2000)
     },
@@ -99,7 +98,11 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
 
   const handleSubmit = (values: any) => {
     if (isEdit) {
-      updateJob({ ...values, jobSchoolId: idz ?? school?.sch_id })
+      console.log('[HERE]')
+      const {assessment, enable_assessment, ...rest} = values;
+      console.log(values)
+      console.log(rest)
+      updateJob({ ...rest, jobSchoolId: idz ?? school?.sch_id })
     } else {
       mutate({ ...values, jobSchoolId: idz ?? school?.sch_id })
     }
@@ -122,7 +125,7 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
 
   return (
     <Formik
-      key={1}
+      key={2}
       enableReinitialize
       validateOnMount={true}
       initialValues={{
@@ -130,12 +133,13 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
         job_active: isArrayJson
           ? JSON.parse({ ...jobData }.job_active)
           : { ...jobData }?.job_active,
+        assessmentId: jobData?.assessmentId ?? null,
       }}
-      onSubmit={() => {}}
+      onSubmit={() => { }}
       validationSchema={jobValidationSchema}
     >
       {({ values, isValid }) => (
-        <Form className="w-full">
+        <Form className="" id="jobPreview">
           <div>
             <div className="text-xs w-full text-center mb-2 italic">
               Note: Posted jobs cannot be edited. Please review before posting.
@@ -192,9 +196,8 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
                 Salary details
               </h3>
               <div
-                className={`grid md:grid-cols-12 grid-cols-6 md:gap-5 ${
-                  values?.job_max_sal || values?.job_min_sal ? 'mt-8' : 'mt-0'
-                }`}
+                className={`grid md:grid-cols-12 grid-cols-6 md:gap-5 ${values?.job_max_sal || values?.job_min_sal ? 'mt-8' : 'mt-0'
+                  }`}
               >
                 <div className="col-span-6">
                   <Field
@@ -256,8 +259,110 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
                 disabled
               />
             </div>
+
+            {/* Assessment Preview Section */}
+            {(values?.enable_assessment || values?.assessmentId) && (
+              <div className="bg-orange p-6 rounded-lg  border border-primary">
+                <h3 className={`mb-4 text-lg font-semibold text-white ${regularFont.className}`}>
+                  Assessment Details
+                </h3>
+
+                <div className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="font-medium text-white">Title:</h4>
+                      <p className="text-white">{values.assessment.title}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-white">Duration:</h4>
+                      <p className="text-white">
+                        {values.assessment.hasDuration ? `${values.assessment.duration} minutes` : 'No time limit'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-white">Description:</h4>
+                    <p className="text-white">{values.assessment.description}</p>
+                  </div>
+
+                  {values.assessment.hasDeadline && (
+                    <div>
+                      <h4 className="font-medium text-white">Deadline:</h4>
+                      <p className="text-white">
+                        {dayjs(values.assessment.deadline).format('MMMM DD, YYYY')}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <span className={`w-3 h-3 rounded-full ${values.assessment.proctored ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                      <span className="text-sm text-white">
+                        {values.assessment.proctored ? 'Proctored' : 'Not Proctored'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {values.assessment.introContent[0].content.trim().length > 1 ? 
+                  <div>
+                    <h4 className="font-medium text-white mb-2">Intro Content ({values.assessment.introContent?.length || 0}):</h4>
+                    <div className="space-y-2">
+                      {values.assessment.introContent?.map((content: any, index: number) => (
+                        <div key={index} className="bg-white p-3 rounded border">
+                          <div className="flex justify-between items-start">
+                            {/* <p className="text-sm text-gray-700 flex-1">{question.prompt}</p> */}
+                           <div dangerouslySetInnerHTML={{__html: content.content}} />
+                          </div>
+                          
+                        </div>
+                      ))}
+                    </div>
+                  </div>: null}
+
+                  <div>
+                    <h4 className="font-medium text-white mb-2">Questions ({values.assessment.questions?.length || 0}):</h4>
+                    <div className="space-y-2">
+                      {values.assessment.questions?.map((question: any, index: number) => (
+                        <div key={index} className="bg-white p-3 rounded border">
+                          <div className="flex justify-between items-start">
+                            <p className="text-sm text-gray-700 flex-1">{question.prompt}</p>
+                            <span className="text-xs bg-gray-200 px-2 py-1 rounded ml-2">
+                              {question.type}
+                            </span>
+                          </div>
+                          {question.hasDuration && (
+                            <p className="text-xs text-gray-500 mt-1">
+                              Time limit: {question.duration} minutes
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {values?.assessmentId && (
+              <>
+              <div className='pt-12' />
+              <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-green-800 font-medium">Assessment Enabled</h4>
+                  <p className="text-sm text-green-700">Applicants will complete the assessment before their application is reviewed</p>
+                  <p className="text-xs text-green-600 mt-1">Assessment ID: {values.assessmentId}</p>
+                </div>
+              </div>
+              </>
+            )}
           </div>
-          <div className="flex justify-between pb-[100px]">
+          <div className="flex justify-between mt-10">
             <Button
               disabled={isPending || jobPending}
               bold={false}

@@ -1,6 +1,7 @@
 import db from '@/db/db'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { IJobSchDb } from './types'
+import { Prisma } from '@prisma/client'
 
 type Data = {
   message: string
@@ -12,7 +13,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  const selected = {
+  const selected:Prisma.JobSelect = {
     job_id: true,
     job_title: true,
     job_role: true,
@@ -22,6 +23,7 @@ export default async function handler(
     job_max_sal: true,
     job_exp: true,
     job_qual: true,
+    assessmentId: true,
     job_resumption: true,
     job_no_hires: true,
     jobSchoolId: true,

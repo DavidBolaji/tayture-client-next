@@ -42,8 +42,8 @@ const PaymentComponent: React.FC<{
       process.env.NEXT_PUBLIC_ENV === 'dev'
         ? process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC!
         : process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_PROD!,
-    accountNumber: school.account[0].accountNumber || '', // Replace with actual DVA account
-    bankName: school.account[0].bankName || '',
+    accountNumber: school.account[0]?.accountNumber || '', // Replace with actual DVA account
+    bankName: school.account[0]?.bankName || '',
   })
 
   const onSuccess = () => {

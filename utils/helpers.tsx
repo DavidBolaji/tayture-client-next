@@ -135,15 +135,14 @@ export const formatXAxisLabel = (dateString: string) => {
   const date = new Date(dateString)
   const day = date.getDate()
   const month = date.toLocaleString('default', { month: 'short' })
-  const formattedDate = `${day}${
-    day === 1 || day === 21 || day === 31
+  const formattedDate = `${day}${day === 1 || day === 21 || day === 31
       ? 'st'
       : day === 2 || day === 22
-      ? 'nd'
-      : day === 3 || day === 23
-      ? 'rd'
-      : 'th'
-  } ${month}`
+        ? 'nd'
+        : day === 3 || day === 23
+          ? 'rd'
+          : 'th'
+    } ${month}`
   return formattedDate
 }
 
@@ -242,7 +241,7 @@ export const getExt = (file: any, fileType: string) => {
     fileType === 'docx' ||
     fileType === 'application/msword' ||
     fileType ===
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   ) {
     return 'doc'
   }
@@ -475,7 +474,11 @@ export const handleUpload = async (
     )
 
     try {
-      const response = await Cloudinary.post('/auto/upload', formData)
+      const response = await axios.post(
+        'https://api.cloudinary.com/v1_1/dhwlkhbet/auto/upload',
+        formData,
+      )
+
       const { secure_url } = response.data
       fn('cv', secure_url)
     } catch (error: any) {
@@ -603,15 +606,12 @@ export const convertData = (originalData: any) => {
         orderedSections.employment = originalData.employment.map(
           (emp: any) => ({
             title: emp.title,
-            date: `${
-              getMonthNumber[emp.startMonth as keyof typeof getMonthNumber]
-            }/${emp.startYear} – ${
-              emp.endMonth === ''
+            date: `${getMonthNumber[emp.startMonth as keyof typeof getMonthNumber]
+              }/${emp.startYear} – ${emp.endMonth === ''
                 ? 'Present'
-                : `${
-                    getMonthNumber[emp.endMonth as keyof typeof getMonthNumber]
-                  }/${emp.endYear}`
-            }`,
+                : `${getMonthNumber[emp.endMonth as keyof typeof getMonthNumber]
+                }/${emp.endYear}`
+              }`,
             startMonth: emp.startMonth.toString(),
             endMonth: emp.endMonth.toString(),
             startYear: emp.startYear.toString(),

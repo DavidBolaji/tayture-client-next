@@ -7,41 +7,36 @@ import { ISchDb } from '../../types'
 import sendSchoolCreated from '@/mail/sendSchoolCreated'
 import { appendSchoolIdToEmail, createDVA, formatNumber } from '@/utils/helpers'
 import { logger } from '@/middleware/logger'
-type Data = {
-  message: string
-  school?: ISchDb
-}
+import axios from 'axios'
+
+let secret = process.env.JELO_SECRET;
+let url =
+  process.env.NEXT_PUBLIC_ENV === 'prod'
+    ? process.env.JELO_API_LIVE
+    : process.env.JELO_API_DEV
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== 'POST')
+  if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
-
-  console.log('STARTED')
+  }
 
   if (
     !req.authUser?.path ||
-    !(JSON.parse(req.authUser.path.replace(/'/g, '"')) as string[]).includes(
-      'school admin',
-    )
-  )
-    return res
-      .status(401)
-      .json({ message: 'Unauthorzed, user is not a school admin' })
-
-  console.log('IS SCHOOL ADMIN')
+    !(JSON.parse(req.authUser.path.replace(/'/g, '"')) as string[]).includes('school admin')
+  ) {
+    return res.status(401).json({ message: 'Unauthorized, user is not a school admin' })
+  }
 
   const holder = ['sch_verified', 'sch_admin']
   const keys = Object.keys(req.body)
   const data: any = {}
 
   keys.forEach((key) => {
-    if (!holder.includes(key)) {
-      data[key] = req.body[key]
-    }
+    if (!holder.includes(key)) data[key] = req.body[key]
   })
 
   try {
-    // create school
+    // === 1. DB operations only ===
     const sch = await db.$transaction(async (tx) => {
       const schoolCreate = await tx.school.create({
         data: {
@@ -50,16 +45,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       })
 
-      logger.info('SCHOOL CREATED', schoolCreate.sch_id)
-
       const walletSchId = schoolCreate.sch_id
 
-      const schAdminDataArray = JSON.parse(
-        req.body['sch_admin'].replace(/'/g, '"'),
-      )
+      const schAdminDataArray = JSON.parse(req.body['sch_admin'].replace(/'/g, '"'))
 
-      // create school admin
-      const schAdmin = tx.schoolAdmin.createMany({
+      await tx.schoolAdmin.createMany({
         data: schAdminDataArray.map((admin: any) => ({
           sch_admin_id: uuid(),
           schoolId: walletSchId,
@@ -67,9 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         })),
       })
 
-      logger.info('SCHOOL ADMIN CREATED')
-      // create school wallet
-      const schWallet = tx.wallet.create({
+      await tx.wallet.create({
         data: {
           walletSchId,
           wallet_balance: 4000,
@@ -77,47 +65,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       })
 
-      logger.info('SCHOOL WALLET')
-
-      logger.info('Email data', req.authUser?.email || '', walletSchId)
-      // create unique email
-      const email = appendSchoolIdToEmail(
-        req.authUser?.email || '',
-        walletSchId,
-      )
-
-      logger.info('NEW MAIL', email)
-      // create dedicated virtual account paystack
-
-      await Promise.all([schAdmin, schWallet])
-
-      const dAccount = await createDVA(
-        walletSchId,
-        req.authUser?.id || '',
-        schoolCreate.sch_name,
-        email,
-        req.authUser?.phone || '',
-      )
-
-      logger.info(`DVA ${dAccount.data}`)
-
       await tx.transaction.create({
         data: {
           amount: 4000,
           type: 'BONUS',
-          message: `School Creation Bonus of ₦ ${formatNumber(
-            4000,
-            'NGN',
-            {},
-          )}`,
+          message: `School Creation Bonus of ₦ ${formatNumber(4000, 'NGN', {})}`,
           userId: req.authUser?.id || '',
-          schoolId: schoolCreate.sch_id,
+          schoolId: walletSchId,
         },
       })
 
-      logger.info('CREATED TRANSACTION')
-
-      tx.notifcation.create({
+      await tx.notifcation.create({
         data: {
           msg: `Hurray!!! you have succesfully created a school`,
           notificationUser: req.authUser?.id as string,
@@ -125,14 +83,43 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       })
 
-      logger.info('CREATED TRANSACTION')
-      sendSchoolCreated({
-        user: `${req.authUser?.fname} ${req.authUser?.lname}`,
-        school: schoolCreate.sch_name,
-      })
-
       return schoolCreate
     })
+
+    // === 2. External calls (after commit) ===
+    const walletSchId = sch.sch_id
+    const email = appendSchoolIdToEmail(req.authUser?.email || '', walletSchId)
+
+    // fire & forget or await depending on importance
+    const createOrg = axios.post(
+      `${url}/signup`,
+      {
+        email,
+        password: walletSchId,
+        fname: req.authUser?.fname,
+        lname: req.authUser?.lname,
+        phone: `${req.authUser?.phone}_${walletSchId}`,
+        name: sch.sch_name,
+        schId: walletSchId,
+      },
+      { headers: { Authorization: `Bearer ${secret}` } },
+    )
+
+    const dAccount = createDVA(
+      walletSchId,
+      req.authUser?.id || '',
+      sch.sch_name,
+      email,
+      req.authUser?.phone || '',
+    )
+
+    sendSchoolCreated({
+      user: `${req.authUser?.fname} ${req.authUser?.lname}`,
+      school: sch.sch_name,
+    })
+
+    // don’t block main response on these if not critical
+    await Promise.allSettled([createOrg, dAccount])
 
     return res.status(200).json({
       message: 'School Created',
@@ -142,13 +129,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     logger.error(error)
     if ((error as Error).name === 'PrismaClientKnownRequestError') {
       return res.status(400).json({
-        message: `An error occured: Client can only create one School`,
+        message: `An error occurred: Client can only create one School`,
       })
     }
-
-    res.status(400).json({
-      message: `An error occured: ${(error as Error).message}`,
-    })
+    res.status(400).json({ message: `An error occurred: ${(error as Error).message}` })
   }
 }
 

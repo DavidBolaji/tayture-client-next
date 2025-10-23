@@ -5,7 +5,7 @@ import { SelectInput } from '../../Form/SelectInput/SelectInput'
 import { regularFont } from '@/assets/fonts/fonts'
 import { degree, expL } from '@/utils/data'
 import CVComponent from '../../CVComponent'
-import { appliedSucces, checkFileExtension } from '@/utils/helpers'
+import { appliedSucces, checkFileExtension, sleep } from '@/utils/helpers'
 import { useGlobalContext } from '@/Context/store'
 import Spinner from '../../Spinner/Spinner'
 import { ApplyFormSchema } from './ApplyFormSchema'
@@ -45,11 +45,19 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
         ...data,
         schoolId: activeJob.school.sch_id,
         jobId: isRelated ? relatedJob.job_id : activeJob.job_id,
+        assessmentId: activeJob.assessmentId
       })
     },
     onSuccess: async (res) =>
       appliedSucces(res, pathname, setUI, setMessage, router, queryClient, SW),
-    onError: (err) => {
+    onError: async (err) => {
+      if((err as Error).message === "Request failed with status code 401" || (err as Error).message === "Request failed with status code 403") {
+        queryClient.removeQueries()
+        setMessage(() => "Unauthorized. please reload and try again or login to apply for job")
+        await sleep(3000)
+        window.location.reload()
+        return;
+      }
       setMessage(() => (err as Error).message)
     },
   })

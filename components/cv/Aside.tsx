@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
-import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd'
+import { useDrag, useDrop } from 'react-dnd'
 import { XYCoord } from 'dnd-core'
 import Button from '../Button/Button'
-import { FiChevronLeft, FiChevronRight, FiMove } from 'react-icons/fi'
+import { FiMove } from 'react-icons/fi'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FaArrowAltCircleDown, FaArrowAltCircleUp } from 'react-icons/fa'
 

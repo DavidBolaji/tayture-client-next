@@ -3,18 +3,28 @@ import { getUserById } from '@/lib/services/user'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { ISchDb } from '../types'
 import { v4 as uuid } from 'uuid'
-import { appendSchoolIdToEmail, createDVA } from '@/utils/helpers'
+import { appendSchoolIdToEmail, createDVA, formatNumber } from '@/utils/helpers'
+import axios from 'axios'
+import sendSchoolCreated from '@/mail/sendSchoolCreated'
+import { logger } from '@/middleware/logger'
+
+let secret = process.env.JELO_SECRET;
+let url =
+  process.env.NEXT_PUBLIC_ENV === 'prod'
+    ? process.env.JELO_API_LIVE
+    : process.env.JELO_API_DEV
+
+
 type Data = {
   message: string
   school?: ISchDb
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>,
-) {
-  if (req.method !== 'POST')
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
+  }
 
   const xUser = await getUserById(req.body.schUserId)
 
@@ -33,78 +43,105 @@ export default async function handler(
   const data: any = {}
 
   keys.forEach((key) => {
-    if (!holder.includes(key)) {
-      data[key] = req.body[key]
-    }
+    if (!holder.includes(key)) data[key] = req.body[key]
   })
 
   try {
-    // create school
-    const schoolCreate = await db.school.create({
-      data: {
-        ...data,
-      },
+    // === 1. DB operations only ===
+    const sch = await db.$transaction(async (tx) => {
+      const schoolCreate = await tx.school.create({
+        data: {
+          ...data,
+        },
+      })
+
+      const walletSchId = schoolCreate.sch_id
+
+      const schAdminDataArray = JSON.parse(req.body['sch_admin'].replace(/'/g, '"'))
+
+      await tx.schoolAdmin.createMany({
+        data: schAdminDataArray.map((admin: any) => ({
+          sch_admin_id: uuid(),
+          schoolId: walletSchId,
+          ...admin,
+        })),
+      })
+
+      await tx.wallet.create({
+        data: {
+          walletSchId,
+          wallet_balance: 4000,
+          walletUserId: xUser.id || '',
+        },
+      })
+
+      await tx.transaction.create({
+        data: {
+          amount: 4000,
+          type: 'BONUS',
+          message: `School Creation Bonus of ₦ ${formatNumber(4000, 'NGN', {})}`,
+          userId: xUser?.id || '',
+          schoolId: walletSchId,
+        },
+      })
+
+      await tx.notifcation.create({
+        data: {
+          msg: `Hurray!!! you have succesfully created a school`,
+          notificationUser: xUser?.id as string,
+          caption: 'School created',
+        },
+      })
+
+      return schoolCreate
     })
 
-    const walletSchId = schoolCreate.sch_id
+    // === 2. External calls (after commit) ===
+    const walletSchId = sch.sch_id
+    const email = appendSchoolIdToEmail(req.authUser?.email || '', walletSchId)
 
-    const schAdminDataArray = JSON.parse(
-      req.body['sch_admin'].replace(/'/g, '"'),
+    // fire & forget or await depending on importance
+    const createOrg = axios.post(
+      `${url}/signup`,
+      {
+        email,
+        password: walletSchId,
+        fname: xUser?.fname,
+        lname: xUser?.lname,
+        phone: `${xUser?.phone}_${walletSchId}`,
+        name: sch.sch_name,
+        schId: walletSchId,
+      },
+      { headers: { Authorization: `Bearer ${secret}` } },
     )
 
-    // create school admin
-    const schAdmin = db.schoolAdmin.createMany({
-      data: schAdminDataArray.map((admin: any) => ({
-        sch_admin_id: uuid(),
-        schoolId: walletSchId,
-        ...admin,
-      })),
-    })
-
-    // create school wallet
-    const schWallet = db.wallet.create({
-      data: {
-        walletSchId,
-        walletUserId: req.body.schUserId,
-      },
-    })
-
-    // create unique email
-    const email = appendSchoolIdToEmail(xUser.email, walletSchId)
-    // create dedicated virtual account paystack
-    const dva = createDVA(
+    const dAccount = createDVA(
       walletSchId,
-      xUser.id,
-      schoolCreate.sch_name,
+      req.authUser?.id || '',
+      sch.sch_name,
       email,
-      xUser.phone,
+      xUser?.phone || '',
     )
 
-    const [, , dAccount] = await Promise.all([schAdmin, schWallet, dva])
-
-    // create prisma Dedicated virtual account
-    await db.dvaAccount.create({
-      data: {
-        schoolId: walletSchId,
-        accountNumber: dAccount.data.account_number,
-        bankName: dAccount.data.bank.name,
-        bankCode: dAccount.data.bank.code,
-        reference: dAccount.data.reference,
-      },
+    sendSchoolCreated({
+      user: `${xUser?.fname} ${req.authUser?.lname}`,
+      school: sch.sch_name,
     })
 
-    res.status(201).json({
+    // don’t block main response on these if not critical
+    await Promise.allSettled([createOrg, dAccount])
+
+    return res.status(200).json({
       message: 'School Created',
-      school: schoolCreate as unknown as ISchDb,
+      school: sch as unknown as ISchDb,
     })
   } catch (error) {
+    logger.error(error)
     if ((error as Error).name === 'PrismaClientKnownRequestError') {
       return res.status(400).json({
-        message: `An error occured: Client can only create one School`,
+        message: `An error occurred: Client can only create one School`,
       })
     }
-    res.status(400).json({
-      message: `An error occured: ${(error as Error).message}`,
-    })
+    res.status(400).json({ message: `An error occurred: ${(error as Error).message}` })
   }
 }

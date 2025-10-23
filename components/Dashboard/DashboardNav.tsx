@@ -27,13 +27,13 @@ const DashboardNav: React.FC = () => {
         <DropdownComponent isAdmin={false} />
         <div className="flex gap-[0.625rem]">
           <div className="scale-50 translate-y-[23px] translate-x-[13px]">
-          {/* <a
+          <a
             href={'https://wa.me/+2347067799302'}
             rel="noreferrer"
             target="_blank"
           >
             <Whatsapp2 />
-          </a> */}
+          </a>
           </div>
           {permissionGranted && <NotificationDropdown mobile />}
           <div

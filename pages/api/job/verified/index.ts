@@ -1,4 +1,5 @@
 import db from '@/db/db'
+import { Prisma, PrismaClient } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
@@ -18,7 +19,7 @@ export default async function handler(
   try {
     const { searchTerm = '', filterBy = 'job', currentPage, pageSize } = req.query
 
-    const select = {
+    const select:Prisma.JobSelect = {
       job_id: true,
       job_title: true,
       job_role: true,
@@ -29,6 +30,7 @@ export default async function handler(
       job_exp: true,
       job_qual: true,
       job_resumption: true,
+      assessmentId: true,
       job_no_hires: true,
       jobSchoolId: true,
       jobUserzId: true,

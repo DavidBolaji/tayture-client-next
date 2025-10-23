@@ -10,7 +10,7 @@ const LearningCardDesktop = () => {
       >
         <div className="group relative flex flex-col items-center mb-6 h-16 xl:h-[0px] opacity-1 hover:h-36 peer hover:opacity-90 ease-in-out cursor-pointer duration-1000 ">
           <div className="flex flex-col justify-center items-center  transition-transform transform group-hover:-translate-y-[55%] ease-in-out duration-1000">
-            <div className="group-hover:ease-in-out group-hover:opacity-0 transition-transform transform duration-[2000ms] scale-75 delay-500">
+            <div className="group-hover:ease-in-out group-hover:opacity-0 transition-transform transform scale-75 delay-500">
               {data.icon}
             </div>
             <p className="text-center whitespace-pre-line break-inside sub_two font-[700] w-52">
