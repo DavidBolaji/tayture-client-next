@@ -250,14 +250,14 @@ const DropdownComponent: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const allItems = [
     ...userItems,
     ...schoolAdminItems,
-    {
+    user?.email === "odavidbolaji14@gmail.com" ? {
       key: 'login_j',
       label: (
         <div onClick={user?.email === "odavidbolaji14@gmail.com" ? handleJLogin: () => {}} className="text-blue-500 flex items-center gap-2">
           <LoginOutlined /> Login to Jelo
         </div>
       ),
-    },
+    } : {},
     {
       key: 'signout',
       label: (
