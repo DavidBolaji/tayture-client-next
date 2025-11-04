@@ -32,6 +32,9 @@ importers:
       '@bull-board/ui':
         specifier: ^5.15.1
         version: 5.23.0
+      '@davidbolaji/termii-node':
+        specifier: ^1.0.3
+        version: 1.0.3
       '@dnd-kit/core':
         specifier: ^6.1.0
         version: 6.3.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1354,6 +1357,9 @@ packages:
 
   '@dabh/diagnostics@2.0.8':
     resolution: {integrity: sha512-R4MSXTVnuMzGD7bzHdW2ZhhdPC/igELENcq5IjEverBvq5hn1SXCWcsi6eSsdWP0/Ur+SItRRjAktmdoX/8R/Q==}
+
+  '@davidbolaji/termii-node@1.0.3':
+    resolution: {integrity: sha512-b+1TraT5POtoRc2PSPhyEV0DXUmGc6sjH0rDQ19SmDUQduKfjFFmCGxfHyxAA7LFpYYu7xjKcaG/DeNcax6vUA==}
 
   '@dependents/detective-less@4.1.0':
     resolution: {integrity: sha512-KrkT6qO5NxqNfy68sBl6CTSoJ4SNDIS5iQArkibhlbGU4LaDukZ3q2HIkh8aUKDio6o4itU4xDR7t82Y2eP1Bg==}
@@ -13483,6 +13489,12 @@ snapshots:
       '@so-ric/colorspace': 1.1.6
       enabled: 2.0.0
       kuler: 2.0.0
+
+  '@davidbolaji/termii-node@1.0.3':
+    dependencies:
+      axios: 1.12.2
+    transitivePeerDependencies:
+      - debug
 
   '@dependents/detective-less@4.1.0':
     dependencies:

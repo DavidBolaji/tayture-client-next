@@ -13,7 +13,6 @@ const AuthLayer = (props: PropsWithChildren) => {
   const queryClient = useQueryClient()
   const { setUI } = useGlobalContext()
 
-  // const permission = queryClient.getQueryData(['permission'])
   const job = router.query?.job
   const profile = router.query?.profile
   const school = router.query?.school
@@ -22,11 +21,12 @@ const AuthLayer = (props: PropsWithChildren) => {
     setMounted(true)
   }, [])
 
+  // Fixed: Corrected typo from 'permision' to 'permission'
   const { data: permission } = useQuery({
-    queryKey: ['permision'],
+    queryKey: ['permission'],
     queryFn: async () => {
-      return queryClient.getQueryData(['permission']);
-    }
+      return queryClient.getQueryData(['permission'])
+    },
   })
 
   const { isError, isLoading, data } = useQuery({
@@ -35,54 +35,71 @@ const AuthLayer = (props: PropsWithChildren) => {
       if (permission !== 'limited') {
         try {
           const req = await getUser2()
-          queryClient.setQueryData(['pinId'], () => req.data.user.pinId)
           const userData = req.data.user
+          
+          // Fixed: Ensure pinId is set before continuing
+          if (userData.pinId) {
+            queryClient.setQueryData(['pinId'], userData.pinId)
+            localStorage.setItem('pinId', userData.pinId)
+          }
+          
+          // Fixed: Set email immediately
+          if (userData.email) {
+            localStorage.setItem('email', userData.email)
+          }
+          
           return userData
         } catch (error: any) {
-          console.log('[ERROR]', error.message)
+          console.error('[ERROR] Failed to fetch user:', error.message)
           throw new Error('Failed to fetch user data')
         }
       }
-      return queryClient.getQueryData(['user']);
+      return queryClient.getQueryData(['user'])
     },
     refetchOnWindowFocus: false,
+    // Fixed: Add retry logic for network issues
+    retry: 2,
+    retryDelay: 1000,
   })
-
-
 
   useEffect(() => {
     if (!mounted) return
+    if (!data) return
 
-    if (data) {
-      if (permission !== 'limited') {
-        if (!data.validated) {
-          setUI((prev: any) => ({
-            ...prev,
-            OTPModal: {
-              ...prev.OTPModal,
-              visibility: true,
-            },
-          }))
-        }
+    // Fixed: Moved pinId and email setting here as backup
+    if (permission !== 'limited') {
+      if (data.pinId && typeof data.pinId === 'string' && data.pinId.trim().length > 0) {
+        queryClient.setQueryData(['pinId'], data.pinId)
+        localStorage.setItem('pinId', data.pinId)
+      }
+      
+      if (data.email) {
+        localStorage.setItem('email', data.email)
       }
 
-      if (permission !== 'limited') {
-        if (typeof data.pinId !== 'undefined' && data.pinId.trim().length > 0) {
-          localStorage.setItem('pinId', data.pinId)
-        }
-        localStorage.setItem('email', data.email)
+      // Show OTP modal if user is not validated
+      if (!data.validated) {
+        setUI((prev: any) => ({
+          ...prev,
+          OTPModal: {
+            ...prev.OTPModal,
+            visibility: true,
+          },
+        }))
+      }
 
-        if (job === '1') {
-          router.push('/dashboard/jobs?jobz=1')
-        }
-        if (profile === '1') {
-          router.push('/dashboard/profile?profile=2')
-        }
+      // Handle query redirects
+      if (job === '1') {
+        router.push('/dashboard/jobs?jobz=1')
+      }
+      if (profile === '1') {
+        router.push('/dashboard/profile?profile=2')
+      }
 
-        if (school === '1' && !data.school?.sch_name) {
+      if (school === '1') {
+        if (!data.school?.sch_name) {
           router.push('/dashboard/school/new?redirect_post=1')
-        }
-        if (school === '1' && data?.school?.sch_name) {
+        } else {
           router.push('/dashboard/school/new?post_job=1')
         }
       }
