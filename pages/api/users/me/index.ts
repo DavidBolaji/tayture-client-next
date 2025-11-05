@@ -1,5 +1,9 @@
+// pages/api/users/me/index.ts
+// Updated to use database-stored OTP
+
 import db from '@/db/db'
-import { sendTextMessageOTP } from '@/lib/services/user'
+import { generateAndSendOTP } from '@/lib/services/otp'
+
 import verifyToken from '@/middleware/verifyToken'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -8,9 +12,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ message: 'Method not allowed' })
 
   try {
+    const userId = req.authUser?.id
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
+
     const user = await db.user.findFirst({
       where: {
-        id: req.authUser?.id,
+        id: userId,
       },
       include: {
         applied: {
@@ -120,57 +130,57 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    let pinId = user.pinId // Fixed: Use existing pinId from database first
     const { add } = req.query
 
-    // Fixed: Only send new OTP if explicitly requested and user is not validated
-    if (add === '1' && !user?.validated) {
+    // Send OTP if requested and user is not validated
+    if (add === '1' && !user.validated) {
       try {
-        // Fixed: Validate phone number before sending OTP
-        if (!user.phone || user.phone.trim().length === 0) {
-          return res.status(400).json({ 
-            message: 'Phone number is required to send OTP' 
-          })
-        }
+        // Validate phone number
+        // if (!user.phone || user.phone.trim().length === 0) {
+        //   return res.status(400).json({
+        //     message: 'Phone number is required to send OTP',
+        //   })
+        // }
 
-        console.log('Sending OTP to:', user.phone)
-        const reqOTP = await sendTextMessageOTP(user.phone)
-        
-        // Fixed: Better error handling for OTP service
-        if (reqOTP?.pinId) {
-          pinId = reqOTP.pinId
-          
-          // Fixed: Update user with new pinId in database
-          await db.user.update({
-            where: { id: user.id },
-            data: { pinId },
-          })
-          
-          console.log('OTP sent successfully, pinId:', pinId?.substring(0, 10) + '...')
-        } else {
-          console.error('Failed to get pinId from OTP service:', reqOTP)
-          return res.status(500).json({ 
-            message: 'Failed to send OTP. Please try again.' 
-          })
-        }
+        // Generate and send OTP
+        const otpResult = await generateAndSendOTP(user.id, user.phone)
+
+        console.log('OTP sent successfully to user:', user.id)
+
+        return res.status(200).json({
+          message: 'OTP sent successfully',
+          user: {
+            ...user,
+            otp: undefined, // Never send OTP to client
+            otpExpiry: undefined,
+            otpAttempts: undefined,
+          },
+          otpSent: true,
+          otpExpiresAt: otpResult.expiresAt,
+        })
       } catch (otpError: any) {
         console.error('Error sending OTP:', otpError)
-        return res.status(500).json({ 
-          message: 'Failed to send OTP. Please try again later.',
-          error: otpError.message 
+        return res.status(500).json({
+          message: otpError.message || 'Failed to send OTP. Please try again later.',
         })
       }
     }
 
+    // Return user data without OTP fields
     return res.status(200).json({
       message: 'Successful',
-      user: { ...user, pinId },
+      user: {
+        ...user,
+        otp: undefined, // Never expose OTP
+        otpExpiry: undefined,
+        otpAttempts: undefined,
+      },
     })
   } catch (error: any) {
     console.error('Error in /users/me handler:', error)
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: 'Internal server error',
-      error: error.message 
+      error: error.message,
     })
   }
 }

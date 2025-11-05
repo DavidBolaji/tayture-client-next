@@ -1,7 +1,8 @@
 import db from '@/db/db'
 import { Axios } from '@/request/request'
 import axios from 'axios'
-import { initialize, sendToken, verifyToken } from '@davidbolaji/termii-node';
+import { initialize, sendMessage, sendToken, verifyToken } from '@davidbolaji/termii-node';
+import { validateOTPFromDB } from './otp';
 
 initialize(process.env.NEXT_PUBLIC_TERMII_API_KEY as string);
 
@@ -54,39 +55,16 @@ export const sendTextMessage = async (phone: string, msg: string) => {
     console.log('error: ', error)
   }
 }
-export const sendTextMessageOTP = async (phone: string) => {
+export const sendTextMessageOTP = async (phone: string, otp: string) => {
   try {
-    const result = await sendToken({
-      message_type: 'NUMERIC',
+    const result = await sendMessage({
       to: phone.replace('+', ''),
       from: 'N-Alert',
+      sms: `${otp}`,
       channel: 'dnd',
-      pin_attempts: 3,
-      pin_time_to_live: 10,
-      pin_length: 4,
-      pin_placeholder: '< 1234 >',
-      message_text: 'Your Tayture one time password is < 1234 >',
-      pin_type: 'NUMERIC',
+      type: "NUMERIC"
     })
 
-
-    // const result = await axios.post(
-    //   `${process.env.NEXT_PUBLIC_TERMII_URL}/sms/otp/send`,
-    //   {
-    //     api_key: process.env.NEXT_PUBLIC_TERMII_API_KEY,
-    //     message_type: 'NUMERIC',
-    //     to: phone.replace('+', ''),
-    //     from: 'N-Alert',
-    //     channel: 'dnd',
-    //     pin_attempts: 3,
-    //     pin_time_to_live: 10,
-    //     pin_length: 4,
-    //     pin_placeholder: '< 1234 >',
-    //     message_text: 'Your Tayture one time password is < 1234 >',
-    //     pin_type: 'NUMERIC',
-    //   },
-    // )
-    console.log('sending')
     return result
   } catch (error: any) {
     console.log('error: ', error)
@@ -103,29 +81,9 @@ export const valdateOTP = async ({
   email: string,
 }) => {
   try {
-
-    const result = await verifyToken({
-      pin_id: pinId,
-      pin: otp,
-    })
-
-    // const result = await axios.post(
-    //   `${process.env.NEXT_PUBLIC_TERMII_URL}/sms/otp/verify`,
-    //   {
-    //     api_key: process.env.NEXT_PUBLIC_TERMII_API_KEY,
-
-    //   },
-    // )
-
-    const user = await Axios.get(`/users/email/${email}`)
-    if (result.verified) {
-      await Axios.put(`/users/update/${user?.data.user.id}`, {
-        validated: 1,
-      })
-      return result
-    } else {
-      return result
-    }
+    const req = await Axios.post(`/users/validate-otp`, {otp})
+    const result = req.data;
+    return result
   } catch (error: any) {
     console.log(error.response.data.verified)
     return { message: error.response.data.verified }

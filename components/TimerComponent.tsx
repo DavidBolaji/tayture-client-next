@@ -9,6 +9,7 @@ import Spinner from './Spinner/Spinner'
 import { message } from 'antd'
 import { useQueryClient } from '@tanstack/react-query'
 import { User } from '@prisma/client'
+import { resendOTP } from '@/lib/api/otp'
 
 const TimerComponent = () => {
   const queryClient = useQueryClient()
@@ -21,10 +22,11 @@ const TimerComponent = () => {
   const handleButtonClick = async () => {
     setLoad(true)
     try {
-      const result = await sendTextMessageOTP(user.phone as string)
-      console.log(result?.data?.pinId)
-      queryClient.setQueryData(['pinId'], () => result?.data?.pinId)
-      localStorage.setItem('pinId', result?.data?.pinId)
+      await resendOTP()
+      // const result = await sendTextMessageOTP(user.phone as string)
+      // console.log(result?.data?.pinId)
+      // queryClient.setQueryData(['pinId'], () => result?.data?.pinId)
+      // localStorage.setItem('pinId', result?.data?.pinId)
       setTime(() => Date.now() + 60000)
       setIsButtonDisabled(true)
       setLoad(false)

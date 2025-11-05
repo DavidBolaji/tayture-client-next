@@ -482,6 +482,10 @@ model User {
   schedule               Schedule[]
   cvDownloadProcesses    CVDownloadProcess[]
 
+  otp         String? // Store the generated OTP
+  otpExpiry   DateTime? // OTP expiration time
+  otpAttempts Int       @default(0) // Track failed attempts
+
   @@index([phone])
 }
 

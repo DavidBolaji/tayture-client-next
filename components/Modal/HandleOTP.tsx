@@ -110,7 +110,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
         const response = await valdateOTP({
           otp: otpCode,
           pinId,
-          email,
+          email
         })
 
         return response

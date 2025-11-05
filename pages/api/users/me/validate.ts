@@ -88,10 +88,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   let pinId
 
   if (!user?.validated) {
-    const reqOTP = await sendTextMessageOTP(user?.phone as string)
-    if (reqOTP.data.pinId) {
-      pinId = reqOTP.data.pinId
-    }
+    // const reqOTP = await sendTextMessageOTP(user?.phone as string)
+    // if (reqOTP.data.pinId) {
+    //   pinId = reqOTP.data.pinId
+    // }
   }
 
   return res.status(200).json({
