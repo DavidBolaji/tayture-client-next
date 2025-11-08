@@ -73,12 +73,8 @@ export const sendTextMessageOTP = async (phone: string, otp: string) => {
 }
 export const valdateOTP = async ({
   otp,
-  pinId,
-  email,
 }: {
   otp: string
-  pinId: string
-  email: string,
 }) => {
   try {
     const req = await Axios.post(`/users/validate-otp`, {otp})

@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import crypto from 'crypto'
 import db from '@/db/db'
-import { logger } from '@/middleware/logger'
 import { withRateLimit } from '@/middleware/rateLimiter'
 import { Prisma } from '@prisma/client'
 import { formatNumber } from '@/utils/helpers'
@@ -12,65 +11,102 @@ const PAYSTACK_SECRET_KEY = isProd
   : process.env.PAYSTACK_SECRET_KEY!
 const MAX_RETRIES = 3
 
+function safeStringify(obj: any) {
+  try {
+    return JSON.stringify(obj, null, 2)
+  } catch {
+    return String(obj)
+  }
+}
+
+function log(section: string, ...msg: any[]) {
+  console.log(`[${new Date().toISOString()}] [${section}]`, ...msg)
+}
+
+function logError(section: string, error: any) {
+  console.error(`[${new Date().toISOString()}] [${section}] ERROR:`, error?.stack || error)
+}
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const requestId = crypto.randomUUID()
+  const logPrefix = `WEBHOOK:${requestId}`
+
+  log(logPrefix, 'Incoming request', { method: req.method, headers: req.headers })
+
   if (req.method !== 'POST') {
+    log(logPrefix, 'Invalid method', req.method)
     return res.status(405).json({ message: 'Method not allowed' })
   }
 
   if (!PAYSTACK_SECRET_KEY) {
-    throw new Error('Missing PAYSTACK_SECRET_KEY in environment variables')
+    const msg = 'Missing PAYSTACK_SECRET_KEY in environment variables'
+    logError(logPrefix, msg)
+    return res.status(500).json({ message: msg })
   }
 
-  logger.info('Received Headers:', req.headers) // Log all headers
-  logger.info('Received Bocdy:', req.body) // Log all headers
-
-  // Verify Paystack signature
-  const hash = crypto
-    .createHmac('sha512', PAYSTACK_SECRET_KEY)
-    .update(JSON.stringify(req.body))
-    .digest('hex')
-
-  logger.info(`Hash: ${hash}`)
-
-  if (hash !== req.headers['x-paystack-signature']) {
-    logger.error('Invalid webhook signature')
-    return res.status(401).json({ message: 'Invalid signature' })
-  }
-
-  const event = req.body
-  const idempotencyKey = req.headers['x-datadog-trace-id'] as string
+  log(logPrefix, 'Body:', safeStringify(req.body))
 
   try {
-    // Check for duplicate webhook
-    const existingEvent = await db.webhookEvent.findUnique({
-      where: { idempotencyKey },
-    })
+    // Verify Paystack signature
+    const hash = crypto
+      .createHmac('sha512', PAYSTACK_SECRET_KEY)
+      .update(JSON.stringify(req.body))
+      .digest('hex')
 
-    if (existingEvent) {
-      logger.info(`Duplicate webhook received: ${idempotencyKey}`)
-      return res.status(200).json({ message: 'Webhook already processed' })
+    const signature = req.headers['x-paystack-signature']
+    log(logPrefix, 'Generated hash:', hash, 'Signature:', signature)
+
+    if (hash !== signature) {
+      logError(logPrefix, 'Invalid Paystack signature')
+      return res.status(401).json({ message: 'Invalid signature' })
     }
 
-    // Store webhook event
-    const webhookEvent = await db.webhookEvent.create({
-      data: {
-        eventType: event.event,
-        payload: event,
-        idempotencyKey,
-      },
-    })
+    const event = req.body
+    const idempotencyKey =
+      (req.headers['x-datadog-trace-id'] as string) ||
+      event.data?.id ||
+      crypto.randomUUID()
 
-    // Process the webhook event
-    await processWebhookEvent(webhookEvent.id, event)
+    // Check duplicates
+    try {
+      const existingEvent = await db.webhookEvent.findUnique({
+        where: { idempotencyKey },
+      })
 
-    return res.status(200).json({ received: true })
-  } catch (error) {
-    logger.error('Error processing webhook:', error)
+      if (existingEvent) {
+        log(logPrefix, `Duplicate webhook received: ${idempotencyKey}`)
+        return res.status(200).json({ message: 'Webhook already processed' })
+      }
+
+      // Store webhook
+      const webhookEvent = await db.webhookEvent.create({
+        data: {
+          eventType: event.event,
+          payload: event,
+          idempotencyKey,
+        },
+      })
+      log(logPrefix, `Stored webhook event: ${webhookEvent.id}`)
+
+      // Process webhook
+      await processWebhookEvent(webhookEvent.id, event)
+      log(logPrefix, `Successfully processed ${event.event}`)
+
+      return res.status(200).json({ received: true })
+    } catch (dbErr) {
+      logError(logPrefix, dbErr)
+      return res.status(500).json({ error: 'Database error' })
+    }
+  } catch (err) {
+    logError(logPrefix, err)
     return res.status(500).json({ error: 'Webhook processing failed' })
   }
 }
 
 async function processWebhookEvent(webhookId: string, event: any) {
+  const logPrefix = `PROCESS:${webhookId}`
+  log(logPrefix, `Processing event: ${event.event}`)
+
   try {
     await db.$transaction(
       async (tx) => {
@@ -87,10 +123,10 @@ async function processWebhookEvent(webhookId: string, event: any) {
           case 'transfer.failed':
             await handleTransferFailed(tx, event.data)
             break
-          // Add other event handlers
+          default:
+            log(logPrefix, `Unhandled event type: ${event.event}`)
         }
 
-        // Mark webhook as processed
         await tx.webhookEvent.update({
           where: { id: webhookId },
           data: {
@@ -98,96 +134,106 @@ async function processWebhookEvent(webhookId: string, event: any) {
             processedAt: new Date(),
           },
         })
+
+        log(logPrefix, `Webhook marked as processed`)
       },
       { timeout: 50000 }
     )
   } catch (error) {
-    logger.error(`Error processing webhook ${webhookId}:`, error)
+    logError(logPrefix, error)
     await handleWebhookError(webhookId, error)
   }
 }
 
 async function handleWebhookError(webhookId: string, error: any) {
-  const webhookEvent = await db.webhookEvent.findUnique({
-    where: { id: webhookId },
-  })
+  const logPrefix = `WEBHOOK_ERROR:${webhookId}`
+  logError(logPrefix, error)
 
-  if (!webhookEvent) return
+  const webhookEvent = await db.webhookEvent.findUnique({ where: { id: webhookId } })
+  if (!webhookEvent) {
+    log(logPrefix, 'Webhook not found in DB')
+    return
+  }
 
   if (webhookEvent.retryCount < MAX_RETRIES) {
-    // Schedule retry with exponential backoff
     const retryDelay = Math.pow(2, webhookEvent.retryCount) * 1000
+    log(logPrefix, `Retrying in ${retryDelay}ms (attempt ${webhookEvent.retryCount + 1})`)
+
     setTimeout(async () => {
-      await db.webhookEvent.update({
-        where: { id: webhookId },
-        data: { retryCount: webhookEvent.retryCount + 1 },
-      })
-      await processWebhookEvent(webhookId, webhookEvent.payload)
+      try {
+        await db.webhookEvent.update({
+          where: { id: webhookId },
+          data: { retryCount: webhookEvent.retryCount + 1 },
+        })
+        await processWebhookEvent(webhookId, webhookEvent.payload)
+      } catch (retryErr) {
+        logError(logPrefix, retryErr)
+      }
     }, retryDelay)
   } else {
-    // Mark as permanently failed
+    logError(logPrefix, 'Max retries reached — marking as failed')
     await db.webhookEvent.update({
       where: { id: webhookId },
       data: {
         status: 'failed',
-        error: error.message || 'Maximum retry attempts reached',
+        error: error.message || 'Max retries reached',
       },
     })
   }
 }
 
-async function handleSuccessfulPayment(
-  tx: Prisma.TransactionClient,
-  data: any
-) {
-  logger.info('Payment made', data)
-  await tx.dvaTransaction.create({
-    data: {
-      reference: data.reference,
-      amount: data.amount / 100, // Convert from kobo to naira
-      status: data.status,
-      accountNumber: data.authorization.receiver_bank_account_number,
-      metadata: data.metadata,
-    },
-  })
+async function handleSuccessfulPayment(tx: Prisma.TransactionClient, data: any) {
+  const logPrefix = 'HANDLE_PAYMENT'
+  log(logPrefix, safeStringify(data))
 
-  await tx.wallet.update({
-    where: {
-      walletSchId: data.customer.metadata.schoolId,
-    },
-    data: {
-      wallet_balance: {
-        increment: data.amount / 100,
+  try {
+    await tx.dvaTransaction.create({
+      data: {
+        reference: data.reference,
+        amount: data.amount / 100,
+        status: data.status,
+        accountNumber: data.authorization.receiver_bank_account_number,
+        metadata: data.metadata,
       },
-    },
-  })
+    })
 
-  await tx.transaction.create({
-    data: {
-      amount: data.amount / 100,
-      type: 'CREDIT',
-      message: `Funded Wallet with ₦${formatNumber(
-        data.amount / 100,
-        'NGN',
-        {}
-      )}`,
-      userId: data.customer.metadata.userId,
-      schoolId: data.customer.metadata.schoolId,
-    },
-  })
+    await tx.wallet.update({
+      where: { walletSchId: data.customer.metadata.schoolId },
+      data: {
+        wallet_balance: { increment: data.amount / 100 },
+      },
+    })
 
-  tx.notifcation.create({
-    data: {
-      msg: `Hurray!!! you have succesfully funded wallet`,
-      notificationUser: data.customer.metadata.userId as string,
-      caption: 'School created',
-    },
-  })
+    await tx.transaction.create({
+      data: {
+        amount: data.amount / 100,
+        type: 'CREDIT',
+        message: `Funded Wallet with ₦${formatNumber(data.amount / 100, 'NGN', {})}`,
+        userId: data.customer.metadata.userId,
+        schoolId: data.customer.metadata.schoolId,
+      },
+    })
+
+    // fixed typo: notification (was notifcation)
+    await tx.notifcation.create({
+      data: {
+        msg: 'Hurray!!! you have successfully funded your wallet',
+        notificationUser: data.customer.metadata.userId,
+        caption: 'Wallet Funded',
+      },
+    })
+
+    log(logPrefix, '✅ Payment processed successfully')
+  } catch (err) {
+    logError(logPrefix, err)
+    throw err
+  }
 }
 
 async function handleAccountSuccess(tx: Prisma.TransactionClient, data: any) {
-  logger.info('Account Created', data)
-  // create prisma Dedicated virtual account
+  const logPrefix = 'HANDLE_ACCOUNT'
+  log(logPrefix, safeStringify(data))
+
   await tx.dvaAccount.create({
     data: {
       schoolId: data.customer.metadata.schoolId,
@@ -200,52 +246,48 @@ async function handleAccountSuccess(tx: Prisma.TransactionClient, data: any) {
 }
 
 async function handleTransferSuccess(tx: Prisma.TransactionClient, data: any) {
-  logger.info('Transfer Created', data)
-  // create prisma Dedicated virtual account
-  const metaData = JSON.parse(data?.reason)
-  logger.info(JSON.stringify(metaData, null, 2))
+  const logPrefix = 'HANDLE_TRANSFER_SUCCESS'
+  log(logPrefix, safeStringify(data))
 
-  await tx.dvaTransaction.create({
-    data: {
-      reference: data.reference,
-      amount: data.amount / 100, // Convert from kobo to naira
-      status: data.status,
-      accountNumber: data?.recipient?.details?.account_number,
-      metadata: data.reason,
-    },
-  })
+  try {
+    const metaData = JSON.parse(data?.reason)
+    log(logPrefix, 'Parsed metadata:', safeStringify(metaData))
 
-  await tx.wallet.update({
-    where: {
-      // walletUserId: req.authUser?.id,
-      walletSchId: metaData.schoolId,
-    },
-    data: {
-      wallet_locked_balance: {
-        decrement: metaData.amount / 100,
+    await tx.dvaTransaction.create({
+      data: {
+        reference: data.reference,
+        amount: data.amount / 100,
+        status: data.status,
+        accountNumber: data?.recipient?.details?.account_number,
+        metadata: data.reason,
       },
-    },
-  })
+    })
 
-  await tx.transaction.create({
-    data: {
-      type: 'DEBIT',
-      amount: metaData.amount / 100,
-      userId: metaData.userId,
-      message: `Succesful Hiring of ${metaData?.role?.trim()} at ₦${formatNumber(
-        metaData.amount / 100,
-        'NGN',
-        {}
-      )}`,
-      schoolId: metaData.schoolId,
-    },
-  })
+    await tx.wallet.update({
+      where: { walletSchId: metaData.schoolId },
+      data: { wallet_locked_balance: { decrement: metaData.amount / 100 } },
+    })
+
+    await tx.transaction.create({
+      data: {
+        type: 'DEBIT',
+        amount: metaData.amount / 100,
+        userId: metaData.userId,
+        message: `Successful Hiring of ${metaData?.role?.trim()} at ₦${formatNumber(metaData.amount / 100, 'NGN', {})}`,
+        schoolId: metaData.schoolId,
+      },
+    })
+
+    log(logPrefix, '✅ Transfer processed successfully')
+  } catch (err) {
+    logError(logPrefix, err)
+    throw err
+  }
 }
 
 async function handleTransferFailed(tx: Prisma.TransactionClient, data: any) {
-  logger.info('Transfer Fauked', data)
-  // create prisma Dedicated virtual account
+  const logPrefix = 'HANDLE_TRANSFER_FAILED'
+  logError(logPrefix, `Transfer failed: ${safeStringify(data)}`)
 }
 
-// Export with rate limiting
 export default withRateLimit(handler)

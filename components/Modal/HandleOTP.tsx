@@ -80,37 +80,35 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
       isSubmittingRef.current = true
 
       try {
-        let pinId: string
-        let email: string
+        // let pinId: string
+        // let email: string
 
         if (closable) {
           // For login flow - use user from context
           if (!user?.pinId || !user?.email) {
             throw new Error('Missing user credentials for OTP validation')
           }
-          pinId = user.pinId
-          email = user.email
+          // pinId = user.pinId
+          // email = user.email
         } else {
           // For registration/dashboard flow - use utility function
-          const credentials = getOTPCredentials(queryClient, user)
+          // const credentials = getOTPCredentials(queryClient, user)
           
-          if (!credentials) {
-            throw new Error('Unable to retrieve OTP credentials. Please try logging in again.')
-          }
+          // if (!credentials) {
+          //   throw new Error('Unable to retrieve OTP credentials. Please try logging in again.')
+          // }
           
-          pinId = credentials.pinId
-          email = credentials.email
+          // pinId = credentials.pinId
+          // email = credentials.email
         }
 
-        console.log('Validating OTP...', { 
-          pinIdPreview: pinId.substring(0, 10) + '...', 
-          email 
-        })
+        // console.log('Validating OTP...', { 
+        //   pinIdPreview: pinId.substring(0, 10) + '...', 
+        //   email 
+        // })
         
         const response = await valdateOTP({
           otp: otpCode,
-          pinId,
-          email
         })
 
         return response
