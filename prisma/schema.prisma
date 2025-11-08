@@ -505,7 +505,7 @@ model Wallet {
 model WebhookEvent {
   id             String    @id @default(cuid())
   eventType      String
-  payload        String    @db.LongText
+  payload        Json    
   processedAt    DateTime?
   status         String    @default("pending")
   retryCount     Int       @default(0)
