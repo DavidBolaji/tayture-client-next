@@ -67,6 +67,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       event.data?.id ||
       crypto.randomUUID()
 
+    log(logPrefix, 'Idempotency key:', idempotencyKey)
+
     // Check duplicates
     try {
       const existingEvent = await db.webhookEvent.findUnique({
@@ -112,15 +114,19 @@ async function processWebhookEvent(webhookId: string, event: any) {
       async (tx) => {
         switch (event.event) {
           case 'charge.success':
+            log(logPrefix, 'Handling charge.success event')
             await handleSuccessfulPayment(tx, event.data)
             break
           case 'dedicatedaccount.assign.success':
+            log(logPrefix, 'Handling dedicatedaccount.assign.success event')
             await handleAccountSuccess(tx, event.data)
             break
           case 'transfer.success':
+            log(logPrefix, 'Handling transfer.success event')
             await handleTransferSuccess(tx, event.data)
             break
           case 'transfer.failed':
+            log(logPrefix, 'Handling transfer.failed event')
             await handleTransferFailed(tx, event.data)
             break
           default:
@@ -165,6 +171,7 @@ async function handleWebhookError(webhookId: string, error: any) {
           where: { id: webhookId },
           data: { retryCount: webhookEvent.retryCount + 1 },
         })
+        log(logPrefix, `Retry attempt ${webhookEvent.retryCount + 1} started`)
         await processWebhookEvent(webhookId, webhookEvent.payload)
       } catch (retryErr) {
         logError(logPrefix, retryErr)
@@ -184,27 +191,38 @@ async function handleWebhookError(webhookId: string, error: any) {
 
 async function handleSuccessfulPayment(tx: Prisma.TransactionClient, data: any) {
   const logPrefix = 'HANDLE_PAYMENT'
-  log(logPrefix, safeStringify(data))
+  log(logPrefix, 'Payment data received:', safeStringify(data))
 
   try {
-    await tx.dvaTransaction.create({
+    // Log the metadata before stringifying
+    log(logPrefix, 'Metadata before stringify:', safeStringify(data.metadata))
+    
+    const metadataString = JSON.stringify(data.metadata)
+    log(logPrefix, 'Metadata stringified successfully')
+
+    // Create DVA transaction
+    const dvaTransaction = await tx.dvaTransaction.create({
       data: {
         reference: data.reference,
         amount: data.amount / 100,
         status: data.status,
         accountNumber: data.authorization.receiver_bank_account_number,
-        metadata: data.metadata,
+        metadata: metadataString, // ✅ Fixed: Convert to string
       },
     })
+    log(logPrefix, `DVA transaction created: ${dvaTransaction.reference}`)
 
-    await tx.wallet.update({
+    // Update wallet balance
+    const updatedWallet = await tx.wallet.update({
       where: { walletSchId: data.customer.metadata.schoolId },
       data: {
         wallet_balance: { increment: data.amount / 100 },
       },
     })
+    log(logPrefix, `Wallet updated for school: ${data.customer.metadata.schoolId}, New balance: ${updatedWallet.wallet_balance}`)
 
-    await tx.transaction.create({
+    // Create transaction record
+    const transaction = await tx.transaction.create({
       data: {
         amount: data.amount / 100,
         type: 'CREDIT',
@@ -213,15 +231,17 @@ async function handleSuccessfulPayment(tx: Prisma.TransactionClient, data: any) 
         schoolId: data.customer.metadata.schoolId,
       },
     })
+    log(logPrefix, `Transaction record created: ${transaction.id}`)
 
-    // fixed typo: notification (was notifcation)
-    await tx.notifcation.create({
+    // Create notification
+    const notification = await tx.notifcation.create({
       data: {
         msg: 'Hurray!!! you have successfully funded your wallet',
         notificationUser: data.customer.metadata.userId,
         caption: 'Wallet Funded',
       },
     })
+    log(logPrefix, `Notification created: ${notification.id}`)
 
     log(logPrefix, '✅ Payment processed successfully')
   } catch (err) {
@@ -232,43 +252,56 @@ async function handleSuccessfulPayment(tx: Prisma.TransactionClient, data: any) 
 
 async function handleAccountSuccess(tx: Prisma.TransactionClient, data: any) {
   const logPrefix = 'HANDLE_ACCOUNT'
-  log(logPrefix, safeStringify(data))
+  log(logPrefix, 'Account assignment data:', safeStringify(data))
 
-  await tx.dvaAccount.create({
-    data: {
-      schoolId: data.customer.metadata.schoolId,
-      accountNumber: data.dedicated_account.account_number,
-      bankName: data.dedicated_account.bank.name,
-      bankCode: data.dedicated_account.bank.slug,
-      reference: data.customer.customer_code,
-    },
-  })
+  try {
+    const dvaAccount = await tx.dvaAccount.create({
+      data: {
+        schoolId: data.customer.metadata.schoolId,
+        accountNumber: data.dedicated_account.account_number,
+        bankName: data.dedicated_account.bank.name,
+        bankCode: data.dedicated_account.bank.slug,
+        reference: data.customer.customer_code,
+      },
+    })
+    log(logPrefix, `DVA account created: ${dvaAccount.accountNumber} for school: ${dvaAccount.schoolId}`)
+    log(logPrefix, '✅ Account assignment processed successfully')
+  } catch (err) {
+    logError(logPrefix, err)
+    throw err
+  }
 }
 
 async function handleTransferSuccess(tx: Prisma.TransactionClient, data: any) {
   const logPrefix = 'HANDLE_TRANSFER_SUCCESS'
-  log(logPrefix, safeStringify(data))
+  log(logPrefix, 'Transfer success data:', safeStringify(data))
 
   try {
+    log(logPrefix, 'Parsing metadata from reason field:', data?.reason)
     const metaData = JSON.parse(data?.reason)
     log(logPrefix, 'Parsed metadata:', safeStringify(metaData))
 
-    await tx.dvaTransaction.create({
+    // Create DVA transaction
+    const dvaTransaction = await tx.dvaTransaction.create({
       data: {
         reference: data.reference,
         amount: data.amount / 100,
         status: data.status,
         accountNumber: data?.recipient?.details?.account_number,
-        metadata: data.reason,
+        metadata: data.reason, // ✅ This is already a string from Paystack
       },
     })
+    log(logPrefix, `DVA transaction created: ${dvaTransaction.reference}`)
 
-    await tx.wallet.update({
+    // Update wallet locked balance
+    const updatedWallet = await tx.wallet.update({
       where: { walletSchId: metaData.schoolId },
       data: { wallet_locked_balance: { decrement: metaData.amount / 100 } },
     })
+    log(logPrefix, `Wallet locked balance updated for school: ${metaData.schoolId}, New locked balance: ${updatedWallet.wallet_locked_balance}`)
 
-    await tx.transaction.create({
+    // Create transaction record
+    const transaction = await tx.transaction.create({
       data: {
         type: 'DEBIT',
         amount: metaData.amount / 100,
@@ -277,6 +310,7 @@ async function handleTransferSuccess(tx: Prisma.TransactionClient, data: any) {
         schoolId: metaData.schoolId,
       },
     })
+    log(logPrefix, `Transaction record created: ${transaction.id}`)
 
     log(logPrefix, '✅ Transfer processed successfully')
   } catch (err) {
@@ -287,7 +321,22 @@ async function handleTransferSuccess(tx: Prisma.TransactionClient, data: any) {
 
 async function handleTransferFailed(tx: Prisma.TransactionClient, data: any) {
   const logPrefix = 'HANDLE_TRANSFER_FAILED'
-  logError(logPrefix, `Transfer failed: ${safeStringify(data)}`)
+  log(logPrefix, 'Transfer failed data:', safeStringify(data))
+  
+  try {
+    log(logPrefix, `Transfer failed for reference: ${data.reference}`)
+    log(logPrefix, `Failure reason: ${data?.reason || 'No reason provided'}`)
+    
+    // You might want to add logic here to:
+    // 1. Release locked funds back to wallet
+    // 2. Notify the user
+    // 3. Create a failed transaction record
+    
+    log(logPrefix, '⚠️ Transfer failure logged')
+  } catch (err) {
+    logError(logPrefix, err)
+    throw err
+  }
 }
 
 export default withRateLimit(handler)
