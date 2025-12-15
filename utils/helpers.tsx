@@ -498,30 +498,22 @@ export const appliedSucces = async (
   queryClient: QueryClient,
   SW: any
 ) => {
-  // const applied = res.data.applied
+  // Close the appropriate modal - applyModal for authenticated users
+  uiCb((prev: any) => {
+    return {
+      ...prev,
+      applyModal: {
+        ...prev.applyModal,
+        visibility: false,
+      },
+    }
+  })
+
   if (path === '/jobs') {
-    uiCb((prev: any) => {
-      return {
-        ...prev,
-        applyLandingModal: {
-          ...prev.applyLandingModal,
-          visibility: false,
-        },
-      }
-    })
     msgCb(res.data.message)
     await sleep(3000)
     router.push('/dashboard')
   } else {
-    uiCb((prev: any) => {
-      return {
-        ...prev,
-        applyModal: {
-          ...prev.applyModal,
-          visibility: false,
-        },
-      }
-    })
     await sleep(2000)
     msgCb(res.data.message)
     SW.prev()

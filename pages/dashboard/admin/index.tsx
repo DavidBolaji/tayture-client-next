@@ -4,10 +4,11 @@ import UserSection from './sections/users/UserSection'
 import CategoriesSection from './sections/categories/CategoriesSection'
 import BlogsSection from './sections/blogs/BlogsSection'
 import { Segmented } from 'antd'
-import { AppstoreOutlined, BarsOutlined, FileOutlined, UserOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, BarsOutlined, FileOutlined, UserOutlined, DollarOutlined } from '@ant-design/icons'
 import AppliedSection from './sections/applied/AppliedSection'
 import JobsSection from './sections/jobs/JobSextion'
 import CVSection from './sections/cv/CVSection'
+import DVARecoveryPage from './dva-recovery'
 
 const AdminPage = () => {
   const [path, setPath] = useState('School')
@@ -37,6 +38,11 @@ const AdminPage = () => {
               value: 'CVDownloads',
               icon: <FileOutlined />,
             },
+            {
+              label: 'DVA Recovery',
+              value: 'DVARecovery',
+              icon: <DollarOutlined />,
+            },
           ]}
         />
       </div>
@@ -48,6 +54,7 @@ const AdminPage = () => {
         {path === 'Applied' && <AppliedSection />}
         {path === 'Jobs' && <JobsSection />}
         {path === 'CVDownloads' && <CVSection />}
+        {path === 'DVARecovery' && <DVARecoveryPage />}
       </div>
     </div>
   )
