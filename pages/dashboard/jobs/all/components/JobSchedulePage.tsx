@@ -15,6 +15,7 @@ import TextareaInput from '@/components/Form/TextareaInput/TextareaInput'
 import { FaMinus, FaPlus } from 'react-icons/fa'
 import { updateScheduled } from '@/lib/api/schedule'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 
 const JobSchedulePage = () => {
   const queryClient = useQueryClient()
@@ -42,7 +43,7 @@ const JobSchedulePage = () => {
         queryKey: ['user'],
       })
       router.back()
-      setMessage(() => 'Schedule updated succesfully')
+      setMessage(createSuccessMessage('Schedule updated successfully'))
     },
   })
 

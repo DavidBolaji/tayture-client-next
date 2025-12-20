@@ -82,17 +82,9 @@ const HandleUpload = () => {
         queryKey: ['users'],
       })
       setMessage(() => res.data.message)
-      const t = setTimeout(() => {
-        setMessage(() => '')
-        clearTimeout(t)
-      }, 5000)
     },
     onError: (err) => {
       setMessage(() => err.message)
-      const t = setTimeout(() => {
-        setMessage(() => '')
-        clearTimeout(t)
-      }, 5000)
     },
   })
 

@@ -93,6 +93,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         take: limitNum
       })
 
+      // Get total statistics for all filtered data (not just current page)
+      const allFilteredApplications = await db.applied.findMany({
+        where: whereClause,
+        select: {
+          cv: true,
+          school: {
+            select: {
+              sch_name: true
+            }
+          }
+        }
+      })
+
+      // Calculate total statistics
+      const totalStats = {
+        totalApplications: totalCount,
+        applicationsWithCV: allFilteredApplications.filter(app => app.cv && app.cv.trim() !== '').length,
+        applicationsWithoutCV: allFilteredApplications.filter(app => !app.cv || app.cv.trim() === '').length,
+        uniqueSchools: new Set(allFilteredApplications.map(app => app.school.sch_name)).size
+      }
+
       const formattedApplications = applications.map(app => ({
         id: app.id,
         applicantFirstName: app.user.fname,
@@ -115,7 +136,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           totalCount,
           hasNext: pageNum < Math.ceil(totalCount / limitNum),
           hasPrev: pageNum > 1
-        }
+        },
+        totalStats
       })
     } catch (error) {
       console.error('Error fetching applications:', error)

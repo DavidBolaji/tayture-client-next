@@ -6,6 +6,8 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { IJobSchDb } from '@/pages/api/job/types'
 import * as momentT from 'moment-timezone'
+import { MessageState } from '@/Context/store'
+import { createSuccessMessage } from './message'
 import {
   Education,
   Profile,
@@ -493,7 +495,7 @@ export const appliedSucces = async (
   res: AxiosResponse,
   path: string,
   uiCb: Dispatch<SetStateAction<any>>,
-  msgCb: Dispatch<SetStateAction<string>>,
+  msgCb: Dispatch<SetStateAction<MessageState>>,
   router: NextRouter,
   queryClient: QueryClient,
   SW: any
@@ -510,12 +512,12 @@ export const appliedSucces = async (
   })
 
   if (path === '/jobs') {
-    msgCb(res.data.message)
+    msgCb(createSuccessMessage(res.data.message))
     await sleep(3000)
     router.push('/dashboard')
   } else {
     await sleep(2000)
-    msgCb(res.data.message)
+    msgCb(createSuccessMessage(res.data.message))
     SW.prev()
 
     const req = await getUser()

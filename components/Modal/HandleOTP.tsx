@@ -16,6 +16,7 @@ import TimerComponent from '../TimerComponent'
 import Spinner from '../Spinner/Spinner'
 import { useRouter } from 'next/router'
 import { getOTPCredentials, isValidOTPFormat } from '@/lib/otp'
+import { createSuccessMessage, createErrorMessage } from '@/utils/message'
 
 
 export const checkPath = (path: string | null) => {
@@ -65,7 +66,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
     },
     onError: (err) => {
       console.error('[LOGIN ERROR]', err)
-      setMessage(() => (err as Error).message || 'Login failed')
+      setMessage(createErrorMessage((err as Error).message || 'Login failed'))
       isSubmittingRef.current = false
     },
   })
@@ -127,12 +128,12 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
         setOtp('')
         isSubmittingRef.current = false
         const errorMsg = res?.message || res?.data?.message || 'Invalid OTP. Please check and try again.'
-        setMessage(() => errorMsg)
+        setMessage(createErrorMessage(errorMsg))
         return
       }
 
       // Success!
-      setMessage(() => 'Hurray!!! Phone number verified successfully')
+      setMessage(createSuccessMessage('Hurray!!! Phone number verified successfully'))
       
       // Invalidate user query to refresh data
       queryClient.invalidateQueries({
@@ -148,7 +149,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
           })
         } else {
           isSubmittingRef.current = false
-          setMessage(() => 'Login credentials missing')
+          setMessage(createErrorMessage('Login credentials missing'))
         }
       } else {
         // Registration/Dashboard flow
@@ -162,10 +163,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
           }, 500)
         }
 
-        // Clear success message after delay
-        setTimeout(() => {
-          setMessage(() => '')
-        }, 2500)
+        // Success message will be cleared when user manually closes the modal
       }
     },
     onError: (err: any) => {
@@ -178,12 +176,9 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
         err?.message || 
         'Invalid OTP. Please try again.'
       
-      setMessage(() => errorMessage)
+      setMessage(createErrorMessage(errorMessage))
       
-      // Clear error message after 3 seconds
-      setTimeout(() => {
-        setMessage(() => '')
-      }, 3000)
+      // Error message will be cleared when user manually closes the modal
     },
   })
 
@@ -192,8 +187,7 @@ const HandleOTP: React.FC<{ closable: boolean }> = ({ closable }) => {
     if (otp.trim().length === 4) {
       // Validate format
       if (!isValidOTPFormat(otp)) {
-        setMessage(() => 'Please enter a valid 4-digit OTP')
-        setTimeout(() => setMessage(() => ''), 2000)
+        setMessage(createErrorMessage('Please enter a valid 4-digit OTP'))
         return
       }
 

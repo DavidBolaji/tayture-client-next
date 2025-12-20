@@ -24,6 +24,12 @@ interface ApplicationsResponse {
     hasNext: boolean
     hasPrev: boolean
   }
+  totalStats: {
+    totalApplications: number
+    applicationsWithCV: number
+    applicationsWithoutCV: number
+    uniqueSchools: number
+  }
 }
 
 interface UseApplicationsListParams {

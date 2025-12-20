@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { useGlobalContext } from '@/Context/store'
 import { AxiosError } from 'axios'
+import { createSuccessMessage, createErrorMessage } from '@/utils/message'
 
 const forgotSchema = Yup.object().shape({
   phone: Yup.string()
@@ -45,12 +46,7 @@ const ForgotPasswordInput: React.FC<{ SW: any }> = ({ SW }) => {
       queryClient.setQueryData(['forgotPasswordUserId'], () => variables.userId)
       queryClient.setQueryData(['forgotPasswordPhone'], () => variables.phone)
       
-      setMessage(() => 'OTP sent successfully to your phone')
-      
-      // Clear message after 2 seconds
-      setTimeout(() => {
-        setMessage(() => '')
-      }, 2000)
+      setMessage(createSuccessMessage('OTP sent successfully to your phone'))
       
       // Move to next step (OTP input screen)
       SW.next()
@@ -60,12 +56,7 @@ const ForgotPasswordInput: React.FC<{ SW: any }> = ({ SW }) => {
         error?.response?.data?.message || 
         error?.message || 
         'Failed to send OTP. Please try again.'
-      setMessage(() => errorMessage)
-      
-      // Clear error after 3 seconds
-      setTimeout(() => {
-        setMessage(() => '')
-      }, 3000)
+      setMessage(createErrorMessage(errorMessage))
     },
   })
 
@@ -77,7 +68,7 @@ const ForgotPasswordInput: React.FC<{ SW: any }> = ({ SW }) => {
     },
     onSuccess: (result, phone) => {
       if (!result?.user) {
-        setMessage(() => 'No account found with this phone number')
+        setMessage(createErrorMessage('No account found with this phone number'))
         return
       }
 
@@ -97,12 +88,7 @@ const ForgotPasswordInput: React.FC<{ SW: any }> = ({ SW }) => {
         error?.message ||
         'Phone number not found. Please check and try again.'
       
-      setMessage(() => errorMessage)
-      
-      // Clear error after 3 seconds
-      setTimeout(() => {
-        setMessage(() => '')
-      }, 3000)
+      setMessage(createErrorMessage(errorMessage))
     },
   })
 

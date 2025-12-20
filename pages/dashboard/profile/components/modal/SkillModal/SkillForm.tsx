@@ -1,4 +1,5 @@
-import { useGlobalContext } from '@/Context/store';
+import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage, createErrorMessage } from '@/utils/message';
 import Button from '@/components/Button/Button';
 import Spinner from '@/components/Spinner/Spinner';
 import { Axios } from '@/request/request';
@@ -28,14 +29,14 @@ const SkillForm: React.FC = () => {
           },
         }
       })
-      setMessage(() => res.data.message)
+      setMessage(createSuccessMessage(res.data.message))
       const t = setTimeout(() => {
         window.location.reload()
         clearTimeout(t)
       }, 4000)
     },
     onError: (error) => {
-      setMessage(() => (error as AxiosError<{error: string}>).response?.data?.error ||(error as Error).message)
+      setMessage(createErrorMessage((error as AxiosError<{error: string}>).response?.data?.error ||(error as Error).message))
     }
    })
   const [skills, setSkill] = useState<string[]>([]);

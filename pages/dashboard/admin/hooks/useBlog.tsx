@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import moment from 'moment'
 import { useState } from 'react'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 
 const useBlog = () => {
   const queryClient = useQueryClient()
@@ -29,7 +30,7 @@ const useBlog = () => {
       return await Axios.delete(`/blog/delete/${blogId}`)
     },
     onSuccess: (res: AxiosResponse) => {
-      setMessage(() => res.data.message)
+      setMessage(createSuccessMessage(res.data.message))
       queryClient.setQueryData(['allBlog'], (oldData: Blog[]) => {
         const newData = oldData.filter((oD) => oD.id !== res.data.blog.id)
         return newData

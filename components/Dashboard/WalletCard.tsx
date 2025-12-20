@@ -12,6 +12,7 @@ import StyledInput from '../Form/NomalInput/StyledInput'
 import { incWallet } from '@/lib/api/wallet'
 import { getUserSchool, getUserSchoolAdmin } from '@/lib/api/school'
 import HandleCreateSchool from '../Modal/HandleCreateSchool'
+import { createSuccessMessage, createErrorMessage } from '@/utils/message'
 
 function WalletCard() {
   const { setUI, setMessage, defaultSchool } = useGlobalContext()
@@ -48,18 +49,15 @@ function WalletCard() {
       await incWallet({
         wallet_balance: +amount,
       }, defaultSchool),
-    onSuccess: (res) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['school'],
       })
       
-      setMessage(() => 'Wallet successfully funded')
-      const t = setTimeout(() => {
-        setMessage(() => "")
-      }, 2000)
+      setMessage(createSuccessMessage('Wallet successfully funded'))
     },
     onError: (err) => {
-      setMessage(() => (err as Error).message)
+      setMessage(createErrorMessage((err as Error).message))
     },
   })
 
@@ -113,7 +111,7 @@ function WalletCard() {
   }
 
   const onFailure = () => {
-    setMessage(() => 'User aborted task')
+    setMessage(createErrorMessage('User aborted task'))
   }
   return (
     <div className="bg-[#FFC299] h-[202px] overflow-hidden grid-cols-7 rounded-[18px] py-[28px] md:px-[40px] px-5 flex items-center justify-between mb-[32px] relative">

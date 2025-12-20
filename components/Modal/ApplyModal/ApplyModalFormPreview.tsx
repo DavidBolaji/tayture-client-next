@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import { usePathname } from 'next/navigation'
 import { updateProfile } from '@/lib/api/job'
 import LocationComponent from '@/components/Form/LocationComponent/LocationComponent'
+import { createErrorMessage } from '@/utils/message'
 type UserApply = {
   cv: string
   exp: string
@@ -53,12 +54,12 @@ const ApplyModalFormPreview: FC<{ SW: any }> = ({ SW }) => {
     onError: async (err) => {
       if((err as Error).message === "Request failed with status code 401" || (err as Error).message === "Request failed with status code 403") {
         queryClient.removeQueries()
-        setMessage(() => "Unauthorized. please reload and try again or login to apply for job")
+        setMessage(createErrorMessage("Unauthorized. please reload and try again or login to apply for job"))
         await sleep(3000)
         window.location.reload()
         return;
       }
-      setMessage(() => (err as Error).message)
+      setMessage(createErrorMessage((err as Error).message))
     },
   })
 

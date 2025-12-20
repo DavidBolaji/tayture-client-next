@@ -74,9 +74,6 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
     },
     onError: (err) => {
       setMessage(() => (err as Error).message)
-      setTimeout(() => {
-        setMessage(() => '')
-      }, 2000)
     },
   })
 
@@ -85,14 +82,12 @@ const JobPreviewForm: FC<{ SW: any }> = ({ SW }) => {
       return await Axios.put(`/job/update/${editJob.job_id}`, data)
     },
     onSuccess: async () => {
-      setMessage(() => 'Job updated succesfully')
+      setMessage(() => 'Job updated successfully')
       await sleep(3000)
       router.push('/dashboard/school')
     },
     onError: async (err) => {
       setMessage(() => (err as Error).message)
-      await sleep(2000)
-      setMessage(() => '')
     },
   })
 

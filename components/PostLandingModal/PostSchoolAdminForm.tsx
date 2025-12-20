@@ -66,10 +66,9 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
 
         setMessage(
           () =>
-            'Hurray!!!, school created succesfully, you can now fund wallet',
+            'Hurray!!!, school created successfully, you can now fund wallet',
         )
         await sleep(3000)
-        setMessage(() => '')
         setUI((prev) => {
           return {
             ...prev,
@@ -92,9 +91,6 @@ const PostSchoolAdminForm: React.FC<{ SW: any; move?: boolean }> = ({
         }
       })
       setMessage(() => (err as Error).message)
-      const t = setTimeout(() => {
-        setMessage(() => '')
-      }, 2000)
     },
   })
   const handleClick: any = async (values: ISchAdmin) => {

@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid'
 import { useGlobalContext } from '@/Context/store'
 import Cloudinary from '@/request/cloudinary'
 import { Icons } from '@/assets'
+import { createErrorMessage } from '@/utils/message'
 
 export interface IUpload {
   public_id: string
@@ -27,12 +28,12 @@ const UserImage: React.FC<{ picture: string | null }> = ({ picture }) => {
   const beforeUpload = async (file: any, x: any) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
     if (!isJpgOrPng) {
-      setMessage(() => 'You can only upload JPG/PNG file!')
+      setMessage(createErrorMessage('You can only upload JPG/PNG file!'))
       return
     }
     const isLt2M = file.size / 1024 / 1024 < 2
     if (!isLt2M) {
-      setMessage(() => 'Image must be smaller than 2MB!')
+      setMessage(createErrorMessage('Image must be smaller than 2MB!'))
       return
     }
     setFileList([...x])

@@ -26,6 +26,7 @@ import { MinusCircleOutlined } from '@ant-design/icons'
 import Spinner from '@/components/Spinner/Spinner'
 import { v4 as uuid } from 'uuid'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 import { useMutation } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { regularFont } from '@/assets/fonts/fonts'
@@ -50,7 +51,7 @@ const ExperienceEditForm: React.FC<{
           },
         }
       })
-      setMessage(() => 'Work Experience updated successfully')
+      setMessage(createSuccessMessage('Work Experience updated successfully'))
       await sleep(4000)
       router.replace(router.asPath)
     },

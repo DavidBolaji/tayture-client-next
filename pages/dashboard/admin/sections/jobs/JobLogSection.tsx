@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Card, Input, Select, Space, Typography, Statistic, Row, Col, Tag, Pagination } from 'antd'
-import { SearchOutlined, EyeOutlined, EyeInvisibleOutlined, CalendarOutlined, UserOutlined, BankOutlined, DollarOutlined } from '@ant-design/icons'
+import { Card, Input, Select, Space, Typography, Statistic, Row, Col, Tag, Pagination, Table, Button, Tooltip } from 'antd'
+import { SearchOutlined, EyeOutlined, EyeInvisibleOutlined, CalendarOutlined, UserOutlined, BankOutlined, DollarOutlined, AppstoreOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import { format } from 'date-fns'
 import useJobLog from '../../hooks/useJobLog'
 
@@ -8,12 +8,13 @@ const { Title, Text } = Typography
 const { Option } = Select
 
 const JobLogSection = () => {
-  const { jobs: rawJobs, isLoading, error } = useJobLog()
+  const { jobs: rawJobs, isLoading, error, columns } = useJobLog()
   const [searchText, setSearchText] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [schoolFilter, setSchoolFilter] = useState<string>('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(12)
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid')
 
   // Ensure jobs is always an array
   const jobs = rawJobs || []
@@ -68,6 +69,133 @@ const JobLogSection = () => {
       </Card>
     )
   }
+
+  // Table columns configuration
+  const tableColumns = [
+    {
+      title: 'Job Title',
+      dataIndex: 'job_title',
+      key: 'job_title',
+      width: 200,
+      render: (text: string) => (
+        <Tooltip title={text}>
+          <Text className="font-medium" style={{ maxWidth: 180 }}>
+            {text}
+          </Text>
+        </Tooltip>
+      ),
+    },
+    {
+      title: 'School',
+      dataIndex: ['school', 'sch_name'],
+      key: 'school_name',
+      width: 180,
+      render: (text: string, record: any) => (
+        <div>
+          <Text className="block font-medium" style={{ maxWidth: 160 }}>
+            {text}
+          </Text>
+          <Tag 
+            color={record.schoolStatus === 'Approved' ? 'green' : 'orange'}
+          >
+            {record.schoolStatus}
+          </Tag>
+        </div>
+      ),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isVisible',
+      key: 'status',
+      width: 100,
+      render: (isVisible: boolean) => (
+        <Tag 
+          icon={isVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+          color={isVisible ? 'green' : 'red'}
+        >
+          {isVisible ? 'Visible' : 'Hidden'}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Experience',
+      dataIndex: 'job_exp',
+      key: 'experience',
+      width: 120,
+      render: (text: string) => (
+        <Text className="text-green-600 font-medium">{text}</Text>
+      ),
+    },
+    {
+      title: 'Qualification',
+      dataIndex: 'job_qual',
+      key: 'qualification',
+      width: 150,
+      render: (text: string) => (
+        <Tooltip title={text}>
+          <Text className="text-purple-600" style={{ maxWidth: 130 }}>
+            {text}
+          </Text>
+        </Tooltip>
+      ),
+    },
+    {
+      title: 'Salary Range',
+      key: 'salary',
+      width: 150,
+      render: (record: any) => (
+        <Text className="text-gray-900 font-medium">
+          ₦{parseInt(record.job_min_sal).toLocaleString()} - ₦{parseInt(record.job_max_sal).toLocaleString()}
+        </Text>
+      ),
+    },
+    {
+      title: 'Vacancy',
+      dataIndex: 'job_no_hires',
+      key: 'vacancy',
+      width: 80,
+      render: (text: number) => (
+        <Text className="text-blue-600 font-medium">{text}</Text>
+      ),
+    },
+    {
+      title: 'Applications',
+      dataIndex: 'applicationCount',
+      key: 'applications',
+      width: 100,
+      render: (count: number) => (
+        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+          {count}
+        </span>
+      ),
+    },
+    {
+      title: 'Deadline',
+      dataIndex: 'deadline',
+      key: 'deadline',
+      width: 120,
+      render: (date: string) => (
+        <div className="flex items-center">
+          <CalendarOutlined className="text-red-500 mr-1" />
+          <Text className="text-red-600 font-medium">
+            {format(new Date(date), 'MMM dd, yyyy')}
+          </Text>
+        </div>
+      ),
+    },
+    {
+      title: 'Created',
+      dataIndex: 'createdAt',
+      key: 'created',
+      width: 120,
+      render: (date: string) => (
+        <div>
+          <div className="text-sm">{format(new Date(date), 'MMM dd, yyyy')}</div>
+          <div className="text-xs text-gray-400">{format(new Date(date), 'HH:mm')}</div>
+        </div>
+      ),
+    },
+  ]
 
   return (
     <div className="space-y-6">
@@ -151,6 +279,28 @@ const JobLogSection = () => {
             >
               Clear Filters
             </button>
+
+            {/* View Mode Toggle */}
+            <div className="flex border border-gray-300 rounded">
+              <Button
+                type={viewMode === 'grid' ? 'primary' : 'default'}
+                icon={<AppstoreOutlined />}
+                onClick={() => setViewMode('grid')}
+                size="small"
+                className="border-0 rounded-r-none"
+              >
+                Grid
+              </Button>
+              <Button
+                type={viewMode === 'table' ? 'primary' : 'default'}
+                icon={<UnorderedListOutlined />}
+                onClick={() => setViewMode('table')}
+                size="small"
+                className="border-0 rounded-l-none"
+              >
+                Table
+              </Button>
+            </div>
           </Space>
 
           <div className="text-sm text-gray-600 mb-2">
@@ -169,7 +319,7 @@ const JobLogSection = () => {
       ) : error ? (
         <Card>
           <div className="text-center py-12">
-            <div className="text-red-500">Error loading jobs: {error?.message || 'Unknown error'}</div>
+            <div className="text-red-500">Error loading jobs: {typeof error === 'string' ? error : 'Unknown error'}</div>
             <button 
               onClick={() => window.location.reload()} 
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -178,14 +328,14 @@ const JobLogSection = () => {
             </button>
           </div>
         </Card>
-      ) : (
+      ) : viewMode === 'grid' ? (
         <>
           <Row gutter={[16, 16]}>
             {paginatedJobs.map((job) => (
               <Col xs={24} sm={24} md={8} key={job.job_id}>
                 <Card
                   className="h-full hover:shadow-lg transition-shadow duration-200"
-                  bodyStyle={{ padding: '16px' }}
+                  styles={{ body: { padding: '16px' } }}
                 >
                   {/* Header with Status and Date */}
                   <div className="flex justify-between items-start mb-3">
@@ -296,25 +446,41 @@ const JobLogSection = () => {
               </div>
             </Card>
           )}
-
-          {/* Pagination */}
-          {filteredJobs.length > 0 && (
-            <div className="flex justify-center mt-6">
-              <Pagination
-                current={currentPage}
-                pageSize={pageSize}
-                total={filteredJobs.length}
-                onChange={handlePageChange}
-                showSizeChanger
-                showQuickJumper
-                showTotal={(total, range) =>
-                  `${range[0]}-${range[1]} of ${total} jobs`
-                }
-                pageSizeOptions={['12', '24', '48']}
-              />
-            </div>
-          )}
         </>
+      ) : (
+        /* Table View */
+        <Card>
+          <Table
+            columns={tableColumns}
+            dataSource={paginatedJobs}
+            rowKey="job_id"
+            pagination={false}
+            loading={isLoading}
+            scroll={{ x: 1200 }}
+            size="small"
+            locale={{
+              emptyText: filteredJobs.length === 0 ? 'No jobs found matching your criteria.' : 'No data'
+            }}
+          />
+        </Card>
+      )}
+
+      {/* Pagination */}
+      {filteredJobs.length > 0 && (
+        <div className="flex justify-center mt-6">
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={filteredJobs.length}
+            onChange={handlePageChange}
+            showSizeChanger
+            showQuickJumper
+            showTotal={(total, range) =>
+              `${range[0]}-${range[1]} of ${total} jobs`
+            }
+            pageSizeOptions={['12', '24', '48']}
+          />
+        </div>
       )}
     </div>
   )

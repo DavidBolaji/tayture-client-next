@@ -55,9 +55,9 @@ const ApplicationsStats: React.FC<ApplicationsStatsProps> = ({
       <Col xs={24} sm={12} lg={6}>
         <Card className="hover:shadow-md transition-shadow">
           <Statistic
-            title="With CV (This Page)"
+            title="With CV (Total)"
             value={stats.applicationsWithCV}
-            suffix={`of ${stats.currentPageTotal}`}
+            suffix={`(${stats.cvPercentage}%)`}
             prefix={<UserOutlined className="text-green-600" />}
             valueStyle={{ color: '#52c41a' }}
           />
@@ -66,7 +66,7 @@ const ApplicationsStats: React.FC<ApplicationsStatsProps> = ({
       <Col xs={24} sm={12} lg={6}>
         <Card className="hover:shadow-md transition-shadow">
           <Statistic
-            title="Without CV (This Page)"
+            title="Without CV (Total)"
             value={stats.applicationsWithoutCV}
             suffix={`(${100 - stats.cvPercentage}%)`}
             prefix={<ExclamationCircleOutlined className="text-red-600" />}
@@ -77,7 +77,7 @@ const ApplicationsStats: React.FC<ApplicationsStatsProps> = ({
       <Col xs={24} sm={12} lg={6}>
         <Card className="hover:shadow-md transition-shadow">
           <Statistic
-            title="Unique Schools"
+            title="Unique Schools (Total)"
             value={stats.uniqueSchools}
             prefix={<BankOutlined className="text-purple-600" />}
             valueStyle={{ color: '#722ed1' }}

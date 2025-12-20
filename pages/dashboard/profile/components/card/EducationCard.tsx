@@ -9,6 +9,7 @@ import { useGlobalContext } from '@/Context/store'
 import { useMutation } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import EducationEditModal from '../modal/EducationModal/EducationEditModal'
+import { createSuccessMessage } from '@/utils/message'
 
 interface EducationCardProp {
   education: Education[]
@@ -44,7 +45,7 @@ const EducationCard: React.FC<EducationCardProp> = ({ education }) => {
       return Axios.delete(`/users/education/me/delete/${id}`)
     },
     onSuccess: () => {
-      setMessage(() => 'Education removed successfully')
+      setMessage(createSuccessMessage('Education removed successfully'))
       window.location.reload()
     },
   })

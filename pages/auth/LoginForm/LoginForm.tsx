@@ -61,10 +61,6 @@ const LoginForm = ({ show = true, redirect = true, close }: {show?: boolean, red
     try {
       const response = await Axios.post('/pdf', { data: newObj, colorList, loc })
       setMessage(() => response.data.message)
-      const t = setTimeout(() => {
-        setMessage(() => '')
-        clearTimeout(t)
-      }, 3000)
     } catch (error) {
       console.error('Error sending PDF:', (error as Error).message)
     }

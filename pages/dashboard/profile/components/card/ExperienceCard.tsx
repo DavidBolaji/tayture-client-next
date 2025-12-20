@@ -9,6 +9,7 @@ import { useGlobalContext } from '@/Context/store'
 import ExperienceEditModal from '../modal/ExperienceModal/ExperienceEditModal'
 import { useMutation } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
+import { createSuccessMessage } from '@/utils/message'
 
 interface ExperienceCardProp {
   experience: (WorkHistory & { roles: WorkRole[] })[]
@@ -44,7 +45,7 @@ const ExperienceCard: React.FC<ExperienceCardProp> = ({ experience }) => {
       return Axios.delete(`/users/work/me/delete/${id}`)
     },
     onSuccess: () => {
-      setMessage(() => 'Experience removed successfully')
+      setMessage(createSuccessMessage('Experience removed successfully'))
       window.location.reload()
     },
   })

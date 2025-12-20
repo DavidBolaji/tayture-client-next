@@ -10,6 +10,7 @@ import * as Yup from 'yup'
 import { Axios } from '@/request/request'
 import { v4 as uuid } from 'uuid'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 import { AxiosResponse } from 'axios'
 import Spinner from '@/components/Spinner/Spinner'
 
@@ -27,7 +28,7 @@ const CreateCoupounForm = () => {
       return await Axios.post('/coupoun/create/me', { ...data })
     },
     onSuccess: (res: AxiosResponse) => {
-      setMessage(() => res.data.message)
+      setMessage(createSuccessMessage(res.data.message))
       queryClient.setQueryData(['allCoupoun'], (oldData: Coupoun[]) => {
         return [...oldData, res.data.coupoun]
       })

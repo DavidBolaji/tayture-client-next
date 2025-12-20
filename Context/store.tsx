@@ -11,6 +11,13 @@ import {
 import { IUser } from '@/pages/api/users/types'
 import { ques as quesData } from './data'
 
+export type MessageType = 'success' | 'error' | 'info'
+
+export interface MessageState {
+  text: string
+  type: MessageType
+}
+
 const INIT = {
   fname: '',
   lname: '',
@@ -209,8 +216,8 @@ type UIState = Partial<Record<UIkeyz, { visibility: boolean; data?: any }>>
 
 type ContextProps = {
   user: Partial<IProfile>
-  message: string
-  setMessage: Dispatch<SetStateAction<string>>
+  message: MessageState
+  setMessage: Dispatch<SetStateAction<MessageState>>
   setUser: Dispatch<SetStateAction<Partial<IProfile>>>
   setUI: Dispatch<SetStateAction<UIState>>
   ques: any
@@ -238,8 +245,8 @@ type ContextProps = {
 
 const GlobalContext = createContext<ContextProps>({
   user: INIT,
-  message: '',
-  setMessage: (): string => '',
+  message: { text: '', type: 'info' },
+  setMessage: (): MessageState => ({ text: '', type: 'info' }),
   setUser: () => {},
   setUI: () => {},
   ui: uiInit,
@@ -294,7 +301,7 @@ const three = {
 export const GlobalContextProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<Partial<IProfile>>(INIT)
   const [defaultSchool, setDefaultSchool] = useState<number>(0)
-  const [message, setMessage] = useState<string>('')
+  const [message, setMessage] = useState<MessageState>({ text: '', type: 'info' })
   const [ui, setUI] = useState<UIState>({})
   const [img, setImg] = useState<string>('')
   const [createSch, setCreateSch] = useState<Partial<ISchData> | null>(null)

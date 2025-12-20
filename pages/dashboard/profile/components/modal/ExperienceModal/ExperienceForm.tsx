@@ -28,6 +28,7 @@ import { MinusCircleOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 
 export const validationSchema = Yup.object().shape({
   location: Yup.string().required('Location i.e where you worked is required'),
@@ -98,12 +99,9 @@ const ExperienceForm: React.FC = () => {
           },
         }
       })
-      setMessage(() => 'Experience created succesfully')
-      const t = setTimeout(() => {
-        setMessage(() => '')
-        window.location.reload()
-        clearTimeout(t)
-      }, 4000)
+      setMessage(createSuccessMessage('Experience created successfully'))
+      // Page will reload to show updated data
+      window.location.reload()
     },
   })
   const handleClick: any = async (

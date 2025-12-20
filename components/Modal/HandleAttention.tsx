@@ -10,6 +10,7 @@ import { updateUser } from '@/lib/api/user'
 import useGetState from '@/hooks/useGetState'
 import { AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
+import { createSuccessMessage, createErrorMessage } from '@/utils/message'
 
 export const checkPath = (path: string | null) => {
   if (!path) return false
@@ -20,7 +21,6 @@ const HandleAttention = () => {
   const { ui, setUI, setMessage, setUser } = useGlobalContext()
   const { user }: { user: IUser | null } = useGetState()
   const queryClient = useQueryClient()
-  const router = useRouter()
   const handleClose = () => {
     setUI((prev) => {
       return {
@@ -61,19 +61,19 @@ const HandleAttention = () => {
     onSuccess: (res) => {
       const user = (res as unknown as AxiosResponse).data.user
       setUser(user)
-      setMessage(() => 'Update successfull')
+      setMessage(createSuccessMessage('Update successful'))
 
       localStorage.setItem('user', JSON.stringify(user))
       queryClient.setQueryData(['user'], user)
       handleClose()
-      const t =  setTimeout(() => {
-        setMessage(() => '')
-        clearTimeout(t)
-      }, 2000)
+      // const t =  setTimeout(() => {
+      //   setMessage(() => '')
+      //   clearTimeout(t)
+      // }, 2000)
     },
     
     onError: (err) => {
-      setMessage(() => (err as Error).message)
+      setMessage(createErrorMessage((err as Error).message))
     },
     mutationKey: ['users'],
     

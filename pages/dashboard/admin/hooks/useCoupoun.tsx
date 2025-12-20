@@ -8,6 +8,7 @@ import { AxiosResponse } from 'axios'
 import moment from 'moment'
 import { useState } from 'react'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 import { formatNumber } from '@/utils/helpers'
 
 const useCoupoun = () => {
@@ -27,7 +28,7 @@ const useCoupoun = () => {
       return await Axios.delete(`/coupoun/delete/${coupounId}`)
     },
     onSuccess: (res: AxiosResponse) => {
-      setMessage(() => res.data.message)
+      setMessage(createSuccessMessage(res.data.message))
       queryClient.setQueryData(['allCoupoun'], (oldData: Coupoun[]) => {
         const newData = oldData.filter((oD) => oD.id !== res.data.coupoun.id)
         return newData

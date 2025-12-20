@@ -8,23 +8,25 @@ const HandleError = () => {
   const [modal, setModal] = useState<boolean>(false)
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout
-
-    if (message.trim().length > 0) {
+    if (message?.text?.trim().length > 0) {
       setModal(true)
-      timeout = setTimeout(() => {
-        setMessage("")
-        setModal(false)
-      }, 3000)
     } else {
       setModal(false)
     }
+  }, [message])
 
-    return () => clearTimeout(timeout)
-  }, [message, setMessage])
+  const handleClose = () => {
+    setMessage({ text: "", type: 'info' })
+    setModal(false)
+  }
 
   return (
-    <AlertModal isOpen={modal} close={() => setMessage('')} msg={message} timeout={3000} />
+    <AlertModal 
+      isOpen={modal} 
+      close={handleClose} 
+      msg={message?.text || ''} 
+      type={message?.type || 'info'}
+    />
   )
 }
 

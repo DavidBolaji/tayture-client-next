@@ -20,6 +20,7 @@ import { regularFont } from '@/assets/fonts/fonts'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 
 export const educationInitials = {
   school: '',
@@ -68,7 +69,7 @@ const EducationForm: React.FC = () => {
           },
         }
       })
-      setMessage(() => 'Education added Successfully')
+      setMessage(createSuccessMessage('Education added Successfully'))
       queryClient.invalidateQueries({
         queryKey: ['user'],
       })

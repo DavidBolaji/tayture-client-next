@@ -15,6 +15,7 @@ import { Axios } from '@/request/request'
 import { AxiosResponse } from 'axios'
 import Spinner from '@/components/Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 import Cloudinary from '@/request/cloudinary'
 
 // Import react-draft-wysiwyg dynamically to avoid server-side rendering
@@ -53,7 +54,7 @@ const CreateExceptAndText: React.FC<{ SW: any }> = ({ SW }) => {
       return await Axios.post('/blog/create/me', { ...data })
     },
     onSuccess: (res: AxiosResponse) => {
-      setMessage(() => res.data.message)
+      setMessage(createSuccessMessage(res.data.message))
       SW.prev()
       setEditorState(EditorState.createEmpty())
       queryClient.removeQueries({

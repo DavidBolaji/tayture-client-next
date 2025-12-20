@@ -14,6 +14,7 @@ import { User } from '@prisma/client'
 import { Axios } from '@/request/request'
 import { regularFont } from '@/assets/fonts/fonts'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 import PersonalForm2 from './PersonalForm2'
 import { sleep } from '@/utils/helpers'
 import { useRouter } from 'next/router'
@@ -95,7 +96,7 @@ const PersonalForm: React.FC<PersonalInformationCardProp> = ({
           },
         }
       })
-      setMessage(() => 'Profile Updated Successfully')
+      setMessage(createSuccessMessage('Profile Updated Successfully'))
       queryClient.invalidateQueries({
         queryKey: ['user'],
       })

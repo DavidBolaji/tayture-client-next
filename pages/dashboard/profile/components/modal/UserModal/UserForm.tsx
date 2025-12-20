@@ -12,6 +12,7 @@ import { useGlobalContext } from '@/Context/store'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Axios } from '@/request/request'
 import UploadComponent from '@/components/UploadComponent/UploadComponent'
+import { createSuccessMessage } from '@/utils/message'
 
 export const userFormSchema = Yup.object().shape({
   fname: Yup.string()
@@ -68,11 +69,9 @@ const UserForm: React.FC<UserCardProps> = ({
       return await Promise.all([picture, summary, user])
     },
     onSuccess: () => {
-      setMessage(() => 'Profile updated Succesfully')
-      setTimeout(() => {
-        setMessage(() => '')
-        window.location.reload()
-      }, 4000)
+      setMessage(createSuccessMessage('Profile updated Successfully'))
+      // Page will reload to show updated data
+      window.location.reload()
     },
   })
 

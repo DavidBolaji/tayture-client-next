@@ -54,12 +54,9 @@ const AddSchoolFormAdmin: React.FC = () => {
         }
       }
 
-      const t = setTimeout(() => {
-        setImg(() => '')
-        setMessage(() => '')
-        setCreateSch(() => null)
-        clearTimeout(t)
-      }, 4000)
+      // Clear form data after successful creation
+      setImg(() => '')
+      setCreateSch(() => null)
 
       return school
     },

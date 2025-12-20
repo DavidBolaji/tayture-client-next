@@ -2,23 +2,42 @@ import styled from '@emotion/styled'
 import { Modal } from 'antd'
 
 export const StyledModal = styled(Modal)`
-  background-color: black;
-  height: 56px;
-  top: 90%;
-  max-width: 100% !important;
-  width: 850px !important;
-  position: relative;
-
-  .ant-modal-close {
-    display: none;
+  .ant-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 0;
   }
 
   .ant-modal-header {
-    padding: 0px;
+    display: none;
   }
 
-  .ant-modal-content {
-    box-shadow: none;
-    padding: 0px;
+  .ant-modal-body {
+    padding: 24px;
+  }
+
+  .ant-modal-close {
+    top: 16px;
+    right: 16px;
+    color: #666;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    
+    &:hover {
+      color: #333;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    }
+  }
+
+  .ant-modal-close-x {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
   }
 `

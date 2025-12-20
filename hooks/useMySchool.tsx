@@ -7,6 +7,7 @@ import { FaEdit } from 'react-icons/fa'
 import { School, SchoolAdmin } from '@prisma/client'
 import { useState } from 'react'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 
 interface DataType {
   sch_id?: string
@@ -47,7 +48,7 @@ const useMySchool = () => {
       queryClient.invalidateQueries({
         queryKey: ['allMySchools'],
       })
-      setMessage(() => res.data.message)
+      setMessage(createSuccessMessage(res.data.message))
       queryClient.invalidateQueries({
         queryKey: [''],
       })

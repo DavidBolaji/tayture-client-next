@@ -85,28 +85,22 @@ const AppliedSection = () => {
     setCurrentPage(1)
   }, [])
 
-  // Statistics
+  // Statistics - now using total stats from API instead of current page data
   const stats = useMemo(() => {
     if (!applicationsData) return null
     
-    const { applications } = applicationsData
-    const totalApplications = applicationsData.pagination.totalCount
-    const currentPageApplicationsWithCV = applications.filter(app => app.cv && app.cv.trim() !== '').length
-    const currentPageApplicationsWithoutCV = applications.filter(app => !app.cv || app.cv.trim() === '').length
-    const uniqueSchools = new Set(applications.map(app => app.schoolName)).size
-    
-    // Calculate percentage based on current page for display purposes
-    const currentPageCvPercentage = applications.length > 0 
-      ? Math.round((currentPageApplicationsWithCV / applications.length) * 100) 
+    const { totalStats } = applicationsData
+    const cvPercentage = totalStats.totalApplications > 0 
+      ? Math.round((totalStats.applicationsWithCV / totalStats.totalApplications) * 100) 
       : 0
     
     return {
-      totalApplications,
-      applicationsWithCV: currentPageApplicationsWithCV,
-      applicationsWithoutCV: currentPageApplicationsWithoutCV,
-      uniqueSchools,
-      cvPercentage: currentPageCvPercentage,
-      currentPageTotal: applications.length
+      totalApplications: totalStats.totalApplications,
+      applicationsWithCV: totalStats.applicationsWithCV,
+      applicationsWithoutCV: totalStats.applicationsWithoutCV,
+      uniqueSchools: totalStats.uniqueSchools,
+      cvPercentage,
+      currentPageTotal: applicationsData.applications.length
     }
   }, [applicationsData])
 

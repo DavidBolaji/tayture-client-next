@@ -15,6 +15,7 @@ import Button from '@/components/Button/Button'
 import Spinner from '@/components/Spinner/Spinner'
 import { regularFont } from '@/assets/fonts/fonts'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage } from '@/utils/message'
 
 const EducationEditForm: React.FC<{ data: Education }> = ({ data }) => {
   const { setUI, setMessage } = useGlobalContext()
@@ -39,7 +40,7 @@ const EducationEditForm: React.FC<{ data: Education }> = ({ data }) => {
           },
         }
       })
-      setMessage(() => 'Education Updated Successfully')
+      setMessage(createSuccessMessage('Education Updated Successfully'))
       window.location.reload()
     },
   })
