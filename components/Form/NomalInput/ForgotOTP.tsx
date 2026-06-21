@@ -9,6 +9,7 @@ import StyledInput from './StyledInput'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { valdateOTP } from '@/lib/services/user'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage, createErrorMessage } from '@/utils/message'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Axios } from '@/request/request'
 import TimerComponent from '@/components/TimerComponent'
@@ -64,7 +65,7 @@ const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
     },
     onSuccess: (res: any) => {
       if (!res?.data?.verified) {
-        return setMessage(() => res?.message ?? 'Invalid OTP')
+        return setMessage(createErrorMessage(res?.message ?? 'Invalid OTP'))
       }
       const { verified } = res?.data
       if (verified) {
@@ -72,7 +73,7 @@ const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
       }
     },
     onError: (err) => {
-      setMessage(() => (err as Error).message)
+      setMessage(createErrorMessage((err as Error).message))
     },
   })
 
@@ -83,13 +84,13 @@ const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
         password: values.password_one,
       })
       close()
-      setMessage(() => 'Password changed successfully')
+      setMessage(createSuccessMessage('Password changed successfully'))
       queryClient.removeQueries({
         queryKey: ['forgotPasswordUserId', 'forgotPasswordPhone', 'forgotPasswordEmail', 'pinId'],
       })
       SW.prev()
     } catch (error) {
-      setMessage(() => (error as Error).message)
+      setMessage(createErrorMessage((error as any)?.response?.data?.message ?? (error as Error).message))
     }
   }
 
