@@ -21,10 +21,9 @@ export default async function handler(
   await Promise.all(keys.map(async (key) => {
     if (!holder.includes(key)) {
       if (key === "password") {
-        console.log('[update] password field received, length:', String(req.body[key]).length, 'type:', typeof req.body[key])
+        console.log('[update] password received — length:', String(req.body[key]).length, 'type:', typeof req.body[key])
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(req.body[key], salt)
-        console.log('[update] hash generated, starts with:', hashedPassword.substring(0, 7))
         data[key] = hashedPassword
       } else {
         data[key] = req.body[key]
@@ -42,7 +41,7 @@ export default async function handler(
       data,
     })
 
-    console.log('[update] DB write success, new hash starts with:', user.password?.substring(0, 7))
+    console.log('[update] DB write success — full hash:', user.password)
     return res.status(200).json({ message: 'User Updated', user })
   } catch (err) {
     console.log((err as Error).message)

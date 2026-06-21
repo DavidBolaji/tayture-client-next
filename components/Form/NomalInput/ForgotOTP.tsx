@@ -67,6 +67,7 @@ const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
 
   const onSubmit = async (values: IForgot) => {
     const userId = queryClient.getQueryData(['forgotPasswordUserId'])
+    console.log('[ForgotOTP] submitting password — length:', values.password_one.length, '| charCodes (first 5):', [...values.password_one.slice(0,5)].map(c => c.charCodeAt(0)))
     try {
       await Axios.put(`/users/update/${userId}`, {
         password: values.password_one,

@@ -39,8 +39,9 @@ export default async function handler(
 
   const user = await getUserByEmail(email)
 
-  console.log('[login] user found:', !!user, '| stored hash starts with:', user?.password?.substring(0, 7))
-  console.log('[login] incoming password length:', password.length)
+  console.log('[login] user lookup result:', user ? 'found' : 'NOT FOUND')
+  console.log('[login] stored hash:', user?.password)
+  console.log('[login] incoming password length:', password.length, '| charCodes (first 5):', [...password.slice(0,5)].map(c => c.charCodeAt(0)))
 
   if (!user) return res.status(401).json({ error: 'Invalid credentials' })
   const passMatch = await bcrypt.compare(password, user.password)
