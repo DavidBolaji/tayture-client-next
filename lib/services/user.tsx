@@ -86,6 +86,22 @@ export const valdateOTP = async ({
   }
 }
 
+export const validateForgotPasswordOTP = async ({
+  userId,
+  otp,
+}: {
+  userId: string
+  otp: string
+}) => {
+  try {
+    const req = await Axios.post(`/users/forgot-password/validate-otp`, { userId, otp })
+    return req.data
+  } catch (error: any) {
+    const msg = error?.response?.data?.message || (error as Error).message
+    throw new Error(msg)
+  }
+}
+
 export const sendWelcome = async ({
   firstName,
   email,

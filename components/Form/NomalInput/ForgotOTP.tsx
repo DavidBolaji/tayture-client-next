@@ -7,7 +7,7 @@ import Button from '@/components/Button/Button'
 import Spinner from '@/components/Spinner/Spinner'
 import StyledInput from './StyledInput'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { valdateOTP } from '@/lib/services/user'
+import { validateForgotPasswordOTP } from '@/lib/services/user'
 import { useGlobalContext } from '@/Context/store'
 import { createSuccessMessage, createErrorMessage } from '@/utils/message'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -48,20 +48,8 @@ const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
   })
 
   const { mutate, isPending: isValidating } = useMutation({
-    mutationFn: async ({
-      otp,
-      pinId,
-      email,
-    }: {
-      otp: string
-      pinId: string
-      email: string
-    }) => {
-      return await valdateOTP({
-        otp,
-        pinId,
-        email,
-      })
+    mutationFn: async ({ otp, userId }: { otp: string; userId: string }) => {
+      return await validateForgotPasswordOTP({ userId, otp })
     },
     onSuccess: (res: any) => {
       if (!res?.data?.verified) {
@@ -96,9 +84,8 @@ const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
 
   const onValidate = async (values: IForgot) => {
     if (String(values.pin).trim().length === 4 && !isOtp) {
-      const pinId = queryClient.getQueryData(['pinId']) as string
-      const email = queryClient.getQueryData(['email']) as string
-      mutate({ otp: values.pin, pinId, email })
+      const userId = queryClient.getQueryData(['forgotPasswordUserId']) as string
+      mutate({ otp: values.pin, userId })
       setInit((prev) => {
         return {
           ...prev,
