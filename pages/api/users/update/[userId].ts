@@ -41,5 +41,6 @@ export default async function handler(
     return res.status(200).json({ message: 'User Updated', user })
   } catch (err) {
     console.log((err as Error).message)
+    return res.status(500).json({ message: (err as Error).message })
   }
 }

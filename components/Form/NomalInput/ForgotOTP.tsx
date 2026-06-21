@@ -77,7 +77,7 @@ const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
   })
 
   const onSubmit = async (values: IForgot) => {
-    const userId = queryClient.getQueryData(['forgotUserId'])
+    const userId = queryClient.getQueryData(['forgotPasswordUserId'])
     try {
       await Axios.put(`/users/update/${userId}`, {
         password: values.password_one,
@@ -85,7 +85,7 @@ const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
       close()
       setMessage(() => 'Password changed successfully')
       queryClient.removeQueries({
-        queryKey: ['forgotUserId', 'phone', 'pinId', 'email'],
+        queryKey: ['forgotPasswordUserId', 'forgotPasswordPhone', 'forgotPasswordEmail', 'pinId'],
       })
       SW.prev()
     } catch (error) {
