@@ -37,7 +37,7 @@ export type IForgot = {
 
 const ForgotOTP: React.FC<{ close: () => void; SW: any }> = ({ close, SW }) => {
   const queryClient = useQueryClient()
-  const phn = queryClient.getQueryData(['phone'])
+  const phn = queryClient.getQueryData(['forgotPasswordPhone'])
   const [isOtp, setIsOtp] = useState(false)
   const { setMessage } = useGlobalContext()
   const [init, setInit] = useState({
