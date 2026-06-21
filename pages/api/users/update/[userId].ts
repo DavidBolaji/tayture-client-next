@@ -13,6 +13,9 @@ export default async function handler(
 ) {
   if (req.method !== 'PUT')
     return res.status(405).json({ message: 'Method not allowed' })
+
+  console.log('[update] CALLED — userId:', req.query.userId, '| body keys:', Object.keys(req.body), '| full body:', JSON.stringify(req.body))
+
   const holder = ['email']
 
   const keys = Object.keys(req.body)

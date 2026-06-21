@@ -39,6 +39,7 @@ export default async function handler(
 
   const user = await getUserByEmail(email)
 
+  console.log('[login] lookup by email:', email, '| user.id:', user?.id)
   console.log('[login] user lookup result:', user ? 'found' : 'NOT FOUND')
   console.log('[login] stored hash:', user?.password)
   console.log('[login] incoming password length:', password.length, '| charCodes (first 5):', [...password.slice(0,5)].map(c => c.charCodeAt(0)))
