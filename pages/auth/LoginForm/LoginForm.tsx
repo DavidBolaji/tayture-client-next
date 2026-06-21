@@ -6,6 +6,7 @@ import Button from '@/components/Button/Button'
 import { useRouter } from 'next/router'
 import Spinner from '@/components/Spinner/Spinner'
 import { useGlobalContext } from '@/Context/store'
+import { createSuccessMessage, createErrorMessage } from '@/utils/message'
 import { loginUser } from '@/lib/api/user'
 import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query'
 import * as Yup from 'yup'
@@ -88,13 +89,13 @@ const LoginForm = ({ show = true, redirect = true, close }: {show?: boolean, red
           if(close) {
             close()
           }
-          setMessage(() => res.data.message)
+          setMessage(createSuccessMessage(res.data.message))
         }
 
       }
     },
     onError: (err) => {
-      setMessage(() => (err as AxiosError<{error: string}>).response?.data?.error || (err as Error).message)
+      setMessage(createErrorMessage((err as AxiosError<{error: string}>).response?.data?.error || (err as Error).message))
     },
   })
 
